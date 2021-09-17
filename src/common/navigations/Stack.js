@@ -7,13 +7,7 @@ import { Home, Calendar, Rank, AddAlarm } from "@screens/index";
 import AddMedicine from "@/medicine/screens/AddMedicine";
 import MyPage from "@/member/screens/Mypage/container/MyPageContainer";
 import Signin from "@/member/screens/Signin/container/SigninContainer";
-import {
-    Signup00,
-    Signup01,
-    Signup02,
-    Signup03,
-    Signup04,
-} from "@/member/screens/Signup/index";
+import { Signup00, Signup01 } from "@/member/screens/Signup/index";
 import { icons30px } from "@/icons";
 
 const headerStyle = {
@@ -166,6 +160,56 @@ const HomeStackNav = () => {
                 }}
             />
             <HomeStack.Screen
+                name="Signup00"
+                component={Signup00}
+                options={({ navigation }) => {
+                    return {
+                        headerBackTitleVisible: false,
+                        headerBackImage: () => {
+                            return (
+                                <Icon
+                                    source={icons30px.leftArrow}
+                                    resizeMode="contain"
+                                />
+                            );
+                        },
+                        headerRight: () => {
+                            return (
+                                <TouchableOpacity
+                                    onPress={() => {
+                                        navigation.navigate("Main");
+                                    }}
+                                >
+                                    <View>
+                                        <Icon
+                                            source={icons30px.home}
+                                            resizeMode="contain"
+                                        />
+                                    </View>
+                                </TouchableOpacity>
+                            );
+                        },
+                        headerTitle: "회원가입",
+                        headerStyle: {
+                            shadowOffset: {
+                                header: 0,
+                            },
+                        },
+                        headerTitleStyle: {
+                            fontSize: 20,
+                            fontWeight: "900",
+                        },
+                        headerLeftContainerStyle: {
+                            paddingLeft: 24,
+                        },
+                        headerTitleAlign: "center",
+                        headerRightContainerStyle: {
+                            paddingRight: 24,
+                        },
+                    };
+                }}
+            />
+            {/* <HomeStack.Screen
                 name="Signup01"
                 component={Signup01}
                 options={({ navigation }) => {
@@ -314,10 +358,10 @@ const HomeStackNav = () => {
                         },
                     };
                 }}
-            />
+            /> */}
             <HomeStack.Screen
-                name="Signup04"
-                component={Signup04}
+                name="Signup01"
+                component={Signup01}
                 options={({ navigation }) => {
                     return {
                         headerBackTitleVisible: false,

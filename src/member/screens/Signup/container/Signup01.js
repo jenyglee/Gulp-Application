@@ -1,88 +1,84 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import { Dimensions } from "react-native";
-import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
-import { Button, Input, Notice } from "@components/index";
-import { BasicModal } from "@components/modal/index";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { Button } from "@components/index";
 import { illust } from "@/images";
 
 const Container = styled.View`
     width: 100%;
     height: 100%;
     background: ${({ theme }) => theme.white};
-    display: flex;
-    justify-content: center;
     align-items: center;
+`;
+
+const ContentContainer = styled.View`
+    width: ${({ width }) => width - 48}px;
+    height: 100%;
 `;
 
 const ContentArea = styled.View`
-    width: ${({ width }) => width - 48}px;
     align-items: center;
+    position: absolute;
+    width: 100%;
+    top: ${({ height }) => height / 5}px;
+    /* top: 100px; */
 `;
 
-const SignupContainer01 = ({ navigation }) => {
+const StyledTitle = styled.Text`
+    font-size: 20px;
+    font-weight: 900;
+    color: ${({ theme }) => theme.textBasic};
+`;
+
+const StyledSubTitle = styled.Text`
+    font-size: 16px;
+    color: ${({ theme }) => theme.textBasic};
+`;
+
+const StyledImage = styled.Image`
+    width: 100%;
+    height: 132px;
+    margin-top: 22px;
+`;
+
+const ButtonArea = styled.View`
+    width: 100%;
+    position: absolute;
+    bottom: 40px;
+`;
+
+const SignupContainer04 = ({ navigation }) => {
     const width = Dimensions.get("window").width;
+    const height = Dimensions.get("window").height;
+    const insets = useSafeAreaInsets();
+    console.log(insets);
     const [name, setName] = useState("");
-    const [errorModal, setErrorModal] = useState(false);
-
-    // ✨빈칸체크
-    const confirmValue = async (name) => {
-        if (name != "") {
-            return true;
-        } else return false;
-    };
-
-    // ✨ 저장하고 다음으로
-    const saveName = async () => {
-        const bool = await confirmValue(name);
-        if (bool) {
-            navigation.navigate("Signup02");
-        } else if (!bool) {
-            setErrorModal(true);
-        }
-    };
-
-    //  ✨ 에러모달 닫기
-    const closeModal = () => {
-        setErrorModal(false);
-    };
-
     return (
-        <KeyboardAwareScrollView extraScrollHeight={20}>
-            <Container>
-                <ContentArea width={width}>
-                    <Notice
-                        illust={illust.character02}
-                        title="닉네임을 입력해주세요"
-                        subTitle="나중에 언제든지 변경할 수 있습니다."
-                    />
-                    <Input
-                        placeholder="닉네임 입력"
-                        value={name}
-                        onBlur={() => {}}
-                        maxLength={7}
-                        onChangeText={(text) => setName(text)}
-                        returnKeyType="done"
-                        onSubmitEditing={() => {
-                            refEmail.current.focus();
+        <Container>
+            <ContentContainer width={width}>
+                <ContentArea height={height}>
+                    <StyledTitle>야호!</StyledTitle>
+                    <StyledTitle
+                        style={{
+                            marginBottom: 10,
                         }}
-                        containerStyle={{
-                            marginBottom: 30,
-                        }}
-                    />
-                    <Button title="다음" onPress={saveName} />
-                    {errorModal ? (
-                        <BasicModal
-                            title="닉네임을 입력해주세요."
-                            visible={errorModal}
-                            onPress={closeModal}
-                            src={illust.error}
-                        />
-                    ) : null}
+                    >
+                        회원가입이 완료되었어요!
+                    </StyledTitle>
+                    <StyledSubTitle>이제 더 유용한 서비스를</StyledSubTitle>
+                    <StyledSubTitle>받으실 수 있어요!</StyledSubTitle>
+                    <StyledImage source={illust.signup} resizeMode="contain" />
                 </ContentArea>
-            </Container>
-        </KeyboardAwareScrollView>
+                <ButtonArea>
+                    <Button
+                        title="로그인하기"
+                        onPress={() => navigation.navigate("Signin")}
+                    />
+                </ButtonArea>
+            </ContentContainer>
+        </Container>
     );
 };
 
-export default SignupContainer01;
+export default SignupContainer04;

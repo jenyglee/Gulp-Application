@@ -1,12 +1,14 @@
 import React, { useState, useRef, useContext } from "react";
 import { Alert, Dimensions } from "react-native";
 import styled, { ThemeContext } from "styled-components";
-import { Button, TextButton, InputWithIcon } from "@components/index";
+import { Button, TextButton } from "@components/index";
+import { InputWithIcon } from "@/member/screens/Signin/component/index";
 import { BasicModal } from "@components/modal/index";
 import { isEmail, removeWhiteSpace } from "@/util";
 import { icons20px } from "@/icons";
 import { logo } from "@/images";
 import { login } from "@/member/api/memberApi";
+import { illust } from "@/images";
 
 const Container = styled.View`
     /* flex: 1; */
@@ -45,15 +47,22 @@ const SigninContainer = ({ navigation }) => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const refPassword = useRef(null);
-    const [errorMessage, setErrorMessage] = useState([
-        { id: 1, message: "이메일을 입력해주세요." },
-        { id: 2, message: "비밀번호를 입력해주세요." },
-        { id: 2, message: "이메일 또는 비밀번호가 " },
-    ]);
-    const [errorModal, setErrorModal] = useState(true);
+    const [errorMessage, setErrorMessage] = useState("");
+    const [errorModal, setErrorModal] = useState(false);
 
     const SigninButtonPress = async () => {
         try {
+            if (email === "") {
+                setErrorModal(true);
+                setErrorMessage("이메일을 입력해주세요.");
+                return;
+            }
+            if (password === "") {
+                setErrorModal(true);
+                setErrorMessage("비밀번호를 입력해주세요.");
+                return;
+            }
+
             const user = await login({ email, password });
             navigation.navigate("Main", { user });
         } catch (e) {
@@ -65,7 +74,7 @@ const SigninContainer = ({ navigation }) => {
     const _handleEmail = (email) => {
         const changedEmail = removeWhiteSpace(email);
         setEmail(changedEmail);
-        setErrorMessage(isEmail(changedEmail) ? "" : "이메일이 틀렸어");
+        // setErrorMessage(isEmail(changedEmail) ? "" : "이메일이 틀렸어");
     };
 
     // ✨ 비밀번호 공백제거
@@ -117,8 +126,9 @@ const SigninContainer = ({ navigation }) => {
                 ) : null} */}
                 {errorModal ? (
                     <BasicModal
-                        title="아이디가 틀렸습니다"
+                        title={errorMessage}
                         onPress={closeModal}
+                        src={illust.error}
                     />
                 ) : null}
 
@@ -139,7 +149,7 @@ const SigninContainer = ({ navigation }) => {
                         marginLeft: 5,
                     }}
                     onPress={() => {
-                        navigation.navigate("Signup01");
+                        navigation.navigate("Signup00");
                     }}
                 />
             </SignupContainer>
