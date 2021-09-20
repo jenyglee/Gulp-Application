@@ -3,7 +3,7 @@ import { Image, TouchableOpacity, View } from "react-native";
 import styled, { ThemeContext } from "styled-components";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { createStackNavigator } from "@react-navigation/stack";
-import { Home, Calendar, Rank, AddAlarm } from "@screens/index";
+import { AlarmList, Calendar, Rank, AddAlarm } from "@screens/index";
 import AddMedicine from "@/medicine/screens/AddMedicine";
 import MyPage from "@/member/screens/Mypage/container/MyPageContainer";
 import Signin from "@/member/screens/Signin/container/SigninContainer";
@@ -42,7 +42,7 @@ const HomeTabs = () => {
         <Tab.Navigator>
             <Tab.Screen
                 name="Home"
-                component={Home}
+                component={AlarmList}
                 options={{
                     headerShown: false,
                 }}
@@ -118,7 +118,7 @@ const HomeStackNav = () => {
             }}
         >
             <HomeStack.Screen
-                name="Main"
+                name="AlarmList"
                 component={HomeTabs}
                 options={{
                     headerShown: false,
@@ -177,7 +177,7 @@ const HomeStackNav = () => {
                             return (
                                 <TouchableOpacity
                                     onPress={() => {
-                                        navigation.navigate("Main");
+                                        navigation.navigate("AlarmList");
                                     }}
                                 >
                                     <View>
@@ -209,156 +209,6 @@ const HomeStackNav = () => {
                     };
                 }}
             />
-            {/* <HomeStack.Screen
-                name="Signup01"
-                component={Signup01}
-                options={({ navigation }) => {
-                    return {
-                        headerBackTitleVisible: false,
-                        headerBackImage: () => {
-                            return (
-                                <Icon
-                                    source={icons30px.leftArrow}
-                                    resizeMode="contain"
-                                />
-                            );
-                        },
-                        headerRight: () => {
-                            return (
-                                <TouchableOpacity
-                                    onPress={() => {
-                                        navigation.navigate("Main");
-                                    }}
-                                >
-                                    <View>
-                                        <Icon
-                                            source={icons30px.home}
-                                            resizeMode="contain"
-                                        />
-                                    </View>
-                                </TouchableOpacity>
-                            );
-                        },
-                        headerTitle: "회원가입",
-                        headerStyle: {
-                            shadowOffset: {
-                                header: 0,
-                            },
-                        },
-                        headerTitleStyle: {
-                            fontSize: 20,
-                            fontWeight: "900",
-                        },
-                        headerLeftContainerStyle: {
-                            paddingLeft: 24,
-                        },
-                        headerTitleAlign: "center",
-                        headerRightContainerStyle: {
-                            paddingRight: 24,
-                        },
-                    };
-                }}
-            />
-            <HomeStack.Screen
-                name="Signup02"
-                component={Signup02}
-                options={({ navigation }) => {
-                    return {
-                        headerBackTitleVisible: false,
-                        headerBackImage: () => {
-                            return (
-                                <Icon
-                                    source={icons30px.leftArrow}
-                                    resizeMode="contain"
-                                />
-                            );
-                        },
-                        headerRight: () => {
-                            return (
-                                <TouchableOpacity
-                                    onPress={() => {
-                                        navigation.navigate("Main");
-                                    }}
-                                >
-                                    <View>
-                                        <Icon
-                                            source={icons30px.home}
-                                            resizeMode="contain"
-                                        />
-                                    </View>
-                                </TouchableOpacity>
-                            );
-                        },
-                        headerTitle: "회원가입",
-                        headerStyle: {
-                            shadowOffset: {
-                                header: 0,
-                            },
-                        },
-                        headerTitleStyle: {
-                            fontSize: 20,
-                            fontWeight: "900",
-                        },
-                        headerLeftContainerStyle: {
-                            paddingLeft: 24,
-                        },
-                        headerTitleAlign: "center",
-                        headerRightContainerStyle: {
-                            paddingRight: 24,
-                        },
-                    };
-                }}
-            />
-            <HomeStack.Screen
-                name="Signup03"
-                component={Signup03}
-                options={({ navigation }) => {
-                    return {
-                        headerBackTitleVisible: false,
-                        headerBackImage: () => {
-                            return (
-                                <Icon
-                                    source={icons30px.leftArrow}
-                                    resizeMode="contain"
-                                />
-                            );
-                        },
-                        headerRight: () => {
-                            return (
-                                <TouchableOpacity
-                                    onPress={() => {
-                                        navigation.navigate("Main");
-                                    }}
-                                >
-                                    <View>
-                                        <Icon
-                                            source={icons30px.home}
-                                            resizeMode="contain"
-                                        />
-                                    </View>
-                                </TouchableOpacity>
-                            );
-                        },
-                        headerTitle: "회원가입",
-                        headerStyle: {
-                            shadowOffset: {
-                                header: 0,
-                            },
-                        },
-                        headerTitleStyle: {
-                            fontSize: 20,
-                            fontWeight: "900",
-                        },
-                        headerLeftContainerStyle: {
-                            paddingLeft: 24,
-                        },
-                        headerTitleAlign: "center",
-                        headerRightContainerStyle: {
-                            paddingRight: 24,
-                        },
-                    };
-                }}
-            /> */}
             <HomeStack.Screen
                 name="Signup01"
                 component={Signup01}
@@ -372,7 +222,7 @@ const HomeStackNav = () => {
                             return (
                                 <TouchableOpacity
                                     onPress={() => {
-                                        navigation.navigate("Main");
+                                        navigation.navigate("AlarmList");
                                     }}
                                 >
                                     <View>

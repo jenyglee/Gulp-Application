@@ -3,6 +3,7 @@ import styled from "styled-components";
 import { Modal, Dimensions } from "react-native";
 import Button from "./Button";
 import Swiper from "../Swiper";
+// import { showGradeTable } from "@/common/helper/helper";
 
 const OpacityBackground = styled.View`
     width: 100%;

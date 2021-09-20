@@ -6,6 +6,8 @@ import { icons } from "@/icons";
 import { Button, Grade, Alarm } from "@components/index";
 import { GradeTable, AlarmMenu } from "@components/modal/index";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { signout } from "@/member/api/memberApi";
+// import { showGradeTable } from "@/common/helper/helper"; // 등급보기 헬퍼
 // import { signout, signConfirm } from "@/firebase";
 
 const Container = styled.View`
@@ -24,7 +26,7 @@ const ProfileName = styled.Text`
     font-size: 18px;
 `;
 
-export default function Main({ navigation }) {
+export default function AlarmList({ navigation }) {
     // ✨데이터형태(참고용)
     // const tempData = {
     //     1: {
@@ -46,6 +48,9 @@ export default function Main({ navigation }) {
     const [tasks, setTasks] = useState({});
     const [count, setCount] = useState(0);
     const [gradeTable, setGradeTable] = useState(false); // 등급표
+    // 🪲 헬퍼를 뽑는 법을 모르겠음...
+    // const bool = showGradeTable(false);
+
     const [alarmMenu, setAlarmMenu] = useState(false); // 알람 메뉴
     const [alarmMenuList, setAlarmMenuList] = useState([
         { id: 0, title: "알람 변경" },
@@ -168,6 +173,8 @@ export default function Main({ navigation }) {
             <Container>
                 <StatusBar style="auto" />
                 {isSignin ? (
+                    // 🪲 헬퍼를 뽑는 법을 모르겠음...
+                    // <Grade count={count} onPress={showGradeTable(bool)} />
                     <Grade count={count} onPress={showGradeTable} />
                 ) : (
                     <ProfileName>로그인해주세요</ProfileName>
@@ -210,10 +217,14 @@ export default function Main({ navigation }) {
                         }}
                         title="(테스트용)로그인"
                     />
-                    {/* <Button onPress={signout} title="(테스트용)로그아웃" /> */}
+                    <Button onPress={signout} title="(테스트용)로그아웃" />
                     <Button onPress={plusDate} title="(테스트용)복용완료" />
                 </View>
-                {gradeTable ? <GradeTable onPress={showGradeTable} /> : null}
+                {gradeTable ? (
+                    // 🪲 헬퍼를 뽑는 법을 모르겠음...
+                    // <GradeTable onPress={showGradeTable(bool)} />
+                    <GradeTable onPress={showGradeTable} />
+                ) : null}
                 {alarmMenu ? (
                     <AlarmMenu
                         showAlarmMenu={showAlarmMenu}

@@ -178,7 +178,7 @@ const AddMedicine = ({ navigation }) => {
                         JSON.stringify({ ...tasks, ...newTask })
                     );
                     console.log(newTask);
-                    navigation.navigate("Main");
+                    navigation.navigate("AlarmList");
                 }
                 ``;
             } catch (error) {

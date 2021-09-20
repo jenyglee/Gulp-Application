@@ -2,19 +2,16 @@ import React, { useState, useRef, useContext } from "react";
 import { Alert, Dimensions } from "react-native";
 import styled, { ThemeContext } from "styled-components";
 import { Button, TextButton } from "@components/index";
-import { InputWithIcon } from "@/member/screens/Signin/component/index";
 import { BasicModal } from "@components/modal/index";
-import { isEmail, removeWhiteSpace } from "@/util";
+import { InputWithIcon } from "@/member/screens/Signin/component/index";
 import { icons20px } from "@/icons";
-import { logo } from "@/images";
+import { logo, illust } from "@/images";
+import { isEmail, removeWhiteSpace } from "@/util";
 import { login } from "@/member/api/memberApi";
-import { illust } from "@/images";
 
 const Container = styled.View`
-    /* flex: 1; */
     align-items: center;
     height: 100%;
-    /* background-color: green; */
 `;
 
 const ContentContainer = styled.View`
@@ -43,7 +40,7 @@ const StyledText = styled.Text`
 const SigninContainer = ({ navigation }) => {
     const width = Dimensions.get("window").width;
     const height = Dimensions.get("window").height;
-    const theme = useContext(ThemeContext);
+    // const theme = useContext(ThemeContext);
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const refPassword = useRef(null);
@@ -64,23 +61,10 @@ const SigninContainer = ({ navigation }) => {
             }
 
             const user = await login({ email, password });
-            navigation.navigate("Main", { user });
+            navigation.navigate("AlarmList", { user });
         } catch (e) {
             Alert.alert(email, password);
         }
-    };
-
-    // ✨ 이메일 공백제거, 유효성 검사
-    const _handleEmail = (email) => {
-        const changedEmail = removeWhiteSpace(email);
-        setEmail(changedEmail);
-        // setErrorMessage(isEmail(changedEmail) ? "" : "이메일이 틀렸어");
-    };
-
-    // ✨ 비밀번호 공백제거
-    const _handlePassword = (password) => {
-        const changedPassword = removeWhiteSpace(password);
-        setPassword(changedPassword);
     };
 
     //  ✨ 에러모달 닫기
@@ -98,7 +82,10 @@ const SigninContainer = ({ navigation }) => {
                     value={email}
                     onBlur={() => {}}
                     // maxLength={10}
-                    onChangeText={(email) => _handleEmail(email)}
+                    onChangeText={(email) => {
+                        const changedEmail = removeWhiteSpace(email);
+                        setEmail(changedEmail);
+                    }}
                     returnKeyType="next"
                     onSubmitEditing={() => {
                         refPassword.current.focus();
@@ -113,7 +100,10 @@ const SigninContainer = ({ navigation }) => {
                     onBlur={() => {}}
                     maxLength={12}
                     returnKeyType="done"
-                    onChangeText={(password) => _handlePassword(password)}
+                    onChangeText={(password) => {
+                        const changedPassword = removeWhiteSpace(password);
+                        setPassword(changedPassword);
+                    }}
                     onSubmitEditing={SigninButtonPress}
                     secureTextEntry={true}
                     icon={icons20px.password}
@@ -121,9 +111,6 @@ const SigninContainer = ({ navigation }) => {
                         marginBottom: 60,
                     }}
                 />
-                {/* {errorMessage != "" ? (
-                    <ErrorMessage message={errorMessage} />
-                ) : null} */}
                 {errorModal ? (
                     <BasicModal
                         title={errorMessage}
