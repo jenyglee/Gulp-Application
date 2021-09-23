@@ -31,13 +31,13 @@ const Line = styled.View`
     background-color: ${({ theme }) => theme.line};
 `;
 
-const Button = ({ onPress, title }) => {
+const Button = ({ onPress, title, buttonColor }) => {
     return (
         <Wrap>
             <Line />
             <Btn onPress={onPress}>
                 <BtnContainer>
-                    <Text>{title}</Text>
+                    <Text style={buttonColor}>{title}</Text>
                 </BtnContainer>
             </Btn>
         </Wrap>

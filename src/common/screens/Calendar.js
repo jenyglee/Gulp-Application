@@ -2,8 +2,14 @@ import React, { useState, useEffect, useContext } from "react";
 import { View, ScrollView, Dimensions } from "react-native";
 import styled, { ThemeContext } from "styled-components";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { CalendarTable, CalendarTitle } from "@components/index";
+import {
+    CalendarTable,
+    CalendarTitle,
+    CalendarTitleNotSignin,
+    RequireSignin,
+} from "@components/index";
 import { badge } from "@/icons";
+import { illust } from "@/images";
 
 const Container = styled.View`
     width: ${({ width }) => width - 48}px;
@@ -66,6 +72,7 @@ const Calendar = ({ navigation }) => {
     const [tasks, setTasks] = useState({});
     const [foundMedicine, setFoundMedicine] = useState(false); // 약 리스트 유무
     const [completed, setCompleted] = useState(true); // 복용 완료 여부
+    const [isSignin, setIsSignin] = useState(false); // 캘린더 노출(로그인시)
 
     // ✨ 로컬에서 가져오기
     const getData = async () => {
@@ -89,71 +96,84 @@ const Calendar = ({ navigation }) => {
 
     return (
         <ScrollView>
-            <Container width={width}>
-                <CalendarTitle />
-                <CalendarTable tasks={tasks} />
-                <HistoryContainer>
-                    <Date>8월 18일</Date>
-                </HistoryContainer>
-                {foundMedicine
-                    ? Object.values(tasks).map((item) => {
-                          return (
-                              <Alarm key={item.id}>
-                                  <TimeContainer>
-                                      <Time>오후 9시 30분</Time>
-                                      {completed ? (
-                                          <CompleteBadge
-                                              source={badge.complete}
-                                              resizeMode="contain"
-                                          />
-                                      ) : (
-                                          <NotCompleteBadge
-                                              source={badge.notComplete}
-                                              resizeMode="contain"
-                                          />
+            {isSignin ? (
+                <Container width={width}>
+                    <CalendarTitle />
+                    <CalendarTable tasks={tasks} />
+                    <HistoryContainer>
+                        <Date>8월 18일</Date>
+                    </HistoryContainer>
+                    {foundMedicine
+                        ? Object.values(tasks).map((item) => {
+                              return (
+                                  <Alarm key={item.id}>
+                                      <TimeContainer>
+                                          <Time>오후 9시 30분</Time>
+                                          {completed ? (
+                                              <CompleteBadge
+                                                  source={badge.complete}
+                                                  resizeMode="contain"
+                                              />
+                                          ) : (
+                                              <NotCompleteBadge
+                                                  source={badge.notComplete}
+                                                  resizeMode="contain"
+                                              />
+                                          )}
+                                      </TimeContainer>
+
+                                      {Object.values(item.name).map(
+                                          (item, i) => {
+                                              return (
+                                                  <View key={i}>
+                                                      {completed ? (
+                                                          <Medicine
+                                                              style={{
+                                                                  color: theme.textBasic,
+                                                              }}
+                                                              key={item.id}
+                                                          >
+                                                              {item.name}
+                                                          </Medicine>
+                                                      ) : (
+                                                          <Medicine
+                                                              style={{
+                                                                  color: theme.textDisable,
+                                                              }}
+                                                              key={item.id}
+                                                          >
+                                                              {item.name}
+                                                          </Medicine>
+                                                      )}
+
+                                                      {/* //   <Medicine
+                                                //       style={{
+                                                //           color: theme.textDisable,
+                                                //       }}
+                                                //       key={item.id}
+                                                //   >
+                                                //       {item.name}
+                                                //   </Medicine> */}
+                                                      <Line />
+                                                  </View>
+                                              );
+                                          }
                                       )}
-                                  </TimeContainer>
-
-                                  {Object.values(item.name).map((item, i) => {
-                                      return (
-                                          <View key={i}>
-                                              {completed ? (
-                                                  <Medicine
-                                                      style={{
-                                                          color: theme.textBasic,
-                                                      }}
-                                                      key={item.id}
-                                                  >
-                                                      {item.name}
-                                                  </Medicine>
-                                              ) : (
-                                                  <Medicine
-                                                      style={{
-                                                          color: theme.textDisable,
-                                                      }}
-                                                      key={item.id}
-                                                  >
-                                                      {item.name}
-                                                  </Medicine>
-                                              )}
-
-                                              {/* //   <Medicine
-                                            //       style={{
-                                            //           color: theme.textDisable,
-                                            //       }}
-                                            //       key={item.id}
-                                            //   >
-                                            //       {item.name}
-                                            //   </Medicine> */}
-                                              <Line />
-                                          </View>
-                                      );
-                                  })}
-                              </Alarm>
-                          );
-                      })
-                    : null}
-            </Container>
+                                  </Alarm>
+                              );
+                          })
+                        : null}
+                </Container>
+            ) : (
+                <Container width={width}>
+                    <CalendarTitleNotSignin />
+                    <RequireSignin
+                        src={illust.error}
+                        title="로그인이 필요한 서비스입니다."
+                        onPress={() => navigation.navigate("Signin")}
+                    />
+                </Container>
+            )}
         </ScrollView>
     );
 };
