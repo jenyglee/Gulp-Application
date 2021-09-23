@@ -9,6 +9,7 @@ import Character02 from "./../assets/images/character_02.png";
 import Character03 from "./../assets/images/character_03.png";
 import Character04 from "./../assets/images/character_04.png";
 import Signup from "./../assets/images/signup.png";
+import FindPassword from "./../assets/images/findPassword.png";
 import LogoAndTitle from "./../assets/images/logoAndTitle.png";
 
 export const imageNumber = {
@@ -26,6 +27,7 @@ export const illust = {
     character03: Character03,
     character04: Character04,
     signup: Signup,
+    findPassword: FindPassword,
 };
 
 export const logo = {

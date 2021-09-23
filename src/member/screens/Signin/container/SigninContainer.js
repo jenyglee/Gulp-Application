@@ -125,7 +125,9 @@ const SigninContainer = ({ navigation }) => {
                     btnStyle={{
                         marginTop: 20,
                     }}
-                    onPress={() => {}}
+                    onPress={() => {
+                        navigation.navigate("FindPasswordContainer00");
+                    }}
                 />
             </ContentContainer>
             <SignupContainer>

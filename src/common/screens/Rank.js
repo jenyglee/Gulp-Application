@@ -11,7 +11,7 @@ const Container = styled.View`
 `;
 
 const ListContainer = styled.View`
-    margin-top: 20px;
+    margin: 20px 0 50px;
     width: ${({ width }) => width - 48}px;
 `;
 
