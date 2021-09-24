@@ -19,8 +19,8 @@ import { signout } from "@/member/api/memberApi";
 const Container = styled.View`
     flex: 1;
     width: ${({ width }) => width - 48}px;
-    background-color: ${({ theme }) => theme.main};
-    align-items: center;
+    background-color: ${({ theme }) => theme.background};
+    align-self: center;
     justify-content: center;
 `;
 

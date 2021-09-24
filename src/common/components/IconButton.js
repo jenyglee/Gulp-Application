@@ -28,7 +28,7 @@ const IconButton = ({ id, icon, onPress, name }) => {
         <TouchableOpacity onPress={_onPress}>
             <Container>
                 <ItemName>{name}</ItemName>
-                {/* <Icon source={icon} /> */}
+                <Icon source={icon} />
             </Container>
         </TouchableOpacity>
     );

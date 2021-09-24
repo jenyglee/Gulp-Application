@@ -9,16 +9,17 @@ const TouchContainer = styled.TouchableOpacity`
 `;
 const Container = styled.View`
     width: 100%;
+    height: auto;
+    border-radius: 12px;
+    background-color: ${({ theme }) => theme.white};
 `;
 const TimeContainer = styled.View`
     width: 100%;
-    height: 80px;
-    border: 1px solid #ccc;
+    /* border: 1px solid #ccc; */
     display: flex;
     flex-direction: row;
     justify-content: space-between;
     padding: 20px;
-    background-color: ${({ theme }) => theme.white};
 `;
 
 const Time = styled.Text`
@@ -29,11 +30,9 @@ const Time = styled.Text`
 
 const ItemContainer = styled.View`
     width: 100%;
-    height: auto;
-    border: 1px solid #ccc;
+    /* border: 1px solid #ccc; */
     flex-direction: column;
     padding: 20px;
-    background-color: ${({ theme }) => theme.white};
 `;
 
 const Alarm = ({ item, checkIcon, menuIcon, toggleTask, showAlarmMenu }) => {
@@ -41,7 +40,8 @@ const Alarm = ({ item, checkIcon, menuIcon, toggleTask, showAlarmMenu }) => {
         <TouchContainer>
             <Container>
                 <TimeContainer>
-                    <Time>{item.alarm}</Time>
+                    <Time>{item.time}</Time>
+                    <Time>{item.ampm}</Time>
                     {/* ✨ 메뉴버튼 */}
                     <IconButton
                         icon={menuIcon}

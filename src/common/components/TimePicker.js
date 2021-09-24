@@ -75,7 +75,7 @@ function TimePicker({ onPress }) {
         // console.warn("dataFormat : ", date.format("a/p hh시 mm분"));
         hideDatePicker();
         setText(date.format("a/p hh:mm"));
-        onPress(date.format("a/p hh:mm"));
+        onPress(date.format("a/p"), date.format("hh:mm"));
     };
 
     const placeholder = "알람시간을 설정해주세요.";

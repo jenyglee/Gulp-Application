@@ -56,7 +56,8 @@ const AddMedicine = ({ navigation }) => {
     // };
     const [weekAll, setWeekAll] = useState(allCheckWeek);
     const [week, setWeek] = useState(checkWeek);
-    const [alarm, setAlarm] = useState("");
+    const [ampm, setAmpm] = useState("");
+    const [time, setTime] = useState("");
     const [errorModal, setErrorModal] = useState(false);
     // const [medicineList, setMedicineList] = useState(tempData);
     const [medicineList, setMedicineList] = useState({});
@@ -126,8 +127,13 @@ const AddMedicine = ({ navigation }) => {
     };
 
     // ✨ 설정한 시간 가져오기
-    const whatTime = (time) => {
-        setAlarm(time);
+    const whatTime = (ampm, time) => {
+        if (ampm === "오전") {
+            setAmpm("am");
+        } else if (ampm === "오후") {
+            setAmpm("pm");
+        }
+        setTime(time);
     };
 
     //  ✨빈칸체크
@@ -143,7 +149,7 @@ const AddMedicine = ({ navigation }) => {
 
     //  ✨ 알람 저장
     const saveMedicine = async () => {
-        const bool = await ConfirmValue(medicineList, alarm, week); // 빈칸이 있는지 확인
+        const bool = await ConfirmValue(medicineList, time, week); // 빈칸이 있는지 확인
         // console.log(bool);
 
         if (bool) {
@@ -163,7 +169,8 @@ const AddMedicine = ({ navigation }) => {
             const newTask = {
                 [ID]: {
                     id: ID,
-                    alarm: alarm,
+                    ampm: ampm,
+                    time: time,
                     name: medicineList,
                     day: weekCheckList,
                     completed: false,
@@ -241,6 +248,12 @@ const AddMedicine = ({ navigation }) => {
                 </ButtonArea>
             </StyledForm>
 
+            <Button
+                title="확인용"
+                onPress={() => {
+                    console.log(ampm, time);
+                }}
+            />
             <Button title="저장하기" onPress={saveMedicine} />
             {errorModal ? (
                 <BasicModal
