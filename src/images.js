@@ -13,6 +13,19 @@ import FindPassword from "./../assets/images/findPassword.png";
 import LogoAndTitle from "./../assets/images/logoAndTitle.png";
 import Gauge00 from "./../assets/images/gauge00.png";
 import Gauge01 from "./../assets/images/gauge01.png";
+import Gauge02 from "./../assets/images/gauge02.png";
+import Gauge03 from "./../assets/images/gauge03.png";
+import Gauge04 from "./../assets/images/gauge04.png";
+import Gauge05 from "./../assets/images/gauge05.png";
+import Gauge06 from "./../assets/images/gauge06.png";
+import Gauge07 from "./../assets/images/gauge07.png";
+import Gauge08 from "./../assets/images/gauge08.png";
+import Gauge09 from "./../assets/images/gauge09.png";
+import Gauge10 from "./../assets/images/gauge10.png";
+import Gauge11 from "./../assets/images/gauge11.png";
+import Gauge12 from "./../assets/images/gauge12.png";
+import Gauge13 from "./../assets/images/gauge13.png";
+import Gauge14 from "./../assets/images/gauge14.png";
 
 export const imageNumber = {
     grade01: Grade01,
@@ -35,6 +48,19 @@ export const illust = {
 export const gauge = {
     gauge00: Gauge00,
     gauge01: Gauge01,
+    gauge02: Gauge02,
+    gauge03: Gauge03,
+    gauge04: Gauge04,
+    gauge05: Gauge05,
+    gauge06: Gauge06,
+    gauge07: Gauge07,
+    gauge08: Gauge08,
+    gauge09: Gauge09,
+    gauge10: Gauge10,
+    gauge11: Gauge11,
+    gauge12: Gauge12,
+    gauge13: Gauge13,
+    gauge14: Gauge14,
 };
 
 export const logo = {
