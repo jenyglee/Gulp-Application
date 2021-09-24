@@ -10,24 +10,17 @@ const Container = styled.View`
 const Icon = styled.Image`
     width: 30px;
     height: 30px;
-    margin: 10px;
-    tint-color: #000;
+    tint-color: ${({ theme }) => theme.black};
+    /* background-color: red; */
 `;
 
-const ItemName = styled.Text`
-    font-size: 16px;
-    font-weight: bold;
-    color: ${({ theme }) => theme.black};
-`;
-
-const IconButton = ({ id, icon, onPress, name }) => {
+const IconButton = ({ id, icon, onPress }) => {
     const _onPress = () => {
         onPress(id);
     };
     return (
         <TouchableOpacity onPress={_onPress}>
             <Container>
-                <ItemName>{name}</ItemName>
                 <Icon source={icon} />
             </Container>
         </TouchableOpacity>

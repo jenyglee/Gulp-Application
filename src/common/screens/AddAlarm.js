@@ -56,6 +56,7 @@ const AddMedicine = ({ navigation }) => {
     // };
     const [weekAll, setWeekAll] = useState(allCheckWeek);
     const [week, setWeek] = useState(checkWeek);
+    const weekCheckList = []; // 체크된 요일
     const [ampm, setAmpm] = useState("");
     const [time, setTime] = useState("");
     const [errorModal, setErrorModal] = useState(false);
@@ -129,9 +130,9 @@ const AddMedicine = ({ navigation }) => {
     // ✨ 설정한 시간 가져오기
     const whatTime = (ampm, time) => {
         if (ampm === "오전") {
-            setAmpm("am");
+            setAmpm("AM");
         } else if (ampm === "오후") {
-            setAmpm("pm");
+            setAmpm("PM");
         }
         setTime(time);
     };
@@ -154,7 +155,6 @@ const AddMedicine = ({ navigation }) => {
 
         if (bool) {
             const ID = Date.now();
-            let weekCheckList = []; // 체크된 요일
 
             {
                 // ⓵ 체크된 요일만 가져와 빈 배열[]에 넣기
@@ -251,7 +251,7 @@ const AddMedicine = ({ navigation }) => {
             <Button
                 title="확인용"
                 onPress={() => {
-                    console.log(ampm, time);
+                    console.log(ampm, time, weekCheckList);
                 }}
             />
             <Button title="저장하기" onPress={saveMedicine} />

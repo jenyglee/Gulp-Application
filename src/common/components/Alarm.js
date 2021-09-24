@@ -1,69 +1,201 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { TouchableOpacity, View } from "react-native";
-import styled from "styled-components";
+import { ButtonSmall, AlarmMedicine } from "@components/index";
+import styled, { ThemeContext } from "styled-components";
 import IconButton from "./IconButton";
+import { icons14px } from "@/icons";
 
 const TouchContainer = styled.TouchableOpacity`
     align-items: center;
     margin-bottom: 10px;
 `;
+
+const WeekContainer = styled.View`
+    flex-direction: row;
+`;
+const WeekDay = styled.View`
+    width: 5px;
+    height: 5px;
+    border-radius: 5px;
+    background-color: ${({ theme }) => theme.main};
+    margin-right: 5px;
+`;
+
 const Container = styled.View`
     width: 100%;
     height: auto;
     border-radius: 12px;
+    padding: 20px;
     background-color: ${({ theme }) => theme.white};
 `;
-const TimeContainer = styled.View`
+
+const TopWrap = styled.View`
     width: 100%;
-    /* border: 1px solid #ccc; */
     display: flex;
     flex-direction: row;
     justify-content: space-between;
-    padding: 20px;
+`;
+
+const TimeContainer = styled.View`
+    flex-direction: row;
 `;
 
 const Time = styled.Text`
     font-size: 30px;
     font-weight: bold;
-    color: ${({ theme }) => theme.black};
+    color: ${({ theme, hadMedicine }) =>
+        hadMedicine ? theme.textDisable : theme.black};
 `;
 
-const ItemContainer = styled.View`
+const Ampm = styled.Text`
+    font-size: 16px;
+    font-weight: bold;
+    color: ${({ theme, hadMedicine }) =>
+        hadMedicine ? theme.textDisable : theme.black};
+    position: absolute;
+    top: 3px;
+    right: -28px;
+`;
+
+const TopWrapLeft = styled.View`
+    margin-bottom: 15px;
+`;
+
+const TopWrapRight = styled.View`
+    flex-direction: row;
+`;
+
+const DayContainer = styled.View`
+    flex-direction: row;
+`;
+
+const Day = styled.Text`
+    font-size: 12px;
+    font-weight: bold;
+
+    color: ${({ theme }) => theme.main};
+`;
+
+const MedicineContainer = styled.View`
     width: 100%;
-    /* border: 1px solid #ccc; */
     flex-direction: column;
-    padding: 20px;
 `;
 
-const Alarm = ({ item, checkIcon, menuIcon, toggleTask, showAlarmMenu }) => {
+const Alarm = ({
+    alarmInfo,
+    checkIcon,
+    menuIcon,
+    toggleTask,
+    showAlarmMenu,
+}) => {
+    const theme = useContext(ThemeContext);
+    const [hadMedicine, setHadMedicine] = useState(false);
+    const _onPress = () => {
+        toggleTask(alarmInfo.id);
+        setHadMedicine(!hadMedicine);
+    };
     return (
-        <TouchContainer>
+        <TouchContainer onPress={_onPress}>
             <Container>
-                <TimeContainer>
-                    <Time>{item.time}</Time>
-                    <Time>{item.ampm}</Time>
-                    {/* ✨ 메뉴버튼 */}
-                    <IconButton
-                        icon={menuIcon}
-                        id={item.id}
-                        onPress={showAlarmMenu}
-                    />
-                </TimeContainer>
-                <ItemContainer>
-                    {Object.values(item.name).map((item) => {
-                        return (
-                            <IconButton
-                                name={item.name}
-                                // icon={checkIcon}
-                                onPress={toggleTask}
-                                id={item.id}
-                                key={item.id}
-                            />
-                        );
-                    })}
-                </ItemContainer>
-                {/* <ItemContainer>
-            </ItemContainer> */}
+                {hadMedicine ? (
+                    <>
+                        <TopWrap>
+                            <TopWrapLeft>
+                                <DayContainer>
+                                    {alarmInfo.day.map((item) => {
+                                        return (
+                                            <Day key={item.id}>{item.day} </Day>
+                                        );
+                                    })}
+                                </DayContainer>
+                                <TimeContainer>
+                                    <Time hadMedicine={hadMedicine}>
+                                        {alarmInfo.time}
+                                    </Time>
+                                    <Ampm hadMedicine={hadMedicine}>
+                                        {alarmInfo.ampm}
+                                    </Ampm>
+                                </TimeContainer>
+                            </TopWrapLeft>
+                            <TopWrapRight>
+                                {/* ✨ 복용, 미복용 버튼 */}
+                                <ButtonSmall
+                                    title="복용"
+                                    icon={icons14px.check}
+                                    onPress={_onPress}
+                                />
+
+                                {/* ✨ 메뉴버튼 */}
+                                <IconButton
+                                    icon={menuIcon}
+                                    id={alarmInfo.id}
+                                    onPress={showAlarmMenu}
+                                />
+                            </TopWrapRight>
+                        </TopWrap>
+                        <MedicineContainer>
+                            {Object.values(alarmInfo.name).map((item) => {
+                                return (
+                                    <AlarmMedicine
+                                        hadMedicine={hadMedicine}
+                                        name={item.name}
+                                        key={item.id}
+                                    />
+                                );
+                            })}
+                        </MedicineContainer>
+                    </>
+                ) : (
+                    <>
+                        <TopWrap>
+                            <TopWrapLeft>
+                                <DayContainer>
+                                    {alarmInfo.day.map((item) => {
+                                        return (
+                                            <Day key={item.id}>{item.day} </Day>
+                                        );
+                                    })}
+                                </DayContainer>
+                                <TimeContainer>
+                                    <Time>{alarmInfo.time}</Time>
+                                    <Ampm>{alarmInfo.ampm}</Ampm>
+                                </TimeContainer>
+                            </TopWrapLeft>
+                            <TopWrapRight>
+                                {/* ✨ 복용, 미복용 버튼 */}
+                                <ButtonSmall
+                                    title="미복용"
+                                    icon={icons14px.uncheck}
+                                    containerStyle={{
+                                        backgroundColor:
+                                            theme.smallBtnBackground,
+                                    }}
+                                    textStyle={{
+                                        color: theme.smallBtnText,
+                                    }}
+                                    onPress={_onPress}
+                                />
+
+                                {/* ✨ 메뉴버튼 */}
+                                <IconButton
+                                    icon={menuIcon}
+                                    id={alarmInfo.id}
+                                    onPress={showAlarmMenu}
+                                />
+                            </TopWrapRight>
+                        </TopWrap>
+                        <MedicineContainer>
+                            {Object.values(alarmInfo.name).map((item) => {
+                                return (
+                                    <AlarmMedicine
+                                        name={item.name}
+                                        key={item.id}
+                                    />
+                                );
+                            })}
+                        </MedicineContainer>
+                    </>
+                )}
             </Container>
         </TouchContainer>
     );

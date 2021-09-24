@@ -35,6 +35,12 @@ export const theme = {
     // ✨ 텍스트버튼
     textBtnText: Colors.main,
 
+    // ✨ 스몰버튼
+    smallBtnText: Colors.deepGrey,
+    smallBtnTextChecked: Colors.white,
+    smallBtnBackground: Colors.grey_5,
+    smallBtnBackgroundChecked: Colors.main,
+
     // ✨ 인풋
     inputBorder: Colors.grey_3,
     inputPlaceholderText: Colors.grey_4,

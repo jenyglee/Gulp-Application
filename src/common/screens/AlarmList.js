@@ -183,7 +183,7 @@ export default function AlarmList({ navigation }) {
                     Object.values(tasks).map((item) => {
                         return (
                             <Alarm
-                                item={item}
+                                alarmInfo={item}
                                 checkIcon={
                                     item.completed ? icons.check : icons.uncheck
                                 }
