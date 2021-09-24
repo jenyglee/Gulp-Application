@@ -1,6 +1,12 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components/native";
-import { View, SafeAreaView, ScrollView, Modal } from "react-native";
+import {
+    View,
+    SafeAreaView,
+    ScrollView,
+    Modal,
+    Dimensions,
+} from "react-native";
 import { StatusBar } from "expo-status-bar";
 import { icons } from "@/icons";
 import { Button, Grade, Alarm } from "@components/index";
@@ -12,8 +18,8 @@ import { signout } from "@/member/api/memberApi";
 
 const Container = styled.View`
     flex: 1;
-    width: 100%;
-    background-color: ${({ theme }) => theme.white};
+    width: ${({ width }) => width - 48}px;
+    background-color: ${({ theme }) => theme.main};
     align-items: center;
     justify-content: center;
 `;
@@ -27,6 +33,7 @@ const ProfileName = styled.Text`
 `;
 
 export default function AlarmList({ navigation }) {
+    const width = Dimensions.get("window").width;
     // ✨데이터형태(참고용)
     // const tempData = {
     //     1: {
@@ -58,7 +65,6 @@ export default function AlarmList({ navigation }) {
         { id: 2, title: "닫기" },
     ]);
     const [foundMedicine, setFoundMedicine] = useState(false); // 약 리스트 유무
-    const [isSignin, setIsSignin] = useState(true); // grade 노출(로그인시)
 
     // ✨ 로컬에 저장하기
     const storeData = async (tasks) => {
@@ -170,15 +176,9 @@ export default function AlarmList({ navigation }) {
 
     return (
         <ScrollView>
-            <Container>
+            <Container width={width}>
                 <StatusBar style="auto" />
-                {isSignin ? (
-                    // 🪲 헬퍼를 뽑는 법을 모르겠음...
-                    // <Grade count={count} onPress={showGradeTable(bool)} />
-                    <Grade count={count} onPress={showGradeTable} />
-                ) : (
-                    <ProfileName>로그인해주세요</ProfileName>
-                )}
+                <Grade count={count} onPress={showGradeTable} />
                 {foundMedicine ? (
                     Object.values(tasks).map((item) => {
                         return (

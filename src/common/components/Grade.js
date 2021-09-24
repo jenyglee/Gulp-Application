@@ -5,7 +5,7 @@ import { Button } from "react-native";
 import { imageNumber } from "./../../images";
 
 const Container = styled.View`
-    background-color: ${({ theme }) => theme.white};
+    background-color: ${({ theme }) => theme.background};
     align-items: center;
     justify-content: center;
     margin: 30px 0;
