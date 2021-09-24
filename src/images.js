@@ -11,6 +11,8 @@ import Character04 from "./../assets/images/character_04.png";
 import Signup from "./../assets/images/signup.png";
 import FindPassword from "./../assets/images/findPassword.png";
 import LogoAndTitle from "./../assets/images/logoAndTitle.png";
+import Gauge00 from "./../assets/images/gauge00.png";
+import Gauge01 from "./../assets/images/gauge01.png";
 
 export const imageNumber = {
     grade01: Grade01,
@@ -28,6 +30,11 @@ export const illust = {
     character04: Character04,
     signup: Signup,
     findPassword: FindPassword,
+};
+
+export const gauge = {
+    gauge00: Gauge00,
+    gauge01: Gauge01,
 };
 
 export const logo = {
