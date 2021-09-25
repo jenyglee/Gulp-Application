@@ -42,13 +42,36 @@ const Icon = styled.Image`
 
 const Tab = createBottomTabNavigator();
 const HomeTabs = () => {
+    const theme = useContext(ThemeContext);
     return (
-        <Tab.Navigator>
+        <Tab.Navigator
+            screenOptions={{
+                tabBarLabelPosition: "below-icon",
+                tabBarStyle: {
+                    borderTopColor: theme.line,
+                    borderTopWidth: 2,
+                },
+                tabBarActiveTintColor: theme.main,
+                tabBarInactiveTintColor: theme.textDisable,
+            }}
+        >
             <Tab.Screen
                 name="Home"
                 component={AlarmList}
                 options={{
                     headerShown: false,
+                    tabBarIcon: (props) => {
+                        return (
+                            <Icon
+                                source={
+                                    props.focused
+                                        ? icons30px.alarm
+                                        : icons30px.alarmDisable
+                                }
+                                resizeMode="contain"
+                            />
+                        );
+                    },
                 }}
             />
             <Tab.Screen
@@ -67,6 +90,18 @@ const HomeTabs = () => {
                         fontWeight: "900",
                     },
                     headerTitleAlign: "center",
+                    tabBarIcon: (props) => {
+                        return (
+                            <Icon
+                                source={
+                                    props.focused
+                                        ? icons30px.calendar
+                                        : icons30px.calendarDisable
+                                }
+                                resizeMode="contain"
+                            />
+                        );
+                    },
                 }}
             />
             <Tab.Screen
@@ -85,6 +120,18 @@ const HomeTabs = () => {
                         fontWeight: "900",
                     },
                     headerTitleAlign: "center",
+                    tabBarIcon: (props) => {
+                        return (
+                            <Icon
+                                source={
+                                    props.focused
+                                        ? icons30px.rank
+                                        : icons30px.rankDisable
+                                }
+                                resizeMode="contain"
+                            />
+                        );
+                    },
                 }}
             />
             <Tab.Screen
@@ -103,6 +150,18 @@ const HomeTabs = () => {
                         fontWeight: "900",
                     },
                     headerTitleAlign: "center",
+                    tabBarIcon: (props) => {
+                        return (
+                            <Icon
+                                source={
+                                    props.focused
+                                        ? icons30px.dot
+                                        : icons30px.dotDisable
+                                }
+                                resizeMode="contain"
+                            />
+                        );
+                    },
                 }}
                 // options={headerStyle}
             />

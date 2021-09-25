@@ -3,7 +3,7 @@ import styled from "styled-components/native";
 import { Button } from "react-native";
 // import { imageNumber } from "../images";
 import { imageNumber } from "./../../images";
-import { gauge } from "@/images";
+import { gauge, illust } from "@/images";
 import ButtonSmall from "./ButtonSmall";
 import { icons14px } from "@/icons";
 
@@ -12,23 +12,40 @@ const Container = styled.View`
     align-items: center;
     justify-content: space-between;
     flex-direction: row;
-    margin: 30px 0;
+    margin-bottom: 20px;
     width: 100%;
 `;
 
-const GaugeContainer = styled.View``;
+const GaugeContainer = styled.View`
+    width: 50%;
+    align-items: center;
+`;
 
 const StyledImage = styled.Image`
-    width: 100px;
+    width: 154px;
+    height: 154px;
     /* background-color: red; */
 `;
 
-const TextContainer = styled.View`
-    /* background-color: blue; */
-    align-items: flex-start;
+const MedicineIllust = styled.Image`
+    position: absolute;
+    top: 19px;
+    width: 60px;
 `;
 
 const Count = styled.Text`
+    position: absolute;
+    bottom: 16px;
+    color: ${({ theme }) => theme.textSub};
+`;
+
+const TextContainer = styled.View`
+    width: 50%;
+    align-items: flex-start;
+    /* background-color: blue; */
+`;
+
+const DayCount = styled.Text`
     font-size: 12px;
     font-weight: bold;
     color: ${({ theme }) => theme.main};
@@ -41,14 +58,7 @@ const GradeTitle = styled.Text`
     color: ${({ theme }) => theme.black};
 `;
 
-const Number = styled.Image`
-    width: 80%;
-    height: 150px;
-    margin-top: 30px;
-    margin-bottom: 20px;
-`;
-
-const Grade = ({ count, onPress }) => {
+const Grade = ({ countTotal, count, onPress }) => {
     const Gauge = () => {
         if (count === 1) {
             return <StyledImage source={gauge.gauge01} resizeMode="contain" />;
@@ -87,29 +97,32 @@ const Grade = ({ count, onPress }) => {
     };
 
     const GradeChange = () => {
-        if (count >= 5 && count < 10) {
-            return <GradeTitle>내 취미는 자기관리</GradeTitle>;
-        } else if (count >= 10 && count < 15) {
-            return <GradeTitle>자기관리 엘리트</GradeTitle>;
-        } else if (count >= 15 && count < 20) {
-            return <GradeTitle>자기관리 없이는 못살아</GradeTitle>;
-        } else if (count >= 20 && count < 25) {
-            return <GradeTitle>일편단심 자기관리</GradeTitle>;
-        } else if (count >= 25) {
-            return <GradeTitle>자기관리 외길인생</GradeTitle>;
+        if (countTotal >= 14 && countTotal < 28) {
+            return <GradeTitle>내 취미는 건강관리!</GradeTitle>;
+        } else if (countTotal >= 28 && countTotal < 42) {
+            return <GradeTitle>영양제 엘리트🤓</GradeTitle>;
+        } else if (countTotal >= 42 && countTotal < 56) {
+            return <GradeTitle>영양제 없이는 못살아😂</GradeTitle>;
+        } else if (countTotal >= 56 && countTotal < 70) {
+            return <GradeTitle>일.편.단.심 건강관리 </GradeTitle>;
+        } else if (countTotal >= 70) {
+            return <GradeTitle>건강관리 외길인생...🧘‍♂️</GradeTitle>;
         }
-        return <GradeTitle>자기관리 꿈나무 </GradeTitle>;
+        return <GradeTitle>건강관리 꿈나무🌱 </GradeTitle>;
     };
 
     return (
         <Container>
             <GaugeContainer>
-                {/* <StyledImage source={gauge.gauge00} resizeMode="contain" /> */}
                 <Gauge />
+                <MedicineIllust
+                    source={illust.illustMedicine}
+                    resizeMode="contain"
+                />
+                <Count>{count} / 14</Count>
             </GaugeContainer>
-            {/* <ImageChange /> */}
             <TextContainer>
-                <Count>{count}일째 꾸준히 복용중!</Count>
+                <DayCount>{countTotal}일째 꾸준히 복용중!</DayCount>
                 <GradeChange />
                 <ButtonSmall
                     title="등급표"

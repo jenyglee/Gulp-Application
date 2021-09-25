@@ -10,7 +10,8 @@ import Character03 from "./../assets/images/character_03.png";
 import Character04 from "./../assets/images/character_04.png";
 import Signup from "./../assets/images/signup.png";
 import FindPassword from "./../assets/images/findPassword.png";
-import LogoAndTitle from "./../assets/images/logoAndTitle.png";
+import TopLogo from "./../assets/images/topLogo.png";
+import SigninLogo from "./../assets/images/signinLogo.png";
 import Gauge00 from "./../assets/images/gauge00.png";
 import Gauge01 from "./../assets/images/gauge01.png";
 import Gauge02 from "./../assets/images/gauge02.png";
@@ -26,6 +27,7 @@ import Gauge11 from "./../assets/images/gauge11.png";
 import Gauge12 from "./../assets/images/gauge12.png";
 import Gauge13 from "./../assets/images/gauge13.png";
 import Gauge14 from "./../assets/images/gauge14.png";
+import IllustMedicine from "./../assets/images/illust_medicine.png";
 
 export const imageNumber = {
     grade01: Grade01,
@@ -43,6 +45,7 @@ export const illust = {
     character04: Character04,
     signup: Signup,
     findPassword: FindPassword,
+    illustMedicine: IllustMedicine,
 };
 
 export const gauge = {
@@ -64,5 +67,6 @@ export const gauge = {
 };
 
 export const logo = {
-    logoAndTitle: LogoAndTitle,
+    topLogo: TopLogo,
+    signinLogo: SigninLogo,
 };

@@ -1,20 +1,20 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components/native";
-import {
-    View,
-    SafeAreaView,
-    ScrollView,
-    Modal,
-    Dimensions,
-} from "react-native";
+import { View, ScrollView, Dimensions } from "react-native";
 import { StatusBar } from "expo-status-bar";
 import { icons } from "@/icons";
-import { Button, Grade, Alarm } from "@components/index";
+import { Button, Grade, Alarm, TopLogo } from "@components/index";
 import { GradeTable, AlarmMenu } from "@components/modal/index";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { signout } from "@/member/api/memberApi";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 // import { showGradeTable } from "@/common/helper/helper"; // 등급보기 헬퍼
 // import { signout, signConfirm } from "@/firebase";
+
+const Wrap = styled.ScrollView`
+    padding-top: ${({ insets }) => insets.top}px;
+    padding-bottom: ${({ insets }) => insets.bottom}px;
+`;
 
 const Container = styled.View`
     flex: 1;
@@ -22,6 +22,14 @@ const Container = styled.View`
     background-color: ${({ theme }) => theme.background};
     align-self: center;
     justify-content: center;
+    margin-bottom: 50px;
+`;
+
+const StyledText = styled.Text`
+    font-size: 20px;
+    font-weight: bold;
+    margin-bottom: 10px;
+    color: ${({ theme }) => theme.textBasic};
 `;
 
 const AddBtn = styled.Button`
@@ -34,6 +42,7 @@ const ProfileName = styled.Text`
 
 export default function AlarmList({ navigation }) {
     const width = Dimensions.get("window").width;
+    const insets = useSafeAreaInsets();
     // ✨데이터형태(참고용)
     // const tempData = {
     //     1: {
@@ -49,10 +58,10 @@ export default function AlarmList({ navigation }) {
     //             { id: 2, day: "화", check: "true" },
     //         ],
     //         completed: false,
-    //         showMenu : false  << 이걸 true로 바꿔주는 toggleTasks를 만들고, 이게 true가 되면 setAlarmMenu를 true로 바꿔주고, 변경을 누르면
     //     },
     const [selectedTaskKey, setSelectedTaskKey] = useState();
     const [tasks, setTasks] = useState({});
+    const [countTotal, setCountTotal] = useState(0);
     const [count, setCount] = useState(0);
     const [gradeTable, setGradeTable] = useState(false); // 등급표
     // 🪲 헬퍼를 뽑는 법을 모르겠음...
@@ -71,11 +80,6 @@ export default function AlarmList({ navigation }) {
         try {
             await AsyncStorage.setItem("tasks", JSON.stringify(tasks));
             setTasks(tasks);
-            // if (Object.values(tasks).length == 0) {
-            //     setFoundMedicine(false);
-            // } else {
-            //     setFoundMedicine(true);
-            // }
             confirmList(tasks);
         } catch (error) {
             throw error;
@@ -106,7 +110,15 @@ export default function AlarmList({ navigation }) {
 
     // ✨(테스트용)복용완료
     const plusDate = () => {
-        setCount(count + 1);
+        setCountTotal(countTotal + 1);
+    };
+
+    const plusDateMAX = () => {
+        if (count === 13) {
+            setCount(0);
+        } else {
+            setCount(count + 1);
+        }
     };
 
     // ✨전체 완료 체크
@@ -116,6 +128,7 @@ export default function AlarmList({ navigation }) {
         storeData(copy);
         // setTasks(copy);
         allCompleted();
+        // 전달할때 toggleTask, id 필요 / Alarm에서 _onPress 필요
     };
 
     // ✨전체 체크 시 복용일을 1일 증가
@@ -175,10 +188,16 @@ export default function AlarmList({ navigation }) {
     }, []);
 
     return (
-        <ScrollView>
+        <Wrap insets={insets}>
             <Container width={width}>
                 <StatusBar style="auto" />
-                <Grade count={count} onPress={showGradeTable} />
+                <TopLogo />
+                <Grade
+                    countTotal={countTotal}
+                    count={count}
+                    onPress={showGradeTable}
+                />
+                <StyledText>내 알람</StyledText>
                 {foundMedicine ? (
                     Object.values(tasks).map((item) => {
                         return (
@@ -218,7 +237,13 @@ export default function AlarmList({ navigation }) {
                         title="(테스트용)로그인"
                     />
                     <Button onPress={signout} title="(테스트용)로그아웃" />
-                    <Button onPress={plusDate} title="(테스트용)복용완료" />
+                    <Button
+                        onPress={() => {
+                            plusDate();
+                            plusDateMAX();
+                        }}
+                        title="(테스트용)복용완료"
+                    />
                 </View>
                 {gradeTable ? (
                     // 🪲 헬퍼를 뽑는 법을 모르겠음...
@@ -234,6 +259,6 @@ export default function AlarmList({ navigation }) {
                     />
                 ) : null}
             </Container>
-        </ScrollView>
+        </Wrap>
     );
 }

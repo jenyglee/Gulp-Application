@@ -75,7 +75,7 @@ const SigninContainer = ({ navigation }) => {
     return (
         <Container>
             <ContentContainer width={width} height={height}>
-                <Logo source={logo.logoAndTitle} resizeMode="contain" />
+                <Logo source={logo.signinLogo} resizeMode="contain" />
                 <InputWithIcon
                     title="이메일"
                     placeholder="이메일을 입력하세요"

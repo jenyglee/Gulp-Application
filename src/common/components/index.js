@@ -22,6 +22,7 @@ import Notice from "./Notice";
 import ButtonMenu from "./ButtonMenu";
 import Category from "./Category";
 import RequireSignin from "./RequireSignin";
+import TopLogo from "./TopLogo";
 
 export {
     Button,
@@ -48,4 +49,5 @@ export {
     ButtonMenu,
     Category,
     RequireSignin,
+    TopLogo,
 };
