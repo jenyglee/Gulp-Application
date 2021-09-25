@@ -5,6 +5,7 @@ import Dot from "@/../assets/icons/dot.png";
 import Password20px from "@/../assets/icons/20px_password.png";
 import User20px from "@/../assets/icons/20px_user.png";
 import Medicine20px from "@/../assets/icons/20px_medicine.png";
+import Filter20px from "@/../assets/icons/20px_filter.png";
 import LeftArrow30px from "@/../assets/icons/30px_leftArrow.png";
 import LeftArrowWhite30px from "@/../assets/icons/30px_leftArrow(w).png";
 import RightArrowWhite30px from "@/../assets/icons/30px_rightArrow(w).png";
@@ -40,6 +41,7 @@ export const icons14px = {
 export const icons20px = {
     password: Password20px,
     user: User20px,
+    filter: Filter20px,
     medicine: Medicine20px,
 };
 

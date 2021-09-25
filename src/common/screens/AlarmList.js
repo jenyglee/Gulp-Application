@@ -3,7 +3,7 @@ import styled from "styled-components/native";
 import { View, ScrollView, Dimensions } from "react-native";
 import { StatusBar } from "expo-status-bar";
 import { icons } from "@/icons";
-import { Button, Grade, Alarm, TopLogo } from "@components/index";
+import { Button, Grade, Alarm, TopLogo, ButtonFilter } from "@components/index";
 import { GradeTable, AlarmMenu } from "@components/modal/index";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { signout } from "@/member/api/memberApi";
@@ -25,10 +25,17 @@ const Container = styled.View`
     margin-bottom: 50px;
 `;
 
+const TitleContainer = styled.View`
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: flex-end;
+    margin-bottom: 10px;
+`;
+
 const StyledText = styled.Text`
     font-size: 20px;
     font-weight: bold;
-    margin-bottom: 10px;
+
     color: ${({ theme }) => theme.textBasic};
 `;
 
@@ -197,7 +204,10 @@ export default function AlarmList({ navigation }) {
                     count={count}
                     onPress={showGradeTable}
                 />
-                <StyledText>내 알람</StyledText>
+                <TitleContainer>
+                    <StyledText>내 알람</StyledText>
+                    <ButtonFilter title="Today" />
+                </TitleContainer>
                 {foundMedicine ? (
                     Object.values(tasks).map((item) => {
                         return (
