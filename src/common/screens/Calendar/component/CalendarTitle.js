@@ -58,24 +58,24 @@ const Per = styled.Text`
     color: ${({ theme }) => theme.white};
 `;
 
-const CalendarTitle = () => {
+const CalendarTitle = ({ month, onPressLeft, onPressRight }) => {
     return (
         <Container>
-            <LeftArrowBtn>
+            <LeftArrowBtn onPress={onPressLeft}>
                 <LeftArrow
                     source={icons30px.leftArrow_w}
                     resizeMode="contain"
                 />
             </LeftArrowBtn>
             <TitleContainer>
-                <Month>8월</Month>
+                <Month>{month}월</Month>
                 <Line />
                 <TextContainer>
                     <StyledText>복용 달성률</StyledText>
                     <Per>52%</Per>
                 </TextContainer>
             </TitleContainer>
-            <RightArrowBtn>
+            <RightArrowBtn onPress={onPressRight}>
                 <RightArrow
                     source={icons30px.rightArrow_w}
                     resizeMode="contain"

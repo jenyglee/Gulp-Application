@@ -70,7 +70,7 @@ const Calendar = ({ navigation }) => {
     const [tasks, setTasks] = useState({});
     const [foundMedicine, setFoundMedicine] = useState(false); // 약 리스트 유무
     const [completed, setCompleted] = useState(true); // 복용 완료 여부
-    const [isSignin, setIsSignin] = useState(false); // 캘린더 노출(로그인시)
+    const [isSignin, setIsSignin] = useState(true); // 캘린더 노출(로그인시)
 
     // ✨ 로컬에서 가져오기
     const getData = async () => {
@@ -96,7 +96,7 @@ const Calendar = ({ navigation }) => {
         <ScrollView>
             {isSignin ? (
                 <Container width={width}>
-                    <CalendarTitle />
+                    {/* <CalendarTitle /> */}
                     <CalendarTable tasks={tasks} />
                     <HistoryContainer>
                         <Date>8월 18일</Date>
