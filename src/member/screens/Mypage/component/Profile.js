@@ -1,10 +1,7 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { Platform } from "react-native";
-// import { illust } from "./../images";
-import { illust } from "./../../images";
-// import { icons35px } from "../icons";
-import { icons35px } from "./../../icons";
+import { icons35px } from "@/icons";
 import * as ImagePicker from "expo-image-picker";
 
 const Container = styled.View`

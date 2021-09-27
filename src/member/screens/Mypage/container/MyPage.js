@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import { SafeAreaView } from "react-native";
 import styled from "styled-components";
-import { Profile, ButtonMenu } from "@components/index";
+import Profile from "@/member/screens/Mypage/component/Profile";
+import ButtonMenu from "@/member/screens/Mypage/component/ButtonMenu";
 import { GradeTable, InputModal } from "@components/modal/index";
 
 const Container = styled.View`
