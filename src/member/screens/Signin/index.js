@@ -1,3 +1,3 @@
-import SigninContainer from "@/member/screens/Signin/container/SigninContainer";
+import Signin from "@/member/screens/Signin/container/Signin";
 
-export default SigninContainer;
+export default Signin;

@@ -19,6 +19,7 @@ const ListBtn = styled.TouchableOpacity`
     flex: 1;
     width: 100%;
 `;
+
 const ListContainer = styled.View`
     width: 100%;
     height: 100%;
@@ -38,6 +39,12 @@ const Line = styled.View`
 
 const ButtonMenu = ({ showGradeTable, showUserInfo }) => {
     const width = Dimensions.get("window").width;
+
+    const buttons = [
+        { onPress: showUserInfo, text: "회원정보 변경" },
+        { onPress: showGradeTable, text: "등급표" },
+    ];
+
     return (
         <Wrap>
             <Container width={width}>

@@ -5,12 +5,12 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { createStackNavigator } from "@react-navigation/stack";
 import { AlarmList, Calendar, Rank, AddAlarm } from "@screens/index";
 import AddMedicine from "@/medicine/screens/AddMedicine";
-import MyPage from "@/member/screens/Mypage/container/MyPageContainer";
-import Signin from "@/member/screens/Signin/container/SigninContainer";
+import MyPage from "@/member/screens/Mypage/container/MyPage";
+import Signin from "@/member/screens/Signin/container/Signin";
 import { Signup00, Signup01 } from "@/member/screens/Signup/index";
 import {
-    FindPasswordContainer00,
-    FindPasswordContainer01,
+    FindPassword00,
+    FindPassword01,
 } from "@/member/screens/FindPassword/index";
 import { icons30px } from "@/icons";
 
@@ -318,8 +318,8 @@ const HomeStackNav = () => {
                 }}
             />
             <HomeStack.Screen
-                name="FindPasswordContainer00"
-                component={FindPasswordContainer00}
+                name="FindPassword00"
+                component={FindPassword00}
                 options={({ navigation }) => {
                     return {
                         headerBackTitleVisible: false,
@@ -363,8 +363,8 @@ const HomeStackNav = () => {
                 }}
             />
             <HomeStack.Screen
-                name="FindPasswordContainer01"
-                component={FindPasswordContainer01}
+                name="FindPassword01"
+                component={FindPassword01}
                 options={({ navigation }) => {
                     return {
                         headerBackTitleVisible: false,

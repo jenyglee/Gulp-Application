@@ -1,3 +1,3 @@
-import MyPageContainer from "@/member/screens/Mypage/container/MyPageContainer";
+import MyPage from "@/member/screens/Mypage/container/MyPage";
 
-export default MyPageContainer;
+export default MyPage;

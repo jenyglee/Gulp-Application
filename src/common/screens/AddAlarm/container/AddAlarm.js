@@ -2,14 +2,12 @@ import React, { useState, useEffect } from "react";
 import styled from "styled-components/native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Alert } from "react-native";
-import {
-    DeleteButton,
-    TimePicker,
-    WeekButton,
-    Button,
-} from "@components/index";
-import { BasicModal } from "@components/modal/index";
 import { illust } from "@/images";
+import Button from "@components/Button";
+import DeleteButton from "@/common/screens/AddAlarm/component/DeleteButton";
+import TimePicker from "@/common/screens/AddAlarm/component/TimePicker";
+import WeekButton from "@/common/screens/AddAlarm/component/WeekButton";
+import { BasicModal } from "@components/modal/index";
 
 const Container = styled.View`
     flex: 1;

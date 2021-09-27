@@ -2,12 +2,10 @@ import React, { useState, useEffect, useContext } from "react";
 import { View, ScrollView, Dimensions } from "react-native";
 import styled, { ThemeContext } from "styled-components";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import {
-    CalendarTable,
-    CalendarTitle,
-    CalendarTitleNotSignin,
-    RequireSignin,
-} from "@components/index";
+import CalendarTable from "@/common/screens/Calendar/component/CalendarTable";
+import CalendarTitle from "@/common/screens/Calendar/component/CalendarTitle";
+import CalendarTitleNotSignin from "@/common/screens/Calendar/component/CalendarTitleNotSignin";
+import RequireSignin from "@/common/screens/Calendar/component/RequireSignin";
 import { badge } from "@/icons";
 import { illust } from "@/images";
 

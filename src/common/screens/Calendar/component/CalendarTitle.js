@@ -1,7 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-// import { icons30px } from "../icons";
-import { icons30px } from "./../../icons";
+import { icons30px } from "@/icons";
 
 const Container = styled.View`
     padding: 18px 20px;

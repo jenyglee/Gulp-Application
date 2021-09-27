@@ -1,7 +1,8 @@
 import React, { useState, useContext } from "react";
-import { ScrollView, View, Dimensions, FlatList } from "react-native";
+import { View, Dimensions, FlatList } from "react-native";
 import styled, { ThemeContext } from "styled-components";
-import { ListItem, Category } from "@components/index";
+import ListItem from "@/common/screens/Rank/component/ListItem";
+import Category from "@/common/screens/Rank/component/Category";
 
 const Container = styled.View`
     width: 100%;
@@ -16,7 +17,7 @@ const ListContainer = styled.View`
 `;
 
 const tempData = [
-    { id: 1, title: "하루약속 멀티비타민" },
+    { id: 1, title: "하루약속 멀티비타민", rank: 1 },
     { id: 2, title: "강블리 퍼스트핏 멀티비타민 미네랄" },
     { id: 3, title: "센트룸 포 우먼 멀티 비타민 미네랄" },
     { id: 4, title: "고려은단 비타민C" },
@@ -40,7 +41,7 @@ const Ranking = () => {
                 num={item.id}
                 title={item.title}
                 containerStyle={{
-                    // backgroundColor: { item.id == 1 ? theme.firstRank : theme.white},
+                    // backgroundColor: { item.id  == 1 ? theme.firstRank : theme.white},
 
                     backgroundColor: theme.white,
                     // backgroundColor: theme.firstRank,

@@ -1,4 +1,4 @@
-import FindPasswordContainer00 from "@/member/screens/FindPassword/container/FindPasswordContainer00";
-import FindPasswordContainer01 from "@/member/screens/FindPassword/container/FindPasswordContainer01";
+import FindPassword00 from "@/member/screens/FindPassword/container/FindPassword00";
+import FindPassword01 from "@/member/screens/FindPassword/container/FindPassword01";
 
-export { FindPasswordContainer00, FindPasswordContainer01 };
+export { FindPassword00, FindPassword01 };

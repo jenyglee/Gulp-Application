@@ -1,10 +1,7 @@
 import React from "react";
 import styled from "styled-components/native";
-import { Button } from "react-native";
-// import { imageNumber } from "../images";
-import { imageNumber } from "./../../images";
 import { gauge, illust } from "@/images";
-import ButtonSmall from "./ButtonSmall";
+import ButtonSmall from "@components/ButtonSmall";
 import { icons14px } from "@/icons";
 
 const Container = styled.View`

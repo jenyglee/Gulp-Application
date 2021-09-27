@@ -1,8 +1,7 @@
 import React, { useState, useContext } from "react";
-import { TouchableOpacity, View } from "react-native";
 import { ButtonSmall, AlarmMedicine } from "@components/index";
 import styled, { ThemeContext } from "styled-components";
-import IconButton from "./IconButton";
+import IconButton from "@/common/screens/AlarmList/component/IconButton";
 import { icons14px } from "@/icons";
 
 const TouchContainer = styled.TouchableOpacity`

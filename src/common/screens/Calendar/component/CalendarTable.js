@@ -1,10 +1,8 @@
-import React, { Component, useState, useContext } from "react";
+import React, { useState, useContext } from "react";
 import { Calendar, CalendarList, Agenda } from "react-native-calendars";
 import { LocaleConfig } from "react-native-calendars";
-import { View, Text } from "react-native";
 import styled, { ThemeContext } from "styled-components";
 import { AntDesign } from "@expo/vector-icons";
-import IconButton from "./IconButton";
 
 const Arrow = () => {
     return <AntDesign name="caretleft" size={24} color="black" />;
