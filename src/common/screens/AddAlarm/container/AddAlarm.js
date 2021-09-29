@@ -1,40 +1,64 @@
-import React, { useState, useEffect } from "react";
-import styled from "styled-components/native";
+import React, { useState, useEffect, useContext } from "react";
+import styled, { ThemeContext } from "styled-components/native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { Alert } from "react-native";
-import { illust } from "@/images";
+import { Alert, Dimensions } from "react-native";
 import Button from "@components/Button";
-import DeleteButton from "@/common/screens/AddAlarm/component/DeleteButton";
+import ButtonSmall from "@components/ButtonSmall";
+import TagButton from "@/common/screens/AddAlarm/component/TagButton";
 import TimePicker from "@/common/screens/AddAlarm/component/TimePicker";
 import WeekButton from "@/common/screens/AddAlarm/component/WeekButton";
 import { BasicModal } from "@components/modal/index";
+import { illust } from "@/images";
+import { icons14px } from "@/icons";
 
 const Container = styled.View`
-    flex: 1;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    width: ${({ width }) => width - 48}px;
+    height: 100%;
+    margin-top: 50px;
+    align-self: center;
 `;
 
 const StyledForm = styled.View`
-    width: 80%;
-    margin: 20px;
+    width: 100%;
+    margin-bottom: 36px;
 `;
+
+const StyledTagForm = styled.View`
+    flex-flow: row wrap;
+`;
+
 const StyledTitle = styled.Text`
-    font-size: 30px;
+    font-size: 20px;
     font-weight: bold;
-    margin-bottom: 20px;
+    margin-bottom: 10px;
+`;
+
+const WeekButtonContainer = styled.View`
+    height: 60px;
+    flex-direction: row;
+    border-radius: 12px;
+    align-items: center;
+    justify-content: center;
+    background-color: ${({ theme }) => theme.background};
+`;
+
+const SaveButtonContainer = styled.View`
+    width: ${({ width }) => width - 48}px;
+    position: absolute;
+    bottom: 40px;
 `;
 
 const ButtonArea = styled.View`
     width: 100%;
-    height: 40px;
-    display: flex;
-    flex-flow: column wrap;
+    position: absolute;
+    bottom: 40px;
 `;
 
 const AddMedicine = ({ navigation }) => {
-    const allCheckWeek = [{ id: 0, day: "매일", checked: false }];
+    const width = Dimensions.get("window").width;
+    const height = Dimensions.get("window").height;
+    const theme = useContext(ThemeContext);
+    const allCheckWeek = [{ id: 0, day: "All", checked: false }];
     const checkWeek = [
         // { id: 0, day: "매일", check: false },
         { id: 0, day: "월", checked: false },
@@ -153,7 +177,6 @@ const AddMedicine = ({ navigation }) => {
 
         if (bool) {
             const ID = Date.now();
-
             {
                 // ⓵ 체크된 요일만 가져와 빈 배열[]에 넣기
                 week.map((checkedDay) => {
@@ -200,38 +223,19 @@ const AddMedicine = ({ navigation }) => {
     };
 
     return (
-        <Container>
+        <Container width={width} height={height}>
             <StyledForm>
-                <StyledTitle>복용중인 영양제</StyledTitle>
-                {Object.values(medicineList).map((item) => {
-                    return (
-                        <DeleteButton
-                            title={item.name}
-                            id={item.id}
-                            key={item.id}
-                            deleteTask={deleteTask}
-                        />
-                    );
-                })}
-                <Button
-                    title="+추가하기"
-                    onPress={() => {
-                        navigation.navigate("AddMedicine");
-                    }}
-                />
-            </StyledForm>
-            <StyledForm>
-                <StyledTitle>복용 시간</StyledTitle>
+                <StyledTitle>복용시간</StyledTitle>
                 <TimePicker onPress={whatTime} />
             </StyledForm>
             <StyledForm>
                 <StyledTitle>복용 요일</StyledTitle>
-                <WeekButton
-                    title={weekAll[0].day}
-                    onPress={allWeekCheck}
-                    checked={weekAll[0].checked}
-                />
-                <ButtonArea>
+                <WeekButtonContainer>
+                    <WeekButton
+                        title={weekAll[0].day}
+                        onPress={allWeekCheck}
+                        checked={weekAll[0].checked}
+                    />
                     {week.map((item) => {
                         return (
                             <WeekButton
@@ -243,16 +247,46 @@ const AddMedicine = ({ navigation }) => {
                             />
                         );
                     })}
-                </ButtonArea>
+                </WeekButtonContainer>
             </StyledForm>
+            <StyledForm>
+                <StyledTitle>복용중인 영양제</StyledTitle>
+                <StyledTagForm>
+                    {Object.values(medicineList).map((item) => {
+                        return (
+                            <TagButton
+                                title={item.name}
+                                id={item.id}
+                                key={item.id}
+                                deleteTask={deleteTask}
+                            />
+                        );
+                    })}
+                </StyledTagForm>
+                <StyledTagForm>
+                    <ButtonSmall
+                        icon={icons14px.plus}
+                        title="추가하기"
+                        containerStyle={{
+                            backgroundColor: theme.white,
+                            borderWidth: 2,
+                            borderColor: theme.main,
+                        }}
+                        textStyle={{
+                            color: theme.main,
+                        }}
+                        onPress={() => {
+                            navigation.navigate("AddMedicine");
+                        }}
+                    />
+                </StyledTagForm>
+            </StyledForm>
+            <SaveButtonContainer width={width}>
+                <ButtonArea>
+                    <Button title="저장하기" onPress={saveMedicine} />
+                </ButtonArea>
+            </SaveButtonContainer>
 
-            <Button
-                title="확인용"
-                onPress={() => {
-                    console.log(ampm, time, weekCheckList);
-                }}
-            />
-            <Button title="저장하기" onPress={saveMedicine} />
             {errorModal ? (
                 <BasicModal
                     title="설정이 전부 입력되었는지 확인해주세요."

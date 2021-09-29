@@ -187,7 +187,41 @@ const HomeStackNav = () => {
                     headerShown: false,
                 }}
             />
-            <HomeStack.Screen name="AddAlarm" component={AddAlarm} />
+            <HomeStack.Screen
+                name="AddAlarm"
+                component={AddAlarm}
+                options={({ navigation }) => {
+                    return {
+                        headerBackTitleVisible: false,
+                        headerBackImage: () => {
+                            return (
+                                <Icon
+                                    source={icons30px.leftArrow}
+                                    resizeMode="contain"
+                                />
+                            );
+                        },
+
+                        headerTitle: "알람추가",
+                        headerStyle: {
+                            shadowOffset: {
+                                header: 0,
+                            },
+                        },
+                        headerTitleStyle: {
+                            fontSize: 20,
+                            fontWeight: "900",
+                        },
+                        headerLeftContainerStyle: {
+                            paddingLeft: 24,
+                        },
+                        headerTitleAlign: "center",
+                        headerRightContainerStyle: {
+                            paddingRight: 24,
+                        },
+                    };
+                }}
+            />
             <HomeStack.Screen name="AddMedicine" component={AddMedicine} />
             <HomeStack.Screen
                 name="Signin"

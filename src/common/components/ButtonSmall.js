@@ -4,7 +4,7 @@ import styled from "styled-components";
 const BtnWrap = styled.TouchableOpacity``;
 const Container = styled.View`
     border-radius: 14px;
-    width: 70px;
+    padding: 0 12px;
     height: 28px;
     background-color: ${({ theme }) => theme.smallBtnBackgroundChecked};
     flex-direction: row;

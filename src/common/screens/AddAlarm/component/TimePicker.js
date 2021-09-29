@@ -1,7 +1,21 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { Button, TouchableOpacity } from "react-native";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
-import styled from "styled-components/native";
+import styled, { ThemeContext } from "styled-components/native";
+
+const Container = styled.View`
+    background-color: white;
+    width: 100%;
+`;
+const StyledInput = styled.TextInput`
+    width: 100%;
+    font-size: 16px;
+    color: #000;
+    height: 50px;
+    border: 1px solid ${({ theme }) => theme.line};
+    border-radius: 12px;
+    padding: 10px;
+`;
 
 Date.prototype.format = function (f) {
     if (!this.valueOf()) return " ";
@@ -61,6 +75,7 @@ Number.prototype.zf = function (len) {
 };
 
 function TimePicker({ onPress }) {
+    const theme = useContext(ThemeContext);
     const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
 
     const showDatePicker = () => {
@@ -81,25 +96,13 @@ function TimePicker({ onPress }) {
     const placeholder = "알람시간을 설정해주세요.";
     const [text, setText] = useState("");
 
-    const Container = styled.View`
-        background-color: white;
-    `;
-    const StyledInput = styled.TextInput`
-        font-size: 16px;
-        color: #000;
-        height: 50px;
-        width: 100%;
-        border: 1px solid #aaa;
-        padding: 10px;
-    `;
-
     return (
         <TouchableOpacity onPress={showDatePicker}>
             <Container>
                 <StyledInput
                     pointerEvents="none"
                     placeholder={placeholder}
-                    placeholderTextColor="#aaa"
+                    placeholderTextColor={theme.inputPlaceholderText}
                     underlineColorAndroid="transparent"
                     editable={false}
                     value={text}

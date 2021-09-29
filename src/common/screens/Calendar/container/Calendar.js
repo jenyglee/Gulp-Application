@@ -21,7 +21,7 @@ const HistoryContainer = styled.View`
 `;
 
 const Date = styled.Text`
-    font-size: 30px;
+    font-size: 24px;
     font-weight: bold;
 `;
 

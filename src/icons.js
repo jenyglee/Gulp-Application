@@ -6,6 +6,7 @@ import Password20px from "@/../assets/icons/20px_password.png";
 import User20px from "@/../assets/icons/20px_user.png";
 import Medicine20px from "@/../assets/icons/20px_medicine.png";
 import Filter20px from "@/../assets/icons/20px_filter.png";
+import X20px from "@/../assets/icons/20px_X.png";
 import LeftArrow30px from "@/../assets/icons/30px_leftArrow.png";
 import LeftArrowWhite30px from "@/../assets/icons/30px_leftArrow(w).png";
 import RightArrowWhite30px from "@/../assets/icons/30px_rightArrow(w).png";
@@ -23,6 +24,7 @@ import Complete from "@/../assets/icons/complete.png";
 import NotComplete from "@/../assets/icons/complete-n.png";
 import CheckSmall14px from "@/../assets/icons/14px_check.png";
 import CheckSmallWhite14px from "@/../assets/icons/14px_check_w.png";
+import Plus14px from "@/../assets/icons/14px_plus.png";
 import Grade14px from "@/../assets/icons/14px_grade.png";
 
 export const icons = {
@@ -36,6 +38,7 @@ export const icons14px = {
     check: CheckSmallWhite14px,
     uncheck: CheckSmall14px,
     grade: Grade14px,
+    plus: Plus14px,
 };
 
 export const icons20px = {
@@ -43,6 +46,7 @@ export const icons20px = {
     user: User20px,
     filter: Filter20px,
     medicine: Medicine20px,
+    x: X20px,
 };
 
 export const icons30px = {

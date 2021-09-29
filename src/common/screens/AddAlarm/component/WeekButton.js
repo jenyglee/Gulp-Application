@@ -3,18 +3,20 @@ import styled from "styled-components";
 import { TouchableOpacity } from "react-native";
 
 const WeekButtonView = styled.View`
-    width: 40px;
-    height: 40px;
+    width: 30px;
+    height: 30px;
     background-color: ${({ checked, theme }) =>
-        checked ? theme.main : theme.white};
-    display: flex;
+        checked ? theme.main : theme.background};
+    margin-right: 7px;
+    border-radius: 15px;
     justify-content: center;
     align-items: center;
 `;
 
 const WeekButtonText = styled.Text`
-    font-size: 18px;
-    color: ${({ checked, theme }) => (checked ? theme.white : theme.main)};
+    font-size: 14px;
+    font-weight: bold;
+    color: ${({ checked, theme }) => (checked ? theme.white : theme.black)};
 `;
 
 const WeekButton = ({ title, id, onPress, checked }) => {
