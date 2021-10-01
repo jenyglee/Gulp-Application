@@ -22,6 +22,7 @@
         "react-dom": "16.13.1",
         "react-native": "https://github.com/expo/react-native/archive/sdk-42.0.0.tar.gz",
         "react-native-calendars": "^1.1264.0",
+        "react-native-floating-action": "^1.22.0",
         "react-native-gesture-handler": "^1.10.3",
         "react-native-keyboard-aware-scroll-view": "^0.9.4",
         "react-native-modal-datetime-picker": "^10.2.0",

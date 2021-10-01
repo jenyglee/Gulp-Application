@@ -14,6 +14,7 @@ import { signout } from "@/member/api/memberApi";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 // import { showGradeTable } from "@/common/helper/helper"; // 등급보기 헬퍼
 // import { signout, signConfirm } from "@/firebase";
+import { FloatingAction } from "react-native-floating-action";
 
 const Wrap = styled.ScrollView`
     padding-top: ${({ insets }) => insets.top}px;
@@ -39,7 +40,6 @@ const TitleContainer = styled.View`
 const StyledText = styled.Text`
     font-size: 20px;
     font-weight: bold;
-
     color: ${({ theme }) => theme.textBasic};
 `;
 
@@ -53,6 +53,7 @@ const ProfileName = styled.Text`
 
 export default function AlarmList({ navigation }) {
     const width = Dimensions.get("window").width;
+    const height = Dimensions.get("window").height;
     const insets = useSafeAreaInsets();
     // ✨데이터형태(참고용)
     // const tempData = {
@@ -199,80 +200,100 @@ export default function AlarmList({ navigation }) {
     }, []);
 
     return (
-        <Wrap insets={insets}>
-            <Container width={width}>
-                <StatusBar style="auto" />
-                <TopLogo />
-                <Grade
-                    countTotal={countTotal}
-                    count={count}
-                    onPress={showGradeTable}
-                />
-                <TitleContainer>
-                    <StyledText>내 알람</StyledText>
-                    <ButtonFilter title="Today" />
-                </TitleContainer>
-                {foundMedicine ? (
-                    Object.values(tasks).map((item) => {
-                        return (
-                            <Alarm
-                                alarmInfo={item}
-                                checkIcon={
-                                    item.completed ? icons.check : icons.uncheck
-                                }
-                                menuIcon={icons.dot}
-                                toggleTask={toggleTask}
-                                showAlarmMenu={showAlarmMenu}
-                                key={item.id}
-                            />
-                        );
-                    })
-                ) : (
-                    <ProfileName>약을 추가해주세요.</ProfileName>
-                )}
+        <>
+            <Wrap insets={insets}>
+                <Container width={width}>
+                    <StatusBar style="auto" />
+                    <TopLogo />
+                    <Grade
+                        countTotal={countTotal}
+                        count={count}
+                        onPress={showGradeTable}
+                    />
+                    <TitleContainer>
+                        <StyledText>내 알람</StyledText>
+                        <ButtonFilter title="Today" />
+                    </TitleContainer>
+                    {foundMedicine ? (
+                        Object.values(tasks).map((item) => {
+                            return (
+                                <Alarm
+                                    alarmInfo={item}
+                                    checkIcon={
+                                        item.completed
+                                            ? icons.check
+                                            : icons.uncheck
+                                    }
+                                    menuIcon={icons.dot}
+                                    toggleTask={toggleTask}
+                                    showAlarmMenu={showAlarmMenu}
+                                    key={item.id}
+                                />
+                            );
+                        })
+                    ) : (
+                        <ProfileName>약을 추가해주세요.</ProfileName>
+                    )}
 
-                <AddBtn
-                    title="+추가하기"
-                    onPress={() => {
-                        navigation.navigate("AddAlarm");
-                    }}
-                />
+                    <AddBtn
+                        title="+추가하기"
+                        onPress={() => {
+                            navigation.navigate("AddAlarm");
+                        }}
+                    />
 
-                <View
-                    style={{
-                        marginTop: 50,
-                    }}
-                >
-                    {/* <Button onPress={() => {}} title="(테스트용)메뉴" /> */}
-                    <Button
-                        onPress={() => {
-                            navigation.navigate("Signin");
+                    <View
+                        style={{
+                            marginTop: 50,
                         }}
-                        title="(테스트용)로그인"
-                    />
-                    <Button onPress={signout} title="(테스트용)로그아웃" />
-                    <Button
-                        onPress={() => {
-                            plusDate();
-                            plusDateMAX();
-                        }}
-                        title="(테스트용)복용완료"
-                    />
-                </View>
-                {gradeTable ? (
-                    // 🪲 헬퍼를 뽑는 법을 모르겠음...
-                    // <GradeTable onPress={showGradeTable(bool)} />
-                    <GradeTable onPress={showGradeTable} />
-                ) : null}
-                {alarmMenu ? (
-                    <AlarmMenu
-                        showAlarmMenu={showAlarmMenu}
-                        deleteTask={deleteTask.bind(null, selectedTaskKey)}
-                        alarmMenuList={alarmMenuList}
-                        editMedicine={editMedicine}
-                    />
-                ) : null}
-            </Container>
-        </Wrap>
+                    >
+                        {/* <Button onPress={() => {}} title="(테스트용)메뉴" /> */}
+                        <Button
+                            onPress={() => {
+                                navigation.navigate("Signin");
+                            }}
+                            title="(테스트용)로그인"
+                        />
+                        <Button onPress={signout} title="(테스트용)로그아웃" />
+                        <Button
+                            onPress={() => {
+                                plusDate();
+                                plusDateMAX();
+                            }}
+                            title="(테스트용)복용완료"
+                        />
+                    </View>
+                    {gradeTable ? (
+                        // 🪲 헬퍼를 뽑는 법을 모르겠음...
+                        // <GradeTable onPress={showGradeTable(bool)} />
+                        <GradeTable onPress={showGradeTable} />
+                    ) : null}
+                    {alarmMenu ? (
+                        <AlarmMenu
+                            showAlarmMenu={showAlarmMenu}
+                            deleteTask={deleteTask.bind(null, selectedTaskKey)}
+                            alarmMenuList={alarmMenuList}
+                            editMedicine={editMedicine}
+                        />
+                    ) : null}
+                </Container>
+            </Wrap>
+            <FloatingAction
+                color="#27C47D"
+                shadow={{
+                    shadowOpacity: 0.1,
+                    shadowOffset: {
+                        width: 5,
+                        height: 10,
+                    },
+                }}
+                buttonSize={60}
+                animated={true}
+                showBackground={false}
+                onPressMain={() => {
+                    navigation.navigate("AddAlarm");
+                }}
+            />
+        </>
     );
 }
