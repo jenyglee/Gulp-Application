@@ -165,7 +165,12 @@ const AddMedicine = ({ navigation }) => {
         if (Object.values(medicine).length != 0) {
             // console.log(typeof time);
             if (time !== "") {
-                return true;
+                const result = day.some((item) => {
+                    return item.checked;
+                });
+                if (result) {
+                    return true;
+                } else return false;
             } else return false;
         } else return false;
     };
@@ -205,7 +210,7 @@ const AddMedicine = ({ navigation }) => {
                         "tasks",
                         JSON.stringify({ ...tasks, ...newTask })
                     );
-                    console.log(newTask);
+                    // console.log(newTask);
                     navigation.navigate("AlarmList");
                 }
                 ``;

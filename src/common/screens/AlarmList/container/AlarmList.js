@@ -167,8 +167,6 @@ export default function AlarmList({ navigation }) {
     const showAlarmMenu = (id) => {
         setAlarmMenu(!alarmMenu);
         setSelectedTaskKey(id);
-        const copy = Object.assign({}, tasks);
-        return copy[id];
     };
 
     // ✨ 약 삭제
@@ -235,13 +233,6 @@ export default function AlarmList({ navigation }) {
                         <ProfileName>약을 추가해주세요.</ProfileName>
                     )}
 
-                    <AddBtn
-                        title="+추가하기"
-                        onPress={() => {
-                            navigation.navigate("AddAlarm");
-                        }}
-                    />
-
                     <View
                         style={{
                             marginTop: 50,
@@ -252,13 +243,34 @@ export default function AlarmList({ navigation }) {
                             onPress={() => {
                                 navigation.navigate("Signin");
                             }}
+                            containerStyle={{
+                                backgroundColor: "#f0f0f0",
+                            }}
+                            textStyle={{
+                                color: "#666",
+                            }}
                             title="(테스트용)로그인"
                         />
-                        <Button onPress={signout} title="(테스트용)로그아웃" />
+                        <Button
+                            onPress={signout}
+                            containerStyle={{
+                                backgroundColor: "#f0f0f0",
+                            }}
+                            textStyle={{
+                                color: "#666",
+                            }}
+                            title="(테스트용)로그아웃"
+                        />
                         <Button
                             onPress={() => {
                                 plusDate();
                                 plusDateMAX();
+                            }}
+                            containerStyle={{
+                                backgroundColor: "#f0f0f0",
+                            }}
+                            textStyle={{
+                                color: "#666",
                             }}
                             title="(테스트용)복용완료"
                         />

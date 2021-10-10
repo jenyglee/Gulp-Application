@@ -9,17 +9,6 @@ const TouchContainer = styled.TouchableOpacity`
     margin-bottom: 10px;
 `;
 
-const WeekContainer = styled.View`
-    flex-direction: row;
-`;
-const WeekDay = styled.View`
-    width: 5px;
-    height: 5px;
-    border-radius: 5px;
-    background-color: ${({ theme }) => theme.main};
-    margin-right: 5px;
-`;
-
 const Container = styled.View`
     width: 100%;
     height: auto;
