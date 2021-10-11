@@ -4,7 +4,7 @@ import XDate from 'xdate';
 import memoize from 'memoize-one';
 
 import React, {Component} from 'react';
-import {View} from 'react-native';
+import {Text,View} from 'react-native';
 import GestureRecognizer, {swipeDirections} from 'react-native-swipe-gestures';
 
 import dateutils from '../dateutils';
@@ -68,7 +68,9 @@ class Calendar extends Component {
     /** Style passed to the header */
     headerStyle: PropTypes.oneOfType([PropTypes.object, PropTypes.number, PropTypes.array]),
     /** Allow rendering of a totally custom header */
-    customHeader: PropTypes.any
+    customHeader: PropTypes.any,
+    /** 복용달성률을 숫자로 받아서 화면에 그려준다 **/
+    gulpPercent: PropTypes.number
   };
 
   static defaultProps = {
@@ -250,6 +252,8 @@ class Calendar extends Component {
         style={{
             backgroundColor : "#27C47D",
             borderRadius:12,
+            marginBottom:20,
+            // padding:20
         }}
         ref={r => (this.header = r)}
         month={this.state.currentMonth}
@@ -272,7 +276,33 @@ class Calendar extends Component {
           accessibilityElementsHidden={this.props.accessibilityElementsHidden} // iOS
           importantForAccessibility={this.props.importantForAccessibility} // Android
         >
-          
+            <View style={{
+                flexDirection:"row",
+                justifyContent:"space-around",
+                marginBottom:13
+            }}>
+                <Text style={{
+                    color: "#cccccc",
+                }}>월</Text>
+                <Text style={{
+                    color: "#cccccc",
+                }}>화</Text>
+                <Text style={{
+                    color: "#cccccc",
+                }}>수</Text>
+                <Text style={{
+                    color: "#cccccc",
+                }}>목</Text>
+                <Text style={{
+                    color: "#cccccc",
+                }}>금</Text>
+                <Text style={{
+                    color: "#cccccc",
+                }}>토</Text>
+                <Text style={{
+                    color: "#cccccc",
+                }}>일</Text>
+            </View>
           {this.renderMonth()}
         </View>
       </GestureComponent>

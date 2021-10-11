@@ -89,7 +89,7 @@ const FindPasswordContainer00 = ({ navigation }) => {
                             marginTop: 20,
                         }}
                         onPress={() => {
-                            navigation.navigate("FindPasswordContainer01");
+                            navigation.navigate("FindPassword01");
                         }}
                     />
                 </ButtonContainer>

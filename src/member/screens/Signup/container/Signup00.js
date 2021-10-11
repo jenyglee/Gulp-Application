@@ -5,6 +5,9 @@ import { Button, Input, Image } from "@components/index";
 import { BasicModal } from "@components/modal/index";
 import { illust } from "@/images";
 import { isEmail, removeWhiteSpace } from "@/util";
+import { nominalTypeHack } from "prop-types";
+import { signup } from "@/member/api/memberApi";
+import { Alert } from "react-native";
 // import { createUser } from "@/firebase";
 
 const Container = styled.View`
@@ -49,6 +52,16 @@ const SignupContainer00 = ({ navigation }) => {
     //  ✨ 에러모달 닫기
     const closeModal = () => {
         setErrorModal(false);
+    };
+
+    const handleSignupBtnPress = async () => {
+        try {
+            await signup({ nickname: name, email, password });
+            Alert.alert("회원가입이 완료됐습니다.");
+            navigation.navigate("Signup01");
+        } catch (error) {
+            Alert.alert(error.message);
+        }
     };
 
     return (
@@ -189,9 +202,7 @@ const SignupContainer00 = ({ navigation }) => {
                         />
                         <Button
                             title="회원가입하기"
-                            onPress={() => {
-                                navigation.navigate("Signup01");
-                            }}
+                            onPress={handleSignupBtnPress}
                         />
                     </InputContainer>
                 ) : null}

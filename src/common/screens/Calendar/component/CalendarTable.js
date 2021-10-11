@@ -60,6 +60,7 @@ const CalendarTable = ({ tasks }) => {
             {/* <CalendarTitle month={month} onPressLeft={} onPressRight={} /> */}
             <Calendar
                 // Initially visible month. Default = Date()
+                gulpPercent={30}
                 current={"2021-08-23"}
                 // Minimum date that can be selected, dates before minDate will be grayed out. Default = undefined
                 minDate={"2021-01-01"}

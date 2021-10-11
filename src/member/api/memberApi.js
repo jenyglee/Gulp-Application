@@ -1,36 +1,64 @@
 import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import jwt_decode from "jwt-decode";
+const url = "https://gulp.jenyglee.com/";
 
-const url = "http://jpark93.iptime.org:39931/";
-const login = async (member) => {
+// ✨로그인
+const signin = async (member) => {
     try {
         const response = await axios({
             method: "POST",
-            url: url + "login",
+            url: url + "signin",
             data: member,
         });
-        console.log(response.data.token);
-        await AsyncStorage.setItem("token", response.data.token);
+
+        console.log(response);
+        if (response.data.statusCodeValue !== 200) {
+            throw new Error(response.data.body.message);
+        }
+        console.log(jwt_decode(response.headers.authorization));
+        await AsyncStorage.setItem("token", response.headers.authorization);
     } catch (error) {
         throw error;
     }
 };
+
+// ✨로그아웃
 const signout = async () => {
     try {
         const token = await AsyncStorage.getItem("token");
+
         const response = await axios({
             method: "POST",
             url: url + "signout",
-            data: { token },
-            // headers: { token }, // 인증용도?
+            headers: { authoriztion: token }, // 인증용도?
         });
-        console.log(response);
+
         if (response.status === 200) {
             await AsyncStorage.removeItem("token");
         }
     } catch (error) {
         // throw error;
         console.log(error);
+    }
+};
+
+// ✨회원가입
+const signup = async (member) => {
+    console.log(member);
+    try {
+        const response = await axios({
+            method: "POST",
+            url: url + "signup",
+            data: member,
+        });
+        console.log(response);
+
+        // if (response.data?.statusCodeValue !== 200) {
+        //     throw new Error(response.data.body.message);
+        // }
+    } catch (error) {
+        throw error;
     }
 };
 
@@ -52,4 +80,4 @@ const confirm = async (member) => {
     }
 };
 
-export { login, signout };
+export { signin, signout, signup };

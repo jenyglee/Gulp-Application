@@ -9,13 +9,15 @@ export default function (theme = {}) {
     header: {
       flexDirection: 'row',
       justifyContent: 'space-between',
-      paddingLeft: 10,
-      paddingRight: 10,
-      marginTop: 6,
+    //   paddingLeft: 10,
+    //   paddingRight: 10,
+    //   marginTop: 6,
+      
       alignItems: 'center'
     },
     headerContainer: {
       flexDirection: 'row',
+      
     },
     monthText: {
       fontSize: appStyle.textMonthFontSize,
@@ -23,10 +25,13 @@ export default function (theme = {}) {
       fontWeight: appStyle.textMonthFontWeight,
       color: "#fff",
       fontWeight:"bold",
-      margin: 10
+      fontSize:20,
+      marginTop: 18,
+      marginBottom: 18
     },
     arrow: {
-      padding: 10,
+      paddingLeft: 10,
+      paddingRight: 10,
       ...appStyle.arrowStyle
     },
     arrowImage: {
@@ -54,7 +59,8 @@ export default function (theme = {}) {
       fontSize: appStyle.textDayHeaderFontSize,
       fontFamily: appStyle.textDayHeaderFontFamily,
       fontWeight: appStyle.textDayHeaderFontWeight,
-      color: appStyle.textSectionTitleColor
+      color: appStyle.textSectionTitleColor,
+      
     },
     disabledDayHeader: {
       color: appStyle.textSectionTitleDisabledColor

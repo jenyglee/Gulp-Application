@@ -7,7 +7,7 @@ import { InputWithIcon } from "@/member/screens/Signin/component/index";
 import { icons20px } from "@/icons";
 import { logo, illust } from "@/images";
 import { isEmail, removeWhiteSpace } from "@/util";
-import { login } from "@/member/api/memberApi";
+import { signin } from "@/member/api/memberApi";
 
 const Container = styled.View`
     align-items: center;
@@ -60,10 +60,10 @@ const SigninContainer = ({ navigation }) => {
                 return;
             }
 
-            const user = await login({ email, password });
+            const user = await signin({ email, password });
             navigation.navigate("AlarmList", { user });
         } catch (e) {
-            Alert.alert(email, password);
+            Alert.alert(e.message);
         }
     };
 
@@ -126,7 +126,7 @@ const SigninContainer = ({ navigation }) => {
                         marginTop: 20,
                     }}
                     onPress={() => {
-                        navigation.navigate("FindPasswordContainer00");
+                        navigation.navigate("FindPassword00");
                     }}
                 />
             </ContentContainer>

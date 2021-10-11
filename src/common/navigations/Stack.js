@@ -3,6 +3,7 @@ import { Image, TouchableOpacity, View } from "react-native";
 import styled, { ThemeContext } from "styled-components";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { createStackNavigator } from "@react-navigation/stack";
+// ✨
 import { AlarmList, Calendar, Rank, AddAlarm } from "@screens/index";
 import AddMedicine from "@/medicine/screens/AddMedicine";
 import MyPage from "@/member/screens/Mypage/container/MyPage";
@@ -14,9 +15,8 @@ import {
 } from "@/member/screens/FindPassword/index";
 import { icons30px } from "@/icons";
 
-const headerStyle = {
+const option = {
     headerBackTitleVisible: false,
-    headerTitle: "회원가입",
     headerStyle: {
         shadowOffset: {
             header: 0,
@@ -78,18 +78,8 @@ const HomeTabs = () => {
                 name="Calendar"
                 component={Calendar}
                 options={{
+                    ...option,
                     headerTitle: "캘린더",
-                    headerStyle: {
-                        shadowOffset: {
-                            header: 0,
-                        },
-                        backgroundColor: "transparent",
-                    },
-                    headerTitleStyle: {
-                        fontSize: 20,
-                        fontWeight: "900",
-                    },
-                    headerTitleAlign: "center",
                     tabBarIcon: (props) => {
                         return (
                             <Icon
@@ -108,18 +98,8 @@ const HomeTabs = () => {
                 name="Rank"
                 component={Rank}
                 options={{
+                    ...option,
                     headerTitle: "영양제 랭킹",
-                    headerStyle: {
-                        shadowOffset: {
-                            header: 0,
-                        },
-                        backgroundColor: "transparent",
-                    },
-                    headerTitleStyle: {
-                        fontSize: 20,
-                        fontWeight: "900",
-                    },
-                    headerTitleAlign: "center",
                     tabBarIcon: (props) => {
                         return (
                             <Icon
@@ -138,18 +118,8 @@ const HomeTabs = () => {
                 name="MyPage"
                 component={MyPage}
                 options={{
+                    ...option,
                     headerTitle: "마이페이지",
-                    headerStyle: {
-                        shadowOffset: {
-                            header: 0,
-                        },
-                        backgroundColor: "transparent",
-                    },
-                    headerTitleStyle: {
-                        fontSize: 20,
-                        fontWeight: "900",
-                    },
-                    headerTitleAlign: "center",
                     tabBarIcon: (props) => {
                         return (
                             <Icon
@@ -190,9 +160,16 @@ const HomeStackNav = () => {
             <HomeStack.Screen
                 name="AddAlarm"
                 component={AddAlarm}
-                options={({ navigation }) => {
+                options={() => {
                     return {
-                        headerBackTitleVisible: false,
+                        ...option,
+                        headerTitle: "알람추가",
+                        headerStyle: {
+                            shadowOffset: {
+                                header: 0,
+                            },
+                            backgroundColor: "#fff",
+                        },
                         headerBackImage: () => {
                             return (
                                 <Icon
@@ -200,24 +177,6 @@ const HomeStackNav = () => {
                                     resizeMode="contain"
                                 />
                             );
-                        },
-
-                        headerTitle: "알람추가",
-                        headerStyle: {
-                            shadowOffset: {
-                                header: 0,
-                            },
-                        },
-                        headerTitleStyle: {
-                            fontSize: 20,
-                            fontWeight: "900",
-                        },
-                        headerLeftContainerStyle: {
-                            paddingLeft: 24,
-                        },
-                        headerTitleAlign: "center",
-                        headerRightContainerStyle: {
-                            paddingRight: 24,
                         },
                     };
                 }}
@@ -261,6 +220,14 @@ const HomeStackNav = () => {
                 component={Signup00}
                 options={({ navigation }) => {
                     return {
+                        ...option,
+                        headerStyle: {
+                            shadowOffset: {
+                                header: 0,
+                            },
+                            backgroundColor: "#fff",
+                        },
+                        headerTitle: "회원가입",
                         headerBackTitleVisible: false,
                         headerBackImage: () => {
                             return (
@@ -286,23 +253,6 @@ const HomeStackNav = () => {
                                 </TouchableOpacity>
                             );
                         },
-                        headerTitle: "회원가입",
-                        headerStyle: {
-                            shadowOffset: {
-                                header: 0,
-                            },
-                        },
-                        headerTitleStyle: {
-                            fontSize: 20,
-                            fontWeight: "900",
-                        },
-                        headerLeftContainerStyle: {
-                            paddingLeft: 24,
-                        },
-                        headerTitleAlign: "center",
-                        headerRightContainerStyle: {
-                            paddingRight: 24,
-                        },
                     };
                 }}
             />
@@ -311,6 +261,14 @@ const HomeStackNav = () => {
                 component={Signup01}
                 options={({ navigation }) => {
                     return {
+                        ...option,
+                        headerStyle: {
+                            shadowOffset: {
+                                header: 0,
+                            },
+                            backgroundColor: "#fff",
+                        },
+                        headerTitle: "회원가입",
                         headerBackTitleVisible: false,
                         headerLeft: () => {
                             return null;
@@ -330,23 +288,6 @@ const HomeStackNav = () => {
                                     </View>
                                 </TouchableOpacity>
                             );
-                        },
-                        headerTitle: "회원가입",
-                        headerStyle: {
-                            shadowOffset: {
-                                header: 0,
-                            },
-                        },
-                        headerTitleStyle: {
-                            fontSize: 20,
-                            fontWeight: "900",
-                        },
-                        headerLeftContainerStyle: {
-                            paddingLeft: 24,
-                        },
-                        headerTitleAlign: "center",
-                        headerRightContainerStyle: {
-                            paddingRight: 24,
                         },
                     };
                 }}
@@ -356,6 +297,14 @@ const HomeStackNav = () => {
                 component={FindPassword00}
                 options={({ navigation }) => {
                     return {
+                        ...option,
+                        headerTitle: "비밀번호 찾기",
+                        headerStyle: {
+                            backgroundColor: "#fff",
+                            shadowOffset: {
+                                header: 0,
+                            },
+                        },
                         headerBackTitleVisible: false,
                         headerLeft: () => {
                             return null;
@@ -375,23 +324,6 @@ const HomeStackNav = () => {
                                     </View>
                                 </TouchableOpacity>
                             );
-                        },
-                        headerTitle: "회원가입",
-                        headerStyle: {
-                            shadowOffset: {
-                                header: 0,
-                            },
-                        },
-                        headerTitleStyle: {
-                            fontSize: 20,
-                            fontWeight: "900",
-                        },
-                        headerLeftContainerStyle: {
-                            paddingLeft: 24,
-                        },
-                        headerTitleAlign: "center",
-                        headerRightContainerStyle: {
-                            paddingRight: 24,
                         },
                     };
                 }}
@@ -401,7 +333,14 @@ const HomeStackNav = () => {
                 component={FindPassword01}
                 options={({ navigation }) => {
                     return {
-                        headerBackTitleVisible: false,
+                        ...option,
+                        headerTitle: "비밀번호 찾기",
+                        headerStyle: {
+                            backgroundColor: "#fff",
+                            shadowOffset: {
+                                header: 0,
+                            },
+                        },
                         headerLeft: () => {
                             return null;
                         },
@@ -420,23 +359,6 @@ const HomeStackNav = () => {
                                     </View>
                                 </TouchableOpacity>
                             );
-                        },
-                        headerTitle: "회원가입",
-                        headerStyle: {
-                            shadowOffset: {
-                                header: 0,
-                            },
-                        },
-                        headerTitleStyle: {
-                            fontSize: 20,
-                            fontWeight: "900",
-                        },
-                        headerLeftContainerStyle: {
-                            paddingLeft: 24,
-                        },
-                        headerTitleAlign: "center",
-                        headerRightContainerStyle: {
-                            paddingRight: 24,
                         },
                     };
                 }}

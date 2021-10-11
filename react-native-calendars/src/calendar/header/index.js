@@ -48,7 +48,9 @@ class CalendarHeader extends Component {
     /** Replace default month and year title with custom one. the function receive a date as parameter. */
     renderHeader: PropTypes.any,
     /** Provide aria-level for calendar heading for proper accessibility when used with web (react-native-web) */
-    webAriaLevel: PropTypes.number
+    webAriaLevel: PropTypes.number,
+    /** 복용달성률을 숫자로 받아서 화면에 그려준다 **/
+    gulpPercent: PropTypes.number
   };
 
   static defaultProps = {
@@ -131,7 +133,7 @@ class CalendarHeader extends Component {
   });
 
   renderHeader = () => {
-    const {renderHeader, month, monthFormat, testID, webAriaLevel} = this.props;
+    const {renderHeader, month, monthFormat, testID, webAriaLevel, gulpPercent} = this.props;
     const webProps = Platform.OS === 'web' ? {'aria-level': webAriaLevel} : {};
 
     if (renderHeader) {
@@ -153,21 +155,30 @@ class CalendarHeader extends Component {
             height:24,
             backgroundColor:"#fff",
             alignSelf:"center",
-            opacity:0.2
-        }} />
-        <Text style={{
-            alignSelf:"center",
-            fontSize: 16,
-            color: "#fff",
-            marginLeft:10,
-            
-        }}>복용달성률</Text>
-        <Text style={{
-            alignSelf:"center",
-            fontSize: 16,
-            color: "#fff",
+            opacity:0.2,
             marginLeft:10
-        }}>52%</Text>
+        }} />
+        {/* &&(그리고)*/}
+        {/* gulpPercent가 true이면 뒤에 코드를 보인다.*/}
+        {/* gulpPercent가 false이면 뒤에껄 실행시킬 필요도 없다(보이지 않는다.)*/}
+        {gulpPercent &&
+            <Fragment>
+                <Text style={{
+                    alignSelf:"center",
+                    fontSize: 16,
+                    color: "#fff",
+                    marginLeft:10,
+
+                }}>복용달성률</Text>
+            <Text style={{
+                alignSelf:"center",
+                fontSize: 20,
+                fontWeight:"bold",
+                color: "#fff",
+                marginLeft:10
+            }}>{gulpPercent}%</Text>
+            </Fragment>
+        }
       </Fragment>
     );
   };
