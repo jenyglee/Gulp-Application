@@ -33,13 +33,13 @@ const DEFAULT_PHOTO =
 
 const SignupContainer00 = ({ navigation }) => {
     const [photo, setPhoto] = useState(DEFAULT_PHOTO);
-    const [name, setName] = useState("");
+    const [nickname, setNickname] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [passwordConfirm, setPasswordConfirm] = useState("");
 
-    const refEmail = useRef(null);
-    const refPassword = useRef(null);
+    // const refEmail = useRef(null);
+    // const refPassword = useRef(null);
     const refPasswordConfirm = useRef(null);
 
     // ✨ 포커스 아웃이 되면 다음 인풋 노출
@@ -56,8 +56,7 @@ const SignupContainer00 = ({ navigation }) => {
 
     const handleSignupBtnPress = async () => {
         try {
-            await signup({ nickname: name, email, password });
-            Alert.alert("회원가입이 완료됐습니다.");
+            await signup({ nickname, email, password });
             navigation.navigate("Signup01");
         } catch (error) {
             Alert.alert(error.message);
@@ -74,34 +73,36 @@ const SignupContainer00 = ({ navigation }) => {
             <Container>
                 {/* <Image url={photo} onChangePhoto={setPhoto} /> */}
                 <InputContainer>
-                    <StyledTitle>이름을 입력해주세요</StyledTitle>
+                    <StyledTitle>닉네임을 입력해주세요</StyledTitle>
                     <Input
-                        title="이름"
-                        placeholder="이름을 입력하세요"
-                        value={name}
-                        onBlur={() => {}}
+                        title="닉네임"
+                        placeholder="닉네임을 입력하세요"
+                        value={nickname}
+                        onBlur={() => {
+                            setShowEmail(true);
+                        }}
                         maxLenth={10}
                         onChangeText={(text) => {
                             const changedName = removeWhiteSpace(text);
-                            setName(changedName);
+                            setNickname(changedName);
                         }}
                         returnKeyType="next"
                         onSubmitEditing={() => {
-                            // if (name != "") {
-                            //     setShowEmail(true);
-                            // } else {
-                            //     setErrorModal(true);
-                            //     setErrorMessage("이름을 입력해주세요.");
-                            // }
+                            if (nickname != "") {
+                                setShowEmail(true);
+                            } else {
+                                setErrorModal(true);
+                                setErrorMessage("닉네임을 입력해주세요.");
+                            }
                             setShowEmail(true);
                         }}
                     />
                 </InputContainer>
                 {showEmail ? (
                     <InputContainer>
-                        <StyledTitle>이메일이 무엇인가요?</StyledTitle>
+                        <StyledTitle>이메일을 입력해주세요</StyledTitle>
                         <Input
-                            ref={refEmail}
+                            // ref={refEmail}
                             title="이메일"
                             placeholder="이메일을 입력하세요"
                             value={email}
@@ -113,19 +114,19 @@ const SignupContainer00 = ({ navigation }) => {
                             }}
                             returnKeyType="next"
                             onSubmitEditing={() => {
-                                // if (email != "") {
-                                //     if (isEmail(email)) {
-                                //         setShowPassword(true);
-                                //     } else {
-                                //         setErrorModal(true);
-                                //         setErrorMessage(
-                                //             "이메일을 올바르게 입력해주세요."
-                                //         );
-                                //     }
-                                // } else {
-                                //     setErrorModal(true);
-                                //     setErrorMessage("이메일을 입력해주세요.");
-                                // }
+                                if (email != "") {
+                                    if (isEmail(email)) {
+                                        setShowPassword(true);
+                                    } else {
+                                        setErrorModal(true);
+                                        setErrorMessage(
+                                            "이메일을 올바르게 입력해주세요."
+                                        );
+                                    }
+                                } else {
+                                    setErrorModal(true);
+                                    setErrorMessage("이메일을 입력해주세요.");
+                                }
                                 setShowPassword(true);
                             }}
                         />
@@ -135,7 +136,7 @@ const SignupContainer00 = ({ navigation }) => {
                     <InputContainer>
                         <StyledTitle>비밀번호를 입력해주세요.</StyledTitle>
                         <Input
-                            ref={refPassword}
+                            // ref={refPassword}
                             title="비밀번호"
                             placeholder="비밀번호를 입력하세요"
                             value={password}
@@ -147,13 +148,12 @@ const SignupContainer00 = ({ navigation }) => {
                                 setPassword(changedPassword);
                             }}
                             onSubmitEditing={() => {
-                                // if (password != "") {
-                                //     refPasswordConfirm.current.focus();
-                                // } else {
-                                //     setErrorModal(true);
-                                //     setErrorMessage("비밀번호를 입력해주세요.");
-                                // }
-                                refPasswordConfirm.current.focus();
+                                if (password != "") {
+                                    refPasswordConfirm.current.focus();
+                                } else {
+                                    setErrorModal(true);
+                                    setErrorMessage("비밀번호를 입력해주세요.");
+                                }
                             }}
                             secureTextEntry={true}
                         />
@@ -171,32 +171,33 @@ const SignupContainer00 = ({ navigation }) => {
                                 setPasswordConfirm(changedPasswordConfirm);
                             }}
                             onSubmitEditing={() => {
-                                // if (passwordConfirm != "") {
-                                //     if (
-                                //         password.length >= 6 ||
-                                //         passwordConfirm.length >= 6
-                                //     ) {
-                                //         if (password == passwordConfirm) {
-                                //             navigation.navigate("Signup01");
-                                //         } else {
-                                //             setErrorModal(true);
-                                //             setErrorMessage(
-                                //                 "비밀번호가 일치하지 않습니다."
-                                //             );
-                                //         }
-                                //     } else {
-                                //         setErrorModal(true);
-                                //         setErrorMessage(
-                                //             "비밀번호는 6자리 이상입니다."
-                                //         );
-                                //     }
-                                // } else {
-                                //     setErrorModal(true);
-                                //     setErrorMessage(
-                                //         "비밀번호를 한번 더 입력해주세요."
-                                //     );
-                                // }
-                                navigation.navigate("Signup01");
+                                if (passwordConfirm != "") {
+                                    if (
+                                        password.length >= 6 ||
+                                        passwordConfirm.length >= 6
+                                    ) {
+                                        if (password == passwordConfirm) {
+                                            handleSignupBtnPress();
+                                            navigation.navigate("Signup01");
+                                        } else {
+                                            setErrorModal(true);
+                                            setErrorMessage(
+                                                "비밀번호가 일치하지 않습니다."
+                                            );
+                                        }
+                                    } else {
+                                        setErrorModal(true);
+                                        setErrorMessage(
+                                            "비밀번호는 6자리 이상입니다."
+                                        );
+                                    }
+                                } else {
+                                    setErrorModal(true);
+                                    setErrorMessage(
+                                        "비밀번호를 한번 더 입력해주세요."
+                                    );
+                                }
+                                // navigation.navigate("Signup01");
                             }}
                             secureTextEntry={true}
                         />
