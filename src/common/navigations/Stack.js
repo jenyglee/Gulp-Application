@@ -35,6 +35,11 @@ const option = {
         paddingRight: 24,
     },
 };
+const backImage = {
+    headerBackImage: () => {
+        return <Icon source={icons30px.leftArrow} resizeMode="contain" />;
+    },
+};
 
 const Icon = styled.Image`
     width: 30px;
@@ -163,6 +168,7 @@ const HomeStackNav = () => {
                 options={() => {
                     return {
                         ...option,
+                        ...backImage,
                         headerTitle: "알람추가",
                         headerStyle: {
                             shadowOffset: {
@@ -170,48 +176,38 @@ const HomeStackNav = () => {
                             },
                             backgroundColor: "#fff",
                         },
-                        headerBackImage: () => {
-                            return (
-                                <Icon
-                                    source={icons30px.leftArrow}
-                                    resizeMode="contain"
-                                />
-                            );
+                    };
+                }}
+            />
+            <HomeStack.Screen
+                name="AddMedicine"
+                component={AddMedicine}
+                options={() => {
+                    return {
+                        ...option,
+                        ...backImage,
+                        headerTitle: "알람추가",
+                        headerStyle: {
+                            shadowOffset: {
+                                header: 0,
+                            },
+                            backgroundColor: "#fff",
                         },
                     };
                 }}
             />
-            <HomeStack.Screen name="AddMedicine" component={AddMedicine} />
             <HomeStack.Screen
                 name="Signin"
                 component={Signin}
                 options={{
-                    headerBackTitleVisible: false,
-                    headerBackImage: () => {
-                        return (
-                            <Icon
-                                source={icons30px.leftArrow}
-                                resizeMode="contain"
-                            />
-                        );
-                    },
-
-                    headerTitle: "회원가입",
+                    ...option,
+                    ...backImage,
+                    headerTitle: "로그인",
                     headerStyle: {
                         shadowOffset: {
                             header: 0,
                         },
-                    },
-                    headerTitleStyle: {
-                        fontSize: 20,
-                        fontWeight: "900",
-                    },
-                    headerLeftContainerStyle: {
-                        paddingLeft: 24,
-                    },
-                    headerTitleAlign: "center",
-                    headerRightContainerStyle: {
-                        paddingRight: 24,
+                        backgroundColor: "#fff",
                     },
                 }}
             />
@@ -221,6 +217,7 @@ const HomeStackNav = () => {
                 options={({ navigation }) => {
                     return {
                         ...option,
+                        ...backImage,
                         headerStyle: {
                             shadowOffset: {
                                 header: 0,
@@ -228,15 +225,7 @@ const HomeStackNav = () => {
                             backgroundColor: "#fff",
                         },
                         headerTitle: "회원가입",
-                        headerBackTitleVisible: false,
-                        headerBackImage: () => {
-                            return (
-                                <Icon
-                                    source={icons30px.leftArrow}
-                                    resizeMode="contain"
-                                />
-                            );
-                        },
+
                         headerRight: () => {
                             return (
                                 <TouchableOpacity
@@ -269,7 +258,6 @@ const HomeStackNav = () => {
                             backgroundColor: "#fff",
                         },
                         headerTitle: "회원가입",
-                        headerBackTitleVisible: false,
                         headerLeft: () => {
                             return null;
                         },
@@ -305,7 +293,6 @@ const HomeStackNav = () => {
                                 header: 0,
                             },
                         },
-                        headerBackTitleVisible: false,
                         headerLeft: () => {
                             return null;
                         },
