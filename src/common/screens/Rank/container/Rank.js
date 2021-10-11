@@ -1,8 +1,11 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import { View, Dimensions, FlatList } from "react-native";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import styled, { ThemeContext } from "styled-components";
 import ListItem from "@/common/screens/Rank/component/ListItem";
 import Category from "@/common/screens/Rank/component/Category";
+import RequireSignin from "@/common/components/RequireSignin";
+import { illust } from "@/images";
 
 const Container = styled.View`
     width: 100%;
@@ -29,13 +32,30 @@ const tempData = [
     { id: 11, title: "마이카인드 유기농 비타민B 컴플렉스 비타민B 컴플렉스" },
 ];
 
-const Ranking = () => {
+const Ranking = ({ navigation }) => {
     const width = Dimensions.get("window").width;
     const theme = useContext(ThemeContext);
     const [medicineList, setMedicineList] = useState(tempData);
+    const [isSignin, setIsSignin] = useState(false); // 랭킹 노출(로그인시)
 
+    useEffect(() => {
+        const removeFocusEvent = navigation.addListener("focus", () => {
+            getUser();
+        });
+        return () => {
+            removeFocusEvent();
+        };
+    }, []);
+
+    // ✨ 로그인정보 가져오기
+    const getUser = async () => {
+        const token = await AsyncStorage.getItem("token");
+        setIsSignin(token);
+    };
+
+    // ✨ 리스트 1~3번째는 배경색 주고 나머지는 나열
     const renderItem = ({ item }) => {
-        console.log(item.id);
+        // console.log(item.id);
         if (item.id === 1) {
             return (
                 <ListItem
@@ -81,13 +101,28 @@ const Ranking = () => {
     return (
         <Container>
             <Category />
-            <ListContainer width={width}>
-                <FlatList
-                    data={medicineList}
-                    renderItem={renderItem}
-                    keyExtractor={(item, index) => index.toString()}
-                />
-            </ListContainer>
+            {isSignin ? (
+                <ListContainer width={width}>
+                    <FlatList
+                        data={medicineList}
+                        renderItem={renderItem}
+                        keyExtractor={(item, index) => index.toString()}
+                    />
+                </ListContainer>
+            ) : (
+                <Container
+                    width={width}
+                    style={{
+                        marginTop: 20,
+                    }}
+                >
+                    <RequireSignin
+                        src={illust.error}
+                        title="로그인이 필요한 서비스입니다."
+                        onPress={() => navigation.navigate("Signin")}
+                    />
+                </Container>
+            )}
         </Container>
     );
 };

@@ -252,8 +252,8 @@ class Calendar extends Component {
         style={{
             backgroundColor : "#27C47D",
             borderRadius:12,
+            marginTop:20,
             marginBottom:20,
-            // padding:20
         }}
         ref={r => (this.header = r)}
         month={this.state.currentMonth}
@@ -281,27 +281,13 @@ class Calendar extends Component {
                 justifyContent:"space-around",
                 marginBottom:13
             }}>
-                <Text style={{
-                    color: "#cccccc",
-                }}>월</Text>
-                <Text style={{
-                    color: "#cccccc",
-                }}>화</Text>
-                <Text style={{
-                    color: "#cccccc",
-                }}>수</Text>
-                <Text style={{
-                    color: "#cccccc",
-                }}>목</Text>
-                <Text style={{
-                    color: "#cccccc",
-                }}>금</Text>
-                <Text style={{
-                    color: "#cccccc",
-                }}>토</Text>
-                <Text style={{
-                    color: "#cccccc",
-                }}>일</Text>
+                <Text style={[this.style.dayName]}>월</Text>
+                <Text style={[this.style.dayName]}>화</Text>
+                <Text style={[this.style.dayName]}>수</Text>
+                <Text style={[this.style.dayName]}>목</Text>
+                <Text style={[this.style.dayName]}>금</Text>
+                <Text style={[this.style.dayName]}>토</Text>
+                <Text style={[this.style.dayName]}>일</Text>
             </View>
           {this.renderMonth()}
         </View>

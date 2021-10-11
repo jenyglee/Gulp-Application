@@ -60,8 +60,11 @@ const SigninContainer = ({ navigation }) => {
                 return;
             }
 
-            const user = await signin({ email, password });
-            navigation.navigate("AlarmList", { user });
+            await signin({ email, password });
+            // const user = await signin({ email, password });
+            // console.log(user);
+            navigation.navigate("AlarmList");
+            // navigation.navigate("AlarmList", { user });
         } catch (e) {
             Alert.alert(e.message);
         }

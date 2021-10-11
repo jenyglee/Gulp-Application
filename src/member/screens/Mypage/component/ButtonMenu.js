@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Dimensions } from "react-native";
 import styled from "styled-components";
 
@@ -9,7 +9,7 @@ const Wrap = styled.View`
 const Container = styled.View`
     background-color: ${({ theme }) => theme.white};
     width: ${({ width }) => width - 48}px;
-    height: 100px;
+    height: 150px;
     padding: 0 20px;
     border-radius: 12px;
     align-items: center;
@@ -37,13 +37,8 @@ const Line = styled.View`
     background-color: ${({ theme }) => theme.line};
 `;
 
-const ButtonMenu = ({ showGradeTable, showUserInfo }) => {
+const ButtonMenu = ({ showGradeTable, showUserInfo, signout, setIsSignin }) => {
     const width = Dimensions.get("window").width;
-
-    const buttons = [
-        { onPress: showUserInfo, text: "회원정보 변경" },
-        { onPress: showGradeTable, text: "등급표" },
-    ];
 
     return (
         <Wrap>
@@ -61,6 +56,21 @@ const ButtonMenu = ({ showGradeTable, showUserInfo }) => {
                         }}
                     >
                         <ListText>등급표</ListText>
+                    </ListContainer>
+                </ListBtn>
+                <Line />
+                <ListBtn
+                    onPress={() => {
+                        signout();
+                        setIsSignin(false);
+                    }}
+                >
+                    <ListContainer
+                        style={{
+                            borderBottomWidth: 0,
+                        }}
+                    >
+                        <ListText>로그아웃</ListText>
                     </ListContainer>
                 </ListBtn>
             </Container>

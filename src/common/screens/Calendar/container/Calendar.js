@@ -5,7 +5,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import CalendarTable from "@/common/screens/Calendar/component/CalendarTable";
 import CalendarTitle from "@/common/screens/Calendar/component/CalendarTitle";
 import CalendarTitleNotSignin from "@/common/screens/Calendar/component/CalendarTitleNotSignin";
-import RequireSignin from "@/common/screens/Calendar/component/RequireSignin";
+import RequireSignin from "@/common/components/RequireSignin";
 import { badge } from "@/icons";
 import { illust } from "@/images";
 
@@ -72,7 +72,23 @@ const Calendar = ({ navigation }) => {
     const [completed, setCompleted] = useState(true); // 복용 완료 여부
     const [isSignin, setIsSignin] = useState(true); // 캘린더 노출(로그인시)
 
-    // ✨ 로컬에서 가져오기
+    useEffect(() => {
+        const removeFocusEvent = navigation.addListener("focus", () => {
+            getData();
+            getUser();
+        });
+        return () => {
+            removeFocusEvent();
+        };
+    }, []);
+
+    // ✨ 로그인정보 가져오기
+    const getUser = async () => {
+        const token = await AsyncStorage.getItem("token");
+        setIsSignin(token);
+    };
+
+    // ✨ 등록된 알람 가져오기
     const getData = async () => {
         const loadedData = await AsyncStorage.getItem("tasks");
         setTasks(JSON.parse(loadedData));
@@ -83,14 +99,6 @@ const Calendar = ({ navigation }) => {
             setFoundMedicine(true);
         }
     };
-    useEffect(() => {
-        const removeFocusEvent = navigation.addListener("focus", () => {
-            getData();
-        });
-        return () => {
-            removeFocusEvent();
-        };
-    }, []);
 
     return (
         <ScrollView>
@@ -143,15 +151,6 @@ const Calendar = ({ navigation }) => {
                                                               {item.name}
                                                           </Medicine>
                                                       )}
-
-                                                      {/* //   <Medicine
-                                                //       style={{
-                                                //           color: theme.textDisable,
-                                                //       }}
-                                                //       key={item.id}
-                                                //   >
-                                                //       {item.name}
-                                                //   </Medicine> */}
                                                       <Line />
                                                   </View>
                                               );

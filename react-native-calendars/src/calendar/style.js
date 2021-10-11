@@ -15,6 +15,9 @@ export default function getStyle(theme = {}) {
       flex: 1,
       alignItems: 'center'
     },
+    dayName : {
+        color: "#cccccc",
+    },
     emptyDayContainer: {
       flex: 1
     },
