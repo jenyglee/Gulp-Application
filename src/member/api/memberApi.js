@@ -12,7 +12,8 @@ const signin = async (member) => {
             data: member,
         });
 
-        // console.log(response);
+        console.log(response.config.data["email"]);
+
         if (response.data.statusCodeValue !== 200) {
             throw new Error(response.data.body.message);
         }

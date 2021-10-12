@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import styled from "styled-components";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { Button, Input, Image } from "@components/index";
@@ -7,7 +7,7 @@ import { illust } from "@/images";
 import { isEmail, removeWhiteSpace } from "@/util";
 import { nominalTypeHack } from "prop-types";
 import { signup } from "@/member/api/memberApi";
-import { Alert } from "react-native";
+import { Alert, Animated } from "react-native";
 // import { createUser } from "@/firebase";
 
 const Container = styled.View`
@@ -37,6 +37,15 @@ const SignupContainer00 = ({ navigation }) => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [passwordConfirm, setPasswordConfirm] = useState("");
+
+    const opacity = useRef(new Animated.Value(0)).current;
+    useEffect(() => {
+        Animated.timing(opacity, {
+            toValue: 1,
+            duration: 3000,
+            useNativeDriver: true,
+        }).start();
+    }, [showEmail]);
 
     // const refEmail = useRef(null);
     // const refPassword = useRef(null);
@@ -99,7 +108,11 @@ const SignupContainer00 = ({ navigation }) => {
                     />
                 </InputContainer>
                 {showEmail ? (
-                    <InputContainer>
+                    <Animated.View
+                        style={{
+                            opacity: opacity,
+                        }}
+                    >
                         <StyledTitle>이메일을 입력해주세요</StyledTitle>
                         <Input
                             // ref={refEmail}
@@ -130,10 +143,14 @@ const SignupContainer00 = ({ navigation }) => {
                                 setShowPassword(true);
                             }}
                         />
-                    </InputContainer>
+                    </Animated.View>
                 ) : null}
                 {showPassword ? (
-                    <InputContainer>
+                    <Animated.View
+                        style={{
+                            opacity: opacity,
+                        }}
+                    >
                         <StyledTitle>비밀번호를 입력해주세요.</StyledTitle>
                         <Input
                             // ref={refPassword}
@@ -205,7 +222,7 @@ const SignupContainer00 = ({ navigation }) => {
                             title="회원가입하기"
                             onPress={handleSignupBtnPress}
                         />
-                    </InputContainer>
+                    </Animated.View>
                 ) : null}
             </Container>
             {errorModal ? (

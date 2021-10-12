@@ -1,5 +1,5 @@
-import React, { useState, forwardRef } from "react";
-import { Dimensions } from "react-native";
+import React, { useState, forwardRef, useRef, useEffect } from "react";
+import { Dimensions, Animated } from "react-native";
 import styled from "styled-components";
 
 const Container = styled.View`
@@ -14,6 +14,8 @@ const Container = styled.View`
     flex-direction: row;
     align-items: center;
     padding: 0 15px;
+    /* opacity: ${({ opacity }) => opacity}; */
+    opacity: 1;
 `;
 
 const StyledInput = styled.TextInput.attrs(({ theme }) => ({
@@ -41,11 +43,21 @@ const Input = forwardRef(
     ) => {
         const width = Dimensions.get("window").width;
         const [isFocused, setIsFocused] = useState(false);
+
+        const opacity = useRef(new Animated.Value(0)).current;
+        useEffect(() => {
+            Animated.timing(opacity, {
+                toValue: 1,
+                useNativeDriver: true,
+            }).start();
+        }, []);
+
         return (
             <Container
                 width={width}
                 isFocused={isFocused}
                 style={containerStyle}
+                // opacity={opacity}
             >
                 <StyledInput
                     ref={ref}

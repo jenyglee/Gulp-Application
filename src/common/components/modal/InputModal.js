@@ -35,7 +35,7 @@ const InputContainer = styled.View`
 const Title = styled.Text`
     font-size: 20px;
     font-weight: 900;
-    margin-bottom: 20;
+    margin-bottom: 20px;
 `;
 
 const InputModal = ({ onPress }) => {
@@ -59,7 +59,7 @@ const InputModal = ({ onPress }) => {
                         />
                         <Input
                             placeholder="닉네임 입력"
-                            value
+                            // value
                             onBlur={() => {}}
                             maxLenth={10}
                             onChangeText={(text) => setName(text)}
@@ -73,7 +73,7 @@ const InputModal = ({ onPress }) => {
                         />
                         <Input
                             placeholder="비밀번호 입력"
-                            value
+                            // value
                             onBlur={() => {}}
                             maxLenth={10}
                             onChangeText={(text) => setName(text)}
@@ -87,7 +87,7 @@ const InputModal = ({ onPress }) => {
                         />
                         <Input
                             placeholder="비밀번호 재입력"
-                            value
+                            // value
                             onBlur={() => {}}
                             maxLenth={10}
                             onChangeText={(text) => setName(text)}
