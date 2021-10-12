@@ -45,7 +45,7 @@ const SignupContainer00 = ({ navigation }) => {
             duration: 3000,
             useNativeDriver: true,
         }).start();
-    }, [showEmail]);
+    }, []);
 
     // const refEmail = useRef(null);
     // const refPassword = useRef(null);
