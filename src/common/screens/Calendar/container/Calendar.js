@@ -86,6 +86,9 @@ const Calendar = ({ navigation }) => {
     const getUser = async () => {
         const token = await AsyncStorage.getItem("token");
         setIsSignin(token);
+        
+        const dec = decodeURI(token);
+        console.log(dec);
     };
 
     // ✨ 등록된 알람 가져오기

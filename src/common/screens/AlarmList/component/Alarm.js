@@ -75,6 +75,7 @@ const Alarm = ({
     menuIcon,
     toggleTask,
     showAlarmMenu,
+    pressButton,
 }) => {
     const theme = useContext(ThemeContext);
     const [hadMedicine, setHadMedicine] = useState(false);
@@ -117,7 +118,7 @@ const Alarm = ({
                                 <IconButton
                                     icon={menuIcon}
                                     id={alarmInfo.id}
-                                    onPress={showAlarmMenu}
+                                    onPress={pressButton}
                                 />
                             </TopWrapRight>
                         </TopWrap>
@@ -168,7 +169,7 @@ const Alarm = ({
                                 <IconButton
                                     icon={menuIcon}
                                     id={alarmInfo.id}
-                                    onPress={showAlarmMenu}
+                                    onPress={pressButton}
                                 />
                             </TopWrapRight>
                         </TopWrap>

@@ -12,12 +12,11 @@ const signin = async (member) => {
             data: member,
         });
 
-        console.log(response.config.data["email"]);
-
+        console.log(response);
         if (response.data.statusCodeValue !== 200) {
             throw new Error(response.data.body.message);
         }
-        // console.log(jwt_decode(response.headers.authorization));
+        console.log(jwt_decode(response.headers.authorization));
         await AsyncStorage.setItem("token", response.headers.authorization);
     } catch (error) {
         throw error;

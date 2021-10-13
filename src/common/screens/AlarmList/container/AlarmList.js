@@ -4,6 +4,7 @@ import { View, ScrollView, Dimensions } from "react-native";
 import { StatusBar } from "expo-status-bar";
 import { icons } from "@/icons";
 import Button from "@components/Button";
+import BottomSheet from "@components/BottomSheet";
 import Grade from "@/common/screens/AlarmList/component/Grade";
 import Alarm from "@/common/screens/AlarmList/component/Alarm";
 import TopLogo from "@/common/screens/AlarmList/component/TopLogo";
@@ -52,6 +53,11 @@ const ProfileName = styled.Text`
 `;
 
 export default function AlarmList({ navigation }) {
+    const [modalVisible, setModalVisible] = useState(false);
+    const pressButton = () => {
+        setModalVisible(true);
+    };
+
     const width = Dimensions.get("window").width;
     const height = Dimensions.get("window").height;
     const insets = useSafeAreaInsets();
@@ -216,6 +222,7 @@ export default function AlarmList({ navigation }) {
                         Object.values(tasks).map((item) => {
                             return (
                                 <Alarm
+                                    pressButton={pressButton}
                                     alarmInfo={item}
                                     checkIcon={
                                         item.completed
@@ -288,6 +295,10 @@ export default function AlarmList({ navigation }) {
                             editMedicine={editMedicine}
                         />
                     ) : null}
+                    <BottomSheet
+                        modalVisible={modalVisible}
+                        setModalVisible={setModalVisible}
+                    />
                 </Container>
             </Wrap>
             <FloatingAction
