@@ -1,5 +1,5 @@
-import React, { useState, useRef, useEffect } from "react";
-import styled from "styled-components";
+import React, { useState, useRef, useEffect, useContext } from "react";
+import styled, { ThemeContext } from "styled-components";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { Button, Input, Image } from "@components/index";
 import { BasicModal } from "@components/modal/index";
@@ -7,7 +7,7 @@ import { illust } from "@/images";
 import { isEmail, removeWhiteSpace } from "@/util";
 import { nominalTypeHack } from "prop-types";
 import { signup } from "@/member/api/memberApi";
-import { Alert, Animated } from "react-native";
+import { Alert, Animated, Dimensions } from "react-native";
 // import { createUser } from "@/firebase";
 
 const Container = styled.View`
@@ -16,11 +16,14 @@ const Container = styled.View`
     height: 100%;
     background: ${({ theme }) => theme.white};
     display: flex;
-    justify-content: center;
+    /* justify-content: center; */
+    margin-top: 50px;
     align-items: center;
 `;
 
-const InputContainer = styled.View``;
+const InputContainer = styled.View`
+    /* margin-bottom: 36px; */
+`;
 
 const StyledTitle = styled.Text`
     font-size: 20px;
@@ -32,24 +35,18 @@ const DEFAULT_PHOTO =
     "https://firebasestorage.googleapis.com/v0/b/medicine-cc1f6.appspot.com/o/face.png?alt=media";
 
 const SignupContainer00 = ({ navigation }) => {
+    const theme = useContext(ThemeContext);
     const [photo, setPhoto] = useState(DEFAULT_PHOTO);
+    const width = Dimensions.get("window").width;
     const [nickname, setNickname] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [passwordConfirm, setPasswordConfirm] = useState("");
-
-    const opacity = useRef(new Animated.Value(0)).current;
-    useEffect(() => {
-        Animated.timing(opacity, {
-            toValue: 1,
-            duration: 3000,
-            useNativeDriver: true,
-        }).start();
-    }, []);
-
-    // const refEmail = useRef(null);
-    // const refPassword = useRef(null);
+    const [allValue, setAllValue] = useState(false);
     const refPasswordConfirm = useRef(null);
+
+    const opacityEmail = useRef(new Animated.Value(0)).current;
+    const opacityPassword = useRef(new Animated.Value(0)).current;
 
     // ✨ 포커스 아웃이 되면 다음 인풋 노출
     const [showEmail, setShowEmail] = useState(false);
@@ -63,6 +60,7 @@ const SignupContainer00 = ({ navigation }) => {
         setErrorModal(false);
     };
 
+    // ✨ 회원가입
     const handleSignupBtnPress = async () => {
         try {
             await signup({ nickname, email, password });
@@ -71,6 +69,74 @@ const SignupContainer00 = ({ navigation }) => {
             Alert.alert(error.message);
         }
     };
+
+    // ✨ 애니메이션 'opacity'
+    const inputAnimation = (opacityItem) => {
+        Animated.timing(opacityItem, {
+            toValue: 1,
+            duration: 1000,
+            useNativeDriver: true,
+        }).start();
+    };
+
+    // ✨ 닉네임 확인
+    const confirmNickname = () => {
+        if (nickname != "") {
+            setShowEmail(true);
+            inputAnimation(opacityEmail);
+        } else {
+            setErrorModal(true);
+            setErrorMessage("닉네임을 입력해주세요.");
+        }
+    };
+
+    // ✨ 이메일 확인
+    const confirmEmail = () => {
+        if (email != "") {
+            if (isEmail(email)) {
+                setShowPassword(true);
+                inputAnimation(opacityPassword);
+            } else {
+                setErrorModal(true);
+                setErrorMessage("이메일을 올바르게 입력해주세요.");
+            }
+        } else {
+            setErrorModal(true);
+            setErrorMessage("이메일을 입력해주세요.");
+        }
+    };
+
+    // ✨ 패스워드 확인
+    const confirmPassword = async (root) => {
+        if (passwordConfirm != "") {
+            if (password.length >= 6 || passwordConfirm.length >= 6) {
+                if (password == passwordConfirm) {
+                    await handleSignupBtnPress();
+                    navigation.navigate(root);
+                } else {
+                    setErrorModal(true);
+                    setErrorMessage("비밀번호가 일치하지 않습니다.");
+                }
+            } else {
+                setErrorModal(true);
+                setErrorMessage("비밀번호는 6자리 이상입니다.");
+            }
+        } else {
+            setErrorModal(true);
+            setErrorMessage("비밀번호를 한번 더 입력해주세요.");
+        }
+    };
+
+    // ✨ 모든 값이 있는지 확인
+    useEffect(() => {
+        if ((nickname, email, password, passwordConfirm)) {
+            setAllValue(true);
+        } else {
+            setAllValue(false);
+        }
+        // const confirmAllValue = () => {
+        // };
+    });
 
     return (
         <KeyboardAwareScrollView
@@ -88,7 +154,7 @@ const SignupContainer00 = ({ navigation }) => {
                         placeholder="닉네임을 입력하세요"
                         value={nickname}
                         onBlur={() => {
-                            setShowEmail(true);
+                            confirmNickname();
                         }}
                         maxLenth={10}
                         onChangeText={(text) => {
@@ -97,20 +163,17 @@ const SignupContainer00 = ({ navigation }) => {
                         }}
                         returnKeyType="next"
                         onSubmitEditing={() => {
-                            if (nickname != "") {
-                                setShowEmail(true);
-                            } else {
-                                setErrorModal(true);
-                                setErrorMessage("닉네임을 입력해주세요.");
-                            }
-                            setShowEmail(true);
+                            confirmNickname();
+                        }}
+                        containerStyle={{
+                            marginBottom: 36,
                         }}
                     />
                 </InputContainer>
                 {showEmail ? (
                     <Animated.View
                         style={{
-                            opacity: opacity,
+                            opacity: opacityEmail,
                         }}
                     >
                         <StyledTitle>이메일을 입력해주세요</StyledTitle>
@@ -119,7 +182,9 @@ const SignupContainer00 = ({ navigation }) => {
                             title="이메일"
                             placeholder="이메일을 입력하세요"
                             value={email}
-                            onBlur={() => {}}
+                            onBlur={() => {
+                                confirmEmail();
+                            }}
                             maxLenth={10}
                             onChangeText={(text) => {
                                 const changedEmail = removeWhiteSpace(text);
@@ -127,20 +192,10 @@ const SignupContainer00 = ({ navigation }) => {
                             }}
                             returnKeyType="next"
                             onSubmitEditing={() => {
-                                if (email != "") {
-                                    if (isEmail(email)) {
-                                        setShowPassword(true);
-                                    } else {
-                                        setErrorModal(true);
-                                        setErrorMessage(
-                                            "이메일을 올바르게 입력해주세요."
-                                        );
-                                    }
-                                } else {
-                                    setErrorModal(true);
-                                    setErrorMessage("이메일을 입력해주세요.");
-                                }
-                                setShowPassword(true);
+                                confirmEmail();
+                            }}
+                            containerStyle={{
+                                marginBottom: 36,
                             }}
                         />
                     </Animated.View>
@@ -148,7 +203,7 @@ const SignupContainer00 = ({ navigation }) => {
                 {showPassword ? (
                     <Animated.View
                         style={{
-                            opacity: opacity,
+                            opacity: opacityPassword,
                         }}
                     >
                         <StyledTitle>비밀번호를 입력해주세요.</StyledTitle>
@@ -157,9 +212,9 @@ const SignupContainer00 = ({ navigation }) => {
                             title="비밀번호"
                             placeholder="비밀번호를 입력하세요"
                             value={password}
-                            onBlur={() => {}}
                             maxLenth={10}
                             returnKeyType="next"
+                            onBlur={() => {}}
                             onChangeText={(text) => {
                                 const changedPassword = removeWhiteSpace(text);
                                 setPassword(changedPassword);
@@ -179,8 +234,8 @@ const SignupContainer00 = ({ navigation }) => {
                             title="비밀번호 재입력"
                             placeholder="비밀번호를 한번 더 입력하세요"
                             value={passwordConfirm}
-                            onBlur={() => {}}
                             maxLenth={10}
+                            onBlur={() => {}}
                             returnKeyType="done"
                             onChangeText={(text) => {
                                 const changedPasswordConfirm =
@@ -188,42 +243,29 @@ const SignupContainer00 = ({ navigation }) => {
                                 setPasswordConfirm(changedPasswordConfirm);
                             }}
                             onSubmitEditing={() => {
-                                if (passwordConfirm != "") {
-                                    if (
-                                        password.length >= 6 ||
-                                        passwordConfirm.length >= 6
-                                    ) {
-                                        if (password == passwordConfirm) {
-                                            handleSignupBtnPress();
-                                            navigation.navigate("Signup01");
-                                        } else {
-                                            setErrorModal(true);
-                                            setErrorMessage(
-                                                "비밀번호가 일치하지 않습니다."
-                                            );
-                                        }
-                                    } else {
-                                        setErrorModal(true);
-                                        setErrorMessage(
-                                            "비밀번호는 6자리 이상입니다."
-                                        );
-                                    }
-                                } else {
-                                    setErrorModal(true);
-                                    setErrorMessage(
-                                        "비밀번호를 한번 더 입력해주세요."
-                                    );
-                                }
-                                // navigation.navigate("Signup01");
+                                confirmPassword("Signup01");
                             }}
                             secureTextEntry={true}
                         />
-                        <Button
-                            title="회원가입하기"
-                            onPress={handleSignupBtnPress}
-                        />
                     </Animated.View>
                 ) : null}
+
+                <Button
+                    title="회원가입하기"
+                    onPress={() => {
+                        confirmPassword("Signup01");
+                    }}
+                    btnWrapStyle={{
+                        width: width - 48,
+                        position: "absolute",
+                        bottom: 40,
+                    }}
+                    containerStyle={{
+                        backgroundColor: allValue
+                            ? theme.btnBackground
+                            : theme.btnBackgroundDisable,
+                    }}
+                />
             </Container>
             {errorModal ? (
                 <BasicModal

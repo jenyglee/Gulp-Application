@@ -30,6 +30,7 @@ export const theme = {
 
     // ✨ 버튼
     btnBackground: Colors.main,
+    btnBackgroundDisable: Colors.grey_3,
     btnText: Colors.white,
 
     // ✨ 텍스트버튼

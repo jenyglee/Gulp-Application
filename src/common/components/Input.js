@@ -44,20 +44,11 @@ const Input = forwardRef(
         const width = Dimensions.get("window").width;
         const [isFocused, setIsFocused] = useState(false);
 
-        const opacity = useRef(new Animated.Value(0)).current;
-        useEffect(() => {
-            Animated.timing(opacity, {
-                toValue: 1,
-                useNativeDriver: true,
-            }).start();
-        }, []);
-
         return (
             <Container
                 width={width}
                 isFocused={isFocused}
                 style={containerStyle}
-                // opacity={opacity}
             >
                 <StyledInput
                     ref={ref}
@@ -69,7 +60,10 @@ const Input = forwardRef(
                     onChangeText={onChangeText}
                     isFocused={isFocused}
                     onFocus={() => setIsFocused(true)}
-                    onBlur={() => setIsFocused(false)}
+                    onBlur={() => {
+                        onBlur();
+                        setIsFocused(false);
+                    }}
                     returnKeyType={returnKeyType}
                     onSubmitEditing={onSubmitEditing}
                     secureTextEntry={secureTextEntry}
