@@ -4,12 +4,12 @@ import { View, ScrollView, Dimensions } from "react-native";
 import { StatusBar } from "expo-status-bar";
 import { icons } from "@/icons";
 import Button from "@components/Button";
-import BottomSheet from "@components/BottomSheet";
+import AlarmMenu from "@/common/components/modal/AlarmMenu";
 import Grade from "@/common/screens/AlarmList/component/Grade";
 import Alarm from "@/common/screens/AlarmList/component/Alarm";
 import TopLogo from "@/common/screens/AlarmList/component/TopLogo";
 import ButtonFilter from "@/common/screens/AlarmList/component/ButtonFilter";
-import { GradeTable, AlarmMenu } from "@components/modal/index";
+import { GradeTable } from "@components/modal/index";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { signout } from "@/member/api/memberApi";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
@@ -44,20 +44,11 @@ const StyledText = styled.Text`
     color: ${({ theme }) => theme.textBasic};
 `;
 
-const AddBtn = styled.Button`
-    margin-bottom: 100px;
-`;
-
 const ProfileName = styled.Text`
     font-size: 18px;
 `;
 
 export default function AlarmList({ navigation }) {
-    const [modalVisible, setModalVisible] = useState(false);
-    const pressButton = () => {
-        setModalVisible(true);
-    };
-
     const width = Dimensions.get("window").width;
     const height = Dimensions.get("window").height;
     const insets = useSafeAreaInsets();
@@ -84,13 +75,7 @@ export default function AlarmList({ navigation }) {
     const [gradeTable, setGradeTable] = useState(false); // 등급표
     // 🪲 헬퍼를 뽑는 법을 모르겠음...
     // const bool = showGradeTable(false);
-
-    const [alarmMenu, setAlarmMenu] = useState(false); // 알람 메뉴
-    const [alarmMenuList, setAlarmMenuList] = useState([
-        { id: 0, title: "알람 변경" },
-        { id: 1, title: "지우기" },
-        { id: 2, title: "닫기" },
-    ]);
+    const [alarmMenu, setAlarmMenu] = useState(false);
     const [foundMedicine, setFoundMedicine] = useState(false); // 약 리스트 유무
 
     // ✨ 로컬에 저장하기
@@ -171,7 +156,7 @@ export default function AlarmList({ navigation }) {
 
     //  ✨알람메뉴 노출/숨김
     const showAlarmMenu = (id) => {
-        setAlarmMenu(!alarmMenu);
+        setAlarmMenu(true);
         setSelectedTaskKey(id);
     };
 
@@ -189,8 +174,7 @@ export default function AlarmList({ navigation }) {
         setAlarmMenu(false);
     };
 
-    // ✨ 로그인했는지 확인
-    // ✨ 약 추가 후 메인으로 복귀
+    // ✨ 로그인했는지 확인 + 약 추가 후 메인으로 복귀
     useEffect(() => {
         // signConfirm();
         // confirmList(tasks);
@@ -222,7 +206,7 @@ export default function AlarmList({ navigation }) {
                         Object.values(tasks).map((item) => {
                             return (
                                 <Alarm
-                                    pressButton={pressButton}
+                                    showAlarmMenu={showAlarmMenu}
                                     alarmInfo={item}
                                     checkIcon={
                                         item.completed
@@ -245,7 +229,6 @@ export default function AlarmList({ navigation }) {
                             marginTop: 50,
                         }}
                     >
-                        {/* <Button onPress={() => {}} title="(테스트용)메뉴" /> */}
                         <Button
                             onPress={() => {
                                 navigation.navigate("Signin");
@@ -287,17 +270,12 @@ export default function AlarmList({ navigation }) {
                         // <GradeTable onPress={showGradeTable(bool)} />
                         <GradeTable onPress={showGradeTable} />
                     ) : null}
-                    {alarmMenu ? (
-                        <AlarmMenu
-                            showAlarmMenu={showAlarmMenu}
-                            deleteTask={deleteTask.bind(null, selectedTaskKey)}
-                            alarmMenuList={alarmMenuList}
-                            editMedicine={editMedicine}
-                        />
-                    ) : null}
-                    <BottomSheet
-                        modalVisible={modalVisible}
-                        setModalVisible={setModalVisible}
+
+                    <AlarmMenu
+                        alarmMenu={alarmMenu}
+                        setAlarmMenu={setAlarmMenu}
+                        deleteTask={deleteTask.bind(null, selectedTaskKey)}
+                        editMedicine={editMedicine}
                     />
                 </Container>
             </Wrap>

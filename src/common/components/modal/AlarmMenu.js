@@ -1,39 +1,32 @@
-import React from "react";
-import { Modal, Dimensions } from "react-native";
+import React, { useEffect, useRef } from "react";
+import {
+    View,
+    StyleSheet,
+    Text,
+    Modal,
+    Animated,
+    TouchableWithoutFeedback,
+    Dimensions,
+    PanResponder,
+} from "react-native";
 import styled from "styled-components";
 
-const OpacityBackground = styled.View`
-    width: 100%;
-    height: 100%;
-    background: #000;
-    opacity: 0.5;
-    position: absolute;
-`;
-
 const Wrap = styled.View`
-    position: relative;
-    /* top: ${({ height }) => height / 10000}px; */
-    top: 0;
-    justify-content: center;
-    align-items: center;
-`;
-
-const ModalContainer = styled.View`
     background-color: ${({ theme }) => theme.white};
-    width: ${({ width }) => width - 48}px;
-    height: 150px;
+    height: 120px;
     padding: 0 20px;
-    border-radius: 12px;
-    align-items: center;
+    border-top-left-radius: 24px;
+    border-top-right-radius: 24px;
 `;
 
 const ListBtn = styled.TouchableOpacity`
     flex: 1;
     width: 100%;
+    justify-content: center;
 `;
 const ListContainer = styled.View`
     width: 100%;
-    height: 100%;
+
     justify-content: center;
     align-items: center;
 `;
@@ -47,58 +40,121 @@ const Line = styled.View`
     height: 1px;
     background-color: ${({ theme }) => theme.line};
 `;
+const AlarmMenu = ({ alarmMenu, setAlarmMenu, editMedicine, deleteTask }) => {
+    // const { alarmMenu, setAlarmMenu } = props;
+    const width = Dimensions.get("screen").width;
+    const screenHeight = Dimensions.get("screen").height;
+    const panY = useRef(new Animated.Value(screenHeight)).current;
+    const translateY = panY.interpolate({
+        inputRange: [-1, 0, 1],
+        outputRange: [0, 0, 1],
+    });
 
-const AlarmMenu = ({ showAlarmMenu, deleteTask, editMedicine }) => {
-    const width = Dimensions.get("window").width;
-    const height = Dimensions.get("window").height;
+    const resetBottomSheet = Animated.timing(panY, {
+        toValue: 0,
+        duration: 300,
+        useNativeDriver: true,
+    });
+
+    const closeBottomSheet = Animated.timing(panY, {
+        toValue: screenHeight,
+        duration: 300,
+        useNativeDriver: true,
+    });
+
+    const panResponders = useRef(
+        PanResponder.create({
+            onStartShouldSetPanResponder: () => true,
+            onMoveShouldSetPanResponder: () => false,
+            onPanResponderMove: (event, gestureState) => {
+                panY.setValue(gestureState.dy);
+            },
+            onPanResponderRelease: (event, gestureState) => {
+                if (gestureState.dy > 0 && gestureState.vy > 1.5) {
+                    closeModal();
+                } else {
+                    resetBottomSheet.start();
+                }
+            },
+        })
+    ).current;
+
+    useEffect(() => {
+        if (alarmMenu) {
+            resetBottomSheet.start();
+        }
+    }, [alarmMenu]);
+
+    const closeModal = () => {
+        closeBottomSheet.start(() => {
+            setAlarmMenu(false);
+        });
+    };
+
     return (
-        <Modal animationType="fade" transparent={true} visible={true}>
-            <OpacityBackground />
-            <Wrap height={height}>
-                <ModalContainer width={width}>
-                    <ListBtn onPress={editMedicine}>
-                        <ListContainer>
-                            <ListText>알람 변경</ListText>
-                        </ListContainer>
-                    </ListBtn>
-                    <Line />
-                    <ListBtn onPress={deleteTask}>
-                        <ListContainer>
-                            <ListText>지우기</ListText>
-                        </ListContainer>
-                    </ListBtn>
-                    <Line />
-                    <ListBtn onPress={showAlarmMenu}>
-                        <ListContainer
-                            style={{
-                                borderBottomWidth: 0,
+        <Modal
+            visible={alarmMenu}
+            animationType={"fade"}
+            transparent
+            statusBarTranslucent
+        >
+            <View style={styles.overlay}>
+                <TouchableWithoutFeedback onPress={closeModal}>
+                    <View style={styles.background} />
+                </TouchableWithoutFeedback>
+                <Animated.View
+                    style={{
+                        ...styles.bottomSheetContainer,
+                        transform: [{ translateY: translateY }],
+                    }}
+                    {...panResponders.panHandlers}
+                >
+                    <Wrap>
+                        <ListBtn
+                            onPress={() => {
+                                editMedicine();
+                                closeModal();
                             }}
                         >
-                            <ListText>닫기</ListText>
-                        </ListContainer>
-                    </ListBtn>
-
-                    {/* ✨ 버튼 개수만큼 반복문 돌려서 운영요소 만들려고 했음 */}
-                    {/* 🪲 버튼의 각각 다른 기능은 어떻게 차별시킨 건지 의문 */}
-                    {
-                        // alarmMenuList.map((i, a) => {
-                        //     return (
-                        //             <>
-                        //                 <ListBtn>
-                        //                     <ListContainer>
-                        //                         <ListText>{i.title}</ListText>
-                        //                     </ListContainer>
-                        //                 </ListBtn>
-                        //                 /* 마지막 버튼 아래 라인 지우기*/
-                        //                 {a == 2 ? null : <Line />}
-                        //             </>
-                        //     );
-                        // })
-                    }
-                </ModalContainer>
-            </Wrap>
+                            <ListContainer>
+                                <ListText>알람 변경</ListText>
+                            </ListContainer>
+                        </ListBtn>
+                        <Line />
+                        <ListBtn
+                            onPress={() => {
+                                deleteTask();
+                                closeModal();
+                            }}
+                        >
+                            <ListContainer>
+                                <ListText>지우기</ListText>
+                            </ListContainer>
+                        </ListBtn>
+                    </Wrap>
+                </Animated.View>
+            </View>
         </Modal>
     );
 };
+
+const styles = StyleSheet.create({
+    overlay: {
+        flex: 1,
+        justifyContent: "flex-end",
+        backgroundColor: "rgba(0, 0, 0, 0.4)",
+    },
+    background: {
+        flex: 1,
+    },
+    bottomSheetContainer: {
+        height: "auto",
+        backgroundColor: "white",
+        // paddingTop: 24,
+        paddingBottom: 20,
+        borderTopLeftRadius: 24,
+        borderTopRightRadius: 24,
+    },
+});
 
 export default AlarmMenu;
