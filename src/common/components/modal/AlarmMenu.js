@@ -15,8 +15,8 @@ const Wrap = styled.View`
     background-color: ${({ theme }) => theme.white};
     height: 120px;
     padding: 0 20px;
-    border-top-left-radius: 24px;
-    border-top-right-radius: 24px;
+    border-top-left-radius: 12px;
+    border-top-right-radius: 12px;
 `;
 
 const ListBtn = styled.TouchableOpacity`
@@ -40,8 +40,8 @@ const Line = styled.View`
     height: 1px;
     background-color: ${({ theme }) => theme.line};
 `;
-const AlarmMenu = ({ alarmMenu, setAlarmMenu, editMedicine, deleteTask }) => {
-    // const { alarmMenu, setAlarmMenu } = props;
+const AlarmMenu = ({ isVisible, setIsVisible, editMedicine, deleteTask }) => {
+    // const { isVisible, setIsVisible } = props;
     const width = Dimensions.get("screen").width;
     const screenHeight = Dimensions.get("screen").height;
     const panY = useRef(new Animated.Value(screenHeight)).current;
@@ -80,20 +80,20 @@ const AlarmMenu = ({ alarmMenu, setAlarmMenu, editMedicine, deleteTask }) => {
     ).current;
 
     useEffect(() => {
-        if (alarmMenu) {
+        if (isVisible) {
             resetBottomSheet.start();
         }
-    }, [alarmMenu]);
+    }, [isVisible]);
 
     const closeModal = () => {
         closeBottomSheet.start(() => {
-            setAlarmMenu(false);
+            setIsVisible(false);
         });
     };
 
     return (
         <Modal
-            visible={alarmMenu}
+            visible={isVisible}
             animationType={"fade"}
             transparent
             statusBarTranslucent
@@ -152,8 +152,8 @@ const styles = StyleSheet.create({
         backgroundColor: "white",
         // paddingTop: 24,
         paddingBottom: 20,
-        borderTopLeftRadius: 24,
-        borderTopRightRadius: 24,
+        borderTopLeftRadius: 12,
+        borderTopRightRadius: 12,
     },
 });
 

@@ -2,12 +2,14 @@ import React, { useState, useEffect } from "react";
 import { Dimensions, SafeAreaView } from "react-native";
 import styled from "styled-components";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import BottomSheet from "@components/modal/BottomSheet";
 import Profile from "@/member/screens/Mypage/component/Profile";
 import ButtonMenu from "@/member/screens/Mypage/component/ButtonMenu";
 import { GradeTable, InputModal } from "@components/modal/index";
 import { signout } from "@/member/api/memberApi";
 import RequireSignin from "@/common/components/RequireSignin";
 import { illust } from "@/images";
+import { Button } from "@/common/components";
 
 const Container = styled.View`
     width: 100%;
@@ -22,6 +24,7 @@ const MyPageContainer = ({ navigation }) => {
     const [userInfo, setUserInfo] = useState(false); // 회원정보
     const [isSignin, setIsSignin] = useState(false); // 마이페이지 노출(로그인시)
 
+    // ✨ 유저 정보 확인
     useEffect(() => {
         const removeFocusEvent = navigation.addListener("focus", () => {
             getUser();
@@ -47,6 +50,16 @@ const MyPageContainer = ({ navigation }) => {
         setUserInfo(!userInfo);
     };
 
+    const [isVisible, setIsVisible] = useState(false);
+    //  ✨알람메뉴 노출/숨김
+    const showAlarmMenu = () => {
+        setIsVisible(true);
+    };
+
+    const saveUserInfo = () => {
+        // 닉네임, 비밀번호 값을 서버에 저장하는 기능
+    };
+
     return (
         <SafeAreaView>
             {isSignin ? (
@@ -57,6 +70,13 @@ const MyPageContainer = ({ navigation }) => {
                         showUserInfo={showUserInfo}
                         signout={signout}
                         setIsSignin={setIsSignin}
+                    />
+                    <Button title="회원정보변경" onPress={showAlarmMenu} />
+                    {/* <Button title="회원정보변경2" onPress={showAlarmMenu} /> */}
+                    <BottomSheet
+                        isVisible={isVisible}
+                        setIsVisible={setIsVisible}
+                        onPress={saveUserInfo}
                     />
                     {gradeTable ? (
                         <GradeTable onPress={showGradeTable} />

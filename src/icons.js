@@ -7,6 +7,7 @@ import User20px from "@/../assets/icons/20px_user.png";
 import Medicine20px from "@/../assets/icons/20px_medicine.png";
 import Filter20px from "@/../assets/icons/20px_filter.png";
 import X20px from "@/../assets/icons/20px_X.png";
+import BottomSheetX20px from "@/../assets/icons/20px_BottomSheet_X.png";
 import LeftArrow30px from "@/../assets/icons/30px_leftArrow.png";
 import LeftArrowWhite30px from "@/../assets/icons/30px_leftArrow(w).png";
 import RightArrowWhite30px from "@/../assets/icons/30px_rightArrow(w).png";
@@ -47,6 +48,7 @@ export const icons20px = {
     filter: Filter20px,
     medicine: Medicine20px,
     x: X20px,
+    bottomSheetX: BottomSheetX20px,
 };
 
 export const icons30px = {

@@ -75,7 +75,7 @@ export default function AlarmList({ navigation }) {
     const [gradeTable, setGradeTable] = useState(false); // 등급표
     // 🪲 헬퍼를 뽑는 법을 모르겠음...
     // const bool = showGradeTable(false);
-    const [alarmMenu, setAlarmMenu] = useState(false);
+    const [isVisible, setIsVisible] = useState(false);
     const [foundMedicine, setFoundMedicine] = useState(false); // 약 리스트 유무
 
     // ✨ 로컬에 저장하기
@@ -156,7 +156,7 @@ export default function AlarmList({ navigation }) {
 
     //  ✨알람메뉴 노출/숨김
     const showAlarmMenu = (id) => {
-        setAlarmMenu(true);
+        setIsVisible(true);
         setSelectedTaskKey(id);
     };
 
@@ -165,13 +165,13 @@ export default function AlarmList({ navigation }) {
         const copy = Object.assign({}, tasks);
         delete copy[id];
         storeData(copy);
-        setAlarmMenu(false);
+        setIsVisible(false);
     };
 
     // ✨ 알람 변경 페이지로 이동
     const editMedicine = () => {
         navigation.navigate("AddAlarm");
-        setAlarmMenu(false);
+        setIsVisible(false);
     };
 
     // ✨ 로그인했는지 확인 + 약 추가 후 메인으로 복귀
@@ -206,7 +206,6 @@ export default function AlarmList({ navigation }) {
                         Object.values(tasks).map((item) => {
                             return (
                                 <Alarm
-                                    showAlarmMenu={showAlarmMenu}
                                     alarmInfo={item}
                                     checkIcon={
                                         item.completed
@@ -272,8 +271,8 @@ export default function AlarmList({ navigation }) {
                     ) : null}
 
                     <AlarmMenu
-                        alarmMenu={alarmMenu}
-                        setAlarmMenu={setAlarmMenu}
+                        isVisible={isVisible}
+                        setIsVisible={setIsVisible}
                         deleteTask={deleteTask.bind(null, selectedTaskKey)}
                         editMedicine={editMedicine}
                     />
