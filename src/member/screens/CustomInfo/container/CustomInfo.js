@@ -129,7 +129,6 @@ const SignupContainer00 = ({ navigation }) => {
                 <View>
                     <StyledTitle>변경할 닉네임을 입력해주세요</StyledTitle>
                     <Input
-                        // ref={refEmail}
                         title="닉네임"
                         value={nickname}
                         placeholder="닉네임을 입력하세요"
