@@ -38,7 +38,7 @@ const Title = styled.Text`
     margin-bottom: 20px;
 `;
 
-const InputModal = ({ onPress }) => {
+const InputModal = ({ onPress, userInfo }) => {
     const width = Dimensions.get("window").width;
     const height = Dimensions.get("window").height;
     const theme = useContext(ThemeContext);
@@ -51,7 +51,7 @@ const InputModal = ({ onPress }) => {
                         <Title>회원정보 수정</Title>
                         <Input
                             //✨ 포커스 자체가 불가능하게 해야함
-                            value="abcd1234@naver.com"
+                            value={userInfo.email}
                             containerStyle={{
                                 width: "100%",
                                 backgroundColor: theme.line,
@@ -59,7 +59,7 @@ const InputModal = ({ onPress }) => {
                         />
                         <Input
                             placeholder="닉네임 입력"
-                            // value
+                            value={userInfo.nickname}
                             onBlur={() => {}}
                             maxLenth={10}
                             onChangeText={(text) => setName(text)}
@@ -72,8 +72,7 @@ const InputModal = ({ onPress }) => {
                             }}
                         />
                         <Input
-                            placeholder="비밀번호 입력"
-                            // value
+                            placeholder="변경할 비밀번호 입력"
                             onBlur={() => {}}
                             maxLenth={10}
                             onChangeText={(text) => setName(text)}
@@ -86,8 +85,7 @@ const InputModal = ({ onPress }) => {
                             }}
                         />
                         <Input
-                            placeholder="비밀번호 재입력"
-                            // value
+                            placeholder="변경할 비밀번호 재입력"
                             onBlur={() => {}}
                             maxLenth={10}
                             onChangeText={(text) => setName(text)}

@@ -4,7 +4,6 @@ import styled from "styled-components";
 
 const Container = styled.View`
     width: ${({ width }) => width - 48}px;
-    height: 50px;
     background: ${({ theme }) => theme.white};
     margin-bottom: 12px;
     border: 1px solid
@@ -24,6 +23,7 @@ const StyledInput = styled.TextInput.attrs(({ theme }) => ({
     width: 100%;
     margin-left: 5px;
     font-size: 14px;
+    padding: 16px 0;
 `;
 
 const Input = forwardRef(
@@ -38,6 +38,7 @@ const Input = forwardRef(
             onSubmitEditing,
             secureTextEntry,
             containerStyle,
+            textStyle,
         },
         ref
     ) => {
@@ -67,6 +68,7 @@ const Input = forwardRef(
                     returnKeyType={returnKeyType}
                     onSubmitEditing={onSubmitEditing}
                     secureTextEntry={secureTextEntry}
+                    style={textStyle}
                 ></StyledInput>
             </Container>
         );

@@ -3,10 +3,10 @@ import { Image, TouchableOpacity, View } from "react-native";
 import styled, { ThemeContext } from "styled-components";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { createStackNavigator } from "@react-navigation/stack";
-// ✨
 import { AlarmList, Calendar, Rank, AddAlarm } from "@screens/index";
 import AddMedicine from "@/medicine/screens/AddMedicine";
 import MyPage from "@/member/screens/Mypage/container/MyPage";
+import CustomInfo from "@/member/screens/CustomInfo/container/CustomInfo";
 import Signin from "@/member/screens/Signin/container/Signin";
 import { Signup00, Signup01 } from "@/member/screens/Signup/index";
 import {
@@ -350,8 +350,22 @@ const HomeStackNav = () => {
                     };
                 }}
             />
+            <HomeStack.Screen
+                name="CustomInfo"
+                component={CustomInfo}
+                options={{
+                    ...option,
+                    ...backImage,
+                    headerTitle: "회원정보 변경",
+                    headerStyle: {
+                        shadowOffset: {
+                            header: 0,
+                        },
+                        backgroundColor: "#fff",
+                    },
+                }}
+            />
         </HomeStack.Navigator>
     );
 };
-
 export default HomeStackNav;

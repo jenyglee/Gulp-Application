@@ -5,11 +5,11 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import BottomSheet from "@components/modal/BottomSheet";
 import Profile from "@/member/screens/Mypage/component/Profile";
 import ButtonMenu from "@/member/screens/Mypage/component/ButtonMenu";
-import { GradeTable, InputModal } from "@components/modal/index";
+import { GradeTable } from "@components/modal/index";
 import { signout } from "@/member/api/memberApi";
 import RequireSignin from "@/common/components/RequireSignin";
 import { illust } from "@/images";
-import { Button } from "@/common/components";
+import jwt_decode from "jwt-decode";
 
 const Container = styled.View`
     width: 100%;
@@ -21,7 +21,6 @@ const Container = styled.View`
 const MyPageContainer = ({ navigation }) => {
     const width = Dimensions.get("window").width;
     const [gradeTable, setGradeTable] = useState(false); // 등급표
-    const [userInfo, setUserInfo] = useState(false); // 회원정보
     const [isSignin, setIsSignin] = useState(false); // 마이페이지 노출(로그인시)
 
     // ✨ 유저 정보 확인
@@ -36,28 +35,13 @@ const MyPageContainer = ({ navigation }) => {
 
     // ✨ 로그인정보 가져오기
     const getUser = async () => {
-        const token = await AsyncStorage.getItem("token");
-        setIsSignin(token);
+        const user = jwt_decode(await AsyncStorage.getItem("token"));
+        setIsSignin(user);
     };
 
     // ✨ 등급표 노출/숨김
     const showGradeTable = () => {
         setGradeTable(!gradeTable);
-    };
-
-    // ✨ 회원정보 노출/숨김
-    const showUserInfo = () => {
-        setUserInfo(!userInfo);
-    };
-
-    const [isVisible, setIsVisible] = useState(false);
-    //  ✨알람메뉴 노출/숨김
-    const showAlarmMenu = () => {
-        setIsVisible(true);
-    };
-
-    const saveUserInfo = () => {
-        // 닉네임, 비밀번호 값을 서버에 저장하는 기능
     };
 
     return (
@@ -67,21 +51,15 @@ const MyPageContainer = ({ navigation }) => {
                     <Profile />
                     <ButtonMenu
                         showGradeTable={showGradeTable}
-                        showUserInfo={showUserInfo}
+                        showUserInfo={() => {
+                            navigation.navigate("CustomInfo");
+                        }}
                         signout={signout}
                         setIsSignin={setIsSignin}
-                    />
-                    <Button title="회원정보변경" onPress={showAlarmMenu} />
-                    {/* <Button title="회원정보변경2" onPress={showAlarmMenu} /> */}
-                    <BottomSheet
-                        isVisible={isVisible}
-                        setIsVisible={setIsVisible}
-                        onPress={saveUserInfo}
                     />
                     {gradeTable ? (
                         <GradeTable onPress={showGradeTable} />
                     ) : null}
-                    {userInfo ? <InputModal onPress={showUserInfo} /> : null}
                 </Container>
             ) : (
                 <Container

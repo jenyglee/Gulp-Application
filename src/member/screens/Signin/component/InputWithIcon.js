@@ -26,6 +26,7 @@ const StyledInput = styled.TextInput.attrs(({ theme }) => ({
     width: 100%;
     margin-left: 5px;
     font-size: 14px;
+    padding: 16px 0;
 `;
 
 const InputWithIcon = forwardRef(
@@ -63,7 +64,9 @@ const InputWithIcon = forwardRef(
                     onChangeText={onChangeText}
                     isFocused={isFocused}
                     onFocus={() => setIsFocused(true)}
-                    onBlur={() => setIsFocused(false)}
+                    onBlur={() => {
+                        setIsFocused(false);
+                    }}
                     returnKeyType={returnKeyType}
                     onSubmitEditing={onSubmitEditing}
                     secureTextEntry={secureTextEntry}

@@ -46,6 +46,7 @@ export const theme = {
     inputBorder: Colors.grey_3,
     inputPlaceholderText: Colors.grey_4,
     inputPlaceholderFocus: Colors.deepGrey,
+    inputHold: Colors.grey_5,
 
     // ✨ 랭킹 1~3등
     firstRank: Colors.gold,

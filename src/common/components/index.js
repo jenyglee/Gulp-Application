@@ -2,7 +2,7 @@ import Button from "./Button";
 import ButtonSmall from "./ButtonSmall";
 import TextButton from "./TextButton";
 import Input from "./Input";
-import InputWithIcon from "./InputWithIcon";
+import InputDisabled from "./inputDisabled";
 import AlarmMedicine from "./AlarmMedicine";
 import Image from "./Image";
 import ErrorMessage from "./ErrorMessage";
@@ -14,7 +14,7 @@ export {
     ButtonSmall,
     TextButton,
     Input,
-    InputWithIcon,
+    InputDisabled,
     AlarmMedicine,
     Image,
     ErrorMessage,
