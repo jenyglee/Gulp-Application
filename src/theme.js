@@ -52,4 +52,11 @@ export const theme = {
     firstRank: Colors.gold,
     secondRank: Colors.silver,
     thirdRank: Colors.bronze,
+
+    // ✨약관 전체동의
+    allAgreeBackground: Colors.white,
+    allAgreeBackgroundStroke: Colors.main,
+    allAgreeText: Colors.main,
+    allAgreeBackgroundChecked: Colors.main,
+    allAgreeTextChecked: Colors.white,
 };

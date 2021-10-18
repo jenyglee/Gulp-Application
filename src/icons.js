@@ -25,6 +25,10 @@ import Complete from "@/../assets/icons/complete.png";
 import NotComplete from "@/../assets/icons/complete-n.png";
 import CheckSmall14px from "@/../assets/icons/14px_check.png";
 import CheckSmallWhite14px from "@/../assets/icons/14px_check_w.png";
+import CheckSmallMain14px from "@/../assets/icons/14px_check_m.png";
+import CheckSmallLightGrey14px from "@/../assets/icons/14px_check_lg.png";
+import ArrowBottom14px from "@/../assets/icons/14px_arrow_bottom.png";
+import ArrowTop14px from "@/../assets/icons/14px_arrow_top.png";
 import Plus14px from "@/../assets/icons/14px_plus.png";
 import Grade14px from "@/../assets/icons/14px_grade.png";
 
@@ -36,8 +40,12 @@ export const icons = {
 };
 
 export const icons14px = {
-    check: CheckSmallWhite14px,
+    checkWhite: CheckSmallWhite14px,
+    checkMain: CheckSmallMain14px,
+    checkLightGrey: CheckSmallLightGrey14px,
     uncheck: CheckSmall14px,
+    arrowBottom: ArrowBottom14px,
+    arrowTop: ArrowTop14px,
     grade: Grade14px,
     plus: Plus14px,
 };

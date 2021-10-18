@@ -86,7 +86,7 @@ const Calendar = ({ navigation }) => {
     const getUser = async () => {
         const token = await AsyncStorage.getItem("token");
         setIsSignin(token);
-        
+
         const dec = decodeURI(token);
         console.log(dec);
     };

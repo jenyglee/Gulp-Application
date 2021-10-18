@@ -8,7 +8,7 @@ import AddMedicine from "@/medicine/screens/AddMedicine";
 import MyPage from "@/member/screens/Mypage/container/MyPage";
 import CustomInfo from "@/member/screens/CustomInfo/container/CustomInfo";
 import Signin from "@/member/screens/Signin/container/Signin";
-import { Signup00, Signup01 } from "@/member/screens/Signup/index";
+import { Signup00, Signup01, Signup02 } from "@/member/screens/Signup/index";
 import {
     FindPassword00,
     FindPassword01,
@@ -218,6 +218,43 @@ const HomeStackNav = () => {
                     return {
                         ...option,
                         ...backImage,
+                        cardStyle: {
+                            backgroundColor: theme.background,
+                        },
+                        headerStyle: {
+                            shadowOffset: {
+                                header: 0,
+                            },
+                            backgroundColor: "transparent",
+                        },
+                        headerTitle: "약관동의",
+
+                        headerRight: () => {
+                            return (
+                                <TouchableOpacity
+                                    onPress={() => {
+                                        navigation.navigate("AlarmList");
+                                    }}
+                                >
+                                    <View>
+                                        <Icon
+                                            source={icons30px.home}
+                                            resizeMode="contain"
+                                        />
+                                    </View>
+                                </TouchableOpacity>
+                            );
+                        },
+                    };
+                }}
+            />
+            <HomeStack.Screen
+                name="Signup01"
+                component={Signup01}
+                options={({ navigation }) => {
+                    return {
+                        ...option,
+                        ...backImage,
                         headerStyle: {
                             shadowOffset: {
                                 header: 0,
@@ -246,8 +283,8 @@ const HomeStackNav = () => {
                 }}
             />
             <HomeStack.Screen
-                name="Signup01"
-                component={Signup01}
+                name="Signup02"
+                component={Signup02}
                 options={({ navigation }) => {
                     return {
                         ...option,

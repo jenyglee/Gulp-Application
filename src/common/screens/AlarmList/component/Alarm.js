@@ -109,7 +109,7 @@ const Alarm = ({
                                 {/* ✨ 복용, 미복용 버튼 */}
                                 <ButtonSmall
                                     title="복용"
-                                    icon={icons14px.check}
+                                    icon={icons14px.checkWhite}
                                     onPress={_onPress}
                                 />
 

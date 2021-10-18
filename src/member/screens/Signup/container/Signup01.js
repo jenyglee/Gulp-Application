@@ -1,84 +1,285 @@
-import React, { useState } from "react";
-import styled from "styled-components";
-import { Dimensions } from "react-native";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { Button } from "@components/index";
+import React, { useState, useRef, useEffect, useContext } from "react";
+import styled, { ThemeContext } from "styled-components";
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
+import { Button, TextButton, Input, Image } from "@components/index";
+import { BasicModal } from "@components/modal/index";
 import { illust } from "@/images";
+import { isEmail, removeWhiteSpace } from "@/util";
+import { nominalTypeHack } from "prop-types";
+import { signup } from "@/member/api/memberApi";
+import { Alert, Animated, Dimensions } from "react-native";
+// import { createUser } from "@/firebase";
 
 const Container = styled.View`
+    flex: 1;
     width: 100%;
     height: 100%;
     background: ${({ theme }) => theme.white};
+    display: flex;
+    /* justify-content: center; */
+    margin-top: 50px;
     align-items: center;
 `;
 
-const ContentContainer = styled.View`
-    width: ${({ width }) => width - 48}px;
-    height: 100%;
-`;
-
-const ContentArea = styled.View`
-    align-items: center;
-    position: absolute;
-    width: 100%;
-    top: ${({ height }) => height / 5}px;
-    /* top: 100px; */
+const InputContainer = styled.View`
+    /* margin-bottom: 36px; */
 `;
 
 const StyledTitle = styled.Text`
     font-size: 20px;
-    font-weight: 900;
-    color: ${({ theme }) => theme.textBasic};
+    font-weight: bold;
+    margin-bottom: 20px;
 `;
 
-const StyledSubTitle = styled.Text`
-    font-size: 16px;
-    color: ${({ theme }) => theme.textBasic};
-`;
+const DEFAULT_PHOTO =
+    "https://firebasestorage.googleapis.com/v0/b/medicine-cc1f6.appspot.com/o/face.png?alt=media";
 
-const StyledImage = styled.Image`
-    width: 100%;
-    height: 132px;
-    margin-top: 22px;
-`;
-
-const ButtonArea = styled.View`
-    width: 100%;
-    position: absolute;
-    bottom: 40px;
-`;
-
-const SignupContainer04 = ({ navigation }) => {
+const SignupContainer00 = ({ navigation }) => {
+    const theme = useContext(ThemeContext);
+    const [photo, setPhoto] = useState(DEFAULT_PHOTO);
     const width = Dimensions.get("window").width;
-    const height = Dimensions.get("window").height;
-    const insets = useSafeAreaInsets();
-    console.log(insets);
-    const [name, setName] = useState("");
+    const [nickname, setNickname] = useState("");
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
+    const [passwordConfirm, setPasswordConfirm] = useState("");
+    const [allValue, setAllValue] = useState(false);
+    const refPasswordConfirm = useRef(null);
+
+    const opacityEmail = useRef(new Animated.Value(0)).current;
+    const opacityPassword = useRef(new Animated.Value(0)).current;
+
+    // ✨ 포커스 아웃이 되면 다음 인풋 노출
+    const [showEmail, setShowEmail] = useState(false);
+    const [showPassword, setShowPassword] = useState(false);
+
+    const [errorMessage, setErrorMessage] = useState("");
+    const [errorModal, setErrorModal] = useState(false);
+
+    //  ✨ 에러모달 닫기
+    const closeModal = () => {
+        setErrorModal(false);
+    };
+
+    // ✨ 회원가입
+    const handleSignupBtnPress = async () => {
+        try {
+            await signup({ nickname, email, password });
+            navigation.navigate("Signup02");
+        } catch (error) {
+            Alert.alert(error.message);
+        }
+    };
+
+    // ✨ 애니메이션 'opacity'
+    const inputAnimation = (opacityItem) => {
+        Animated.timing(opacityItem, {
+            toValue: 1,
+            duration: 1000,
+            useNativeDriver: true,
+        }).start();
+    };
+
+    // ✨ 닉네임 확인
+    const confirmNickname = () => {
+        if (nickname != "") {
+            setShowEmail(true);
+            inputAnimation(opacityEmail);
+        } else {
+            setErrorModal(true);
+            setErrorMessage("닉네임을 입력해주세요.");
+        }
+    };
+
+    // ✨ 이메일 확인
+    const confirmEmail = () => {
+        if (email != "") {
+            if (isEmail(email)) {
+                setShowPassword(true);
+                inputAnimation(opacityPassword);
+            } else {
+                setErrorModal(true);
+                setErrorMessage("이메일을 올바르게 입력해주세요.");
+            }
+        } else {
+            setErrorModal(true);
+            setErrorMessage("이메일을 입력해주세요.");
+        }
+    };
+
+    // ✨ 패스워드 확인
+    const confirmPassword = async (root) => {
+        if (passwordConfirm != "") {
+            if (password.length >= 6 || passwordConfirm.length >= 6) {
+                if (password == passwordConfirm) {
+                    await handleSignupBtnPress();
+                    navigation.navigate(root);
+                } else {
+                    setErrorModal(true);
+                    setErrorMessage("비밀번호가 일치하지 않습니다.");
+                }
+            } else {
+                setErrorModal(true);
+                setErrorMessage("비밀번호는 6자리 이상입니다.");
+            }
+        } else {
+            setErrorModal(true);
+            setErrorMessage("비밀번호를 한번 더 입력해주세요.");
+        }
+    };
+
+    // ✨ 모든 값이 있는지 확인
+    useEffect(() => {
+        if ((nickname, email, password, passwordConfirm)) {
+            setAllValue(true);
+        } else {
+            setAllValue(false);
+        }
+        // const confirmAllValue = () => {
+        // };
+    });
+
     return (
-        <Container>
-            <ContentContainer width={width}>
-                <ContentArea height={height}>
-                    <StyledTitle>야호!</StyledTitle>
-                    <StyledTitle
+        <KeyboardAwareScrollView
+            contentContainerStyle={{
+                flex: 1,
+            }}
+            extraScrollHeight={20}
+        >
+            <Container>
+                {/* <Image url={photo} onChangePhoto={setPhoto} /> */}
+                <InputContainer>
+                    <StyledTitle>닉네임을 입력해주세요</StyledTitle>
+                    <Input
+                        title="닉네임"
+                        placeholder="닉네임을 입력하세요"
+                        value={nickname}
+                        onBlur={() => {
+                            confirmNickname();
+                        }}
+                        maxLenth={10}
+                        onChangeText={(text) => {
+                            const changedName = removeWhiteSpace(text);
+                            setNickname(changedName);
+                        }}
+                        returnKeyType="next"
+                        onSubmitEditing={() => {
+                            confirmNickname();
+                        }}
+                        containerStyle={{
+                            marginBottom: 36,
+                        }}
+                    />
+                </InputContainer>
+                {showEmail ? (
+                    <Animated.View
                         style={{
-                            marginBottom: 10,
+                            opacity: opacityEmail,
+                            marginBottom: 36,
                         }}
                     >
-                        회원가입이 완료되었어요!
-                    </StyledTitle>
-                    <StyledSubTitle>이제 더 유용한 서비스를</StyledSubTitle>
-                    <StyledSubTitle>받으실 수 있어요!</StyledSubTitle>
-                    <StyledImage source={illust.signup} resizeMode="contain" />
-                </ContentArea>
-                <ButtonArea>
-                    <Button
-                        title="로그인하기"
-                        onPress={() => navigation.navigate("Signin")}
-                    />
-                </ButtonArea>
-            </ContentContainer>
-        </Container>
+                        <StyledTitle>이메일을 입력해주세요</StyledTitle>
+                        <Input
+                            // ref={refEmail}
+                            title="이메일"
+                            placeholder="이메일을 입력하세요"
+                            value={email}
+                            onBlur={() => {
+                                confirmEmail();
+                            }}
+                            maxLenth={10}
+                            onChangeText={(text) => {
+                                const changedEmail = removeWhiteSpace(text);
+                                setEmail(changedEmail);
+                            }}
+                            returnKeyType="next"
+                            onSubmitEditing={() => {
+                                confirmEmail();
+                            }}
+                        />
+                        <TextButton
+                            btnStyle={{
+                                marginLeft: 12,
+                            }}
+                            title="이메일 중복 확인"
+                        />
+                    </Animated.View>
+                ) : null}
+                {showPassword ? (
+                    <Animated.View
+                        style={{
+                            opacity: opacityPassword,
+                        }}
+                    >
+                        <StyledTitle>비밀번호를 입력해주세요.</StyledTitle>
+                        <Input
+                            // ref={refPassword}
+                            title="비밀번호"
+                            placeholder="비밀번호를 입력하세요"
+                            value={password}
+                            maxLenth={10}
+                            returnKeyType="next"
+                            onBlur={() => {}}
+                            onChangeText={(text) => {
+                                const changedPassword = removeWhiteSpace(text);
+                                setPassword(changedPassword);
+                            }}
+                            onSubmitEditing={() => {
+                                if (password != "") {
+                                    refPasswordConfirm.current.focus();
+                                } else {
+                                    setErrorModal(true);
+                                    setErrorMessage("비밀번호를 입력해주세요.");
+                                }
+                            }}
+                            secureTextEntry={true}
+                        />
+                        <Input
+                            ref={refPasswordConfirm}
+                            title="비밀번호 재입력"
+                            placeholder="비밀번호를 한번 더 입력하세요"
+                            value={passwordConfirm}
+                            maxLenth={10}
+                            onBlur={() => {}}
+                            returnKeyType="done"
+                            onChangeText={(text) => {
+                                const changedPasswordConfirm =
+                                    removeWhiteSpace(text);
+                                setPasswordConfirm(changedPasswordConfirm);
+                            }}
+                            onSubmitEditing={() => {
+                                confirmPassword("Signup02");
+                            }}
+                            secureTextEntry={true}
+                        />
+                    </Animated.View>
+                ) : null}
+
+                <Button
+                    title="회원가입하기"
+                    onPress={() => {
+                        confirmPassword("Signup02");
+                    }}
+                    btnWrapStyle={{
+                        width: width - 48,
+                        position: "absolute",
+                        bottom: 40,
+                    }}
+                    containerStyle={{
+                        backgroundColor: allValue
+                            ? theme.btnBackground
+                            : theme.btnBackgroundDisable,
+                    }}
+                />
+            </Container>
+            {errorModal ? (
+                <BasicModal
+                    title={errorMessage}
+                    onPress={closeModal}
+                    src={illust.error}
+                />
+            ) : null}
+        </KeyboardAwareScrollView>
     );
 };
 
-export default SignupContainer04;
+export default SignupContainer00;
