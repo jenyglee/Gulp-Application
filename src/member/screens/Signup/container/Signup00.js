@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect, useContext } from "react";
 import styled, { ThemeContext } from "styled-components";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
-import { Button, Input, Image } from "@components/index";
+import { Button, TextButton, Input, Image } from "@components/index";
 import { BasicModal } from "@components/modal/index";
 import { illust } from "@/images";
 import { isEmail, removeWhiteSpace } from "@/util";
@@ -174,6 +174,7 @@ const SignupContainer00 = ({ navigation }) => {
                     <Animated.View
                         style={{
                             opacity: opacityEmail,
+                            marginBottom: 36,
                         }}
                     >
                         <StyledTitle>이메일을 입력해주세요</StyledTitle>
@@ -194,9 +195,12 @@ const SignupContainer00 = ({ navigation }) => {
                             onSubmitEditing={() => {
                                 confirmEmail();
                             }}
-                            containerStyle={{
-                                marginBottom: 36,
+                        />
+                        <TextButton
+                            btnStyle={{
+                                marginLeft: 12,
                             }}
+                            title="이메일 중복 확인"
                         />
                     </Animated.View>
                 ) : null}
