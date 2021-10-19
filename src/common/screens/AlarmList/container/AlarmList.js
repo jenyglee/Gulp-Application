@@ -166,9 +166,15 @@ export default function AlarmList({ navigation }) {
     };
 
     // ✨ 알람 변경 페이지로 이동
-    const editMedicine = () => {
+    const editMedicine = async () => {
         navigation.navigate("AddAlarm");
         setIsVisible(false);
+    };
+
+    // ✨ 알람 추가 페이지로 이동
+    const goAddAlarm = async () => {
+        await AsyncStorage.setItem("medicine", {});
+        navigation.navigate("AddAlarm");
     };
 
     // ✨ 로그인했는지 확인 + 약 추가 후 메인으로 복귀

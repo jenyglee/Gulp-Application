@@ -4,8 +4,6 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import jwt_decode from "jwt-decode";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { Button, Input, InputDisabled } from "@components/index";
-import { BasicModal } from "@components/modal/index";
-import { illust } from "@/images";
 import { removeWhiteSpace } from "@/util";
 import { View, Alert, Animated, Dimensions } from "react-native";
 // import { createUser } from "@/firebase";
@@ -41,25 +39,12 @@ const SignupContainer00 = ({ navigation }) => {
     const [allValue, setAllValue] = useState(false);
     const refPasswordConfirm = useRef(null);
 
-    // ✨ 포커스 아웃이 되면 다음 인풋 노출
-    const [showEmail, setShowEmail] = useState(false);
-    const [showPassword, setShowPassword] = useState(false);
-
-    const [errorMessage, setErrorMessage] = useState("");
-    const [errorModal, setErrorModal] = useState(false);
-
-    //  ✨ 에러모달 닫기
-    const closeModal = () => {
-        setErrorModal(false);
-    };
-
     // ✨ 닉네임 확인
     const confirmNickname = () => {
         if (nickname != "") {
             navigation.goBack();
         } else {
-            setErrorModal(true);
-            setErrorMessage("닉네임을 입력해주세요.");
+            Alert.alert("닉네임을 입력해주세요.");
         }
     };
 
@@ -71,16 +56,13 @@ const SignupContainer00 = ({ navigation }) => {
                     await handleSignupBtnPress();
                     navigation.navigate(root);
                 } else {
-                    setErrorModal(true);
-                    setErrorMessage("비밀번호가 일치하지 않습니다.");
+                    Alert.alert("비밀번호가 일치하지 않습니다.");
                 }
             } else {
-                setErrorModal(true);
-                setErrorMessage("비밀번호는 6자리 이상입니다.");
+                Alert.alert("비밀번호는 6자리 이상입니다.");
             }
         } else {
-            setErrorModal(true);
-            setErrorMessage("비밀번호를 한번 더 입력해주세요.");
+            Alert.alert("비밀번호를 한번 더 입력해주세요.");
         }
     };
 
@@ -187,13 +169,6 @@ const SignupContainer00 = ({ navigation }) => {
                     }}
                 />
             </Container>
-            {errorModal ? (
-                <BasicModal
-                    title={errorMessage}
-                    onPress={closeModal}
-                    src={illust.error}
-                />
-            ) : null}
         </KeyboardAwareScrollView>
     );
 };

@@ -2,10 +2,9 @@ import React, { useState, useRef, useContext } from "react";
 import { Alert, Dimensions } from "react-native";
 import styled, { ThemeContext } from "styled-components";
 import { Button, TextButton } from "@components/index";
-import { BasicModal } from "@components/modal/index";
 import { InputWithIcon } from "@/member/screens/Signin/component/index";
 import { icons20px } from "@/icons";
-import { logo, illust } from "@/images";
+import { logo } from "@/images";
 import { isEmail, removeWhiteSpace } from "@/util";
 import { signin } from "@/member/api/memberApi";
 
@@ -44,35 +43,33 @@ const SigninContainer = ({ navigation }) => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const refPassword = useRef(null);
-    const [errorMessage, setErrorMessage] = useState("");
-    const [errorModal, setErrorModal] = useState(false);
 
+    // ✨ 이메일/비밀번호 검토 및 로그인 진행
     const SigninButtonPress = async () => {
         try {
-            if (email === "") {
-                setErrorModal(true);
-                setErrorMessage("이메일을 입력해주세요.");
+            if (email !== "") {
+                if (isEmail(email)) {
+                    if (password !== "") {
+                        await signin({ email, password });
+                        navigation.navigate("AlarmList");
+                    } else {
+                        Alert.alert("비밀번호를 입력해주세요.");
+                        return;
+                    }
+                } else {
+                    Alert.alert("이메일을 올바르게 입력해주세요.");
+                    return;
+                }
+            } else {
+                Alert.alert("이메일을 입력해주세요.");
                 return;
             }
-            if (password === "") {
-                setErrorModal(true);
-                setErrorMessage("비밀번호를 입력해주세요.");
-                return;
-            }
-
-            await signin({ email, password });
             // const user = await signin({ email, password });
             // console.log(user);
-            navigation.navigate("AlarmList");
             // navigation.navigate("AlarmList", { user });
         } catch (e) {
             Alert.alert(e.message);
         }
-    };
-
-    //  ✨ 에러모달 닫기
-    const closeModal = () => {
-        setErrorModal(false);
     };
 
     return (
@@ -114,13 +111,6 @@ const SigninContainer = ({ navigation }) => {
                         marginBottom: 60,
                     }}
                 />
-                {errorModal ? (
-                    <BasicModal
-                        title={errorMessage}
-                        onPress={closeModal}
-                        src={illust.error}
-                    />
-                ) : null}
 
                 <Button title="로그인" onPress={SigninButtonPress} />
                 <TextButton

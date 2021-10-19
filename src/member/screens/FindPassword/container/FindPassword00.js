@@ -1,12 +1,9 @@
 import React, { useState, useRef } from "react";
 import styled from "styled-components";
-import { Dimensions } from "react-native";
+import { Alert, Dimensions } from "react-native";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { Button, Input, Image } from "@components/index";
-import { BasicModal } from "@components/modal/index";
-import { illust } from "@/images";
 import { isEmail, removeWhiteSpace } from "@/util";
-// import { createUser } from "@/firebase";
 
 const Container = styled.View`
     flex: 1;
@@ -32,13 +29,19 @@ const StyledTitle = styled.Text`
 
 const FindPasswordContainer00 = ({ navigation }) => {
     const [email, setEmail] = useState("");
-    const [errorMessage, setErrorMessage] = useState("");
-    const [errorModal, setErrorModal] = useState(false);
     const width = Dimensions.get("window").width;
 
-    //  ✨ 에러모달 닫기
-    const closeModal = () => {
-        setErrorModal(false);
+    // ✨이메일 확인
+    const confirmEmail = () => {
+        if (email != "") {
+            if (isEmail(email)) {
+                navigation.navigate("FindPassword01");
+            } else {
+                Alert.alert("이메일을 올바르게 입력해주세요.");
+            }
+        } else {
+            Alert.alert("이메일을 입력해주세요.");
+        }
     };
 
     return (
@@ -59,24 +62,8 @@ const FindPasswordContainer00 = ({ navigation }) => {
                             const changedEmail = removeWhiteSpace(text);
                             setEmail(changedEmail);
                         }}
-                        returnKeyType="next"
-                        onSubmitEditing={() => {
-                            if (email != "") {
-                                if (isEmail(email)) {
-                                    navigation.navigate(
-                                        "FindPasswordContainer01"
-                                    );
-                                } else {
-                                    setErrorModal(true);
-                                    setErrorMessage(
-                                        "이메일을 올바르게 입력해주세요."
-                                    );
-                                }
-                            } else {
-                                setErrorModal(true);
-                                setErrorMessage("이메일을 입력해주세요.");
-                            }
-                        }}
+                        returnKeyType="done"
+                        onSubmitEditing={confirmEmail}
                         containerStyle={{
                             marginBottom: 0,
                         }}
@@ -88,19 +75,9 @@ const FindPasswordContainer00 = ({ navigation }) => {
                         containerStyle={{
                             marginTop: 20,
                         }}
-                        onPress={() => {
-                            navigation.navigate("FindPassword01");
-                        }}
+                        onPress={confirmEmail}
                     />
                 </ButtonContainer>
-
-                {errorModal ? (
-                    <BasicModal
-                        title={errorMessage}
-                        onPress={closeModal}
-                        src={illust.error}
-                    />
-                ) : null}
             </Container>
         </KeyboardAwareScrollView>
     );

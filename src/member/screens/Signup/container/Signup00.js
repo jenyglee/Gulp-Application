@@ -1,5 +1,5 @@
 import React, { useState, useContext } from "react";
-import { Dimensions } from "react-native";
+import { Alert, Dimensions } from "react-native";
 import styled, { ThemeContext } from "styled-components";
 import { icons14px } from "@/icons";
 import { Button } from "@components/index";
@@ -139,7 +139,11 @@ const Signup00 = ({ navigation }) => {
             <Button
                 title="다음"
                 onPress={() => {
-                    navigation.navigate("Signup01");
+                    if (allAgree[0].checked) {
+                        navigation.navigate("Signup01");
+                    } else {
+                        Alert.alert("약관에 동의해주세요.");
+                    }
                 }}
                 btnWrapStyle={{
                     width: width - 48,
@@ -147,7 +151,7 @@ const Signup00 = ({ navigation }) => {
                     bottom: 40,
                 }}
                 containerStyle={{
-                    backgroundColor: allValue
+                    backgroundColor: allAgree[0].checked
                         ? theme.btnBackground
                         : theme.textDisable,
                 }}

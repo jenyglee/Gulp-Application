@@ -7,8 +7,6 @@ import ButtonSmall from "@components/ButtonSmall";
 import TagButton from "@/common/screens/AddAlarm/component/TagButton";
 import TimePicker from "@/common/screens/AddAlarm/component/TimePicker";
 import WeekButton from "@/common/screens/AddAlarm/component/WeekButton";
-import { BasicModal } from "@components/modal/index";
-import { illust } from "@/images";
 import { icons14px } from "@/icons";
 
 const Container = styled.View`
@@ -80,15 +78,15 @@ const AddMedicine = ({ navigation }) => {
     const [week, setWeek] = useState(checkWeek);
     const weekCheckList = []; // 체크된 요일
     const [time, setTime] = useState("");
-    const [errorModal, setErrorModal] = useState(false);
     // const [medicineList, setMedicineList] = useState(tempData);
     const [medicineList, setMedicineList] = useState({});
 
     // ✨로컬에 저장하기
-    const storeData = async (tasks) => {
+    const storeData = async (item) => {
         try {
-            await AsyncStorage.setItem("medicine", JSON.stringify(tasks));
-            setTasks(tasks);
+            // const loadedData = await AsyncStorage.getItem("medicine");
+            // const tasks = JSON.parse(loadedData);
+            await AsyncStorage.setItem("medicine", JSON.stringify(item));
         } catch (error) {
             throw error;
         }
@@ -113,7 +111,7 @@ const AddMedicine = ({ navigation }) => {
     }, []);
 
     // ✨ 약 삭제
-    const deleteTask = (id) => {
+    const deleteTask = async (id) => {
         const copy = Object.assign({}, medicineList);
         delete copy[id];
         try {
@@ -216,13 +214,8 @@ const AddMedicine = ({ navigation }) => {
                 Alert.alert(error);
             }
         } else if (!bool) {
-            setErrorModal(true);
+            Alert.alert("설정이 전부 입력되었는지 확인해주세요.");
         }
-    };
-
-    //  ✨ 에러모달 닫기
-    const closeModal = () => {
-        setErrorModal(false);
     };
 
     return (
@@ -289,15 +282,6 @@ const AddMedicine = ({ navigation }) => {
                     <Button title="저장하기" onPress={saveMedicine} />
                 </ButtonArea>
             </SaveButtonContainer>
-
-            {errorModal ? (
-                <BasicModal
-                    title="설정이 전부 입력되었는지 확인해주세요."
-                    visible={errorModal}
-                    onPress={closeModal}
-                    src={illust.error}
-                />
-            ) : null}
         </Container>
     );
 };

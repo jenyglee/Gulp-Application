@@ -2,10 +2,7 @@ import React, { useState, useRef, useEffect, useContext } from "react";
 import styled, { ThemeContext } from "styled-components";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { Button, TextButton, Input, Image } from "@components/index";
-import { BasicModal } from "@components/modal/index";
-import { illust } from "@/images";
 import { isEmail, removeWhiteSpace } from "@/util";
-import { nominalTypeHack } from "prop-types";
 import { signup } from "@/member/api/memberApi";
 import { Alert, Animated, Dimensions } from "react-native";
 // import { createUser } from "@/firebase";
@@ -52,14 +49,6 @@ const SignupContainer00 = ({ navigation }) => {
     const [showEmail, setShowEmail] = useState(false);
     const [showPassword, setShowPassword] = useState(false);
 
-    const [errorMessage, setErrorMessage] = useState("");
-    const [errorModal, setErrorModal] = useState(false);
-
-    //  ✨ 에러모달 닫기
-    const closeModal = () => {
-        setErrorModal(false);
-    };
-
     // ✨ 회원가입
     const handleSignupBtnPress = async () => {
         try {
@@ -85,8 +74,7 @@ const SignupContainer00 = ({ navigation }) => {
             setShowEmail(true);
             inputAnimation(opacityEmail);
         } else {
-            setErrorModal(true);
-            setErrorMessage("닉네임을 입력해주세요.");
+            Alert.alert("닉네임을 입력해주세요.");
         }
     };
 
@@ -97,33 +85,36 @@ const SignupContainer00 = ({ navigation }) => {
                 setShowPassword(true);
                 inputAnimation(opacityPassword);
             } else {
-                setErrorModal(true);
-                setErrorMessage("이메일을 올바르게 입력해주세요.");
+                Alert.alert("이메일을 올바르게 입력해주세요.");
             }
         } else {
-            setErrorModal(true);
-            setErrorMessage("이메일을 입력해주세요.");
+            Alert.alert("이메일을 입력해주세요.");
         }
     };
 
     // ✨ 패스워드 확인
-    const confirmPassword = async (root) => {
-        if (passwordConfirm != "") {
-            if (password.length >= 6 || passwordConfirm.length >= 6) {
-                if (password == passwordConfirm) {
-                    await handleSignupBtnPress();
-                    navigation.navigate(root);
-                } else {
-                    setErrorModal(true);
-                    setErrorMessage("비밀번호가 일치하지 않습니다.");
-                }
+    const confirmPassword = () => {
+        if (password != "") {
+            if (password.length >= 6) {
+                refPasswordConfirm.current.focus();
             } else {
-                setErrorModal(true);
-                setErrorMessage("비밀번호는 6자리 이상입니다.");
+                Alert.alert("비밀번호를 6자리 이상 입력해주세요.");
             }
         } else {
-            setErrorModal(true);
-            setErrorMessage("비밀번호를 한번 더 입력해주세요.");
+            Alert.alert("비밀번호를 입력해주세요.");
+        }
+    };
+
+    // ✨ 패스워드 재입력 확인
+    const confirmPasswordTwo = () => {
+        if (passwordConfirm != "") {
+            if (passwordConfirm.length >= 6) {
+                return;
+            } else {
+                Alert.alert("비밀번호를 6자리 이상 입력해주세요.");
+            }
+        } else {
+            Alert.alert("비밀번호를 한번 더 입력해주세요.");
         }
     };
 
@@ -224,12 +215,7 @@ const SignupContainer00 = ({ navigation }) => {
                                 setPassword(changedPassword);
                             }}
                             onSubmitEditing={() => {
-                                if (password != "") {
-                                    refPasswordConfirm.current.focus();
-                                } else {
-                                    setErrorModal(true);
-                                    setErrorMessage("비밀번호를 입력해주세요.");
-                                }
+                                confirmPassword();
                             }}
                             secureTextEntry={true}
                         />
@@ -247,7 +233,7 @@ const SignupContainer00 = ({ navigation }) => {
                                 setPasswordConfirm(changedPasswordConfirm);
                             }}
                             onSubmitEditing={() => {
-                                confirmPassword("Signup02");
+                                confirmPasswordTwo();
                             }}
                             secureTextEntry={true}
                         />
@@ -257,7 +243,15 @@ const SignupContainer00 = ({ navigation }) => {
                 <Button
                     title="회원가입하기"
                     onPress={() => {
-                        confirmPassword("Signup02");
+                        if ((nickname, email, password, passwordConfirm)) {
+                            if (password === passwordConfirm) {
+                                handleSignupBtnPress();
+                            } else {
+                                Alert.alert("비밀번호가 일치하지 않습니다.");
+                            }
+                        } else {
+                            Alert.alert("모든 빈칸을 입력해주세요.");
+                        }
                     }}
                     btnWrapStyle={{
                         width: width - 48,
@@ -271,13 +265,6 @@ const SignupContainer00 = ({ navigation }) => {
                     }}
                 />
             </Container>
-            {errorModal ? (
-                <BasicModal
-                    title={errorMessage}
-                    onPress={closeModal}
-                    src={illust.error}
-                />
-            ) : null}
         </KeyboardAwareScrollView>
     );
 };
