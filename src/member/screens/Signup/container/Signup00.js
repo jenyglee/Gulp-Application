@@ -20,7 +20,9 @@ const AllAgreeBtn = styled.TouchableOpacity`
 
 const AllAgreeBtnContainer = styled.View`
     background-color: ${({ theme, allAgree }) =>
-        allAgree ? theme.allAgreeBackgroundChecked : theme.allAgreeBackground};
+        allAgree[0].checked
+            ? theme.allAgreeBackgroundChecked
+            : theme.allAgreeBackground};
     height: 50px;
     border-radius: 12px;
     border: ${({ theme }) => `2px solid ${theme.allAgreeBackgroundStroke}`};
@@ -39,14 +41,14 @@ const AllAgreeBtnTitle = styled.Text`
     font-size: 16px;
     font-weight: bold;
     color: ${({ theme, allAgree }) =>
-        allAgree ? theme.allAgreeTextChecked : theme.allAgreeText};
+        allAgree[0].checked ? theme.allAgreeTextChecked : theme.allAgreeText};
 `;
 
 const Signup00 = ({ navigation }) => {
     const width = Dimensions.get("window").width;
     const height = Dimensions.get("window").height;
     const theme = useContext(ThemeContext);
-    const [allAgree, setAllAgree] = useState(false);
+    const [allAgree, setAllAgree] = useState([{ checked: false }]);
     const [allValue, setAllValue] = useState(false);
     const listData = [
         {
@@ -69,17 +71,19 @@ const Signup00 = ({ navigation }) => {
 
     // ✨ 모두 동의 체크
     const allCheck = () => {
-        setAllAgree(!allAgree);
+        const copyAllAgree = [...allAgree];
         const copyList = [...list];
+        copyAllAgree[0].checked = !copyAllAgree[0].checked;
         {
             copyList.map((item) => {
-                if (allAgree) {
-                    item.checked = false;
-                } else {
+                if (copyAllAgree[0].checked) {
                     item.checked = true;
+                } else {
+                    item.checked = false;
                 }
             });
         }
+        setAllAgree(copyAllAgree);
         setList(copyList);
     };
 
@@ -87,6 +91,10 @@ const Signup00 = ({ navigation }) => {
     const toggleList = (id) => {
         const copy = [...list];
         copy[id].checked = !copy[id].checked;
+        const result = copy.every((item) => {
+            return item.checked;
+        });
+        setAllAgree([{ checked: result }]);
         setList(copy);
     };
 
@@ -107,7 +115,7 @@ const Signup00 = ({ navigation }) => {
                 <AllAgreeBtnContainer allAgree={allAgree}>
                     <AllAgreeBtnImage
                         source={
-                            allAgree
+                            allAgree[0].checked
                                 ? icons14px.checkWhite
                                 : icons14px.checkMain
                         }

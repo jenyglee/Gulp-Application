@@ -145,6 +145,11 @@ const AddMedicine = ({ navigation }) => {
     const weekCheck = (id) => {
         var copy = [...week];
         copy[id - 1].checked = !copy[id - 1].checked;
+
+        const result = copy.every((item) => {
+            return item.checked;
+        });
+        setWeekAll([{ id: 0, day: "All", checked: result }]);
         setWeek(copy);
     };
 

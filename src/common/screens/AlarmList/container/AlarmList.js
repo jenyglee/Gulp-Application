@@ -56,16 +56,13 @@ export default function AlarmList({ navigation }) {
     // const tempData = {
     //     1: {
     //         id: 1,
-    //         alarm: "오후 8:30",
+    //         time: "08:30:20",
     //         name: {
     //             1: { id: 1, name: "오메가3", completed: false },
     //             2: { id: 2, name: "비타민", completed: false },
     //             3: { id: 3, name: "철분", completed: false },
     //         },
-    //         day: [
-    //             { id: 1, day: "월", check: "true" },
-    //             { id: 2, day: "화", check: "true" },
-    //         ],
+    //         day: [1, 2],
     //         completed: false,
     //     },
     const [selectedTaskKey, setSelectedTaskKey] = useState();
