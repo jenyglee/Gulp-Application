@@ -61,13 +61,13 @@ const AddMedicine = ({ navigation }) => {
     const allCheckWeek = [{ id: 0, day: "All", checked: false }];
     const checkWeek = [
         // { id: 0, day: "매일", check: false },
-        { id: 0, day: "월", checked: false },
-        { id: 1, day: "화", checked: false },
-        { id: 2, day: "수", checked: false },
-        { id: 3, day: "목", checked: false },
-        { id: 4, day: "금", checked: false },
-        { id: 5, day: "토", checked: false },
-        { id: 6, day: "일", checked: false },
+        { id: 1, day: "월", checked: false },
+        { id: 2, day: "화", checked: false },
+        { id: 3, day: "수", checked: false },
+        { id: 4, day: "목", checked: false },
+        { id: 5, day: "금", checked: false },
+        { id: 6, day: "토", checked: false },
+        { id: 7, day: "일", checked: false },
     ];
     // const tempData = {
     //     1: { id: 1, name: "비타민c" },
@@ -145,7 +145,7 @@ const AddMedicine = ({ navigation }) => {
     // ✨요일 개별선택
     const weekCheck = (id) => {
         var copy = [...week];
-        copy[id].checked = !copy[id].checked;
+        copy[id - 1].checked = !copy[id - 1].checked;
         setWeek(copy);
     };
 
@@ -177,18 +177,20 @@ const AddMedicine = ({ navigation }) => {
 
     //  ✨ 알람 저장
     const saveMedicine = async () => {
-        const bool = await ConfirmValue(medicineList, time, week); // 빈칸이 있는지 확인
-        // console.log(bool);
+        // 빈칸 검수
+        const bool = await ConfirmValue(medicineList, time, week);
 
+        // 빈칸 검수가 완료된 경우 실행
         if (bool) {
             const ID = Date.now();
             {
-                // ⓵ 체크된 요일만 가져와 빈 배열[]에 넣기
+                // ⓵ 체크된 요일만 가져와 빈 배열(weekCheckList)에 넣기
                 week.map((checkedDay) => {
                     if (checkedDay.checked) {
-                        weekCheckList.push(checkedDay);
+                        weekCheckList.push(checkedDay.id);
                     }
                 });
+                console.log(weekCheckList);
             }
 
             // ⓶ 채워진 배열을 변수화
@@ -198,7 +200,7 @@ const AddMedicine = ({ navigation }) => {
                     ampm: ampm,
                     time: time,
                     name: medicineList,
-                    day: weekCheckList,
+                    day: weekCheckList, // 숫자로 전달됨 ex) [2, 3]
                     completed: false,
                 },
             };

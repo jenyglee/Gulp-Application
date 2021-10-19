@@ -78,10 +78,39 @@ const Alarm = ({
 }) => {
     const theme = useContext(ThemeContext);
     const [hadMedicine, setHadMedicine] = useState(false);
+    const changedDay = [];
     const _onPress = () => {
         toggleTask(alarmInfo.id);
         setHadMedicine(!hadMedicine);
     };
+
+    // ✨ 숫자로 들어온 요일 변환
+    alarmInfo.day.map((num) => {
+        switch (num) {
+            case 1:
+                changedDay.push("월");
+                break;
+            case 2:
+                changedDay.push("화");
+                break;
+            case 3:
+                changedDay.push("수");
+                break;
+            case 4:
+                changedDay.push("목");
+                break;
+            case 5:
+                changedDay.push("금");
+                break;
+            case 6:
+                changedDay.push("토");
+                break;
+            case 7:
+                changedDay.push("일");
+                break;
+        }
+    });
+
     return (
         <TouchContainer onPress={_onPress}>
             <Container>
@@ -90,10 +119,8 @@ const Alarm = ({
                         <TopWrap>
                             <TopWrapLeft>
                                 <DayContainer>
-                                    {alarmInfo.day.map((item) => {
-                                        return (
-                                            <Day key={item.id}>{item.day} </Day>
-                                        );
+                                    {changedDay.map((item) => {
+                                        return <Day key={item}>{item} </Day>;
                                     })}
                                 </DayContainer>
                                 <TimeContainer>
@@ -138,10 +165,8 @@ const Alarm = ({
                         <TopWrap>
                             <TopWrapLeft>
                                 <DayContainer>
-                                    {alarmInfo.day.map((item) => {
-                                        return (
-                                            <Day key={item.id}>{item.day} </Day>
-                                        );
+                                    {changedDay.map((item) => {
+                                        return <Day key={item}>{item} </Day>;
                                     })}
                                 </DayContainer>
                                 <TimeContainer>
