@@ -79,7 +79,6 @@ const AddMedicine = ({ navigation }) => {
     const [weekAll, setWeekAll] = useState(allCheckWeek);
     const [week, setWeek] = useState(checkWeek);
     const weekCheckList = []; // 체크된 요일
-    const [ampm, setAmpm] = useState("");
     const [time, setTime] = useState("");
     const [errorModal, setErrorModal] = useState(false);
     // const [medicineList, setMedicineList] = useState(tempData);
@@ -150,13 +149,8 @@ const AddMedicine = ({ navigation }) => {
     };
 
     // ✨ 설정한 시간 가져오기
-    const whatTime = (ampm, time) => {
-        if (ampm === "오전") {
-            setAmpm("AM");
-        } else if (ampm === "오후") {
-            setAmpm("PM");
-        }
-        setTime(time);
+    const whatTime = (date) => {
+        setTime(date);
     };
 
     //  ✨빈칸체크
@@ -184,20 +178,18 @@ const AddMedicine = ({ navigation }) => {
         if (bool) {
             const ID = Date.now();
             {
-                // ⓵ 체크된 요일만 가져와 빈 배열(weekCheckList)에 넣기
+                // ⓵ 체크된 요일의 id만 가져와 빈 배열(weekCheckList)에 넣기
                 week.map((checkedDay) => {
                     if (checkedDay.checked) {
                         weekCheckList.push(checkedDay.id);
                     }
                 });
-                console.log(weekCheckList);
             }
 
             // ⓶ 채워진 배열을 변수화
             const newTask = {
                 [ID]: {
                     id: ID,
-                    ampm: ampm,
                     time: time,
                     name: medicineList,
                     day: weekCheckList, // 숫자로 전달됨 ex) [2, 3]
@@ -215,7 +207,6 @@ const AddMedicine = ({ navigation }) => {
                     // console.log(newTask);
                     navigation.navigate("AlarmList");
                 }
-                ``;
             } catch (error) {
                 Alert.alert(error);
             }

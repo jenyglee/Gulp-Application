@@ -21,7 +21,7 @@ const Container = styled.View`
 const MyPageContainer = ({ navigation }) => {
     const width = Dimensions.get("window").width;
     const [gradeTable, setGradeTable] = useState(false); // 등급표
-    const [isSignin, setIsSignin] = useState(false); // 마이페이지 노출(로그인시)
+    const [isSignin, setIsSignin] = useState(true); // 마이페이지 노출(로그인시)
 
     // ✨ 유저 정보 확인
     useEffect(() => {

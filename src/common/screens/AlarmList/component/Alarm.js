@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import { ButtonSmall, AlarmMedicine } from "@components/index";
 import styled, { ThemeContext } from "styled-components";
 import IconButton from "@/common/screens/AlarmList/component/IconButton";
@@ -69,47 +69,75 @@ const MedicineContainer = styled.View`
     flex-direction: column;
 `;
 
-const Alarm = ({
-    alarmInfo,
-    checkIcon,
-    menuIcon,
-    toggleTask,
-    showAlarmMenu,
-}) => {
+const Alarm = ({ alarmInfo, menuIcon, toggleTask, showAlarmMenu }) => {
     const theme = useContext(ThemeContext);
-    const [hadMedicine, setHadMedicine] = useState(false);
-    const changedDay = [];
+    const [hadMedicine, setHadMedicine] = useState(false); // 복용 / 미복용
+    const [changedDay, setChangedDay] = useState([]); // 숫자 요일이 한글로 저장되는 곳
+    const [time, setTime] = useState([]); // 시, 분이 저장되는 곳
+    const [ampm, setAmpm] = useState(""); // AM / PM 이 저장되는 곳
+    const hour = alarmInfo.time.split(":", 1); // 시 부분 👉00👈:00:00
+    const minute = alarmInfo.time.substring(3, 5); // 분 부분 00:👉00👈:00
+
+    useEffect(() => {
+        numChangeDay();
+        editTime();
+    }, []);
+
+    // ✨ 숫자로 들어온 요일 변환 [1 ,2 ,3] => ["월", "화", "수"]
+    const numChangeDay = () => {
+        alarmInfo.day.map((num) => {
+            switch (num) {
+                case 1:
+                    changedDay.push("월");
+                    break;
+                case 2:
+                    changedDay.push("화");
+                    break;
+                case 3:
+                    changedDay.push("수");
+                    break;
+                case 4:
+                    changedDay.push("목");
+                    break;
+                case 5:
+                    changedDay.push("금");
+                    break;
+                case 6:
+                    changedDay.push("토");
+                    break;
+                case 7:
+                    changedDay.push("일");
+                    break;
+            }
+        });
+    };
+
+    // ✨ HH:mm:dd로 들어온 시간 전환 => "14:30:30" => "PM 2:30"
+    const editTime = () => {
+        const copy = [...time];
+        if (hour < 12) {
+            setAmpm("AM");
+            if (hour < 10 && hour > 0) {
+                copy.push(hour[0].substring(1, 2), minute);
+                setTime(copy);
+            } else if (hour >= 10) {
+                copy.push(hour[0], minute);
+                setTime(copy);
+            } else if (hour == 0) {
+                copy.push(hour[0], minute);
+                setTime(copy);
+            }
+        } else if (hour >= 12) {
+            setAmpm("PM");
+            copy.push(hour[0] - 12, minute);
+            setTime(copy);
+        }
+    };
+
     const _onPress = () => {
         toggleTask(alarmInfo.id);
         setHadMedicine(!hadMedicine);
     };
-
-    // ✨ 숫자로 들어온 요일 변환
-    alarmInfo.day.map((num) => {
-        switch (num) {
-            case 1:
-                changedDay.push("월");
-                break;
-            case 2:
-                changedDay.push("화");
-                break;
-            case 3:
-                changedDay.push("수");
-                break;
-            case 4:
-                changedDay.push("목");
-                break;
-            case 5:
-                changedDay.push("금");
-                break;
-            case 6:
-                changedDay.push("토");
-                break;
-            case 7:
-                changedDay.push("일");
-                break;
-        }
-    });
 
     return (
         <TouchContainer onPress={_onPress}>
@@ -119,16 +147,16 @@ const Alarm = ({
                         <TopWrap>
                             <TopWrapLeft>
                                 <DayContainer>
-                                    {changedDay.map((item) => {
-                                        return <Day key={item}>{item} </Day>;
+                                    {changedDay.map((day) => {
+                                        return <Day key={day}>{day} </Day>;
                                     })}
                                 </DayContainer>
                                 <TimeContainer>
                                     <Time hadMedicine={hadMedicine}>
-                                        {alarmInfo.time}
+                                        {time[0]}:{time[1]}
                                     </Time>
                                     <Ampm hadMedicine={hadMedicine}>
-                                        {alarmInfo.ampm}
+                                        {ampm}
                                     </Ampm>
                                 </TimeContainer>
                             </TopWrapLeft>
@@ -170,8 +198,10 @@ const Alarm = ({
                                     })}
                                 </DayContainer>
                                 <TimeContainer>
-                                    <Time>{alarmInfo.time}</Time>
-                                    <Ampm>{alarmInfo.ampm}</Ampm>
+                                    <Time>
+                                        {time[0]}:{time[1]}
+                                    </Time>
+                                    <Ampm>{ampm}</Ampm>
                                 </TimeContainer>
                             </TopWrapLeft>
                             <TopWrapRight>
