@@ -9,6 +9,8 @@ import { illust } from "@/images";
 
 const Container = styled.View`
     width: 100%;
+    height: ${({ height }) => height}px;
+    justify-content: center;
     align-items: center;
     background-color: ${({ theme }) => theme.background};
 `;
@@ -34,6 +36,7 @@ const tempData = [
 
 const Ranking = ({ navigation }) => {
     const width = Dimensions.get("window").width;
+    const height = Dimensions.get("window").height;
     const theme = useContext(ThemeContext);
     const [medicineList, setMedicineList] = useState(tempData);
     const [isSignin, setIsSignin] = useState(false); // 랭킹 노출(로그인시)
@@ -100,20 +103,28 @@ const Ranking = ({ navigation }) => {
     };
     return (
         <Container>
-            <Category />
             {isSignin ? (
-                <ListContainer width={width}>
-                    <FlatList
-                        data={medicineList}
-                        renderItem={renderItem}
-                        keyExtractor={(item, index) => index.toString()}
-                    />
-                </ListContainer>
+                <View
+                    style={{
+                        height: "100%",
+                        alignItems: "center",
+                    }}
+                >
+                    <Category />
+                    <ListContainer width={width}>
+                        <FlatList
+                            data={medicineList}
+                            renderItem={renderItem}
+                            keyExtractor={(item, index) => index.toString()}
+                        />
+                    </ListContainer>
+                </View>
             ) : (
                 <Container
                     width={width}
+                    height={height}
                     style={{
-                        marginTop: 20,
+                        paddingBottom: 116,
                     }}
                 >
                     <RequireSignin

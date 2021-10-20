@@ -11,6 +11,8 @@ import { illust } from "@/images";
 
 const Container = styled.View`
     width: ${({ width }) => width - 48}px;
+    height: ${({ height }) => height}px;
+    justify-content: ${({ isSignin }) => (isSignin ? `flex-start` : `center`)};
     align-self: center;
 `;
 
@@ -66,6 +68,7 @@ const Line = styled.View`
 
 const Calendar = ({ navigation }) => {
     const width = Dimensions.get("window").width;
+    const height = Dimensions.get("window").height;
     const theme = useContext(ThemeContext);
     const [tasks, setTasks] = useState({});
     const [foundMedicine, setFoundMedicine] = useState(false); // 약 리스트 유무
@@ -106,7 +109,7 @@ const Calendar = ({ navigation }) => {
     return (
         <ScrollView>
             {isSignin ? (
-                <Container width={width}>
+                <Container width={width} height={height} isSignin={isSignin}>
                     {/* <CalendarTitle /> */}
                     <CalendarTable tasks={tasks} />
                     <HistoryContainer>
@@ -165,8 +168,14 @@ const Calendar = ({ navigation }) => {
                         : null}
                 </Container>
             ) : (
-                <Container width={width}>
-                    <CalendarTitleNotSignin />
+                <Container
+                    width={width}
+                    height={height}
+                    style={{
+                        paddingBottom: 200,
+                    }}
+                >
+                    {/* <CalendarTitleNotSignin /> */}
                     <RequireSignin
                         src={illust.error}
                         title="로그인이 필요한 서비스입니다."

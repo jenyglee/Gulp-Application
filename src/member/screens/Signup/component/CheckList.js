@@ -93,7 +93,13 @@ const CheckList = ({ item, toggleList, toggleDetail }) => {
                     </CheckBtnWrap>
 
                     <CheckListDetailBtnWrap onPress={_toggleDetail}>
-                        <DetailBtnImage source={icons14px.arrowBottom} />
+                        <DetailBtnImage
+                            source={
+                                item.accordion
+                                    ? icons14px.arrowTop
+                                    : icons14px.arrowBottom
+                            }
+                        />
                     </CheckListDetailBtnWrap>
                 </View>
                 {item.accordion ? (

@@ -13,15 +13,16 @@ import jwt_decode from "jwt-decode";
 
 const Container = styled.View`
     width: 100%;
-    height: 100%;
+    height: ${({ height }) => height}px;
     align-items: center;
+    justify-content: ${({ isSignin }) => (isSignin ? `flex-start` : `center`)};
     background-color: ${({ theme }) => theme.background};
 `;
 
 const MyPageContainer = ({ navigation }) => {
-    const width = Dimensions.get("window").width;
+    const height = Dimensions.get("window").height;
     const [gradeTable, setGradeTable] = useState(false); // 등급표
-    const [isSignin, setIsSignin] = useState(false); // 마이페이지 노출(로그인시)
+    const [isSignin, setIsSignin] = useState(true); // 마이페이지 노출(로그인시)
 
     // ✨ 유저 정보 확인
     useEffect(() => {
@@ -47,7 +48,7 @@ const MyPageContainer = ({ navigation }) => {
     return (
         <SafeAreaView>
             {isSignin ? (
-                <Container>
+                <Container height={height} isSignin={isSignin}>
                     <Profile />
                     <ButtonMenu
                         showGradeTable={showGradeTable}
@@ -64,9 +65,9 @@ const MyPageContainer = ({ navigation }) => {
                 </Container>
             ) : (
                 <Container
-                    width={width}
+                    height={height}
                     style={{
-                        marginTop: 20,
+                        paddingBottom: 200,
                     }}
                 >
                     <RequireSignin
