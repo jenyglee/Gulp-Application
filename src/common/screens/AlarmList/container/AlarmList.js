@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components/native";
-import { View, ScrollView, Dimensions } from "react-native";
+import { View, ScrollView, Dimensions, Alert } from "react-native";
 import { StatusBar } from "expo-status-bar";
 import { icons } from "@/icons";
 import Button from "@components/Button";
@@ -10,6 +10,7 @@ import Alarm from "@/common/screens/AlarmList/component/Alarm";
 import TopLogo from "@/common/screens/AlarmList/component/TopLogo";
 import ButtonFilter from "@/common/screens/AlarmList/component/ButtonFilter";
 import { GradeTable } from "@components/modal/index";
+import CompleteModal from "@screens/AlarmList/component/CompleteModal";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { signout } from "@/member/api/memberApi";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
@@ -73,7 +74,18 @@ export default function AlarmList({ navigation }) {
     // 🪲 헬퍼를 뽑는 법을 모르겠음...
     // const bool = showGradeTable(false);
     const [isVisible, setIsVisible] = useState(false);
+    const [isVisibleComplete, setIsVisibleComplete] = useState(false);
     const [foundMedicine, setFoundMedicine] = useState(false); // 약 리스트 유무
+
+    // ✨ 로그인했는지 확인 + 약 추가 후 메인으로 복귀
+    useEffect(() => {
+        const removeFocusEvent = navigation.addListener("focus", () => {
+            getData();
+        });
+        return () => {
+            removeFocusEvent();
+        };
+    }, []);
 
     // ✨ 로컬에 저장하기
     const storeData = async (tasks) => {
@@ -89,14 +101,24 @@ export default function AlarmList({ navigation }) {
     // ✨로컬에서 가져오기
     const getData = async () => {
         const loadedData = await AsyncStorage.getItem("tasks");
-        setTasks(JSON.parse(loadedData));
-        // await confirmList(tasks);
+        const parseData = JSON.parse(loadedData);
+        const result = await setAlarmCompleted(parseData);
+        setTasks(result);
 
+        // await confirmList(tasks);
         if (Object.values(JSON.parse(loadedData)).length == 0) {
             setFoundMedicine(false);
         } else {
             setFoundMedicine(true);
         }
+    };
+
+    // ✨ 새로고침 시 completed 꼬임 방지
+    const setAlarmCompleted = async (data) => {
+        const copy = Object.assign({}, data);
+        console.log(copy[1634727162582]);
+
+        return data;
     };
 
     // ✨ 약이 있는지 없는지 검사
@@ -106,6 +128,11 @@ export default function AlarmList({ navigation }) {
         } else {
             setFoundMedicine(true);
         }
+    };
+
+    // ✨복용완료
+    const completeAlarm = () => {
+        setIsVisibleComplete(true);
     };
 
     // ✨(테스트용)복용완료
@@ -126,20 +153,25 @@ export default function AlarmList({ navigation }) {
         var copy = Object.assign({}, tasks);
         copy[id].completed = !copy[id].completed;
         storeData(copy);
-        // setTasks(copy);
         allCompleted();
-        // 전달할때 toggleTask, id 필요 / Alarm에서 _onPress 필요
     };
 
     // ✨전체 체크 시 복용일을 1일 증가
     const allCompleted = () => {
         // 🪲 하루에 한번만 떠야함 🪲
         var num = 0;
+
         for (let i = 0; i < Object.values(tasks).length; i++) {
             if (Object.values(tasks)[i].completed) {
                 num++;
+                console.log(Object.values(tasks)[i].completed);
                 if (num == Object.values(tasks).length) {
                     plusDate();
+                    plusDateMAX();
+                    // 복용완료 바텀시트!
+                    completeAlarm();
+                    setIsVisibleComplete(true);
+                    // Alert.alert("sdasds");
                     return;
                 }
             }
@@ -177,19 +209,6 @@ export default function AlarmList({ navigation }) {
         navigation.navigate("AddAlarm");
     };
 
-    // ✨ 로그인했는지 확인 + 약 추가 후 메인으로 복귀
-    useEffect(() => {
-        // signConfirm();
-        // confirmList(tasks);
-        const removeFocusEvent = navigation.addListener("focus", () => {
-            getData();
-        });
-
-        return () => {
-            removeFocusEvent();
-        };
-    }, []);
-
     return (
         <>
             <Wrap insets={insets}>
@@ -210,11 +229,6 @@ export default function AlarmList({ navigation }) {
                             return (
                                 <Alarm
                                     alarmInfo={item}
-                                    checkIcon={
-                                        item.completed
-                                            ? icons.check
-                                            : icons.uncheck
-                                    }
                                     menuIcon={icons.dot}
                                     toggleTask={toggleTask}
                                     showAlarmMenu={showAlarmMenu}
@@ -278,6 +292,13 @@ export default function AlarmList({ navigation }) {
                         setIsVisible={setIsVisible}
                         deleteTask={deleteTask.bind(null, selectedTaskKey)}
                         editMedicine={editMedicine}
+                    />
+                    <CompleteModal
+                        isVisible={isVisibleComplete}
+                        setIsVisible={setIsVisibleComplete}
+                        deleteTask={deleteTask.bind(null, selectedTaskKey)}
+                        editMedicine={editMedicine}
+                        count={count}
                     />
                 </Container>
             </Wrap>

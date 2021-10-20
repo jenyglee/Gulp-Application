@@ -6,7 +6,7 @@ import BottomSheet from "@components/modal/BottomSheet";
 import Profile from "@/member/screens/Mypage/component/Profile";
 import ButtonMenu from "@/member/screens/Mypage/component/ButtonMenu";
 import { GradeTable } from "@components/modal/index";
-import { signout } from "@/member/api/memberApi";
+import { logout, removeUser } from "@/member/api/memberApi";
 import RequireSignin from "@/common/components/RequireSignin";
 import { illust } from "@/images";
 import jwt_decode from "jwt-decode";
@@ -21,7 +21,7 @@ const Container = styled.View`
 const MyPageContainer = ({ navigation }) => {
     const width = Dimensions.get("window").width;
     const [gradeTable, setGradeTable] = useState(false); // 등급표
-    const [isSignin, setIsSignin] = useState(true); // 마이페이지 노출(로그인시)
+    const [isSignin, setIsSignin] = useState(false); // 마이페이지 노출(로그인시)
 
     // ✨ 유저 정보 확인
     useEffect(() => {
@@ -35,8 +35,8 @@ const MyPageContainer = ({ navigation }) => {
 
     // ✨ 로그인정보 가져오기
     const getUser = async () => {
-        const user = jwt_decode(await AsyncStorage.getItem("token"));
-        setIsSignin(user);
+        const token = await AsyncStorage.getItem("token");
+        setIsSignin(token);
     };
 
     // ✨ 등급표 노출/숨김
@@ -54,7 +54,8 @@ const MyPageContainer = ({ navigation }) => {
                         showUserInfo={() => {
                             navigation.navigate("CustomInfo");
                         }}
-                        signout={signout}
+                        logout={logout}
+                        removeUser={removeUser}
                         setIsSignin={setIsSignin}
                     />
                     {gradeTable ? (

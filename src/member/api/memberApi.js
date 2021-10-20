@@ -1,6 +1,7 @@
 import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import jwt_decode from "jwt-decode";
+import { Alert } from "react-native";
 const url = "https://gulp.jenyglee.com/";
 
 // ✨로그인
@@ -24,19 +25,19 @@ const signin = async (member) => {
 };
 
 // ✨로그아웃
-const signout = async () => {
+const logout = async () => {
     try {
-        await AsyncStorage.removeItem("token");
-        // const token = await AsyncStorage.getItem("token");
-        // // console.log(token);
-        // const response = await axios({
-        //     method: "POST",
-        //     url: url + "logout",
-        //     headers: { authoriztion: token }, // 인증용도?
-        // });
-        // if (response.status === 200) {
-        //     await AsyncStorage.removeItem("token");
-        // }
+        const token = await AsyncStorage.getItem("token");
+        const response = await axios({
+            method: "POST",
+            url: url + "logout",
+            headers: { authorization: token },
+        });
+        if (response.status === 200) {
+            console.log(response.status);
+            await AsyncStorage.removeItem("token");
+        }
+        // await AsyncStorage.removeItem("token");
     } catch (error) {
         // throw error;
         console.log(error);
@@ -62,22 +63,31 @@ const signup = async (member) => {
     }
 };
 
-const confirm = async (member) => {
+// ✨회원탈퇴
+const removeUser = async () => {
+    const token = await AsyncStorage.getItem("token");
+    console.log(token);
+
+    // const response = await axios({
+    //     method : "DELETE",
+    //     url: url +
+    // })
+};
+
+const emailValidation = async (email) => {
     try {
-        const token = await AsyncStorage.getItem("token");
         const response = await axios({
             method: "POST",
-            url: "http://192.168.0.21:signout",
-            data: member,
-            headers: { token }, // 인증용도?
+            url: url + "emailValidation",
+            data: email,
         });
         if (response.status === 200) {
-            return response.data.alarmList;
+            console.log(response.status);
+            Alert.alert("사용할 수 있는 이메일입니다.");
         }
-        console.log(response);
     } catch (error) {
         throw error;
     }
 };
 
-export { signin, signout, signup };
+export { signin, logout, signup, removeUser, emailValidation };

@@ -81,34 +81,31 @@ const AddMedicine = ({ navigation }) => {
     // const [medicineList, setMedicineList] = useState(tempData);
     const [medicineList, setMedicineList] = useState({});
 
-    // ✨로컬에 저장하기
-    const storeData = async (item) => {
-        try {
-            // const loadedData = await AsyncStorage.getItem("medicine");
-            // const tasks = JSON.parse(loadedData);
-            await AsyncStorage.setItem("medicine", JSON.stringify(item));
-        } catch (error) {
-            throw error;
-        }
-    };
-
-    // ✨로컬에서 가져오기
-    const getData = async () => {
-        try {
-            const loadedData = await AsyncStorage.getItem("medicine");
-            setMedicineList(JSON.parse(loadedData));
-            // return JSON.parse(loadedData);
-        } catch (error) {
-            throw error;
-        }
-    };
-
     useEffect(() => {
         const removeFocusEvent = navigation.addListener("focus", () => {
             getData();
         });
         return () => removeFocusEvent();
     }, []);
+
+    // ✨ 약 로컬에 저장하기
+    const storeData = async (item) => {
+        try {
+            await AsyncStorage.setItem("medicine", JSON.stringify(item));
+        } catch (error) {
+            throw error;
+        }
+    };
+
+    // ✨로컬에서 약 가져오기
+    const getData = async () => {
+        try {
+            const loadedData = await AsyncStorage.getItem("medicine");
+            setMedicineList(JSON.parse(loadedData));
+        } catch (error) {
+            throw error;
+        }
+    };
 
     // ✨ 약 삭제
     const deleteTask = async (id) => {

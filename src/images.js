@@ -10,6 +10,7 @@ import Character03 from "./../assets/images/character_03.png";
 import Character04 from "./../assets/images/character_04.png";
 import Signup from "./../assets/images/signup.png";
 import FindPassword from "./../assets/images/findPassword.png";
+import Complete from "./../assets/images/complete.png";
 import TopLogo from "./../assets/images/topLogo.png";
 import SigninLogo from "./../assets/images/signinLogo.png";
 import Gauge00 from "./../assets/images/gauge00.png";
@@ -46,6 +47,7 @@ export const illust = {
     signup: Signup,
     findPassword: FindPassword,
     illustMedicine: IllustMedicine,
+    complete: Complete,
 };
 
 export const gauge = {

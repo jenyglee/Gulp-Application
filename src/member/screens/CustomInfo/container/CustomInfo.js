@@ -78,7 +78,6 @@ const SignupContainer00 = ({ navigation }) => {
     // ✨ 유저 정보 가져오기
     const getUser = async () => {
         const user = jwt_decode(await AsyncStorage.getItem("token"));
-        console.log(user);
         setEmail(user.email);
         setNickname(user.nickname);
     };

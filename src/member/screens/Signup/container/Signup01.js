@@ -3,7 +3,7 @@ import styled, { ThemeContext } from "styled-components";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { Button, TextButton, Input, Image } from "@components/index";
 import { isEmail, removeWhiteSpace } from "@/util";
-import { signup } from "@/member/api/memberApi";
+import { emailValidation, signup } from "@/member/api/memberApi";
 import { Alert, Animated, Dimensions } from "react-native";
 // import { createUser } from "@/firebase";
 
@@ -188,6 +188,9 @@ const SignupContainer00 = ({ navigation }) => {
                             }}
                         />
                         <TextButton
+                            onPress={() => {
+                                emailValidation(email);
+                            }}
                             btnStyle={{
                                 marginLeft: 12,
                             }}

@@ -9,7 +9,7 @@ const Wrap = styled.View`
 const Container = styled.View`
     background-color: ${({ theme }) => theme.white};
     width: ${({ width }) => width - 48}px;
-    height: 150px;
+    height: 200px;
     padding: 0 20px;
     border-radius: 12px;
     align-items: center;
@@ -37,7 +37,13 @@ const Line = styled.View`
     background-color: ${({ theme }) => theme.line};
 `;
 
-const ButtonMenu = ({ showGradeTable, showUserInfo, signout, setIsSignin }) => {
+const ButtonMenu = ({
+    showGradeTable,
+    showUserInfo,
+    logout,
+    removeUser,
+    setIsSignin,
+}) => {
     const width = Dimensions.get("window").width;
 
     return (
@@ -61,7 +67,7 @@ const ButtonMenu = ({ showGradeTable, showUserInfo, signout, setIsSignin }) => {
                 <Line />
                 <ListBtn
                     onPress={() => {
-                        signout();
+                        logout();
                         setIsSignin(false);
                     }}
                 >
@@ -71,6 +77,21 @@ const ButtonMenu = ({ showGradeTable, showUserInfo, signout, setIsSignin }) => {
                         }}
                     >
                         <ListText>로그아웃</ListText>
+                    </ListContainer>
+                </ListBtn>
+                <Line />
+                <ListBtn
+                    onPress={() => {
+                        removeUser();
+                        // setIsSignin(false);
+                    }}
+                >
+                    <ListContainer
+                        style={{
+                            borderBottomWidth: 0,
+                        }}
+                    >
+                        <ListText>회원탈퇴</ListText>
                     </ListContainer>
                 </ListBtn>
             </Container>
