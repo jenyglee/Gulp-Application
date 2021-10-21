@@ -15,23 +15,59 @@ const Container = styled.View`
     background-color: ${({ theme }) => theme.background};
 `;
 
+const Wrap = styled.View`
+    height: 100%;
+    align-items: center;
+    background-color: ${({ theme }) => theme.white};
+`;
+
 const ListContainer = styled.View`
     margin: 20px 0 50px;
-    width: ${({ width }) => width - 48}px;
+    width: 100%;
+`;
+
+const Block = styled.View`
+    width: ${({ width }) => width} px;
+    height: 20px;
+    background-color: ${({ theme }) => theme.background};
 `;
 
 const tempData = [
-    { id: 1, title: "하루약속 멀티비타민" },
-    { id: 2, title: "강블리 퍼스트핏 멀티비타민 미네랄" },
-    { id: 3, title: "센트룸 포 우먼 멀티 비타민 미네랄" },
-    { id: 4, title: "고려은단 비타민C" },
-    { id: 5, title: "마이카인드 유기농 원료 비타민C" },
-    { id: 6, title: "모어네이처 안심 비타민D2000" },
-    { id: 7, title: "마이카인드 유기농 비타민B 컴플렉스 비타민B 컴플렉스" },
-    { id: 8, title: "마이카인드 유기농 비타민B 컴플렉스 비타민B 컴플렉스" },
-    { id: 9, title: "마이카인드 유기농 비타민B 컴플렉스 비타민B 컴플렉스" },
-    { id: 10, title: "마이카인드 유기농 비타민B 컴플렉스 비타민B 컴플렉스" },
-    { id: 11, title: "마이카인드 유기농 비타민B 컴플렉스 비타민B 컴플렉스" },
+    { id: 1, name: "플래티넘 메가비타민c 3000", brand: "렛츠미" },
+    { id: 2, name: "고려은단 메가도스C 3000 3g", brand: "고려은단" },
+    { id: 3, name: "비타민C 골드플러스 파워업", brand: "고려은단" },
+    { id: 4, name: "비타민C 1000", brand: "고려은단" },
+    { id: 5, name: "비타민C 1000mg", brand: "종근당" },
+    {
+        id: 6,
+        name: "메리트 C 산 3000mg 메가도스 고함량 영국산 비타민",
+        brand: "휴온스",
+    },
+    {
+        id: 7,
+        name: "메리트 C&D 메가도스 고함량 영국산 비타민",
+        brand: "휴온스",
+    },
+    {
+        id: 8,
+        name: "영국산100% 메가도스 비타민C3000",
+        brand: "라이프케어",
+    },
+    {
+        id: 9,
+        name: "비타민C 600mg",
+        brand: "뉴트리코어",
+    },
+    {
+        id: 10,
+        name: "비타민c 인디안구스베리 600mg",
+        brand: "팜엔탑",
+    },
+    {
+        id: 11,
+        name: "메가 비타민C3000 울트라파인",
+        brand: "바이탈스푼",
+    },
 ];
 
 const Ranking = ({ navigation }) => {
@@ -58,67 +94,22 @@ const Ranking = ({ navigation }) => {
 
     // ✨ 리스트 1~3번째는 배경색 주고 나머지는 나열
     const renderItem = ({ item }) => {
-        // console.log(item.id);
-        if (item.id === 1) {
-            return (
-                <ListItem
-                    num={item.id}
-                    title={item.title}
-                    containerStyle={{
-                        backgroundColor: theme.firstRank,
-                    }}
-                />
-            );
-        } else if (item.id === 2) {
-            return (
-                <ListItem
-                    num={item.id}
-                    title={item.title}
-                    containerStyle={{
-                        backgroundColor: theme.secondRank,
-                    }}
-                />
-            );
-        } else if (item.id === 3) {
-            return (
-                <ListItem
-                    num={item.id}
-                    title={item.title}
-                    containerStyle={{
-                        backgroundColor: theme.thirdRank,
-                    }}
-                />
-            );
-        } else {
-            return (
-                <ListItem
-                    num={item.id}
-                    title={item.title}
-                    containerStyle={{
-                        backgroundColor: theme.white,
-                    }}
-                />
-            );
-        }
+        return <ListItem item={item} />;
     };
     return (
         <Container>
             {isSignin ? (
-                <View
-                    style={{
-                        height: "100%",
-                        alignItems: "center",
-                    }}
-                >
+                <Wrap>
                     <Category />
                     <ListContainer width={width}>
+                        <Block width={width} />
                         <FlatList
                             data={medicineList}
                             renderItem={renderItem}
                             keyExtractor={(item, index) => index.toString()}
                         />
                     </ListContainer>
-                </View>
+                </Wrap>
             ) : (
                 <Container
                     width={width}

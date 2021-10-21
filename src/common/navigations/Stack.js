@@ -104,6 +104,12 @@ const HomeTabs = () => {
                 component={Rank}
                 options={{
                     ...option,
+                    headerStyle: {
+                        shadowOffset: {
+                            header: 0,
+                        },
+                        backgroundColor: "#fff",
+                    },
                     headerTitle: "영양제 랭킹",
                     tabBarIcon: (props) => {
                         return (

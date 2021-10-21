@@ -13,11 +13,10 @@ const signin = async (member) => {
             data: member,
         });
 
-        // console.log(response);
         if (response.data.statusCodeValue !== 200) {
             throw new Error(response.data.body.message);
         }
-        // console.log(jwt_decode(response.headers.authorization));
+        console.log(response.headers.authorization);
         await AsyncStorage.setItem("token", response.headers.authorization);
     } catch (error) {
         throw error;
@@ -34,10 +33,9 @@ const logout = async () => {
             headers: { authorization: token },
         });
         if (response.status === 200) {
-            console.log(response.status);
+            // console.log(response.status);
             await AsyncStorage.removeItem("token");
         }
-        // await AsyncStorage.removeItem("token");
     } catch (error) {
         // throw error;
         console.log(error);

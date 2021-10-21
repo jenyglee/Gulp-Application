@@ -1,44 +1,57 @@
 import React from "react";
-import { TouchableOpacity } from "react-native";
+import { Dimensions, TouchableOpacity } from "react-native";
 import styled from "styled-components";
 
 const Container = styled.View`
-    width: 100%;
-    flex-direction: row;
-    padding: 24px 20px;
-    border-radius: 12px;
+    padding: 0 24px;
     background-color: ${({ theme }) => theme.white};
-    margin-bottom: 10px;
 `;
 
-const NumberContainer = styled.View`
-    width: 24px;
+const Circle = styled.View`
+    width: 8px;
+    height: 8px;
+    border-radius: 4px;
+    margin-right: 12px;
+    background-color: ${({ theme }) => theme.main};
+`;
+
+const NameContainer = styled.View`
+    flex-direction: row;
     align-items: center;
-    margin-right: 5px;
+    margin-top: 15px;
 `;
 
-const StyledNumber = styled.Text`
-    font-size: 16px;
+const Name = styled.Text`
+    font-size: 18px;
     font-weight: bold;
-    color: ${({ theme }) => theme.textSub};
+    color: ${({ theme }) => theme.textBasic};
 `;
 
-const StyledTitle = styled.Text`
+const BrandName = styled.Text`
     font-size: 16px;
     color: ${({ theme }) => theme.textBasic};
-    margin-right: 40px;
+    margin: 10px 0 15px 20px;
 `;
 
-const ListItem = ({ num, title, selectItem, containerStyle }) => {
+const Line = styled.View`
+    width: ${({ width }) => width}px;
+    height: 1px;
+    background-color: ${({ theme }) => theme.line};
+    position: absolute;
+    bottom: 0;
+`;
+
+const ListItem = ({ item }) => {
+    const width = Dimensions.get("window").width;
     return (
-        <TouchableOpacity onPress={selectItem}>
-            <Container style={containerStyle}>
-                <NumberContainer>
-                    <StyledNumber>{num}</StyledNumber>
-                </NumberContainer>
-                <StyledTitle>{title}</StyledTitle>
-            </Container>
-        </TouchableOpacity>
+        <Container>
+            <NameContainer>
+                <Circle />
+                <Name>{item.name}</Name>
+            </NameContainer>
+            <BrandName>{item.brand}</BrandName>
+            <Line width={width} />
+        </Container>
     );
 };
 
