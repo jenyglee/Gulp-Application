@@ -4,13 +4,11 @@ import styled from "styled-components/native";
 import { icons20px } from "@/icons";
 
 const Container = styled.View`
-    height: 30px;
-    border-radius: 15px;
+    border-radius: 12px;
     background-color: ${({ theme }) => theme.background};
     justify-content: center;
-    align-items: center;
     flex-direction: row;
-    padding: 0 14px 0 10px;
+    padding: 15px 20px;
     margin-bottom: 10px;
     margin-right: 10px;
 `;
@@ -19,14 +17,13 @@ const Icon = styled.Image`
     width: 20px;
     height: 20px;
     margin-right: 5px;
-    /* background-color: red; */
 `;
 
 const StyledText = styled.Text`
     font-size: 14px;
     font-weight: bold;
+    margin-right: 10px;
     color: ${({ theme }) => theme.black};
-    /* background-color: red; */
 `;
 
 const TagButton = ({ id, deleteTask, title }) => {
@@ -34,12 +31,12 @@ const TagButton = ({ id, deleteTask, title }) => {
         deleteTask(id);
     };
     return (
-        <TouchableOpacity onPress={_onPress}>
-            <Container>
+        <Container>
+            <TouchableOpacity onPress={_onPress}>
                 <Icon source={icons20px.x} resizeMode="contain" />
-                <StyledText>{title}</StyledText>
-            </Container>
-        </TouchableOpacity>
+            </TouchableOpacity>
+            <StyledText>{title}</StyledText>
+        </Container>
     );
 };
 

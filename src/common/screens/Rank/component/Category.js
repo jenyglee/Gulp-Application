@@ -19,10 +19,6 @@ const CategoryText = styled.Text`
 `;
 
 const Category = ({ selectedItem, setSelectedItem, categoryList }) => {
-    useEffect(() => {
-        // setSelectedItem(0);
-    }, []);
-
     const renderItem = ({ item }) => {
         return (
             <TouchableOpacity

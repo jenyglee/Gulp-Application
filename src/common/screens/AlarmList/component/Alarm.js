@@ -40,9 +40,6 @@ const Ampm = styled.Text`
     font-weight: bold;
     color: ${({ theme, hadMedicine }) =>
         hadMedicine ? theme.textDisable : theme.black};
-    position: absolute;
-    top: 3px;
-    right: -28px;
 `;
 
 const TopWrapLeft = styled.View`

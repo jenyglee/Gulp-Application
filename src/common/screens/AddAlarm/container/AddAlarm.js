@@ -8,10 +8,10 @@ import TagButton from "@/common/screens/AddAlarm/component/TagButton";
 import TimePicker from "@/common/screens/AddAlarm/component/TimePicker";
 import WeekButton from "@/common/screens/AddAlarm/component/WeekButton";
 import { icons14px } from "@/icons";
+import { ScrollView } from "react-native-gesture-handler";
 
 const Container = styled.View`
     width: ${({ width }) => width - 48}px;
-    height: 100%;
     margin-top: 50px;
     align-self: center;
 `;
@@ -40,15 +40,9 @@ const WeekButtonContainer = styled.View`
     background-color: ${({ theme }) => theme.background};
 `;
 
-const SaveButtonContainer = styled.View`
-    width: ${({ width }) => width - 48}px;
-    position: absolute;
-    bottom: 40px;
-`;
-
 const ButtonArea = styled.View`
-    width: 100%;
-    position: absolute;
+    width: ${({ width }) => width - 48}px;
+    align-self: center;
     bottom: 40px;
 `;
 
@@ -216,70 +210,72 @@ const AddMedicine = ({ navigation }) => {
     };
 
     return (
-        <Container width={width} height={height}>
-            <StyledForm>
-                <StyledTitle>복용시간</StyledTitle>
-                <TimePicker onPress={whatTime} />
-            </StyledForm>
-            <StyledForm>
-                <StyledTitle>복용 요일</StyledTitle>
-                <WeekButtonContainer>
-                    <WeekButton
-                        title={weekAll[0].day}
-                        onPress={allWeekCheck}
-                        checked={weekAll[0].checked}
-                    />
-                    {week.map((item) => {
-                        return (
+        <>
+            <ScrollView>
+                <Container width={width} height={height}>
+                    <StyledForm>
+                        <StyledTitle>복용시간</StyledTitle>
+                        <TimePicker onPress={whatTime} />
+                    </StyledForm>
+                    <StyledForm>
+                        <StyledTitle>복용 요일</StyledTitle>
+                        <WeekButtonContainer>
                             <WeekButton
-                                title={item.day}
-                                id={item.id}
-                                key={item.id}
-                                onPress={weekCheck}
-                                checked={item.checked}
+                                title={weekAll[0].day}
+                                onPress={allWeekCheck}
+                                checked={weekAll[0].checked}
                             />
-                        );
-                    })}
-                </WeekButtonContainer>
-            </StyledForm>
-            <StyledForm>
-                <StyledTitle>복용중인 영양제</StyledTitle>
-                <StyledTagForm>
-                    {Object.values(medicineList).map((item) => {
-                        return (
-                            <TagButton
-                                title={item.name}
-                                id={item.id}
-                                key={item.id}
-                                deleteTask={deleteTask}
+                            {week.map((item) => {
+                                return (
+                                    <WeekButton
+                                        title={item.day}
+                                        id={item.id}
+                                        key={item.id}
+                                        onPress={weekCheck}
+                                        checked={item.checked}
+                                    />
+                                );
+                            })}
+                        </WeekButtonContainer>
+                    </StyledForm>
+                    <StyledForm>
+                        <StyledTitle>복용중인 영양제</StyledTitle>
+                        <StyledTagForm>
+                            {Object.values(medicineList).map((item) => {
+                                return (
+                                    <TagButton
+                                        title={item.name}
+                                        id={item.id}
+                                        key={item.id}
+                                        deleteTask={deleteTask}
+                                    />
+                                );
+                            })}
+                        </StyledTagForm>
+                        <StyledTagForm>
+                            <ButtonSmall
+                                icon={icons14px.plus}
+                                title="추가하기"
+                                containerStyle={{
+                                    backgroundColor: theme.white,
+                                    borderWidth: 2,
+                                    borderColor: theme.main,
+                                }}
+                                textStyle={{
+                                    color: theme.main,
+                                }}
+                                onPress={() => {
+                                    navigation.navigate("AddMedicine");
+                                }}
                             />
-                        );
-                    })}
-                </StyledTagForm>
-                <StyledTagForm>
-                    <ButtonSmall
-                        icon={icons14px.plus}
-                        title="추가하기"
-                        containerStyle={{
-                            backgroundColor: theme.white,
-                            borderWidth: 2,
-                            borderColor: theme.main,
-                        }}
-                        textStyle={{
-                            color: theme.main,
-                        }}
-                        onPress={() => {
-                            navigation.navigate("AddMedicine");
-                        }}
-                    />
-                </StyledTagForm>
-            </StyledForm>
-            <SaveButtonContainer width={width}>
-                <ButtonArea>
-                    <Button title="저장하기" onPress={saveMedicine} />
-                </ButtonArea>
-            </SaveButtonContainer>
-        </Container>
+                        </StyledTagForm>
+                    </StyledForm>
+                </Container>
+            </ScrollView>
+            <ButtonArea width={width}>
+                <Button title="저장하기" onPress={saveMedicine} />
+            </ButtonArea>
+        </>
     );
 };
 

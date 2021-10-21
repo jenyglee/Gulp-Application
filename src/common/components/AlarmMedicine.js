@@ -13,6 +13,7 @@ const ItemName = styled.Text`
     font-size: 16px;
     color: ${({ theme, hadMedicine }) =>
         hadMedicine ? theme.textDisable : theme.textSub};
+    padding-right: 30px;
 `;
 
 const Icon = styled.Image`
