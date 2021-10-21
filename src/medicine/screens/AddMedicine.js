@@ -2,31 +2,25 @@ import React, { useState } from "react";
 import styled from "styled-components";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Button, Input } from "@components/index";
-import { AutoList } from "@/medicine/components/index";
+import { SerchDropList } from "@/medicine/components/index";
 import { Alert } from "react-native";
 
 const Container = styled.View`
     width: 100%;
     height: 100%;
 `;
-
+// "name":"오메가 3", "imgPath":"test", "brand":"정동제", "category":"오메가"}
 const AddMedicine = ({ navigation }) => {
-    const tempData = {
-        // 1: { id: 1, name: "비타민c" },
-        // 2: { id: 2, name: "철분" },
-        // 3: { id: 3, name: "오메가3" },
-        // 4: { id: 4, name: "아르기닌" },
-        // 5: { id: 5, name: "고려은단" },
-    };
-
-    const [tasks, setTasks] = useState(tempData);
+    const tempData = [
+        { id: 0, name: "플래티넘 메가비타민c 3000", brand: "렛츠미" },
+        { id: 1, name: "고려은단 메가도스C 3000 3g", brand: "고려은단" },
+        { id: 2, name: "비타민C 골드플러스 파워업", brand: "고려은단" },
+        { id: 3, name: "비타민C 1000", brand: "고려은단" },
+        { id: 4, name: "비타민C 1000mg", brand: "종근당" },
+    ];
+    const [filtered, setFiltered] = useState(tempData);
     const [value, setValue] = useState("");
-
-    // ✨ 항목에 있는 약을 인풋에 입력
-    const selectItem = (id) => {
-        // console.log(tasks[id].name);
-        setValue(tasks[id].name);
-    };
+    const [searching, setSearching] = useState(false);
 
     // ✨ 로컬에 저장하기
     const getMedicineData = async () => {
@@ -60,24 +54,43 @@ const AddMedicine = ({ navigation }) => {
         }
     };
 
+    const onSearch = (text) => {
+        if (text) {
+            setSearching(true);
+            const filteredMedicine = tempData.filter((item) => {
+                if (item.name.match(text)) {
+                    return item.name;
+                }
+            });
+            setFiltered(filteredMedicine);
+        } else {
+            setSearching(false);
+        }
+        setValue(text);
+    };
+
+    // ✨ 항목에 있는 약을 인풋에 입력
+    const selectItem = (id) => {
+        // console.log(id);
+        filtered.map((item) => {
+            if (item.id === id) {
+                setValue(item.name);
+                return;
+            } else return;
+        });
+    };
+
     return (
         <Container>
             <Input
                 value={value}
                 onBlur={() => {}}
-                onChangeText={(text) => {
-                    setValue(text);
-                }}
+                onChangeText={(text) => onSearch(text)}
             />
-            {Object.values(tasks).map((item) => {
-                return (
-                    <AutoList
-                        item={item}
-                        key={item.id}
-                        selectItem={selectItem}
-                    />
-                );
-            })}
+
+            {searching && (
+                <SerchDropList filtered={filtered} onPress={selectItem} />
+            )}
             <Button title="저장" onPress={getMedicineData} />
         </Container>
     );
