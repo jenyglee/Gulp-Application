@@ -4,7 +4,8 @@ import styled from "styled-components";
 
 const Container = styled.View`
     padding: 0 24px;
-    background-color: ${({ theme }) => theme.white};
+    width: ${({ width }) => width}px;
+    /* background-color: ${({ theme }) => theme.white}; */
 `;
 
 const Circle = styled.View`
@@ -22,6 +23,7 @@ const NameContainer = styled.View`
 `;
 
 const Name = styled.Text`
+    width: 90%;
     font-size: 18px;
     font-weight: bold;
     color: ${({ theme }) => theme.textBasic};
@@ -44,10 +46,10 @@ const Line = styled.View`
 const ListItem = ({ item }) => {
     const width = Dimensions.get("window").width;
     return (
-        <Container>
+        <Container width={width}>
             <NameContainer>
                 <Circle />
-                <Name>{item.name}</Name>
+                <Name width={width}>{item.name}</Name>
             </NameContainer>
             <BrandName>{item.brand}</BrandName>
             <Line width={width} />
