@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components/native";
-import { View, ScrollView, Dimensions, Alert } from "react-native";
+import { View, Text, ScrollView, Dimensions, Alert } from "react-native";
 import { StatusBar } from "expo-status-bar";
 import { icons } from "@/icons";
 import Button from "@components/Button";
@@ -114,7 +114,7 @@ export default function AlarmList({ navigation }) {
     // ✨ 새로고침 시 completed 꼬임 방지
     const setAlarmCompleted = async (data) => {
         const copy = Object.assign({}, data);
-        console.log(copy[1634727162582]);
+        // console.log(copy[1634727162582]);
 
         return data;
     };
@@ -162,7 +162,6 @@ export default function AlarmList({ navigation }) {
         for (let i = 0; i < Object.values(tasks).length; i++) {
             if (Object.values(tasks)[i].completed) {
                 num++;
-                console.log(Object.values(tasks)[i].completed);
                 if (num == Object.values(tasks).length) {
                     // 카운트 증가
                     plusDate();
@@ -206,6 +205,14 @@ export default function AlarmList({ navigation }) {
         navigation.navigate("AddAlarm");
     };
 
+    const [filtered, setFiltered] = useState(true);
+    // ✨ 전체알람 < > 오늘알람
+    const alarmFilter = (bool) => {
+        // true : 오늘의 알람만 노출
+        // false : 모든 알람 노출
+        setFiltered(bool);
+    };
+
     return (
         <>
             <Wrap insets={insets}>
@@ -219,11 +226,10 @@ export default function AlarmList({ navigation }) {
                     />
                     <TitleContainer>
                         <StyledText>내 알람</StyledText>
-                        <ButtonFilter title="Today" />
+                        <ButtonFilter onPress={alarmFilter} />
                     </TitleContainer>
                     {foundMedicine ? (
                         Object.values(tasks).map((item) => {
-                            console.log(item);
                             return (
                                 <Alarm
                                     alarmInfo={item}
@@ -231,6 +237,7 @@ export default function AlarmList({ navigation }) {
                                     toggleTask={toggleTask}
                                     showAlarmMenu={showAlarmMenu}
                                     key={item.id}
+                                    filtered={filtered}
                                 />
                             );
                         })
@@ -278,6 +285,16 @@ export default function AlarmList({ navigation }) {
                             }}
                             title="(테스트용)복용완료"
                         />
+                        {/* <Button
+                            onPress={today}
+                            containerStyle={{
+                                backgroundColor: "#f0f0f0",
+                            }}
+                            textStyle={{
+                                color: "#666",
+                            }}
+                            title="(테스트용)오늘의 요일"
+                        /> */}
                     </View>
                     {gradeTable ? (
                         // 🪲 헬퍼를 뽑는 법을 모르겠음...

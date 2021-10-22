@@ -66,8 +66,17 @@ const MedicineContainer = styled.View`
     flex-direction: column;
 `;
 
-const Alarm = ({ alarmInfo, menuIcon, toggleTask, showAlarmMenu }) => {
+const Alarm = ({
+    alarmInfo,
+    menuIcon,
+    toggleTask,
+    showAlarmMenu,
+    filtered,
+}) => {
     const theme = useContext(ThemeContext);
+    const [alarmVisible, setAlarmVisible] = useState(true); // 알람 노출 / 미노출
+    //👇 이게 false 라면
+
     const [completed, setCompleted] = useState(alarmInfo.completed); // 복용 / 미복용
     const [changedDay, setChangedDay] = useState([]); // 숫자 요일이 한글로 저장되는 곳
     const [time, setTime] = useState([]); // 시, 분이 저장되는 곳
@@ -78,7 +87,20 @@ const Alarm = ({ alarmInfo, menuIcon, toggleTask, showAlarmMenu }) => {
     useEffect(() => {
         numChangeDay();
         editTime();
-    }, []);
+        console.log(filtered);
+        if (filtered === true) {
+            // ✨오늘의 알람
+            const date = new Date();
+            const day = date.getDay(); // 0 : 일
+            const result = alarmInfo.day.some((num) => {
+                return num === day;
+            });
+            setAlarmVisible(result);
+        } else {
+            // ✨모든 알람
+            setAlarmVisible(true);
+        }
+    }, [filtered]);
 
     // "tasks"를 가져온다.
 
@@ -133,112 +155,140 @@ const Alarm = ({ alarmInfo, menuIcon, toggleTask, showAlarmMenu }) => {
         }
     };
 
+    // ✨오늘의 요일 출력
+    const today = () => {
+        const date = new Date();
+        const day = date.getDay();
+        // 0 : 일, 1 : 월, 2 : 화, 3 : 수, 4 : 목, 5 : 금
+
+        const result = alarmInfo.day.some((num) => {
+            return num === day;
+        });
+        setAlarmVisible(result);
+    };
+
     const _onPress = () => {
         toggleTask(alarmInfo.id);
         setCompleted(!completed);
     };
 
     return (
-        <TouchContainer onPress={_onPress}>
-            <Container>
-                {completed ? (
-                    <>
-                        <TopWrap>
-                            <TopWrapLeft>
-                                <DayContainer>
-                                    {changedDay.map((day) => {
-                                        return <Day key={day}>{day} </Day>;
-                                    })}
-                                </DayContainer>
-                                <TimeContainer>
-                                    <Time completed={completed}>
-                                        {time[0]}:{time[1]}
-                                    </Time>
-                                    <Ampm completed={completed}>{ampm}</Ampm>
-                                </TimeContainer>
-                            </TopWrapLeft>
-                            <TopWrapRight>
-                                {/* ✨ 복용, 미복용 버튼 */}
-                                <ButtonSmall
-                                    title="복용"
-                                    icon={icons14px.checkWhite}
-                                    onPress={_onPress}
-                                />
+        <>
+            {alarmVisible ? (
+                <TouchContainer onPress={_onPress}>
+                    <Container>
+                        {completed ? (
+                            <>
+                                <TopWrap>
+                                    <TopWrapLeft>
+                                        <DayContainer>
+                                            {changedDay.map((day) => {
+                                                return (
+                                                    <Day key={day}>{day} </Day>
+                                                );
+                                            })}
+                                        </DayContainer>
+                                        <TimeContainer>
+                                            <Time completed={completed}>
+                                                {time[0]}:{time[1]}
+                                            </Time>
+                                            <Ampm completed={completed}>
+                                                {ampm}
+                                            </Ampm>
+                                        </TimeContainer>
+                                    </TopWrapLeft>
+                                    <TopWrapRight>
+                                        {/* ✨ 복용, 미복용 버튼 */}
+                                        <ButtonSmall
+                                            title="복용"
+                                            icon={icons14px.checkWhite}
+                                            onPress={_onPress}
+                                        />
 
-                                {/* ✨ 메뉴버튼 */}
-                                <IconButton
-                                    icon={menuIcon}
-                                    id={alarmInfo.id}
-                                    onPress={showAlarmMenu}
-                                />
-                            </TopWrapRight>
-                        </TopWrap>
-                        <MedicineContainer>
-                            {Object.values(alarmInfo.name).map((item) => {
-                                return (
-                                    <AlarmMedicine
-                                        completed={completed}
-                                        name={item.name}
-                                        key={item.id}
-                                    />
-                                );
-                            })}
-                        </MedicineContainer>
-                    </>
-                ) : (
-                    <>
-                        <TopWrap>
-                            <TopWrapLeft>
-                                <DayContainer>
-                                    {changedDay.map((item) => {
-                                        return <Day key={item}>{item} </Day>;
-                                    })}
-                                </DayContainer>
-                                <TimeContainer>
-                                    <Time>
-                                        {time[0]}:{time[1]}
-                                    </Time>
-                                    <Ampm>{ampm}</Ampm>
-                                </TimeContainer>
-                            </TopWrapLeft>
-                            <TopWrapRight>
-                                {/* ✨ 복용, 미복용 버튼 */}
-                                <ButtonSmall
-                                    title="미복용"
-                                    icon={icons14px.uncheck}
-                                    containerStyle={{
-                                        backgroundColor:
-                                            theme.smallBtnBackground,
-                                    }}
-                                    textStyle={{
-                                        color: theme.smallBtnText,
-                                    }}
-                                    onPress={_onPress}
-                                />
+                                        {/* ✨ 메뉴버튼 */}
+                                        <IconButton
+                                            icon={menuIcon}
+                                            id={alarmInfo.id}
+                                            onPress={showAlarmMenu}
+                                        />
+                                    </TopWrapRight>
+                                </TopWrap>
+                                <MedicineContainer>
+                                    {Object.values(alarmInfo.name).map(
+                                        (item) => {
+                                            return (
+                                                <AlarmMedicine
+                                                    completed={completed}
+                                                    name={item.name}
+                                                    key={item.id}
+                                                />
+                                            );
+                                        }
+                                    )}
+                                </MedicineContainer>
+                            </>
+                        ) : (
+                            <>
+                                <TopWrap>
+                                    <TopWrapLeft>
+                                        <DayContainer>
+                                            {changedDay.map((item) => {
+                                                return (
+                                                    <Day key={item}>
+                                                        {item}{" "}
+                                                    </Day>
+                                                );
+                                            })}
+                                        </DayContainer>
+                                        <TimeContainer>
+                                            <Time>
+                                                {time[0]}:{time[1]}
+                                            </Time>
+                                            <Ampm>{ampm}</Ampm>
+                                        </TimeContainer>
+                                    </TopWrapLeft>
+                                    <TopWrapRight>
+                                        {/* ✨ 복용, 미복용 버튼 */}
+                                        <ButtonSmall
+                                            title="미복용"
+                                            icon={icons14px.uncheck}
+                                            containerStyle={{
+                                                backgroundColor:
+                                                    theme.smallBtnBackground,
+                                            }}
+                                            textStyle={{
+                                                color: theme.smallBtnText,
+                                            }}
+                                            onPress={_onPress}
+                                        />
 
-                                {/* ✨ 메뉴버튼 */}
-                                <IconButton
-                                    icon={menuIcon}
-                                    id={alarmInfo.id}
-                                    onPress={showAlarmMenu}
-                                />
-                            </TopWrapRight>
-                        </TopWrap>
-                        <MedicineContainer>
-                            {Object.values(alarmInfo.name).map((item) => {
-                                return (
-                                    <AlarmMedicine
-                                        name={item.name}
-                                        key={item.id}
-                                        completed={completed}
-                                    />
-                                );
-                            })}
-                        </MedicineContainer>
-                    </>
-                )}
-            </Container>
-        </TouchContainer>
+                                        {/* ✨ 메뉴버튼 */}
+                                        <IconButton
+                                            icon={menuIcon}
+                                            id={alarmInfo.id}
+                                            onPress={showAlarmMenu}
+                                        />
+                                    </TopWrapRight>
+                                </TopWrap>
+                                <MedicineContainer>
+                                    {Object.values(alarmInfo.name).map(
+                                        (item) => {
+                                            return (
+                                                <AlarmMedicine
+                                                    name={item.name}
+                                                    key={item.id}
+                                                    completed={completed}
+                                                />
+                                            );
+                                        }
+                                    )}
+                                </MedicineContainer>
+                            </>
+                        )}
+                    </Container>
+                </TouchContainer>
+            ) : null}
+        </>
     );
 };
 

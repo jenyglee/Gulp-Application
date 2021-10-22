@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import { icons20px } from "@/icons";
 
@@ -20,14 +20,38 @@ const StyledImage = styled.Image`
     /* background-color: red; */
 `;
 
-const ButtonFilter = ({ title, onPress }) => {
+const ButtonFilter = ({ onPress }) => {
+    const [filtered, setFiltered] = useState(false);
+    const _onPress = (bool) => {
+        onPress(bool);
+        setFiltered(!filtered);
+    };
     return (
-        <BtnWrap onPress={onPress}>
-            <Container>
-                <StyledText>{title}</StyledText>
-                <StyledImage source={icons20px.filter} />
-            </Container>
-        </BtnWrap>
+        <>
+            {filtered ? (
+                <BtnWrap
+                    onPress={() => {
+                        _onPress(true);
+                    }}
+                >
+                    <Container>
+                        <StyledText>All</StyledText>
+                        <StyledImage source={icons20px.filter} />
+                    </Container>
+                </BtnWrap>
+            ) : (
+                <BtnWrap
+                    onPress={() => {
+                        _onPress(false);
+                    }}
+                >
+                    <Container>
+                        <StyledText>Today</StyledText>
+                        <StyledImage source={icons20px.filter} />
+                    </Container>
+                </BtnWrap>
+            )}
+        </>
     );
 };
 
