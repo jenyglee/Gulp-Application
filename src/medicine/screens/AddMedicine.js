@@ -3,13 +3,15 @@ import styled from "styled-components";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Button, Input } from "@components/index";
 import { SearchDropList } from "@/medicine/components/index";
-import { Alert, View, Text } from "react-native";
+import { Alert } from "react-native";
+import { debounce } from "lodash";
+import { addMedicine } from "@/medicine/api/medicineApi";
 
 const Container = styled.View`
     width: 100%;
     height: 100%;
 `;
-// "name":"오메가 3", "imgPath":"test", "brand":"정동제", "category":"오메가"}
+
 const AddMedicine = ({ navigation }) => {
     const tempData = [
         { id: 0, name: "플래티넘 메가비타민c 3000", brand: "렛츠미" },
@@ -19,8 +21,6 @@ const AddMedicine = ({ navigation }) => {
         { id: 4, name: "비타민C 1000mg", brand: "종근당" },
     ];
     const [filtered, setFiltered] = useState(tempData);
-    const [onlyMedicineArr, setOnlyMedicineArr] = useState([]);
-    const [onlyBrandArr, setOnlyBrandArr] = useState([]);
     const [medicine, setMedicine] = useState("");
     const [brand, setBrand] = useState("");
     const [searchingMedicine, setSearchingMedicine] = useState(false);
@@ -29,28 +29,37 @@ const AddMedicine = ({ navigation }) => {
     // ✨ 로컬에 저장하기
     const getMedicineData = async () => {
         try {
+            // ① 이미 등록된 약인지 확인
             const loadedData = await AsyncStorage.getItem("medicine");
             const Item = JSON.parse(loadedData);
-
-            // ✨ value 값이 medicine 스토레이지에 있는지 확인
             let duplicate = Object.values(Item).some((v) => {
-                v.name === medicine;
+                const sameBrand = () => {
+                    if (v.brand === brand) {
+                        return true;
+                    } else return false;
+                };
+                const sameMedicine = () => {
+                    if (v.name === medicine) {
+                        return true;
+                    } else return false;
+                };
+                //
+                sameBrand && sameMedicine;
             });
-
             if (duplicate) {
+                // 🪲알럿이 안뜸
                 Alert.alert("이 약은 이미 등록되어 있습니다.");
                 return;
             }
 
-            const ID = Date.now();
-            const newMedicine = {
-                [ID]: { id: ID, name: medicine, brand: brand },
+            // ② 저장 진행
+            const newMedicineServer = {
+                name: medicine,
+                brand: brand,
+                imgPath: "",
+                category: "기타",
             };
-
-            await AsyncStorage.setItem(
-                "medicine",
-                JSON.stringify({ ...Item, ...newMedicine })
-            );
+            await addMedicine(newMedicineServer);
 
             navigation.navigate("AddAlarm");
         } catch (e) {
@@ -58,8 +67,13 @@ const AddMedicine = ({ navigation }) => {
         }
     };
 
-    // ✨ 약 검색창에 입력시 자동완성
+    // ✨ medicine 검색창에 입력
     const onSearchMedicine = (text) => {
+        setMedicine(text);
+        debounceSearchMedicine(text);
+    };
+    // ✨ medicine 검색어 자동완성 노출
+    const debounceSearchMedicine = debounce((text) => {
         if (text) {
             setSearchingMedicine(true);
             const filteredMedicine = tempData.filter((item) => {
@@ -68,28 +82,19 @@ const AddMedicine = ({ navigation }) => {
                 }
             });
             setFiltered(filteredMedicine);
-
-            // onlyMedicineArr.push(filteredMedicine);
-            // console.log(onlyMedicineArr);
         } else {
             setSearchingMedicine(false);
         }
-        setMedicine(text);
-    };
+    }, 300);
 
-    // ✨
-    const passSameMedicine = () => {
-        // 목표 : 같은 이름의 값을 삭제하기
-        //  도출된 오브젝트들을 배열에 넣고 돌려서 같은 값이 있으면 삭제해서 저장
-        // 이중 반복문.
-        filtered.map((item) => {
-            const currElem = item.name;
-            console.log(currElem);
-        });
-    };
-
-    // ✨ 브랜드 검색창에 입력시 자동완성
+    // ✨ brand 검색창에 입력
     const onSearchBrand = (text) => {
+        setBrand(text);
+        debounceSearchBrand(text);
+    };
+
+    //✨ brand 검색어 자동완성 노출
+    const debounceSearchBrand = debounce((text) => {
         if (text) {
             setSearchingBrand(true);
             const filteredMedicine = tempData.filter((item) => {
@@ -101,8 +106,7 @@ const AddMedicine = ({ navigation }) => {
         } else {
             setSearchingBrand(false);
         }
-        setBrand(text);
-    };
+    }, 300);
 
     // ✨ 항목에 있는 약을 인풋에 입력
     const selectMedicine = (id) => {
@@ -126,12 +130,22 @@ const AddMedicine = ({ navigation }) => {
         // });
     };
 
+    // ✨
+    // const passSameMedicine = () => {
+    //     // 목표 : 같은 이름의 값을 삭제하기
+    //     //  도출된 오브젝트들을 배열에 넣고 돌려서 같은 값이 있으면 삭제해서 저장
+    //     // 이중 반복문.
+    //     filtered.map((item) => {
+    //         const currElem = item.name;
+    //         console.log(currElem);
+    //     });
+    // };
+
     return (
         <Container>
             <Input
                 value={medicine}
                 onBlur={() => {}}
-                // onChangeText={_.debounce((text) => console.log('debouncing', text), 2000)}
                 onChangeText={(text) => onSearchMedicine(text)}
                 placeholder="약 입력"
             />

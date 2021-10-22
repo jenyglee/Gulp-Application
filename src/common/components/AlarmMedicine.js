@@ -11,8 +11,8 @@ const Container = styled.View`
 
 const ItemName = styled.Text`
     font-size: 16px;
-    color: ${({ theme, hadMedicine }) =>
-        hadMedicine ? theme.textDisable : theme.textSub};
+    color: ${({ theme, completed }) =>
+        completed ? theme.textDisable : theme.textSub};
     padding-right: 30px;
 `;
 
@@ -22,11 +22,11 @@ const Icon = styled.Image`
     margin-right: 6px;
 `;
 
-const AlarmMedicine = ({ name, containerStyle, hadMedicine }) => {
+const AlarmMedicine = ({ name, containerStyle, completed }) => {
     return (
         <Container style={containerStyle}>
             <Icon source={icons20px.medicine} resizeMode="contain" />
-            <ItemName hadMedicine={hadMedicine}>{name}</ItemName>
+            <ItemName completed={completed}>{name}</ItemName>
         </Container>
     );
 };

@@ -48,33 +48,31 @@ const StyledText = styled.Text`
 const ProfileName = styled.Text`
     font-size: 18px;
 `;
+// ✨데이터형태(참고용)
+// const tempData = {
+//     1: {
+//         id: 1,
+//         time: "08:30:20",
+//         name: {
+//             1: { id: 1, name: "오메가3", completed: false },
+//             2: { id: 2, name: "비타민", completed: false },
+//             3: { id: 3, name: "철분", completed: false },
+//         },
+//         day: [1, 2],
+//         completed: false,
+//     },
 
 export default function AlarmList({ navigation }) {
     const width = Dimensions.get("window").width;
     const height = Dimensions.get("window").height;
     const insets = useSafeAreaInsets();
-    // ✨데이터형태(참고용)
-    // const tempData = {
-    //     1: {
-    //         id: 1,
-    //         time: "08:30:20",
-    //         name: {
-    //             1: { id: 1, name: "오메가3", completed: false },
-    //             2: { id: 2, name: "비타민", completed: false },
-    //             3: { id: 3, name: "철분", completed: false },
-    //         },
-    //         day: [1, 2],
-    //         completed: false,
-    //     },
     const [selectedTaskKey, setSelectedTaskKey] = useState();
     const [tasks, setTasks] = useState({});
     const [countTotal, setCountTotal] = useState(0);
     const [count, setCount] = useState(0);
     const [gradeTable, setGradeTable] = useState(false); // 등급표
-    // 🪲 헬퍼를 뽑는 법을 모르겠음...
-    // const bool = showGradeTable(false);
-    const [isVisible, setIsVisible] = useState(false);
-    const [isVisibleComplete, setIsVisibleComplete] = useState(false);
+    const [menuVisible, setMenuVisible] = useState(false); // 알람메뉴 노출/숨김
+    const [isVisibleComplete, setIsVisibleComplete] = useState(false); //전체복용 완료
     const [foundMedicine, setFoundMedicine] = useState(false); // 약 리스트 유무
 
     // ✨ 로그인했는지 확인 + 약 추가 후 메인으로 복귀
@@ -166,12 +164,11 @@ export default function AlarmList({ navigation }) {
                 num++;
                 console.log(Object.values(tasks)[i].completed);
                 if (num == Object.values(tasks).length) {
+                    // 카운트 증가
                     plusDate();
                     plusDateMAX();
-                    // 복용완료 바텀시트!
+                    // 바텀시트 노출
                     completeAlarm();
-                    setIsVisibleComplete(true);
-                    // Alert.alert("sdasds");
                     return;
                 }
             }
@@ -185,7 +182,7 @@ export default function AlarmList({ navigation }) {
 
     //  ✨알람메뉴 노출/숨김
     const showAlarmMenu = (id) => {
-        setIsVisible(true);
+        setMenuVisible(true);
         setSelectedTaskKey(id);
     };
 
@@ -194,13 +191,13 @@ export default function AlarmList({ navigation }) {
         const copy = Object.assign({}, tasks);
         delete copy[id];
         storeData(copy);
-        setIsVisible(false);
+        setMenuVisible(false);
     };
 
     // ✨ 알람 변경 페이지로 이동
     const editMedicine = async () => {
         navigation.navigate("AddAlarm");
-        setIsVisible(false);
+        setMenuVisible(false);
     };
 
     // ✨ 알람 추가 페이지로 이동
@@ -226,6 +223,7 @@ export default function AlarmList({ navigation }) {
                     </TitleContainer>
                     {foundMedicine ? (
                         Object.values(tasks).map((item) => {
+                            console.log(item);
                             return (
                                 <Alarm
                                     alarmInfo={item}
@@ -288,8 +286,8 @@ export default function AlarmList({ navigation }) {
                     ) : null}
 
                     <AlarmMenu
-                        isVisible={isVisible}
-                        setIsVisible={setIsVisible}
+                        menuVisible={menuVisible}
+                        setMenuVisible={setMenuVisible}
                         deleteTask={deleteTask.bind(null, selectedTaskKey)}
                         editMedicine={editMedicine}
                     />

@@ -9,6 +9,7 @@ import TimePicker from "@/common/screens/AddAlarm/component/TimePicker";
 import WeekButton from "@/common/screens/AddAlarm/component/WeekButton";
 import { icons14px } from "@/icons";
 import { ScrollView } from "react-native-gesture-handler";
+import { deleteMedicine } from "@/medicine/api/medicineApi";
 
 const Container = styled.View`
     width: ${({ width }) => width - 48}px;
@@ -94,13 +95,15 @@ const AddMedicine = ({ navigation }) => {
 
     // ✨ 약 삭제
     const deleteTask = async (id) => {
-        const copy = Object.assign({}, medicineList);
-        delete copy[id];
-        try {
-            // await storeData(copy, "medicine");
-            storeData(copy);
-            setMedicineList(copy);
-        } catch (error) {}
+        // const copy = Object.assign({}, medicineList);
+        // delete copy[id];
+        // try {
+        //     // await storeData(copy, "medicine");
+        //     storeData(copy);
+        //     setMedicineList(copy);
+        // } catch (error) {}
+        const token = await AsyncStorage.getItem("token");
+        await deleteMedicine(token);
     };
 
     // ✨ 약을 삭제하고 나면 "medicine"로컬에 다시 저장
@@ -246,7 +249,8 @@ const AddMedicine = ({ navigation }) => {
                             {Object.values(medicineList).map((item) => {
                                 return (
                                     <TagButton
-                                        title={item.name}
+                                        name={item.name}
+                                        brand={item.brand}
                                         id={item.id}
                                         key={item.id}
                                         deleteTask={deleteTask}

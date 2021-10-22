@@ -31,15 +31,15 @@ const TimeContainer = styled.View`
 const Time = styled.Text`
     font-size: 30px;
     font-weight: bold;
-    color: ${({ theme, hadMedicine }) =>
-        hadMedicine ? theme.textDisable : theme.black};
+    color: ${({ theme, completed }) =>
+        completed ? theme.textDisable : theme.black};
 `;
 
 const Ampm = styled.Text`
     font-size: 16px;
     font-weight: bold;
-    color: ${({ theme, hadMedicine }) =>
-        hadMedicine ? theme.textDisable : theme.black};
+    color: ${({ theme, completed }) =>
+        completed ? theme.textDisable : theme.black};
 `;
 
 const TopWrapLeft = styled.View`
@@ -68,7 +68,7 @@ const MedicineContainer = styled.View`
 
 const Alarm = ({ alarmInfo, menuIcon, toggleTask, showAlarmMenu }) => {
     const theme = useContext(ThemeContext);
-    const [hadMedicine, setHadMedicine] = useState(false); // 복용 / 미복용
+    const [completed, setCompleted] = useState(alarmInfo.completed); // 복용 / 미복용
     const [changedDay, setChangedDay] = useState([]); // 숫자 요일이 한글로 저장되는 곳
     const [time, setTime] = useState([]); // 시, 분이 저장되는 곳
     const [ampm, setAmpm] = useState(""); // AM / PM 이 저장되는 곳
@@ -79,6 +79,8 @@ const Alarm = ({ alarmInfo, menuIcon, toggleTask, showAlarmMenu }) => {
         numChangeDay();
         editTime();
     }, []);
+
+    // "tasks"를 가져온다.
 
     // ✨ 숫자로 들어온 요일 변환 [1 ,2 ,3] => ["월", "화", "수"]
     const numChangeDay = () => {
@@ -133,13 +135,13 @@ const Alarm = ({ alarmInfo, menuIcon, toggleTask, showAlarmMenu }) => {
 
     const _onPress = () => {
         toggleTask(alarmInfo.id);
-        setHadMedicine(!hadMedicine);
+        setCompleted(!completed);
     };
 
     return (
         <TouchContainer onPress={_onPress}>
             <Container>
-                {hadMedicine ? (
+                {completed ? (
                     <>
                         <TopWrap>
                             <TopWrapLeft>
@@ -149,12 +151,10 @@ const Alarm = ({ alarmInfo, menuIcon, toggleTask, showAlarmMenu }) => {
                                     })}
                                 </DayContainer>
                                 <TimeContainer>
-                                    <Time hadMedicine={hadMedicine}>
+                                    <Time completed={completed}>
                                         {time[0]}:{time[1]}
                                     </Time>
-                                    <Ampm hadMedicine={hadMedicine}>
-                                        {ampm}
-                                    </Ampm>
+                                    <Ampm completed={completed}>{ampm}</Ampm>
                                 </TimeContainer>
                             </TopWrapLeft>
                             <TopWrapRight>
@@ -177,7 +177,7 @@ const Alarm = ({ alarmInfo, menuIcon, toggleTask, showAlarmMenu }) => {
                             {Object.values(alarmInfo.name).map((item) => {
                                 return (
                                     <AlarmMedicine
-                                        hadMedicine={hadMedicine}
+                                        completed={completed}
                                         name={item.name}
                                         key={item.id}
                                     />
@@ -230,6 +230,7 @@ const Alarm = ({ alarmInfo, menuIcon, toggleTask, showAlarmMenu }) => {
                                     <AlarmMedicine
                                         name={item.name}
                                         key={item.id}
+                                        completed={completed}
                                     />
                                 );
                             })}

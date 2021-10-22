@@ -26,7 +26,7 @@ const StyledText = styled.Text`
     color: ${({ theme }) => theme.black};
 `;
 
-const TagButton = ({ id, deleteTask, title }) => {
+const TagButton = ({ id, deleteTask, name, brand }) => {
     const _onPress = () => {
         deleteTask(id);
     };
@@ -35,7 +35,9 @@ const TagButton = ({ id, deleteTask, title }) => {
             <TouchableOpacity onPress={_onPress}>
                 <Icon source={icons20px.x} resizeMode="contain" />
             </TouchableOpacity>
-            <StyledText>{title}</StyledText>
+            <StyledText>
+                {brand} - {name}
+            </StyledText>
         </Container>
     );
 };
