@@ -1,3 +1,3 @@
-import SerchDropList from "@/medicine/components/SerchDropList";
+import SearchDropList from "@/medicine/components/SearchDropList";
 
-export { SerchDropList };
+export { SearchDropList };

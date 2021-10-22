@@ -2,8 +2,8 @@ import React, { useState } from "react";
 import styled from "styled-components";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Button, Input } from "@components/index";
-import { SerchDropList } from "@/medicine/components/index";
-import { Alert } from "react-native";
+import { SearchDropList } from "@/medicine/components/index";
+import { Alert, View, Text } from "react-native";
 
 const Container = styled.View`
     width: 100%;
@@ -19,8 +19,12 @@ const AddMedicine = ({ navigation }) => {
         { id: 4, name: "비타민C 1000mg", brand: "종근당" },
     ];
     const [filtered, setFiltered] = useState(tempData);
-    const [value, setValue] = useState("");
-    const [searching, setSearching] = useState(false);
+    const [onlyMedicineArr, setOnlyMedicineArr] = useState([]);
+    const [onlyBrandArr, setOnlyBrandArr] = useState([]);
+    const [medicine, setMedicine] = useState("");
+    const [brand, setBrand] = useState("");
+    const [searchingMedicine, setSearchingMedicine] = useState(false);
+    const [searchingBrand, setSearchingBrand] = useState(false);
 
     // ✨ 로컬에 저장하기
     const getMedicineData = async () => {
@@ -30,7 +34,7 @@ const AddMedicine = ({ navigation }) => {
 
             // ✨ value 값이 medicine 스토레이지에 있는지 확인
             let duplicate = Object.values(Item).some((v) => {
-                v.name === value;
+                v.name === medicine;
             });
 
             if (duplicate) {
@@ -40,7 +44,7 @@ const AddMedicine = ({ navigation }) => {
 
             const ID = Date.now();
             const newMedicine = {
-                [ID]: { id: ID, name: value, completed: false },
+                [ID]: { id: ID, name: medicine, brand: brand },
             };
 
             await AsyncStorage.setItem(
@@ -54,42 +58,102 @@ const AddMedicine = ({ navigation }) => {
         }
     };
 
-    const onSearch = (text) => {
+    // ✨ 약 검색창에 입력시 자동완성
+    const onSearchMedicine = (text) => {
         if (text) {
-            setSearching(true);
+            setSearchingMedicine(true);
             const filteredMedicine = tempData.filter((item) => {
                 if (item.name.match(text)) {
                     return item.name;
                 }
             });
             setFiltered(filteredMedicine);
+
+            // onlyMedicineArr.push(filteredMedicine);
+            // console.log(onlyMedicineArr);
         } else {
-            setSearching(false);
+            setSearchingMedicine(false);
         }
-        setValue(text);
+        setMedicine(text);
+    };
+
+    // ✨
+    const passSameMedicine = () => {
+        // 목표 : 같은 이름의 값을 삭제하기
+        //  도출된 오브젝트들을 배열에 넣고 돌려서 같은 값이 있으면 삭제해서 저장
+        // 이중 반복문.
+        filtered.map((item) => {
+            const currElem = item.name;
+            console.log(currElem);
+        });
+    };
+
+    // ✨ 브랜드 검색창에 입력시 자동완성
+    const onSearchBrand = (text) => {
+        if (text) {
+            setSearchingBrand(true);
+            const filteredMedicine = tempData.filter((item) => {
+                if (item.brand.match(text)) {
+                    return item.brand;
+                }
+            });
+            setFiltered(filteredMedicine);
+        } else {
+            setSearchingBrand(false);
+        }
+        setBrand(text);
     };
 
     // ✨ 항목에 있는 약을 인풋에 입력
-    const selectItem = (id) => {
+    const selectMedicine = (id) => {
         // console.log(id);
-        filtered.map((item) => {
-            if (item.id === id) {
-                setValue(item.name);
-                return;
-            } else return;
-        });
+        // filtered.map((item) => {
+        //     if (item.id === id) {
+        //         setMedicine(item.name);
+        //         return;
+        //     } else return;
+        // });
+    };
+
+    // ✨ 항목에 있는 브랜드를 인풋에 입력
+    const selectBrand = (id) => {
+        // console.log(id);
+        // filtered.map((item) => {
+        //     if (item.id === id) {
+        //         setMedicine(item.brand);
+        //         return;
+        //     } else return;
+        // });
     };
 
     return (
         <Container>
             <Input
-                value={value}
+                value={medicine}
                 onBlur={() => {}}
-                onChangeText={(text) => onSearch(text)}
+                // onChangeText={_.debounce((text) => console.log('debouncing', text), 2000)}
+                onChangeText={(text) => onSearchMedicine(text)}
+                placeholder="약 입력"
             />
-
-            {searching && (
-                <SerchDropList filtered={filtered} onPress={selectItem} />
+            {searchingMedicine && (
+                <SearchDropList
+                    filtered={filtered}
+                    selectItem={selectMedicine}
+                    searchType="name"
+                />
+            )}
+            <Input
+                value={brand}
+                onBlur={() => {}}
+                onChangeText={(text) => onSearchBrand(text)}
+                placeholder="브랜드 입력"
+            />
+            {searchingBrand && (
+                <SearchDropList
+                    filtered={filtered}
+                    selectItem={selectBrand}
+                    searchType="brand"
+                />
             )}
             <Button title="저장" onPress={getMedicineData} />
         </Container>

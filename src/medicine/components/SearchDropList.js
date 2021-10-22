@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { TouchableOpacity, View } from "react-native";
 import styled from "styled-components";
 
@@ -15,19 +15,25 @@ const StyledText = styled.Text`
     color: #000;
 `;
 
-const SerchDropList = ({ filtered, onPress }) => {
+const SearchDropList = ({ filtered, selectItem, searchType }) => {
+    // const [name, setName] = useState([]);
     const _onPress = (id) => {
-        onPress(id);
+        selectItem(id);
     };
+
+    // ✨ 브랜드 이름이 겹칠 경우를 차단
+    const passSameBrand = () => {};
     return (
         <View>
             {filtered.map((item) => {
                 return (
                     <TouchableOpacity key={item.id} onPress={_onPress(item.id)}>
                         <View>
-                            <StyledText>
-                                {item.brand} - {item.name}
-                            </StyledText>
+                            {searchType === "name" ? (
+                                <StyledText>{item.name}</StyledText>
+                            ) : (
+                                <StyledText>{item.brand}</StyledText>
+                            )}
                         </View>
                     </TouchableOpacity>
                 );
@@ -36,4 +42,4 @@ const SerchDropList = ({ filtered, onPress }) => {
     );
 };
 
-export default SerchDropList;
+export default SearchDropList;

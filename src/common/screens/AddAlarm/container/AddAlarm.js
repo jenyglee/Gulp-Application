@@ -82,15 +82,6 @@ const AddMedicine = ({ navigation }) => {
         return () => removeFocusEvent();
     }, []);
 
-    // ✨ 약 로컬에 저장하기
-    const storeData = async (item) => {
-        try {
-            await AsyncStorage.setItem("medicine", JSON.stringify(item));
-        } catch (error) {
-            throw error;
-        }
-    };
-
     // ✨로컬에서 약 가져오기
     const getData = async () => {
         try {
@@ -110,6 +101,15 @@ const AddMedicine = ({ navigation }) => {
             storeData(copy);
             setMedicineList(copy);
         } catch (error) {}
+    };
+
+    // ✨ 약을 삭제하고 나면 "medicine"로컬에 다시 저장
+    const storeData = async (item) => {
+        try {
+            await AsyncStorage.setItem("medicine", JSON.stringify(item));
+        } catch (error) {
+            throw error;
+        }
     };
 
     // ✨요일 전채선택
@@ -149,14 +149,16 @@ const AddMedicine = ({ navigation }) => {
 
     //  ✨빈칸체크
     const ConfirmValue = async (medicine, time, day) => {
-        // console.log(time);
+        // ① 복용중인 영양제에 등록된 약이 있는지
         if (Object.values(medicine).length != 0) {
-            // console.log(typeof time);
+            // ② 시간을 설정했는지
             if (time !== "") {
+                // ③ 체크된 요일이 하나라도 존재하는지
                 const result = day.some((item) => {
                     return item.checked;
                 });
                 if (result) {
+                    // ①②③ 모두 통과 시 true 반환
                     return true;
                 } else return false;
             } else return false;
@@ -166,10 +168,10 @@ const AddMedicine = ({ navigation }) => {
     //  ✨ 알람 저장
     const saveMedicine = async () => {
         // 빈칸 검수
-        const bool = await ConfirmValue(medicineList, time, week);
+        const confirmed = await ConfirmValue(medicineList, time, week);
 
-        // 빈칸 검수가 완료된 경우 실행
-        if (bool) {
+        // 빈칸 검수가 완료된 경우 저장 진행
+        if (confirmed) {
             const ID = Date.now();
             {
                 // ⓵ 체크된 요일의 id만 가져와 빈 배열(weekCheckList)에 넣기
@@ -204,7 +206,7 @@ const AddMedicine = ({ navigation }) => {
             } catch (error) {
                 Alert.alert(error);
             }
-        } else if (!bool) {
+        } else if (!confirmed) {
             Alert.alert("설정이 전부 입력되었는지 확인해주세요.");
         }
     };
