@@ -165,9 +165,11 @@ export default function AlarmList({ navigation }) {
 
     // ✨복용완료
     const toggleTask = (id) => {
+        // 🪲 완료시 알람을 가져와서 변경해주는데 전체알람쪽이 사라진다.
         var copy = Object.assign({}, alarm);
         copy[id].completed = !copy[id].completed;
-        storeData(copy);
+        setAlarm(copy);
+        confirmList(copy);
         allCompleted();
     };
 
@@ -183,6 +185,7 @@ export default function AlarmList({ navigation }) {
                     const parseDate = JSON.parse(loadedDate);
                     const todayDate = `${year}-${month + 1}-${date}`; // "2021-10-25"
                     if (parseDate !== todayDate) {
+                        // console.log(parseDate, todayDate);
                         plusDate();
                         plusDateMAX();
                         completeAlarm();
@@ -192,14 +195,9 @@ export default function AlarmList({ navigation }) {
                         );
                         return;
                     } else {
-                        console.log(parseDate, todayDate);
+                        // console.log(parseDate, todayDate);
                         return;
                     }
-                    // if( 어싱크스토리지("date")의 값이 오늘 날짜(2021-10-25)가 아니면 ){
-
-                    // 카운트증가, 완료모달노출 진행
-                    // 어싱크스토리지("date")의 값을 오늘 날짜로 바꾼다.
-                    // }
                 }
             }
         }
