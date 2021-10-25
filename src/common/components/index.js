@@ -1,4 +1,5 @@
 import Button from "./Button";
+import ButtonFloating from "./ButtonFloating";
 import ButtonSmall from "./ButtonSmall";
 import TextButton from "./TextButton";
 import Input from "./Input";
@@ -11,6 +12,7 @@ import Notice from "./Notice";
 
 export {
     Button,
+    ButtonFloating,
     ButtonSmall,
     TextButton,
     Input,

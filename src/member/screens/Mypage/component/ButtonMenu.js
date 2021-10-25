@@ -41,7 +41,7 @@ const ButtonMenu = ({
     showGradeTable,
     showUserInfo,
     logout,
-    removeUser,
+    onRemoveUser,
     setIsSignin,
 }) => {
     const width = Dimensions.get("window").width;
@@ -80,12 +80,7 @@ const ButtonMenu = ({
                     </ListContainer>
                 </ListBtn>
                 <Line />
-                <ListBtn
-                    onPress={() => {
-                        removeUser();
-                        // setIsSignin(false);
-                    }}
-                >
+                <ListBtn onPress={onRemoveUser}>
                     <ListContainer
                         style={{
                             borderBottomWidth: 0,

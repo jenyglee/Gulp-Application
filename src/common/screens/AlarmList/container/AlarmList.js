@@ -3,7 +3,6 @@ import styled from "styled-components/native";
 import { View, Text, ScrollView, Dimensions, Alert } from "react-native";
 import { StatusBar } from "expo-status-bar";
 import { icons } from "@/icons";
-import Button from "@components/Button";
 import AlarmMenu from "@/common/components/modal/AlarmMenu";
 import Grade from "@/common/screens/AlarmList/component/Grade";
 import Alarm from "@/common/screens/AlarmList/component/Alarm";
@@ -12,10 +11,7 @@ import ButtonFilter from "@/common/screens/AlarmList/component/ButtonFilter";
 import { GradeTable } from "@components/modal/index";
 import CompleteModal from "@screens/AlarmList/component/CompleteModal";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { signout } from "@/member/api/memberApi";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-// import { showGradeTable } from "@/common/helper/helper"; // 등급보기 헬퍼
-// import { signout, signConfirm } from "@/firebase";
 import { FloatingAction } from "react-native-floating-action";
 
 const Wrap = styled.ScrollView`
@@ -279,57 +275,6 @@ export default function AlarmList({ navigation }) {
                         <ProfileName>약을 추가해주세요.</ProfileName>
                     )}
 
-                    <View
-                        style={{
-                            marginTop: 50,
-                        }}
-                    >
-                        <Button
-                            onPress={() => {
-                                navigation.navigate("Signin");
-                            }}
-                            containerStyle={{
-                                backgroundColor: "#f0f0f0",
-                            }}
-                            textStyle={{
-                                color: "#666",
-                            }}
-                            title="(테스트용)로그인"
-                        />
-                        <Button
-                            onPress={signout}
-                            containerStyle={{
-                                backgroundColor: "#f0f0f0",
-                            }}
-                            textStyle={{
-                                color: "#666",
-                            }}
-                            title="(테스트용)로그아웃"
-                        />
-                        <Button
-                            onPress={() => {
-                                plusDate();
-                                plusDateMAX();
-                            }}
-                            containerStyle={{
-                                backgroundColor: "#f0f0f0",
-                            }}
-                            textStyle={{
-                                color: "#666",
-                            }}
-                            title="(테스트용)복용완료"
-                        />
-                        {/* <Button
-                            onPress={today}
-                            containerStyle={{
-                                backgroundColor: "#f0f0f0",
-                            }}
-                            textStyle={{
-                                color: "#666",
-                            }}
-                            title="(테스트용)오늘의 요일"
-                        /> */}
-                    </View>
                     {gradeTable ? (
                         // 🪲 헬퍼를 뽑는 법을 모르겠음...
                         // <GradeTable onPress={showGradeTable(bool)} />

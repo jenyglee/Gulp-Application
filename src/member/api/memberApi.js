@@ -13,11 +13,12 @@ const signin = async (member) => {
             data: member,
         });
 
-        if (response.data.statusCodeValue !== 200) {
+        if (response.data.statusCodeValue === 200) {
+            console.log(response.headers.authorization);
+            await AsyncStorage.setItem("token", response.headers.authorization);
+        } else if (response.data.statusCodeValue !== 200) {
             throw new Error(response.data.body.message);
         }
-        console.log(response.headers.authorization);
-        await AsyncStorage.setItem("token", response.headers.authorization);
     } catch (error) {
         throw error;
     }
@@ -53,9 +54,9 @@ const signup = async (member) => {
         });
         console.log(response);
 
-        // if (response.data?.statusCodeValue !== 200) {
-        //     throw new Error(response.data.body.message);
-        // }
+        if (response.data?.statusCodeValue !== 200) {
+            throw new Error(response.data.body.message);
+        }
     } catch (error) {
         throw error;
     }
@@ -66,12 +67,15 @@ const removeUser = async () => {
     const token = await AsyncStorage.getItem("token");
     console.log(token);
 
-    // const response = await axios({
-    //     method : "DELETE",
-    //     url: url +
-    // })
+    const response = await axios({
+        method: "DELETE",
+        url: url + "member",
+        headers: { authorization: token },
+    });
+    console.log(response);
 };
 
+// ✨ 이메일 중복확인
 const emailValidation = async (email) => {
     try {
         const response = await axios({
@@ -88,4 +92,15 @@ const emailValidation = async (email) => {
     }
 };
 
-export { signin, logout, signup, removeUser, emailValidation };
+// ✨회원정보 변경
+const updateUser = async (member) => {
+    try {
+        const response = await axios({
+            method: "PUT",
+            url: url + "member",
+            data: member,
+        });
+        console.log(response.config.data);
+    } catch (error) {}
+};
+export { signin, logout, signup, removeUser, emailValidation, updateUser };

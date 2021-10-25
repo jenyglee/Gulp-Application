@@ -257,9 +257,7 @@ const SignupContainer00 = ({ navigation }) => {
                         }
                     }}
                     btnWrapStyle={{
-                        width: width - 48,
-                        position: "absolute",
-                        bottom: 40,
+                        width: width,
                     }}
                     containerStyle={{
                         backgroundColor: allValue

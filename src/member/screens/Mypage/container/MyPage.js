@@ -56,7 +56,7 @@ const MyPageContainer = ({ navigation }) => {
                             navigation.navigate("CustomInfo");
                         }}
                         logout={logout}
-                        removeUser={removeUser}
+                        onRemoveUser={removeUser}
                         setIsSignin={setIsSignin}
                     />
                     {gradeTable ? (

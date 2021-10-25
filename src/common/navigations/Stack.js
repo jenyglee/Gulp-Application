@@ -1,5 +1,5 @@
 import React, { useContext } from "react";
-import { Image, TouchableOpacity, View } from "react-native";
+import { Image, View, TouchableWithoutFeedback } from "react-native";
 import styled, { ThemeContext } from "styled-components";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { createStackNavigator } from "@react-navigation/stack";
@@ -43,6 +43,11 @@ const backImage = {
 
 const Icon = styled.Image`
     width: 30px;
+`;
+
+const rightText = styled.Text`
+    font-size: 16px;
+    color: ${({ theme }) => theme.main};
 `;
 
 const Tab = createBottomTabNavigator();
@@ -171,7 +176,7 @@ const HomeStackNav = () => {
             <HomeStack.Screen
                 name="AddAlarm"
                 component={AddAlarm}
-                options={() => {
+                options={({ navigation }) => {
                     return {
                         ...option,
                         ...backImage,
@@ -181,6 +186,22 @@ const HomeStackNav = () => {
                                 header: 0,
                             },
                             backgroundColor: "#fff",
+                        },
+                        headerRight: () => {
+                            return (
+                                <TouchableWithoutFeedback
+                                    onPress={() => {
+                                        navigation.navigate("AlarmList");
+                                    }}
+                                >
+                                    <View>
+                                        <Icon
+                                            source={icons30px.home}
+                                            resizeMode="contain"
+                                        />
+                                    </View>
+                                </TouchableWithoutFeedback>
+                            );
                         },
                     };
                 }}
@@ -237,7 +258,7 @@ const HomeStackNav = () => {
 
                         headerRight: () => {
                             return (
-                                <TouchableOpacity
+                                <TouchableWithoutFeedback
                                     onPress={() => {
                                         navigation.navigate("AlarmList");
                                     }}
@@ -248,7 +269,7 @@ const HomeStackNav = () => {
                                             resizeMode="contain"
                                         />
                                     </View>
-                                </TouchableOpacity>
+                                </TouchableWithoutFeedback>
                             );
                         },
                     };
@@ -271,7 +292,7 @@ const HomeStackNav = () => {
 
                         headerRight: () => {
                             return (
-                                <TouchableOpacity
+                                <TouchableWithoutFeedback
                                     onPress={() => {
                                         navigation.navigate("AlarmList");
                                     }}
@@ -282,7 +303,7 @@ const HomeStackNav = () => {
                                             resizeMode="contain"
                                         />
                                     </View>
-                                </TouchableOpacity>
+                                </TouchableWithoutFeedback>
                             );
                         },
                     };
@@ -306,7 +327,7 @@ const HomeStackNav = () => {
                         },
                         headerRight: () => {
                             return (
-                                <TouchableOpacity
+                                <TouchableWithoutFeedback
                                     onPress={() => {
                                         navigation.navigate("AlarmList");
                                     }}
@@ -317,7 +338,7 @@ const HomeStackNav = () => {
                                             resizeMode="contain"
                                         />
                                     </View>
-                                </TouchableOpacity>
+                                </TouchableWithoutFeedback>
                             );
                         },
                     };
@@ -341,7 +362,7 @@ const HomeStackNav = () => {
                         },
                         headerRight: () => {
                             return (
-                                <TouchableOpacity
+                                <TouchableWithoutFeedback
                                     onPress={() => {
                                         navigation.navigate("AlarmList");
                                     }}
@@ -352,7 +373,7 @@ const HomeStackNav = () => {
                                             resizeMode="contain"
                                         />
                                     </View>
-                                </TouchableOpacity>
+                                </TouchableWithoutFeedback>
                             );
                         },
                     };
@@ -376,7 +397,7 @@ const HomeStackNav = () => {
                         },
                         headerRight: () => {
                             return (
-                                <TouchableOpacity
+                                <TouchableWithoutFeedback
                                     onPress={() => {
                                         navigation.navigate("AlarmList");
                                     }}
@@ -387,7 +408,7 @@ const HomeStackNav = () => {
                                             resizeMode="contain"
                                         />
                                     </View>
-                                </TouchableOpacity>
+                                </TouchableWithoutFeedback>
                             );
                         },
                     };

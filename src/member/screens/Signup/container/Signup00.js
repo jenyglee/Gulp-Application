@@ -146,9 +146,7 @@ const Signup00 = ({ navigation }) => {
                     }
                 }}
                 btnWrapStyle={{
-                    width: width - 48,
-                    position: "absolute",
-                    bottom: 40,
+                    width: width,
                 }}
                 containerStyle={{
                     backgroundColor: allAgree[0].checked

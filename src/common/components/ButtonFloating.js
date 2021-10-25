@@ -3,9 +3,7 @@ import styled from "styled-components/native";
 
 const BtnWrap = styled.TouchableOpacity`
     width: 100%;
-    height: 78px;
-    position: absolute;
-    bottom: 0;
+    height: 50px;
 `;
 
 const Container = styled.View`
@@ -14,15 +12,16 @@ const Container = styled.View`
     background-color: ${({ theme }) => theme.btnBackground};
     justify-content: center;
     align-items: center;
+    border-radius: 12px;
 `;
 const StyledText = styled.Text`
     font-size: 16px;
     font-weight: 900;
-    margin-bottom: 20px;
+
     color: ${({ theme }) => theme.btnText};
 `;
 
-const Button = ({
+const ButtonFloating = ({
     onPress,
     title,
     btnWrapStyle,
@@ -38,4 +37,4 @@ const Button = ({
     );
 };
 
-export default Button;
+export default ButtonFloating;

@@ -1,7 +1,7 @@
 import React, { useState, useRef, useContext } from "react";
 import { Alert, Dimensions } from "react-native";
 import styled, { ThemeContext } from "styled-components";
-import { Button, TextButton } from "@components/index";
+import { ButtonFloating, TextButton } from "@components/index";
 import { InputWithIcon } from "@/member/screens/Signin/component/index";
 import { icons20px } from "@/icons";
 import { logo } from "@/images";
@@ -112,7 +112,7 @@ const SigninContainer = ({ navigation }) => {
                     }}
                 />
 
-                <Button title="로그인" onPress={SigninButtonPress} />
+                <ButtonFloating title="로그인" onPress={SigninButtonPress} />
                 <TextButton
                     title="비밀번호 찾기"
                     btnStyle={{

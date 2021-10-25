@@ -22,7 +22,6 @@ const ContentArea = styled.View`
     position: absolute;
     width: 100%;
     top: ${({ height }) => height / 5}px;
-    /* top: 100px; */
 `;
 
 const StyledTitle = styled.Text`
@@ -40,12 +39,6 @@ const StyledImage = styled.Image`
     width: 100%;
     height: 132px;
     margin-top: 22px;
-`;
-
-const ButtonArea = styled.View`
-    width: 100%;
-    position: absolute;
-    bottom: 40px;
 `;
 
 const SignupContainer04 = ({ navigation }) => {
@@ -70,12 +63,14 @@ const SignupContainer04 = ({ navigation }) => {
                     <StyledSubTitle>받으실 수 있어요!</StyledSubTitle>
                     <StyledImage source={illust.signup} resizeMode="contain" />
                 </ContentArea>
-                <ButtonArea>
-                    <Button
-                        title="로그인하기"
-                        onPress={() => navigation.navigate("Signin")}
-                    />
-                </ButtonArea>
+                <Button
+                    title="로그인하기"
+                    btnWrapStyle={{
+                        width: width,
+                        alignSelf: "center",
+                    }}
+                    onPress={() => navigation.navigate("Signin")}
+                />
             </ContentContainer>
         </Container>
     );

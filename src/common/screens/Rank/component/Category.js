@@ -20,11 +20,20 @@ const CategoryText = styled.Text`
 
 const Category = ({ selectedItem, setSelectedItem, categoryList }) => {
     const renderItem = ({ item }) => {
+        if (item.id === 10) {
+        }
         return (
             <TouchableOpacity
                 onPress={() => {
                     setSelectedItem(item.id);
                 }}
+                style={
+                    item.id === 10
+                        ? {
+                              paddingRight: 40,
+                          }
+                        : {}
+                }
             >
                 <CategoryWrap>
                     <CategoryText selectedItem={selectedItem} item={item}>
@@ -44,6 +53,8 @@ const Category = ({ selectedItem, setSelectedItem, categoryList }) => {
                 horizontal={true}
                 style={{
                     paddingLeft: 24,
+                    paddingRight: 200,
+                    // marginRight: 100,
                 }}
                 // ListHeaderComponent={ContentThatGoesAboveTheFlatList}
                 // ListFooterComponent={ContentThatGoesBelowTheFlatList}

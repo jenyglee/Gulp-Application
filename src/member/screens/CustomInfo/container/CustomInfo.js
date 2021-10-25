@@ -6,6 +6,7 @@ import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view
 import { Button, Input, InputDisabled } from "@components/index";
 import { removeWhiteSpace } from "@/util";
 import { View, Alert, Animated, Dimensions } from "react-native";
+import { updateUser } from "@/member/api/memberApi";
 // import { createUser } from "@/firebase";
 
 const Container = styled.View`
@@ -39,33 +40,6 @@ const SignupContainer00 = ({ navigation }) => {
     const [allValue, setAllValue] = useState(false);
     const refPasswordConfirm = useRef(null);
 
-    // ✨ 닉네임 확인
-    const confirmNickname = () => {
-        if (nickname != "") {
-            navigation.goBack();
-        } else {
-            Alert.alert("닉네임을 입력해주세요.");
-        }
-    };
-
-    // ✨ 패스워드 확인
-    const confirmPassword = async (root) => {
-        if (passwordConfirm != "") {
-            if (password.length >= 6 || passwordConfirm.length >= 6) {
-                if (password == passwordConfirm) {
-                    await handleSignupBtnPress();
-                    navigation.navigate(root);
-                } else {
-                    Alert.alert("비밀번호가 일치하지 않습니다.");
-                }
-            } else {
-                Alert.alert("비밀번호는 6자리 이상입니다.");
-            }
-        } else {
-            Alert.alert("비밀번호를 한번 더 입력해주세요.");
-        }
-    };
-
     useEffect(() => {
         const removeFocusEvent = navigation.addListener("focus", () => {
             getUser();
@@ -80,6 +54,30 @@ const SignupContainer00 = ({ navigation }) => {
         const user = jwt_decode(await AsyncStorage.getItem("token"));
         setEmail(user.email);
         setNickname(user.nickname);
+    };
+
+    // ✨ 닉네임 확인
+    const confirmValue = async () => {
+        if (nickname != "") {
+            if (
+                (password.length >= 6 && passwordConfirm.length >= 6) ||
+                (password.length == 0 && passwordConfirm.length == 0)
+            ) {
+                // if 패스워드와 패스워드컨펌이 6자리 이상이라면
+                if (password == passwordConfirm) {
+                    // if 패스워드와 패스워드컨펌이 같다면
+                    await updateUser({ nickname, password });
+                    Alert.alert("회원정보 변경이 완료되었습니다.");
+                    navigation.goBack();
+                } else {
+                    Alert.alert("비밀번호가 일치하지 않습니다.");
+                }
+            } else {
+                Alert.alert("비밀번호는 6자리 이상입니다.");
+            }
+        } else {
+            Alert.alert("닉네임을 입력해주세요.");
+        }
     };
 
     return (
@@ -160,7 +158,7 @@ const SignupContainer00 = ({ navigation }) => {
                 </View>
                 <Button
                     title="저장하기"
-                    onPress={confirmNickname}
+                    onPress={confirmValue}
                     btnWrapStyle={{
                         width: width - 48,
                         position: "absolute",

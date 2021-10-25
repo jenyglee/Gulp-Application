@@ -10,6 +10,7 @@ import { addMedicine } from "@/medicine/api/medicineApi";
 const Container = styled.View`
     width: 100%;
     height: 100%;
+    background-color: red;
 `;
 
 const AddMedicine = ({ navigation }) => {

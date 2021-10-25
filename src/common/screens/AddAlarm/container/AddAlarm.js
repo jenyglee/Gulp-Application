@@ -281,9 +281,7 @@ const AddMedicine = ({ navigation, route }) => {
                     </StyledForm>
                 </Container>
             </ScrollView>
-            <ButtonArea width={width}>
-                <Button title="저장하기" onPress={saveMedicine} />
-            </ButtonArea>
+            <Button title="저장하기" onPress={saveMedicine} />
         </>
     );
 };
