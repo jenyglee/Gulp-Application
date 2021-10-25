@@ -15,19 +15,16 @@ const StyledText = styled.Text`
     color: #000;
 `;
 
-const SearchDropList = ({ filtered, selectItem, searchType }) => {
-    // const [name, setName] = useState([]);
-    const _onPress = (id) => {
-        selectItem(id);
-    };
-
-    // ✨ 브랜드 이름이 겹칠 경우를 차단
-    const passSameBrand = () => {};
+const SearchDropList = ({ filtered, onSelectItem, searchType }) => {
     return (
         <View>
             {filtered.map((item) => {
                 return (
-                    <TouchableOpacity key={item.id} onPress={_onPress(item.id)}>
+                    <TouchableOpacity
+                        key={item.id}
+                        onPress={onSelectItem.bind(undefined, item.id)}
+                        // naming convention 이름짓는
+                    >
                         <View>
                             {searchType === "name" ? (
                                 <StyledText>{item.name}</StyledText>

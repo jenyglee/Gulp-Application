@@ -20,38 +20,14 @@ const StyledImage = styled.Image`
     /* background-color: red; */
 `;
 
-const ButtonFilter = ({ onPress }) => {
-    const [filtered, setFiltered] = useState(false);
-    const _onPress = (bool) => {
-        onPress(bool);
-        setFiltered(!filtered);
-    };
+const ButtonFilter = ({ filtered, onPress }) => {
     return (
-        <>
-            {filtered ? (
-                <BtnWrap
-                    onPress={() => {
-                        _onPress(true);
-                    }}
-                >
-                    <Container>
-                        <StyledText>All</StyledText>
-                        <StyledImage source={icons20px.filter} />
-                    </Container>
-                </BtnWrap>
-            ) : (
-                <BtnWrap
-                    onPress={() => {
-                        _onPress(false);
-                    }}
-                >
-                    <Container>
-                        <StyledText>Today</StyledText>
-                        <StyledImage source={icons20px.filter} />
-                    </Container>
-                </BtnWrap>
-            )}
-        </>
+        <BtnWrap onPress={onPress}>
+            <Container>
+                <StyledText>{filtered ? "Today" : "All"}</StyledText>
+                <StyledImage source={icons20px.filter} />
+            </Container>
+        </BtnWrap>
     );
 };
 

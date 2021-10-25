@@ -70,7 +70,7 @@ const Calendar = ({ navigation }) => {
     const width = Dimensions.get("window").width;
     const height = Dimensions.get("window").height;
     const theme = useContext(ThemeContext);
-    const [tasks, setTasks] = useState({});
+    const [alarm, setAlarm] = useState({});
     const [foundMedicine, setFoundMedicine] = useState(false); // 약 리스트 유무
     const [completed, setCompleted] = useState(true); // 복용 완료 여부
     const [isSignin, setIsSignin] = useState(true); // 캘린더 노출(로그인시)
@@ -96,8 +96,8 @@ const Calendar = ({ navigation }) => {
 
     // ✨ 등록된 알람 가져오기
     const getData = async () => {
-        const loadedData = await AsyncStorage.getItem("tasks");
-        setTasks(JSON.parse(loadedData));
+        const loadedData = await AsyncStorage.getItem("alarm");
+        setAlarm(JSON.parse(loadedData));
 
         if (Object.values(JSON.parse(loadedData)).length == 0) {
             setFoundMedicine(false);
@@ -111,12 +111,12 @@ const Calendar = ({ navigation }) => {
             {isSignin ? (
                 <Container width={width} height={height} isSignin={isSignin}>
                     {/* <CalendarTitle /> */}
-                    <CalendarTable tasks={tasks} />
+                    <CalendarTable alarm={alarm} />
                     <HistoryContainer>
                         <Date>8월 18일</Date>
                     </HistoryContainer>
                     {foundMedicine
-                        ? Object.values(tasks).map((item) => {
+                        ? Object.values(alarm).map((item) => {
                               return (
                                   <Alarm key={item.id}>
                                       <TimeContainer>

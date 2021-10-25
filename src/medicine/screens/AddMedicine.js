@@ -32,6 +32,7 @@ const AddMedicine = ({ navigation }) => {
             // ① 이미 등록된 약인지 확인
             const loadedData = await AsyncStorage.getItem("medicine");
             const Item = JSON.parse(loadedData);
+            // 🍎 값이 있을 경우 알럿 뜨게 하기(이건 api에서도 또 체크해야함.)
             let duplicate = Object.values(Item).some((v) => {
                 const sameBrand = () => {
                     if (v.brand === brand) {
@@ -109,37 +110,25 @@ const AddMedicine = ({ navigation }) => {
     }, 300);
 
     // ✨ 항목에 있는 약을 인풋에 입력
-    const selectMedicine = (id) => {
-        // console.log(id);
-        // filtered.map((item) => {
-        //     if (item.id === id) {
-        //         setMedicine(item.name);
-        //         return;
-        //     } else return;
-        // });
+    const handleSelectMedicine = (id) => {
+        filtered.map((item) => {
+            if (item.id === id) {
+                setMedicine(item.name);
+                return;
+            } else return;
+        });
     };
 
     // ✨ 항목에 있는 브랜드를 인풋에 입력
-    const selectBrand = (id) => {
+    const handleSelectBrand = (id) => {
         // console.log(id);
-        // filtered.map((item) => {
-        //     if (item.id === id) {
-        //         setMedicine(item.brand);
-        //         return;
-        //     } else return;
-        // });
+        filtered.map((item) => {
+            if (item.id === id) {
+                setBrand(item.brand);
+                return;
+            } else return;
+        });
     };
-
-    // ✨
-    // const passSameMedicine = () => {
-    //     // 목표 : 같은 이름의 값을 삭제하기
-    //     //  도출된 오브젝트들을 배열에 넣고 돌려서 같은 값이 있으면 삭제해서 저장
-    //     // 이중 반복문.
-    //     filtered.map((item) => {
-    //         const currElem = item.name;
-    //         console.log(currElem);
-    //     });
-    // };
 
     return (
         <Container>
@@ -152,7 +141,7 @@ const AddMedicine = ({ navigation }) => {
             {searchingMedicine && (
                 <SearchDropList
                     filtered={filtered}
-                    selectItem={selectMedicine}
+                    onSelectItem={handleSelectMedicine}
                     searchType="name"
                 />
             )}
@@ -165,7 +154,7 @@ const AddMedicine = ({ navigation }) => {
             {searchingBrand && (
                 <SearchDropList
                     filtered={filtered}
-                    selectItem={selectBrand}
+                    onSelectItem={handleSelectBrand}
                     searchType="brand"
                 />
             )}

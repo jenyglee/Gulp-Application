@@ -26,12 +26,16 @@ const addMedicine = async (medicine) => {
                 "medicine",
                 JSON.stringify({ ...Item, ...newMedicine })
             );
+        } else if (response.status === 500) {
+            // ❓👀 중복된 약이 있을땐 500이 뜨는데, 왜 알럿이 안뜨는 걸까?
+            Alert.alert("500");
         }
     } catch (error) {
-        // ❓👀 중복된 약이 있을땐 500이 뜨는데, 왜 알럿이 안뜨는 걸까?
         Alert.alert(error);
     }
 };
+
+// 동일한 알람에서 같은id의 브랜드 안에 같은id의 약이있으면 에러
 
 // ✨약 삭제
 const deleteMedicine = async (token) => {
@@ -44,7 +48,7 @@ const deleteMedicine = async (token) => {
 
         if (response.status === 200) {
             // ❓👀 등록된 약을 삭제해야 하는데, 어느 경로로 들어가야 할까?
-            console.log(response.status);
+            console.log(response);
         }
     } catch (error) {}
 };

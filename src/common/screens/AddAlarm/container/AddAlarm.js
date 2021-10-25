@@ -47,13 +47,12 @@ const ButtonArea = styled.View`
     bottom: 40px;
 `;
 
-const AddMedicine = ({ navigation }) => {
+const AddMedicine = ({ navigation, route }) => {
     const width = Dimensions.get("window").width;
     const height = Dimensions.get("window").height;
     const theme = useContext(ThemeContext);
     const allCheckWeek = [{ id: 0, day: "All", checked: false }];
     const checkWeek = [
-        // { id: 0, day: "매일", check: false },
         { id: 1, day: "월", checked: false },
         { id: 2, day: "화", checked: false },
         { id: 3, day: "수", checked: false },
@@ -62,6 +61,7 @@ const AddMedicine = ({ navigation }) => {
         { id: 6, day: "토", checked: false },
         { id: 7, day: "일", checked: false },
     ];
+
     // const tempData = {
     //     1: { id: 1, name: "비타민c" },
     //     2: { id: 2, name: "철분" },
@@ -69,15 +69,19 @@ const AddMedicine = ({ navigation }) => {
     //     4: { id: 4, name: "아르기닌" },
     //     5: { id: 5, name: "고려은단" },
     // };
+
     const [weekAll, setWeekAll] = useState(allCheckWeek);
     const [week, setWeek] = useState(checkWeek);
     const weekCheckList = []; // 체크된 요일
     const [time, setTime] = useState("");
-    // const [medicineList, setMedicineList] = useState(tempData);
     const [medicineList, setMedicineList] = useState({});
+    // const [medicineList, setMedicineList] = useState(tempData);
 
     useEffect(() => {
         const removeFocusEvent = navigation.addListener("focus", () => {
+            // 🍎 알람변경 시 등록된 알람 정보 가져와서 넣어주기
+            // const alarmId = route.params?.alarmId;
+            // getData(alarmId);
             getData();
         });
         return () => removeFocusEvent();
@@ -86,6 +90,7 @@ const AddMedicine = ({ navigation }) => {
     // ✨로컬에서 약 가져오기
     const getData = async () => {
         try {
+            // const alarm = await AsyncStorage.getItem("alarm");
             const loadedData = await AsyncStorage.getItem("medicine");
             setMedicineList(JSON.parse(loadedData));
         } catch (error) {
@@ -95,15 +100,13 @@ const AddMedicine = ({ navigation }) => {
 
     // ✨ 약 삭제
     const deleteTask = async (id) => {
-        // const copy = Object.assign({}, medicineList);
-        // delete copy[id];
-        // try {
-        //     // await storeData(copy, "medicine");
-        //     storeData(copy);
-        //     setMedicineList(copy);
-        // } catch (error) {}
-        const token = await AsyncStorage.getItem("token");
-        await deleteMedicine(token);
+        const copy = Object.assign({}, medicineList);
+        delete copy[id];
+        try {
+            // await storeData(copy, "medicine");
+            storeData(copy);
+            setMedicineList(copy);
+        } catch (error) {}
     };
 
     // ✨ 약을 삭제하고 나면 "medicine"로컬에 다시 저장
@@ -196,16 +199,16 @@ const AddMedicine = ({ navigation }) => {
                 },
             };
             try {
-                const value = await AsyncStorage.getItem("tasks");
-                if (value !== null) {
-                    const tasks = JSON.parse(value);
-                    await AsyncStorage.setItem(
-                        "tasks",
-                        JSON.stringify({ ...tasks, ...newTask })
-                    );
-                    // console.log(newTask);
-                    navigation.navigate("AlarmList");
-                }
+                const value = await AsyncStorage.getItem("alarm");
+                // if (value !== null) {
+                // }
+                const alarm = JSON.parse(value);
+                await AsyncStorage.setItem(
+                    "alarm",
+                    JSON.stringify({ ...alarm, ...newTask })
+                );
+                // console.log(newTask);
+                navigation.navigate("AlarmList");
             } catch (error) {
                 Alert.alert(error);
             }

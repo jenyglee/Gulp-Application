@@ -41,12 +41,12 @@ const Line = styled.View`
     background-color: ${({ theme }) => theme.line};
 `;
 const AlarmMenu = ({
-    menuVisible,
-    setMenuVisible,
+    isVisibleMenu,
+    setIsVisibleMenu,
     editMedicine,
     deleteTask,
 }) => {
-    // const { menuVisible, setMenuVisible } = props;
+    // const { isVisibleMenu, setIsVisibleMenu } = props;
     const width = Dimensions.get("screen").width;
     const screenHeight = Dimensions.get("screen").height;
     const panY = useRef(new Animated.Value(screenHeight)).current;
@@ -85,20 +85,20 @@ const AlarmMenu = ({
     ).current;
 
     useEffect(() => {
-        if (menuVisible) {
+        if (isVisibleMenu) {
             resetBottomSheet.start();
         }
-    }, [menuVisible]);
+    }, [isVisibleMenu]);
 
     const closeModal = () => {
         closeBottomSheet.start(() => {
-            setMenuVisible(false);
+            setIsVisibleMenu(false);
         });
     };
 
     return (
         <Modal
-            visible={menuVisible}
+            visible={isVisibleMenu}
             animationType={"fade"}
             transparent
             statusBarTranslucent

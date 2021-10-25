@@ -67,30 +67,38 @@ export default function AlarmList({ navigation }) {
     const height = Dimensions.get("window").height;
     const insets = useSafeAreaInsets();
     const [selectedTaskKey, setSelectedTaskKey] = useState();
-    const [tasks, setTasks] = useState({});
+    const [alarm, setAlarm] = useState({});
     const [countTotal, setCountTotal] = useState(0);
     const [count, setCount] = useState(0);
+    const [taskTotal, setTaskTotal] = useState(0);
     const [gradeTable, setGradeTable] = useState(false); // 등급표
-    const [menuVisible, setMenuVisible] = useState(false); // 알람메뉴 노출/숨김
-    const [isVisibleComplete, setIsVisibleComplete] = useState(false); //전체복용 완료
-    const [foundMedicine, setFoundMedicine] = useState(false); // 약 리스트 유무
+    const [isVisibleMenu, setIsVisibleMenu] = useState(false); // 알람메뉴 노출/숨김
+    const [isVisibleCompleteModal, setIsVisibleCompleteModal] = useState(false); //전체복용 완료
+    const [isVisibleAlarm, setIsVisibleAlarm] = useState(false); // 약 리스트 유무
+    const [filtered, setFiltered] = useState(true); // Today <-> All 필터링
 
     // ✨ 로그인했는지 확인 + 약 추가 후 메인으로 복귀
     useEffect(() => {
         const removeFocusEvent = navigation.addListener("focus", () => {
             getData();
+            setFiltered(true);
         });
         return () => {
             removeFocusEvent();
         };
     }, []);
 
+    // ✨ Today <-> All 필터링 됐을 때
+    useEffect(() => {
+        getData();
+    }, [filtered]);
+
     // ✨ 로컬에 저장하기
-    const storeData = async (tasks) => {
+    const storeData = async (alarm) => {
         try {
-            await AsyncStorage.setItem("tasks", JSON.stringify(tasks));
-            setTasks(tasks);
-            confirmList(tasks);
+            await AsyncStorage.setItem("alarm", JSON.stringify(alarm));
+            setAlarm(alarm);
+            confirmList(alarm);
         } catch (error) {
             throw error;
         }
@@ -98,39 +106,43 @@ export default function AlarmList({ navigation }) {
 
     // ✨로컬에서 가져오기
     const getData = async () => {
-        const loadedData = await AsyncStorage.getItem("tasks");
+        console.log(filtered);
+        const loadedData = await AsyncStorage.getItem("alarm");
         const parseData = JSON.parse(loadedData);
-        const result = await setAlarmCompleted(parseData);
-        setTasks(result);
+        const date = new Date();
+        // const day = date.getDay(); // 0 : 일요일
+        const day = 0;
+        const changedDay = day ? day : 7; //일요일을 0 👉 7 변환
 
-        // await confirmList(tasks);
+        //🍎
+        // true면 오늘의 요일만 ,  false면 전체요일
+        const alarm = filtered
+            ? Object.values(parseData)
+                  .filter((alarm) => alarm.day.includes(changedDay))
+                  .reduce((p, v) => ({ ...p, [v.id]: v }), {})
+            : parseData;
+        console.log(alarm);
+        setAlarm(alarm);
+
         if (Object.values(JSON.parse(loadedData)).length == 0) {
-            setFoundMedicine(false);
+            setIsVisibleAlarm(false);
         } else {
-            setFoundMedicine(true);
+            setIsVisibleAlarm(true);
         }
-    };
-
-    // ✨ 새로고침 시 completed 꼬임 방지
-    const setAlarmCompleted = async (data) => {
-        const copy = Object.assign({}, data);
-        // console.log(copy[1634727162582]);
-
-        return data;
     };
 
     // ✨ 약이 있는지 없는지 검사
     const confirmList = (list) => {
         if (Object.values(list).length == 0) {
-            setFoundMedicine(false);
+            setIsVisibleAlarm(false);
         } else {
-            setFoundMedicine(true);
+            setIsVisibleAlarm(true);
         }
     };
 
     // ✨복용완료
     const completeAlarm = () => {
-        setIsVisibleComplete(true);
+        setIsVisibleCompleteModal(true);
     };
 
     // ✨(테스트용)복용완료
@@ -146,9 +158,9 @@ export default function AlarmList({ navigation }) {
         }
     };
 
-    // ✨전체 완료 체크
+    // ✨복용완료
     const toggleTask = (id) => {
-        var copy = Object.assign({}, tasks);
+        var copy = Object.assign({}, alarm);
         copy[id].completed = !copy[id].completed;
         storeData(copy);
         allCompleted();
@@ -156,17 +168,18 @@ export default function AlarmList({ navigation }) {
 
     // ✨전체 체크 시 복용일을 1일 증가
     const allCompleted = () => {
-        // 🪲 하루에 한번만 떠야함 🪲
-        var num = 0;
-
-        for (let i = 0; i < Object.values(tasks).length; i++) {
-            if (Object.values(tasks)[i].completed) {
+        // 🪲 하루에 한번만 떠야함
+        // 🪲 오늘의 알람만 눌러야 완료체크 되도록 해야함. 🪲
+        // const date = new Date();
+        // const day = date.getDay();
+        let num = 0;
+        for (let i = 0; i < Object.values(alarm).length; i++) {
+            if (Object.values(alarm)[i].completed) {
                 num++;
-                if (num == Object.values(tasks).length) {
-                    // 카운트 증가
+                if (num == Object.values(alarm).length) {
+                    // 카운트 증가, 완료모달 노출
                     plusDate();
                     plusDateMAX();
-                    // 바텀시트 노출
                     completeAlarm();
                     return;
                 }
@@ -181,22 +194,25 @@ export default function AlarmList({ navigation }) {
 
     //  ✨알람메뉴 노출/숨김
     const showAlarmMenu = (id) => {
-        setMenuVisible(true);
+        setIsVisibleMenu(true);
         setSelectedTaskKey(id);
     };
 
     // ✨ 약 삭제
     const deleteTask = (id) => {
-        const copy = Object.assign({}, tasks);
+        const copy = Object.assign({}, alarm);
         delete copy[id];
         storeData(copy);
-        setMenuVisible(false);
+        setIsVisibleMenu(false);
     };
 
     // ✨ 알람 변경 페이지로 이동
-    const editMedicine = async () => {
-        navigation.navigate("AddAlarm");
-        setMenuVisible(false);
+    const editMedicine = (id) => {
+        // 🍎
+        navigation.navigate("AddAlarm", {
+            alarmId: id,
+        });
+        setIsVisibleMenu(false);
     };
 
     // ✨ 알람 추가 페이지로 이동
@@ -205,12 +221,11 @@ export default function AlarmList({ navigation }) {
         navigation.navigate("AddAlarm");
     };
 
-    const [filtered, setFiltered] = useState(true);
     // ✨ 전체알람 < > 오늘알람
-    const alarmFilter = (bool) => {
+    const handlePressAlarmFilter = () => {
         // true : 오늘의 알람만 노출
         // false : 모든 알람 노출
-        setFiltered(bool);
+        setFiltered((filtered) => !filtered);
     };
 
     return (
@@ -226,10 +241,13 @@ export default function AlarmList({ navigation }) {
                     />
                     <TitleContainer>
                         <StyledText>내 알람</StyledText>
-                        <ButtonFilter onPress={alarmFilter} />
+                        <ButtonFilter
+                            filtered={filtered}
+                            onPress={handlePressAlarmFilter}
+                        />
                     </TitleContainer>
-                    {foundMedicine ? (
-                        Object.values(tasks).map((item) => {
+                    {isVisibleAlarm ? (
+                        Object.values(alarm).map((item) => {
                             return (
                                 <Alarm
                                     alarmInfo={item}
@@ -237,7 +255,6 @@ export default function AlarmList({ navigation }) {
                                     toggleTask={toggleTask}
                                     showAlarmMenu={showAlarmMenu}
                                     key={item.id}
-                                    filtered={filtered}
                                 />
                             );
                         })
@@ -303,16 +320,17 @@ export default function AlarmList({ navigation }) {
                     ) : null}
 
                     <AlarmMenu
-                        menuVisible={menuVisible}
-                        setMenuVisible={setMenuVisible}
+                        isVisibleMenu={isVisibleMenu}
+                        setIsVisibleMenu={setIsVisibleMenu}
                         deleteTask={deleteTask.bind(null, selectedTaskKey)}
-                        editMedicine={editMedicine}
+                        editMedicine={editMedicine.bind(
+                            undefined,
+                            selectedTaskKey
+                        )}
                     />
                     <CompleteModal
-                        isVisible={isVisibleComplete}
-                        setIsVisible={setIsVisibleComplete}
-                        deleteTask={deleteTask.bind(null, selectedTaskKey)}
-                        editMedicine={editMedicine}
+                        isVisible={isVisibleCompleteModal}
+                        setIsVisible={setIsVisibleCompleteModal}
                         count={count}
                     />
                 </Container>
