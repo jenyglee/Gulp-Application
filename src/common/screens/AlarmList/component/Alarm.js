@@ -63,6 +63,7 @@ const Alarm = ({ alarmInfo, menuIcon, toggleTask, showAlarmMenu }) => {
     const [alarmVisible, setAlarmVisible] = useState(true); // 알람 노출 / 미노출 (요일 맞춰서)
     const [completed, setCompleted] = useState(alarmInfo.completed); // 복용 / 미복용
 
+    // ✨ 숫자로 넘어온 요일을 한글로 변환
     const formatNumToKoreanDay = (numberDay) =>
         numberDay.map((num) => koreanDaysArr[num - 1]);
 
@@ -112,8 +113,6 @@ const Alarm = ({ alarmInfo, menuIcon, toggleTask, showAlarmMenu }) => {
     //         return day;
     //     }
     // };
-
-    // ✨ 숫자로 들어온 요일 변환 [1 ,2 ,3] => ["월", "화", "수"]
 
     // ✨오늘의 요일 출력
     // const today = () => {

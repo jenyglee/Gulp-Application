@@ -11,7 +11,7 @@ const Arrow = () => {
     return <AntDesign name="caretleft" size={24} color="black" />;
 };
 
-const CalendarTable = ({ tasks }) => {
+const CalendarTable = ({ alarm }) => {
     LocaleConfig.locales["fr"] = {
         monthNames: [
             "1월",

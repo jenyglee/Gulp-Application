@@ -76,12 +76,18 @@ export default function AlarmList({ navigation }) {
     const [isVisibleCompleteModal, setIsVisibleCompleteModal] = useState(false); //전체복용 완료
     const [isVisibleAlarm, setIsVisibleAlarm] = useState(false); // 약 리스트 유무
     const [filtered, setFiltered] = useState(true); // Today <-> All 필터링
+    const globalDate = new Date();
+    const year = globalDate.getFullYear();
+    const month = globalDate.getMonth();
+    const date = globalDate.getDate();
+    const day = globalDate.getDay(); // 0 : 일요일
 
     // ✨ 로그인했는지 확인 + 약 추가 후 메인으로 복귀
     useEffect(() => {
         const removeFocusEvent = navigation.addListener("focus", () => {
             getData();
             setFiltered(true);
+            // 어싱크스토리지("isCompleted")의 값이 false이면
         });
         return () => {
             removeFocusEvent();
@@ -106,28 +112,27 @@ export default function AlarmList({ navigation }) {
 
     // ✨로컬에서 가져오기
     const getData = async () => {
-        console.log(filtered);
-        const loadedData = await AsyncStorage.getItem("alarm");
-        const parseData = JSON.parse(loadedData);
-        const date = new Date();
-        // const day = date.getDay(); // 0 : 일요일
-        const day = 0;
-        const changedDay = day ? day : 7; //일요일을 0 👉 7 변환
+        try {
+            const loadedData = await AsyncStorage.getItem("alarm");
+            const parseData = JSON.parse(loadedData);
+            const changedDay = day ? day : 7; //일요일을 0 👉 7 변환
 
-        //🍎
-        // true면 오늘의 요일만 ,  false면 전체요일
-        const alarm = filtered
-            ? Object.values(parseData)
-                  .filter((alarm) => alarm.day.includes(changedDay))
-                  .reduce((p, v) => ({ ...p, [v.id]: v }), {})
-            : parseData;
-        console.log(alarm);
-        setAlarm(alarm);
+            //🍎
+            // true면 오늘의 요일만 ,  false면 전체요일
+            const alarm = filtered
+                ? Object.values(parseData)
+                      .filter((alarm) => alarm.day.includes(changedDay))
+                      .reduce((p, v) => ({ ...p, [v.id]: v }), {})
+                : parseData;
+            setAlarm(alarm);
 
-        if (Object.values(JSON.parse(loadedData)).length == 0) {
-            setIsVisibleAlarm(false);
-        } else {
-            setIsVisibleAlarm(true);
+            if (Object.values(JSON.parse(loadedData)).length == 0) {
+                setIsVisibleAlarm(false);
+            } else {
+                setIsVisibleAlarm(true);
+            }
+        } catch (error) {
+            throw error;
         }
     };
 
@@ -167,21 +172,34 @@ export default function AlarmList({ navigation }) {
     };
 
     // ✨전체 체크 시 복용일을 1일 증가
-    const allCompleted = () => {
-        // 🪲 하루에 한번만 떠야함
+    const allCompleted = async () => {
         // 🪲 오늘의 알람만 눌러야 완료체크 되도록 해야함. 🪲
-        // const date = new Date();
-        // const day = date.getDay();
         let num = 0;
         for (let i = 0; i < Object.values(alarm).length; i++) {
             if (Object.values(alarm)[i].completed) {
                 num++;
                 if (num == Object.values(alarm).length) {
-                    // 카운트 증가, 완료모달 노출
-                    plusDate();
-                    plusDateMAX();
-                    completeAlarm();
-                    return;
+                    const loadedDate = await AsyncStorage.getItem("date");
+                    const parseDate = JSON.parse(loadedDate);
+                    const todayDate = `${year}-${month + 1}-${date}`; // "2021-10-25"
+                    if (parseDate !== todayDate) {
+                        plusDate();
+                        plusDateMAX();
+                        completeAlarm();
+                        await AsyncStorage.setItem(
+                            "date",
+                            JSON.stringify(todayDate)
+                        );
+                        return;
+                    } else {
+                        console.log(parseDate, todayDate);
+                        return;
+                    }
+                    // if( 어싱크스토리지("date")의 값이 오늘 날짜(2021-10-25)가 아니면 ){
+
+                    // 카운트증가, 완료모달노출 진행
+                    // 어싱크스토리지("date")의 값을 오늘 날짜로 바꾼다.
+                    // }
                 }
             }
         }
@@ -202,6 +220,7 @@ export default function AlarmList({ navigation }) {
     const deleteTask = (id) => {
         const copy = Object.assign({}, alarm);
         delete copy[id];
+
         storeData(copy);
         setIsVisibleMenu(false);
     };
