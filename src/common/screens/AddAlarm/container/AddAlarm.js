@@ -41,12 +41,6 @@ const WeekButtonContainer = styled.View`
     background-color: ${({ theme }) => theme.background};
 `;
 
-const ButtonArea = styled.View`
-    width: ${({ width }) => width - 48}px;
-    align-self: center;
-    bottom: 40px;
-`;
-
 const AddMedicine = ({ navigation, route }) => {
     const width = Dimensions.get("window").width;
     const height = Dimensions.get("window").height;

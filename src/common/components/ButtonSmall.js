@@ -17,6 +17,7 @@ const StyledImage = styled.Image`
 `;
 const StyledText = styled.Text`
     color: ${({ theme }) => theme.smallBtnTextChecked};
+    font-weight: bold;
 `;
 
 const ButtonSmall = ({ containerStyle, textStyle, icon, title, onPress }) => {
