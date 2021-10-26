@@ -56,8 +56,6 @@ const Category = ({ selectedItem, setSelectedItem, categoryList }) => {
                     paddingRight: 200,
                     // marginRight: 100,
                 }}
-                // ListHeaderComponent={ContentThatGoesAboveTheFlatList}
-                // ListFooterComponent={ContentThatGoesBelowTheFlatList}
             />
         </Container>
     );

@@ -8,12 +8,15 @@ const Container = styled.View`
     /* background-color: ${({ theme }) => theme.white}; */
 `;
 
-const Circle = styled.View`
-    width: 8px;
-    height: 8px;
-    border-radius: 4px;
-    margin-right: 12px;
-    background-color: ${({ theme }) => theme.main};
+const RankContainer = styled.View`
+    width: 24px;
+    margin-right: 10px;
+`;
+
+const Rank = styled.Text`
+    font-size: 16px;
+    font-weight: bold;
+    color: ${({ theme }) => theme.main};
 `;
 
 const NameContainer = styled.View`
@@ -23,7 +26,7 @@ const NameContainer = styled.View`
 `;
 
 const Name = styled.Text`
-    width: 90%;
+    width: 85%;
     font-size: 18px;
     font-weight: bold;
     color: ${({ theme }) => theme.textBasic};
@@ -32,7 +35,7 @@ const Name = styled.Text`
 const BrandName = styled.Text`
     font-size: 16px;
     color: ${({ theme }) => theme.textBasic};
-    margin: 10px 0 15px 20px;
+    margin: 10px 0 15px 34px;
 `;
 
 const Line = styled.View`
@@ -48,7 +51,9 @@ const ListItem = ({ item }) => {
     return (
         <Container width={width}>
             <NameContainer>
-                <Circle />
+                <RankContainer>
+                    <Rank>{item.id + 1}</Rank>
+                </RankContainer>
                 <Name width={width}>{item.name}</Name>
             </NameContainer>
             <BrandName>{item.brand}</BrandName>

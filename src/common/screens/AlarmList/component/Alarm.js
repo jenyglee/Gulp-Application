@@ -69,16 +69,14 @@ const Alarm = ({ alarmInfo, menuIcon, toggleTask, showAlarmMenu }) => {
 
     // ✨ HH:mm:dd로 들어온 시간 전환 => "14:30:30" => "PM 2:30"
     const formatStrToTimeObj = (timeStr) => {
-        // 🍎
         const [hour, minute] = timeStr.split(":").map((str) => Number(str));
         return {
-            hour,
+            hour: hour > 12 ? hour - 12 : hour,
             minute: minute > 10 ? minute : `0${minute}`,
             ampm: hour < 12 ? "AM" : "PM",
         };
     };
 
-    // 🍎
     const changedDay = useMemo(() => formatNumToKoreanDay(alarmInfo.day), []);
     const { hour, minute, ampm } = useMemo(
         () => formatStrToTimeObj(alarmInfo.time),

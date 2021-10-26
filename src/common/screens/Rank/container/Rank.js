@@ -10,7 +10,6 @@ import { tempData, categoryData } from "@/common/screens/Rank/data";
 
 const Container = styled.View`
     width: 100%;
-    height: ${({ height }) => height}px;
     justify-content: center;
     align-items: center;
     background-color: ${({ theme }) => theme.background};
@@ -28,8 +27,8 @@ const ListContainer = styled.View`
 `;
 
 const Block = styled.View`
-    width: ${({ width }) => width} px;
-    height: 20px;
+    width: ${({ width }) => width}px;
+    height: 16px;
     background-color: ${({ theme }) => theme.background};
 `;
 
@@ -58,9 +57,6 @@ const Ranking = ({ navigation }) => {
         setIsSignin(token);
     };
 
-    // ✨ 카테고리 별 리스트 노출
-    const categoryPress = () => {};
-
     const renderItem = ({ item }) => {
         return <ListItem item={item} />;
     };
@@ -74,7 +70,13 @@ const Ranking = ({ navigation }) => {
                         categoryList={categoryList}
                     />
                     <ListContainer width={width}>
-                        <Block width={width} />
+                        <Block
+                            width={width}
+                            style={{
+                                borderTopWidth: 1,
+                                borderTopColor: "#dedede",
+                            }}
+                        />
                         <FlatList
                             data={medicineList[selectedItem].list}
                             renderItem={renderItem}
