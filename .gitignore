@@ -391,3 +391,7 @@ web-build/
 
 # macOS
 .DS_Store
+
+# lock
+package-lock.json
+yarn.lock
