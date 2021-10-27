@@ -45,6 +45,7 @@ const ProfileName = styled.Text`
     font-size: 18px;
 `;
 // ✨데이터형태(참고용)
+
 // const tempData = {
 //     1: {
 //         id: 1,
@@ -100,7 +101,7 @@ export default function AlarmList({ navigation }) {
         try {
             await AsyncStorage.setItem("alarm", JSON.stringify(alarm));
             setAlarm(alarm);
-            confirmList(alarm);
+            confirmList(alarm); // 알람이 아예 없는지 검사
         } catch (error) {
             throw error;
         }
@@ -132,7 +133,7 @@ export default function AlarmList({ navigation }) {
         }
     };
 
-    // ✨ 약이 있는지 없는지 검사
+    // ✨ 알람이 아예 없는지 검사
     const confirmList = (list) => {
         if (Object.values(list).length == 0) {
             setIsVisibleAlarm(false);
@@ -164,9 +165,8 @@ export default function AlarmList({ navigation }) {
         // 🪲 완료시 알람을 가져와서 변경해주는데 전체알람쪽이 사라진다.
         var copy = Object.assign({}, alarm);
         copy[id].completed = !copy[id].completed;
-        setAlarm(copy);
-        confirmList(copy);
-        allCompleted();
+        storeData(copy); // 로컬에 저장하기
+        allCompleted(); // 전체 복용했는지 확인
     };
 
     // ✨전체 체크 시 복용일을 1일 증가
@@ -300,14 +300,14 @@ export default function AlarmList({ navigation }) {
             <FloatingAction
                 color="#27C47D"
                 shadow={{
-                    shadowOpacity: 0.1,
+                    shadowOpacity: 0,
                     shadowOffset: {
                         width: 5,
                         height: 10,
                     },
                 }}
-                buttonSize={60}
-                animated={true}
+                buttonSize={50}
+                animated={false}
                 showBackground={false}
                 onPressMain={() => {
                     navigation.navigate("AddAlarm");

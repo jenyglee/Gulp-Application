@@ -14,6 +14,7 @@ const addMedicine = async (medicine) => {
         });
 
         if (response.status === 200) {
+            console.log(response.data);
             // 서버 저장 완료 후, AsyncStorage(medicine)에 저장
             const loadedData = await AsyncStorage.getItem("medicine");
             const Item = JSON.parse(loadedData);

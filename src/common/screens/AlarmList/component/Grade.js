@@ -28,6 +28,7 @@ const MedicineIllust = styled.Image`
     position: absolute;
     top: 19px;
     width: 60px;
+
 `;
 
 const Count = styled.Text`
