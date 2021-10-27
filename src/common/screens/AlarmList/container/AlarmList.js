@@ -13,6 +13,7 @@ import CompleteModal from "@screens/AlarmList/component/CompleteModal";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { FloatingAction } from "react-native-floating-action";
+import { inject, observer } from "mobx-react";
 
 const Wrap = styled.ScrollView`
     padding-top: ${({ insets }) => insets.top}px;
@@ -59,12 +60,16 @@ const ProfileName = styled.Text`
 //         completed: false,
 //     },
 
-export default function AlarmList({ navigation }) {
+const AlarmList = ({ navigation, alarmsStore }) => {
+    // console.log(alarmsStore);
+    const { alarms, setAlarm, storeData, deleteTask } = alarmsStore;
+    // const deleteTask = alarmsStore.deleteTask;
+
     const width = Dimensions.get("window").width;
     const height = Dimensions.get("window").height;
     const insets = useSafeAreaInsets();
     const [selectedTaskKey, setSelectedTaskKey] = useState();
-    const [alarm, setAlarm] = useState({});
+    // const [alarm, setAlarm] = useState({});
     const [countTotal, setCountTotal] = useState(0);
     const [count, setCount] = useState(0);
     const [taskTotal, setTaskTotal] = useState(0);
@@ -82,9 +87,10 @@ export default function AlarmList({ navigation }) {
     // ✨ 로그인했는지 확인 + 약 추가 후 메인으로 복귀
     useEffect(() => {
         const removeFocusEvent = navigation.addListener("focus", () => {
-            getData();
+            // getData();
             setFiltered(true);
             // 어싱크스토리지("isCompleted")의 값이 false이면
+            alarmsStore.getAlarms({ setIsVisibleAlarm, filtered });
         });
         return () => {
             removeFocusEvent();
@@ -93,45 +99,46 @@ export default function AlarmList({ navigation }) {
 
     // ✨ Today <-> All 필터링 됐을 때
     useEffect(() => {
-        getData();
+        // getData();
+        alarmsStore.getAlarms({ filtered });
     }, [filtered]);
 
     // ✨ 로컬에 저장하기
-    const storeData = async (alarm) => {
-        try {
-            await AsyncStorage.setItem("alarm", JSON.stringify(alarm));
-            setAlarm(alarm);
-            confirmList(alarm); // 알람이 아예 없는지 검사
-        } catch (error) {
-            throw error;
-        }
-    };
+    // const storeData = async (alarm) => {
+    //     try {
+    //         await AsyncStorage.setItem("alarm", JSON.stringify(alarm));
+    //         setAlarm(alarm);
+    //         confirmList(alarm); // 알람이 아예 없는지 검사
+    //     } catch (error) {
+    //         throw error;
+    //     }
+    // };
 
     // ✨로컬에서 가져오기
-    const getData = async () => {
-        try {
-            const loadedData = await AsyncStorage.getItem("alarm");
-            const parseData = JSON.parse(loadedData);
-            const changedDay = day ? day : 7; //일요일을 0 👉 7 변환
+    // const getData = async () => {
+    //     try {
+    //         const loadedData = await AsyncStorage.getItem("alarm");
+    //         const parseData = JSON.parse(loadedData);
+    //         const changedDay = day ? day : 7; //일요일을 0 👉 7 변환
 
-            //🍎
-            // true면 오늘의 요일만 ,  false면 전체요일
-            const alarm = filtered
-                ? Object.values(parseData)
-                      .filter((alarm) => alarm.day.includes(changedDay))
-                      .reduce((p, v) => ({ ...p, [v.id]: v }), {})
-                : parseData;
-            setAlarm(alarm);
+    //         //🍎
+    //         // true면 오늘의 요일만 ,  false면 전체요일
+    //         const alarm = filtered
+    //             ? Object.values(parseData)
+    //                   .filter((alarm) => alarm.day.includes(changedDay))
+    //                   .reduce((p, v) => ({ ...p, [v.id]: v }), {})
+    //             : parseData;
+    //         setAlarm(alarm);
 
-            if (Object.values(JSON.parse(loadedData)).length == 0) {
-                setIsVisibleAlarm(false);
-            } else {
-                setIsVisibleAlarm(true);
-            }
-        } catch (error) {
-            throw error;
-        }
-    };
+    //         if (Object.values(JSON.parse(loadedData)).length == 0) {
+    //             setIsVisibleAlarm(false);
+    //         } else {
+    //             setIsVisibleAlarm(true);
+    //         }
+    //     } catch (error) {
+    //         throw error;
+    //     }
+    // };
 
     // ✨ 알람이 아예 없는지 검사
     const confirmList = (list) => {
@@ -163,7 +170,7 @@ export default function AlarmList({ navigation }) {
     // ✨복용완료
     const toggleTask = (id) => {
         // 🪲 완료시 알람을 가져와서 변경해주는데 전체알람쪽이 사라진다.
-        var copy = Object.assign({}, alarm);
+        var copy = Object.assign({}, alarms);
         copy[id].completed = !copy[id].completed;
         storeData(copy); // 로컬에 저장하기
         allCompleted(); // 전체 복용했는지 확인
@@ -173,10 +180,10 @@ export default function AlarmList({ navigation }) {
     const allCompleted = async () => {
         // 🪲 오늘의 알람만 눌러야 완료체크 되도록 해야함. 🪲
         let num = 0;
-        for (let i = 0; i < Object.values(alarm).length; i++) {
-            if (Object.values(alarm)[i].completed) {
+        for (let i = 0; i < Object.values(alarms).length; i++) {
+            if (Object.values(alarms)[i].completed) {
                 num++;
-                if (num == Object.values(alarm).length) {
+                if (num == Object.values(alarms).length) {
                     const loadedDate = await AsyncStorage.getItem("date");
                     const parseDate = JSON.parse(loadedDate);
                     const todayDate = `${year}-${month + 1}-${date}`; // "2021-10-25"
@@ -211,13 +218,13 @@ export default function AlarmList({ navigation }) {
     };
 
     // ✨ 약 삭제
-    const deleteTask = (id) => {
-        const copy = Object.assign({}, alarm);
-        delete copy[id];
+    // const deleteTask = (id) => {
+    //     const copy = Object.assign({}, alarm);
+    //     delete copy[id];
 
-        storeData(copy);
-        setIsVisibleMenu(false);
-    };
+    //     storeData(copy);
+    //     setIsVisibleMenu(false);
+    // };
 
     // ✨ 알람 변경 페이지로 이동
     const editMedicine = (id) => {
@@ -260,7 +267,7 @@ export default function AlarmList({ navigation }) {
                         />
                     </TitleContainer>
                     {isVisibleAlarm ? (
-                        Object.values(alarm).map((item) => {
+                        Object.values(alarms).map((item) => {
                             return (
                                 <Alarm
                                     alarmInfo={item}
@@ -284,7 +291,11 @@ export default function AlarmList({ navigation }) {
                     <AlarmMenu
                         isVisibleMenu={isVisibleMenu}
                         setIsVisibleMenu={setIsVisibleMenu}
-                        deleteTask={deleteTask.bind(null, selectedTaskKey)}
+                        deleteTask={deleteTask.bind(
+                            null,
+                            selectedTaskKey,
+                            setIsVisibleMenu
+                        )}
                         editMedicine={editMedicine.bind(
                             undefined,
                             selectedTaskKey
@@ -315,4 +326,7 @@ export default function AlarmList({ navigation }) {
             />
         </>
     );
-}
+};
+
+// export default inject("alarmsStore")(observer(AlarmList));
+export default inject("alarmsStore")(observer(AlarmList));

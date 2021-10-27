@@ -10,6 +10,7 @@ import WeekButton from "@/common/screens/AddAlarm/component/WeekButton";
 import { icons14px } from "@/icons";
 import { ScrollView } from "react-native-gesture-handler";
 import { deleteMedicine } from "@/medicine/api/medicineApi";
+import { inject, observer } from "mobx-react";
 
 const Container = styled.View`
     width: ${({ width }) => width - 48}px;
@@ -41,7 +42,8 @@ const WeekButtonContainer = styled.View`
     background-color: ${({ theme }) => theme.background};
 `;
 
-const AddMedicine = ({ navigation, route }) => {
+const AddMedicine = ({ navigation, route, medicinesStore }) => {
+    console.log(medicinesStore);
     const width = Dimensions.get("window").width;
     const height = Dimensions.get("window").height;
     const theme = useContext(ThemeContext);
@@ -280,4 +282,8 @@ const AddMedicine = ({ navigation, route }) => {
     );
 };
 
-export default AddMedicine;
+export default inject("medicinesStore")(observer(AddMedicine));
+
+// export default inject("medicinesStore, membersStore")(observer(AddMedicine));
+// observer: 스토어를 관측할 것이다.
+// inject : 어떤 스토어일지
