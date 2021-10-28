@@ -37,6 +37,7 @@ const MyPageContainer = ({ navigation }) => {
     // ✨ 로그인정보 가져오기
     const getUser = async () => {
         const token = await AsyncStorage.getItem("token");
+        // token ? setIsSignin(token) : setIsSignin(false);
         setIsSignin(token);
     };
 
@@ -56,7 +57,10 @@ const MyPageContainer = ({ navigation }) => {
                             navigation.navigate("CustomInfo");
                         }}
                         logout={logout}
-                        onRemoveUser={removeUser}
+                        onRemoveUser={() => {
+                            removeUser();
+                            navigation.navigate("Signin");
+                        }}
                         setIsSignin={setIsSignin}
                     />
                     {gradeTable ? (

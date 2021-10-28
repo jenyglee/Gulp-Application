@@ -45,18 +45,18 @@ const logout = async () => {
 
 // ✨회원가입
 const signup = async (member) => {
-    console.log(member);
     try {
         const response = await axios({
             method: "POST",
             url: url + "signup",
             data: member,
         });
-        console.log(response);
+        // console.log(response.status);
+        return response.status;
 
-        if (response.data?.statusCodeValue !== 200) {
-            throw new Error(response.data.body.message);
-        }
+        // if (response.data?.statusCodeValue !== 200) {
+        //     throw new Error(response.data.body.message);
+        // }
     } catch (error) {
         throw error;
     }
@@ -72,19 +72,23 @@ const removeUser = async () => {
         url: url + "member",
         headers: { authorization: token },
     });
-    console.log(response);
+    if (response.status === 200) {
+        Alert.alert("회원탈퇴가 정상적으로 완료되었습니다.");
+        AsyncStorage.setItem("token", "");
+    }
 };
 
 // ✨ 이메일 중복확인
 const emailValidation = async (email) => {
     try {
         const response = await axios({
-            method: "POST",
-            url: url + "emailValidation",
+            method: "GET",
+            url: url + "email-validation",
             data: email,
         });
+        console.log(response);
+
         if (response.status === 200) {
-            console.log(response.status);
             Alert.alert("사용할 수 있는 이메일입니다.");
         }
     } catch (error) {

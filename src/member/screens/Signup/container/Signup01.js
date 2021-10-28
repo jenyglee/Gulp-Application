@@ -52,8 +52,12 @@ const SignupContainer00 = ({ navigation }) => {
     // ✨ 회원가입
     const handleSignupBtnPress = async () => {
         try {
-            await signup({ nickname, email, password });
-            navigation.navigate("Signup02");
+            const response = await signup({ nickname, email, password });
+            if (response === 200) {
+                navigation.navigate("Signup02");
+            } else {
+                Alert.alert(response);
+            }
         } catch (error) {
             Alert.alert(error.message);
         }
