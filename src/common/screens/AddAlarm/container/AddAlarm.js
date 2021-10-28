@@ -42,176 +42,27 @@ const WeekButtonContainer = styled.View`
     background-color: ${({ theme }) => theme.background};
 `;
 
-const AddMedicine = ({ navigation, route, medicinesStore }) => {
-    console.log(medicinesStore);
+const AddMedicine = ({
+    navigation,
+    medicinesStore,
+    commonStore,
+    alarmsStore,
+}) => {
+    const { medicineList, deleteTask, getMedicine } = medicinesStore;
+    const { weekAll, week, allWeekCheck, weekCheck, whatTime, time } =
+        commonStore;
+    const { saveMedicine } = alarmsStore;
     const width = Dimensions.get("window").width;
     const height = Dimensions.get("window").height;
     const theme = useContext(ThemeContext);
-    const allCheckWeek = [{ id: 0, day: "All", checked: false }];
-    const checkWeek = [
-        { id: 1, day: "월", checked: false },
-        { id: 2, day: "화", checked: false },
-        { id: 3, day: "수", checked: false },
-        { id: 4, day: "목", checked: false },
-        { id: 5, day: "금", checked: false },
-        { id: 6, day: "토", checked: false },
-        { id: 7, day: "일", checked: false },
-    ];
-
-    // const tempData = {
-    //     1: { id: 1, name: "비타민c" },
-    //     2: { id: 2, name: "철분" },
-    //     3: { id: 3, name: "오메가3" },
-    //     4: { id: 4, name: "아르기닌" },
-    //     5: { id: 5, name: "고려은단" },
-    // };
-
-    const [weekAll, setWeekAll] = useState(allCheckWeek);
-    const [week, setWeek] = useState(checkWeek);
     const weekCheckList = []; // 체크된 요일
-    const [time, setTime] = useState("");
-    const [medicineList, setMedicineList] = useState({});
-    // const [medicineList, setMedicineList] = useState(tempData);
 
     useEffect(() => {
         const removeFocusEvent = navigation.addListener("focus", () => {
-            // 🍎 알람변경 시 등록된 알람 정보 가져와서 넣어주기
-            // const alarmId = route.params?.alarmId;
-            // getData(alarmId);
-            getData();
+            getMedicine();
         });
         return () => removeFocusEvent();
     }, []);
-
-    // ✨로컬에서 약 가져오기
-    const getData = async () => {
-        try {
-            // const alarm = await AsyncStorage.getItem("alarm");
-            const loadedData = await AsyncStorage.getItem("medicine");
-            setMedicineList(JSON.parse(loadedData));
-        } catch (error) {
-            throw error;
-        }
-    };
-
-    // ✨ 약 삭제
-    const deleteTask = async (id) => {
-        const copy = Object.assign({}, medicineList);
-        delete copy[id];
-        try {
-            // await storeData(copy, "medicine");
-            storeData(copy);
-            setMedicineList(copy);
-        } catch (error) {}
-    };
-
-    // ✨ 약을 삭제하고 나면 "medicine"로컬에 다시 저장
-    const storeData = async (item) => {
-        try {
-            await AsyncStorage.setItem("medicine", JSON.stringify(item));
-        } catch (error) {
-            throw error;
-        }
-    };
-
-    // ✨요일 전채선택
-    const allWeekCheck = () => {
-        const copyAllWeek = [...weekAll];
-        const copyWeek = [...week];
-        copyAllWeek[0].checked = !copyAllWeek[0].checked;
-        {
-            copyWeek.map((item) => {
-                if (copyAllWeek[0].checked) {
-                    item.checked = true;
-                } else {
-                    item.checked = false;
-                }
-            });
-        }
-        setWeek(copyWeek);
-        setWeekAll(copyAllWeek);
-    };
-
-    // ✨요일 개별선택
-    const weekCheck = (id) => {
-        var copy = [...week];
-        copy[id - 1].checked = !copy[id - 1].checked;
-
-        const result = copy.every((item) => {
-            return item.checked;
-        });
-        setWeekAll([{ id: 0, day: "All", checked: result }]);
-        setWeek(copy);
-    };
-
-    // ✨ 설정한 시간 가져오기
-    const whatTime = (date) => {
-        setTime(date);
-    };
-
-    //  ✨빈칸체크
-    const ConfirmValue = async (medicine, time, day) => {
-        // ① 복용중인 영양제에 등록된 약이 있는지
-        if (Object.values(medicine).length != 0) {
-            // ② 시간을 설정했는지
-            if (time !== "") {
-                // ③ 체크된 요일이 하나라도 존재하는지
-                const result = day.some((item) => {
-                    return item.checked;
-                });
-                if (result) {
-                    // ①②③ 모두 통과 시 true 반환
-                    return true;
-                } else return false;
-            } else return false;
-        } else return false;
-    };
-
-    //  ✨ 알람 저장
-    const saveMedicine = async () => {
-        // 빈칸 검수
-        const confirmed = await ConfirmValue(medicineList, time, week);
-
-        // 빈칸 검수가 완료된 경우 저장 진행
-        if (confirmed) {
-            const ID = Date.now();
-            {
-                // ⓵ 체크된 요일의 id만 가져와 빈 배열(weekCheckList)에 넣기
-                week.map((checkedDay) => {
-                    if (checkedDay.checked) {
-                        weekCheckList.push(checkedDay.id);
-                    }
-                });
-            }
-
-            // ⓶ 채워진 배열을 변수화
-            const newTask = {
-                [ID]: {
-                    id: ID,
-                    time: time,
-                    name: medicineList,
-                    day: weekCheckList, // 숫자로 전달됨 ex) [2, 3]
-                    completed: false,
-                },
-            };
-            try {
-                const value = await AsyncStorage.getItem("alarm");
-                // if (value !== null) {
-                // }
-                const alarm = JSON.parse(value);
-                await AsyncStorage.setItem(
-                    "alarm",
-                    JSON.stringify({ ...alarm, ...newTask })
-                );
-                // console.log(newTask);
-                navigation.navigate("AlarmList");
-            } catch (error) {
-                Alert.alert(error);
-            }
-        } else if (!confirmed) {
-            Alert.alert("설정이 전부 입력되었는지 확인해주세요.");
-        }
-    };
 
     return (
         <>
@@ -277,13 +128,26 @@ const AddMedicine = ({ navigation, route, medicinesStore }) => {
                     </StyledForm>
                 </Container>
             </ScrollView>
-            <Button title="저장하기" onPress={saveMedicine} />
+            <Button
+                title="저장하기"
+                onPress={() => {
+                    saveMedicine(
+                        medicineList,
+                        time,
+                        week,
+                        weekCheckList,
+                        navigation
+                    );
+                }}
+            />
         </>
     );
 };
 
-export default inject("medicinesStore")(observer(AddMedicine));
-
-// export default inject("medicinesStore, membersStore")(observer(AddMedicine));
+export default inject((stores) => ({
+    medicinesStore: stores.medicinesStore,
+    commonStore: stores.commonStore,
+    alarmsStore: stores.alarmsStore,
+}))(observer(AddMedicine));
 // observer: 스토어를 관측할 것이다.
 // inject : 어떤 스토어일지

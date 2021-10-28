@@ -1,5 +1,6 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { configure, makeAutoObservable } from "mobx";
+import { Alert } from "react-native";
 
 configure({
     // enforceActions: 'never',
@@ -14,8 +15,7 @@ export default class AlarmsStore {
     globalDate = new Date();
     year = this.globalDate.getFullYear();
     month = this.globalDate.getMonth();
-    // date = this.globalDate.getDate();
-    date = 9;
+    date = this.globalDate.getDate();
     day = this.globalDate.getDay();
 
     alarms = [];
@@ -23,11 +23,13 @@ export default class AlarmsStore {
         this.alarms = alarms;
     }
 
+    // 알람 유무
     isVisibleAlarm = true;
     setIsVisibleAlarm(bool) {
         this.isVisibleAlarm = bool;
     }
 
+    // Today <-> All 필터링
     filtered = true;
     setFiltered(bool) {
         this.filtered = bool;
@@ -43,6 +45,7 @@ export default class AlarmsStore {
         this.countTotal = num;
     }
 
+    //전체복용 완료
     isVisibleCompleteModal = false;
     setIsVisibleCompleteModal(bool) {
         this.isVisibleCompleteModal = bool;
@@ -158,6 +161,72 @@ export default class AlarmsStore {
     // ✨복용완료
     completeAlarm = () => {
         this.setIsVisibleCompleteModal(true);
+    };
+
+    //  ✨ 알람 저장
+    saveMedicine = async (
+        medicineList,
+        time,
+        week,
+        weekCheckList,
+        navigation
+    ) => {
+        // 빈칸 검수
+        const confirmed = this.ConfirmValue(medicineList, time, week);
+
+        // 빈칸 검수가 완료된 경우 저장 진행
+        if (confirmed) {
+            const ID = Date.now();
+            {
+                // ⓵ 체크된 요일의 id만 가져와 빈 배열(weekCheckList)에 넣기
+                week.map((checkedDay) => {
+                    if (checkedDay.checked) {
+                        weekCheckList.push(checkedDay.id);
+                    }
+                });
+            }
+            // ⓶ 채워진 배열을 변수화
+            const newTask = {
+                [ID]: {
+                    id: ID,
+                    time: time,
+                    name: medicineList,
+                    day: weekCheckList, // 숫자로 전달됨 ex) [2, 3]
+                    completed: false,
+                },
+            };
+            try {
+                const value = await AsyncStorage.getItem("alarm");
+                const alarm = JSON.parse(value);
+                await AsyncStorage.setItem(
+                    "alarm",
+                    JSON.stringify({ ...alarm, ...newTask })
+                );
+                navigation.navigate("AlarmList");
+            } catch (error) {
+                Alert.alert(error);
+            }
+        } else if (!confirmed) {
+            console.log(confirmed);
+            Alert.alert("설정이 전부 입력되었는지 확인해주세요.");
+        }
+    };
+    //  ✨빈칸검수
+    ConfirmValue = (medicine, time, day) => {
+        // ① 복용중인 영양제에 등록된 약이 있는지
+        if (Object.values(medicine).length != 0) {
+            // ② 시간을 설정했는지
+            if (time !== "") {
+                // ③ 체크된 요일이 하나라도 존재하는지
+                const result = day.some((item) => {
+                    return item.checked;
+                });
+                if (result) {
+                    // ①②③ 모두 통과 시 true 반환
+                    return true;
+                } else return false;
+            } else return false;
+        } else return false;
     };
 }
 
