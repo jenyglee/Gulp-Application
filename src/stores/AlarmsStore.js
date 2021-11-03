@@ -23,10 +23,6 @@ export default class AlarmsStore {
         this.alarms = alarms;
     }
 
-    asdasdasd() {
-        console.log("asjhsdh");
-    }
-
     // 알람 유무
     isVisibleAlarm = true;
     setIsVisibleAlarm(bool) {
@@ -34,7 +30,7 @@ export default class AlarmsStore {
     }
 
     // Today <-> All 필터링
-    filtered = true;
+    filtered = false;
     setFiltered(bool) {
         this.filtered = bool;
     }
@@ -78,39 +74,46 @@ export default class AlarmsStore {
     };
 
     // ✨ 알람 불러오기
-    getAlarms = async () => {
-        try {
-            const loadedData = await AsyncStorage.getItem("alarm");
-            const parseData = JSON.parse(loadedData);
-            const changedDay = this.day ? this.day : 7; //일요일을 0 👉 7 변환
-            // true면 오늘의 요일만 ,  false면 전체요일
-            const alarm = this.filtered
-                ? Object.values(parseData)
-                      .filter((alarm) => alarm.day.includes(changedDay))
-                      .reduce((p, v) => ({ ...p, [v.id]: v }), {})
-                : parseData;
-            this.alarms = alarm || [];
+    // getAlarms = async () => {
+    //     try {
+    //         const loadedData = await AsyncStorage.getItem("alarm");
+    //         const parseData = JSON.parse(loadedData);
+    //         const changedDay = this.day ? this.day : 7; //일요일을 0 👉 7 변환
+    //         // true면 오늘의 요일만 ,  false면 전체요일
+    //         // console.log(
+    //         //     Object.values(parseData)
+    //         //         .filter((alarm) => alarm.day.includes(changedDay))
+    //         //         .reduce((p, v) => ({ ...p, [v.id]: v }), {})
+    //         // );
 
-            // 🥸 다른 함수에 전달할때도 this를 잊지말자!
-            this.confirmList(this.alarms);
-        } catch (error) {
-            throw error;
-        }
-    };
+    //         const alarm = this.filtered
+    //             ? Object.values(parseData)
+    //                   .filter((alarm) => alarm.day.includes(changedDay))
+    //                   .reduce((p, v) => ({ ...p, [v.id]: v }), {})
+    //             : parseData;
+    //         this.alarms = alarm || [];
+    //         // console.log(alarm);
+
+    //         // 🥸 다른 함수에 전달할때도 this를 잊지말자!
+    //         this.confirmList(this.alarms);
+    //     } catch (error) {
+    //         throw error;
+    //     }
+    // };
 
     // ✨ 알람이 아예 없는지 검사
-    confirmList = (alarms) => {
-        Object.values(alarms).length === 0
-            ? this.setIsVisibleAlarm(false)
-            : this.setIsVisibleAlarm(true);
-    };
+    // confirmList = (alarms) => {
+    //     Object.values(alarms).length === 0
+    //         ? this.setIsVisibleAlarm(false)
+    //         : this.setIsVisibleAlarm(true);
+    // };
 
     // ✨ 전체알람 < > 오늘알람
-    handlePressAlarmFilter = () => {
-        // true : 오늘의 알람만 노출
-        // false : 모든 알람 노출
-        this.setFiltered(!this.filtered);
-    };
+    // handlePressAlarmFilter = () => {
+    //     // true : 오늘의 알람만 노출
+    //     // false : 모든 알람 노출
+    //     this.setFiltered(!this.filtered);
+    // };
 
     // ✨복용완료
     toggleTask = (id) => {
@@ -134,7 +137,7 @@ export default class AlarmsStore {
                     const todayDate = `${this.year}-${this.month + 1}-${
                         this.date
                     }`; // "2021-10-25"
-                    console.log(parseDate, todayDate);
+                    // console.log(parseDate, todayDate);
                     if (parseDate !== todayDate) {
                         this.plusDate();
                         this.plusDateMAX();

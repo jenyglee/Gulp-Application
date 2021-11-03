@@ -22,6 +22,7 @@ import { useSelector, useDispatch } from "react-redux";
 // } from "@/stores/alarms/alarmsSlice";
 import { stateAlarms } from "stores/alarms/alarmsSlice.js";
 import actionsAlarms from "stores/alarms/alarmsActions.js";
+import { Button } from "@/common/components";
 
 const Wrap = styled.ScrollView`
     padding-top: ${({ insets }) => insets.top}px;
@@ -71,22 +72,27 @@ const ProfileName = styled.Text`
 const AlarmList = ({ navigation, alarmsStore }) => {
     // console.log(alarmsStore);
     const dispatch = useDispatch(); //dispatch : 해당 state 값을 수정하는 액션
-    //   const filtered = {...useSelector(stateAlarms).filtered};
+    // const filtered = { ...useSelector(stateAlarms).filtered };
     const filtered = useSelector(stateAlarms).filtered;
-    console.log(filtered);
+    const year = useSelector(stateAlarms).year;
+    const month = useSelector(stateAlarms).month;
+    const date = useSelector(stateAlarms).date;
+    const day = useSelector(stateAlarms).day;
+    const alarms = useSelector(stateAlarms).alarms;
+
+    // console.log(filtered);
     const {
-        alarms,
+        // alarms,
         // filtered,
         setFiltered,
         isVisibleAlarm,
-        deleteTask,
-        handlePressAlarmFilter,
-        toggleTask,
+        // deleteTask,
+        // handlePressAlarmFilter,
+        // toggleTask,
         countTotal,
         count,
         isVisibleCompleteModal,
         setIsVisibleCompleteModal,
-        // asdasdasd,
     } = alarmsStore;
 
     const width = Dimensions.get("window").width;
@@ -95,12 +101,12 @@ const AlarmList = ({ navigation, alarmsStore }) => {
     const [gradeTable, setGradeTable] = useState(false); // 등급표
     const [isVisibleMenu, setIsVisibleMenu] = useState(false); // 알람메뉴 노출/숨김
 
-    // ✨ 로그인했는지 확인 + 약 추가 후 메인으로 복귀s
+    // ✨ 로그인했는지 확인 + 약 추가 후 메인으로 복귀
     useEffect(() => {
-        // asdasdasd();
         const removeFocusEvent = navigation.addListener("focus", () => {
             setFiltered(true);
-            alarmsStore.getAlarms();
+            dispatch(actionsAlarms.getAlarms({ filtered, day }));
+            dispatch(actionsAlarms.confirmList(alarms));
         });
         return () => {
             removeFocusEvent();
@@ -109,7 +115,8 @@ const AlarmList = ({ navigation, alarmsStore }) => {
 
     // ✨ Today <-> All 필터링 됐을 때
     useEffect(() => {
-        alarmsStore.getAlarms();
+        dispatch(actionsAlarms.getAlarms({ filtered, day }));
+        dispatch(actionsAlarms.confirmList(alarms));
     }, [filtered]);
 
     // ✨ 등급표 노출/숨김
@@ -147,9 +154,22 @@ const AlarmList = ({ navigation, alarmsStore }) => {
                         <StyledText>내 알람</StyledText>
                         <ButtonFilter
                             filtered={filtered}
+                            // onPress={handlePressAlarmFilter}
+                            // onPress={() => {
+                            //     console.log(filtered);
+                            // }}
                             onPress={() => {
-                                dispatch(actionsAlarms.setFiltered(!filtered));
+                                dispatch(
+                                    actionsAlarms.handlePressAlarmFilter(
+                                        !filtered
+                                    )
+                                );
                             }}
+                            // onPress={() => {
+                            //     dispatch(
+                            //         actionsAlarms.setAlarm({ filtered, day })
+                            //     );
+                            // }}
                         />
                     </TitleContainer>
                     {isVisibleAlarm ? (
@@ -158,7 +178,27 @@ const AlarmList = ({ navigation, alarmsStore }) => {
                                 <Alarm
                                     alarmInfo={item}
                                     menuIcon={icons.dot}
-                                    toggleTask={toggleTask}
+                                    // toggleTask={toggleTask}
+                                    toggleTask={(id) => {
+                                        dispatch(actionsAlarms.toggleTask(id))
+                                            .then((alarms) => {
+                                                dispatch(
+                                                    actionsAlarms.storeData(
+                                                        alarms
+                                                    )
+                                                );
+                                            })
+                                            .then(() => {
+                                                dispatch(
+                                                    actionsAlarms.allCompleted({
+                                                        alarms,
+                                                        year,
+                                                        month,
+                                                        date,
+                                                    })
+                                                );
+                                            });
+                                    }}
                                     showAlarmMenu={showAlarmMenu}
                                     key={item.id}
                                 />
@@ -171,15 +211,38 @@ const AlarmList = ({ navigation, alarmsStore }) => {
                     {gradeTable ? (
                         <GradeTable onPress={showGradeTable} />
                     ) : null}
+                    <Button
+                        containerStyle={{
+                            marginTop: 300,
+                        }}
+                        title="deleteTask"
+                        onPress={() => {}}
+                    />
 
                     <AlarmMenu
                         isVisibleMenu={isVisibleMenu}
                         setIsVisibleMenu={setIsVisibleMenu}
-                        deleteTask={deleteTask.bind(
-                            null,
-                            selectedTaskKey,
-                            setIsVisibleMenu
-                        )}
+                        deleteTask={() => {
+                            dispatch(
+                                actionsAlarms.deleteTask({
+                                    selectedTaskKey,
+                                    setIsVisibleMenu,
+                                })
+                            )
+                                .then((otherAlarms) => {
+                                    dispatch(
+                                        actionsAlarms.storeData(otherAlarms)
+                                    );
+                                })
+                                .then(() => {
+                                    dispatch(
+                                        actionsAlarms.getAlarms({
+                                            filtered,
+                                            day,
+                                        })
+                                    );
+                                });
+                        }}
                         editMedicine={editMedicine.bind(
                             undefined,
                             selectedTaskKey

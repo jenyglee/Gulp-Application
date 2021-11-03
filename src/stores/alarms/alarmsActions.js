@@ -2,30 +2,122 @@ import { actionsAlarms } from "./alarmsSlice.js";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const actions = {
-    setFiltered: (payload) => async (dispatch) => {
-        const loadedData = await AsyncStorage.getItem("alarm");
-        const parseData = JSON.parse(loadedData);
-        console.log(parseData);
-
-        //     const copy = Object.assign({}, parseData);
-        //     delete copy[id];
-        //     this.storeData(copy);
-        //     this.getAlarms(this.filtered);
-        //     setIsVisibleMenu(false);
-
+    // ✨ 전체알람 < > 오늘알람
+    handlePressAlarmFilter: (payload) => async (dispatch) => {
         dispatch(actionsAlarms.setFiltered(payload));
     },
-    storeData: (payload) => async (dispatch) => {
+
+    // ✨ 알람 삭제
+    deleteTask:
+        ({ selectedTaskKey, setIsVisibleMenu }) =>
+        async (dispatch) => {
+            // console.log(selectedTaskKey, isVisibleMenu);
+            const loadedData = await AsyncStorage.getItem("alarm");
+            const parseData = JSON.parse(loadedData);
+            const copy = Object.assign({}, parseData);
+            delete copy[selectedTaskKey];
+            return copy;
+        },
+
+    // ✨ 로컬에 저장하기
+    storeData: (alarms) => async (dispatch) => {
         try {
-            // await AsyncStorage.setItem("alarm", JSON.stringify(alarms));
-            // confirmList(alarms); // 알람이 아예 없는지 검사
-            // dispatch(actionsAlarms.setAlarm(payload));
+            await AsyncStorage.setItem("alarm", JSON.stringify(alarms));
+            dispatch(actionsAlarms.setAlarms(alarms));
         } catch (error) {
             throw error;
         }
-
-        dispatch(actionsAlarms.deleteTask(payload));
     },
+
+    // ✨ 알람 불러오기
+    getAlarms:
+        ({ filtered, day }) =>
+        async (dispatch) => {
+            try {
+                const loadedData = await AsyncStorage.getItem("alarm");
+                const parseData = JSON.parse(loadedData);
+                const changedDay = day ? day : 7; //일요일을 0 👉 7 변환
+
+                // true면 오늘의 요일만 ,  false면 전체요일
+                const alarm = filtered
+                    ? Object.values(parseData)
+                          .filter((alarm) => alarm.day.includes(changedDay))
+                          .reduce((p, v) => ({ ...p, [v.id]: v }), {})
+                    : parseData;
+
+                dispatch(actionsAlarms.setAlarms(alarm || []));
+            } catch (error) {
+                throw error;
+            }
+        },
+
+    // ✨ 알람이 아예 없는지 검사
+    confirmList: (alarms) => async (dispatch) => {
+        Object.values(alarms).length === 0
+            ? dispatch(actionsAlarms.setIsVisibleAlarm(false))
+            : dispatch(actionsAlarms.setIsVisibleAlarm(true));
+    },
+
+    // ✨복용완료
+    toggleTask: (id) => async (dispatch) => {
+        // 🪲 완료시 알람을 가져와서 변경해주는데 전체알람쪽이 사라진다.
+        const loadedData = await AsyncStorage.getItem("alarm");
+        const parseData = JSON.parse(loadedData);
+        const copy = Object.assign({}, parseData);
+        copy[id].completed = !copy[id].completed;
+        return copy;
+
+        // this.storeData(copy); // 로컬에 저장하기
+        // this.allCompleted(); // 전체 복용했는지 확인
+    },
+
+    // ✨전체 체크 시 복용일을 1일 증가
+    allCompleted:
+        ({ alarms, year, month, date }) =>
+        async (dispatch) => {
+            // 🪲 오늘의 알람만 눌러야 완료체크 되도록 해야함. 🪲
+            let num = 0;
+            for (let i = 0; i < Object.values(alarms).length; i++) {
+                if (Object.values(alarms)[i].completed) {
+                    num++;
+                    if (num == Object.values(alarms).length) {
+                        const loadedDate = await AsyncStorage.getItem("date");
+                        const parseDate = JSON.parse(loadedDate);
+                        const todayDate = `${year}-${month + 1}-${date}`; // "2021-10-25"
+                        console.log(parseDate, todayDate);
+                        // if (parseDate !== todayDate) {
+                        //     this.plusDate();
+                        //     this.plusDateMAX();
+                        //     this.completeAlarm();
+                        //     await AsyncStorage.setItem(
+                        //         "date",
+                        //         JSON.stringify(todayDate)
+                        //     );
+                        //     return;
+                        // } else {
+                        //     return;
+                        // }
+                    }
+                }
+            }
+        },
+
+    // // ✨복용완료
+    // plusDate = () => {
+    //     this.setCountTotal(this.countTotal + 1);
+    // };
+    // plusDateMAX = () => {
+    //     if (this.count === 13) {
+    //         this.setCount(0);
+    //     } else {
+    //         this.setCount(this.count + 1);
+    //     }
+    // };
+
+    // // ✨복용완료
+    // completeAlarm = () => {
+    //     this.setIsVisibleCompleteModal(true);
+    // };
 };
 
 export default actions;

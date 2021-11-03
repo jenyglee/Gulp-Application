@@ -4,24 +4,28 @@ export const alarmsSlice = createSlice({
     name: "alarms",
     initialState: {
         alarms: [],
-        alarm: {
-            name: "",
-            age: "",
-        },
+
         filtered: true,
+        isVisibleAlarm: true,
+        year: new Date().getFullYear(),
+        month: new Date().getMonth(),
+        date: new Date().getDate(),
+        day: new Date().getDay(),
+
+        task: [],
     },
     reducers: {
-        alarmSet: (state, action) => {
-            state.alarm = action.payload;
+        setAlarms(state, action) {
+            state.alarms = action.payload;
         },
-        alarmsCreate: (state, action) => {
-            state.alarms.push(action.payload);
+        storeData(state, action) {
+            state.alarms = action.payload;
         },
         setFiltered(state, action) {
             state.filtered = action.payload;
         },
-        setAlarm(state, action) {
-            state.alarms = action.payload;
+        setIsVisibleAlarm(state, action) {
+            state.isVisibleAlarm = action.payload;
         },
     },
 });

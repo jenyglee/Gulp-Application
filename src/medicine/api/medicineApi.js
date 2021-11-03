@@ -20,7 +20,7 @@ const addMedicine = async (medicine) => {
             const Item = JSON.parse(loadedData);
             const ID = Date.now();
             const newMedicine = {
-                [ID]: { id: ID, name: medicine.name, brand: medicine.brand },
+                [ID]: { id: ID, name: medicine.name, brand: medicine.brand.id },
             };
 
             await AsyncStorage.setItem(

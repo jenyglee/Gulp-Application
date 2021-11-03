@@ -94,9 +94,10 @@ const AddMedicine = ({ navigation }) => {
             // ② 저장 진행
             const newMedicineServer = {
                 name: medicine,
-                brand: brand,
-                imgPath: "",
-                category: "기타",
+                // brand: brand,
+                brand: { id: 1 },
+                // category: "기타",
+                category: { id: 1 },
             };
             await addMedicine(newMedicineServer);
 
