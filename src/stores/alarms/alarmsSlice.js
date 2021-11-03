@@ -20,6 +20,9 @@ export const alarmsSlice = createSlice({
         setFiltered(state, action) {
             state.filtered = action.payload;
         },
+        setAlarm(state, action) {
+            state.alarms = action.payload;
+        },
     },
 });
 

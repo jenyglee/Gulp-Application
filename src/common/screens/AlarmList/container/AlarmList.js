@@ -15,11 +15,13 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { FloatingAction } from "react-native-floating-action";
 import { inject, observer } from "mobx-react";
 import { useSelector, useDispatch } from "react-redux";
-import {
-    stateAlarms,
-    actionsAlrams,
-    actionsAlarms,
-} from "@/stores/alarms/alarmsSlice";
+// import {
+//     stateAlarms,
+//     actionsAlrams,
+//     actionsAlarms,
+// } from "@/stores/alarms/alarmsSlice";
+import { stateAlarms } from "stores/alarms/alarmsSlice.js";
+import actionsAlarms from "stores/alarms/alarmsActions.js";
 
 const Wrap = styled.ScrollView`
     padding-top: ${({ insets }) => insets.top}px;
