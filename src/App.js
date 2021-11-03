@@ -8,19 +8,24 @@ import { medicinesStore } from "./stores/MedicinesStore.js";
 import { alarmsStore } from "./stores/AlarmsStore";
 import { commonStore } from "./stores/CommonStore";
 // import memberStore from "./stores/MemberStore";
+import { Provider as ProviderRedux } from "react-redux";
+import store from "./stores/index.js";
 
 export default function App() {
+    console.log(ProviderRedux);
     return (
-        <Provider
-            alarmsStore={alarmsStore}
-            commonStore={commonStore}
-            medicinesStore={medicinesStore}
-            // memberStore={memberStore}
-        >
-            <ThemeProvider theme={theme}>
-                <StatusBar style="auto" />
-                <Navigation />
-            </ThemeProvider>
-        </Provider>
+        <ProviderRedux store={store}>
+            <Provider
+                alarmsStore={alarmsStore}
+                commonStore={commonStore}
+                medicinesStore={medicinesStore}
+                // memberStore={memberStore}
+            >
+                <ThemeProvider theme={theme}>
+                    <StatusBar style="auto" />
+                    <Navigation />
+                </ThemeProvider>
+            </Provider>
+        </ProviderRedux>
     );
 }

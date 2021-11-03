@@ -14,6 +14,12 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { FloatingAction } from "react-native-floating-action";
 import { inject, observer } from "mobx-react";
+import { useSelector, useDispatch } from "react-redux";
+import {
+    stateAlarms,
+    actionsAlrams,
+    actionsAlarms,
+} from "@/stores/alarms/alarmsSlice";
 
 const Wrap = styled.ScrollView`
     padding-top: ${({ insets }) => insets.top}px;
@@ -61,10 +67,14 @@ const ProfileName = styled.Text`
 //     },
 
 const AlarmList = ({ navigation, alarmsStore }) => {
-    console.log(alarmsStore);
+    // console.log(alarmsStore);
+    const dispatch = useDispatch(); //dispatch : 해당 state 값을 수정하는 액션
+    //   const filtered = {...useSelector(stateAlarms).filtered};
+    const filtered = useSelector(stateAlarms).filtered;
+    console.log(filtered);
     const {
         alarms,
-        filtered,
+        // filtered,
         setFiltered,
         isVisibleAlarm,
         deleteTask,
@@ -135,7 +145,9 @@ const AlarmList = ({ navigation, alarmsStore }) => {
                         <StyledText>내 알람</StyledText>
                         <ButtonFilter
                             filtered={filtered}
-                            onPress={handlePressAlarmFilter}
+                            onPress={() => {
+                                dispatch(actionsAlarms.setFiltered(!filtered));
+                            }}
                         />
                     </TitleContainer>
                     {isVisibleAlarm ? (
