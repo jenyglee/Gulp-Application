@@ -12,13 +12,11 @@ export const alarmsSlice = createSlice({
         date: new Date().getDate(),
         day: new Date().getDay(),
 
-        task: [],
+        count: 0,
+        countTotal: 0,
     },
     reducers: {
         setAlarms(state, action) {
-            state.alarms = action.payload;
-        },
-        storeData(state, action) {
             state.alarms = action.payload;
         },
         setFiltered(state, action) {
@@ -26,6 +24,12 @@ export const alarmsSlice = createSlice({
         },
         setIsVisibleAlarm(state, action) {
             state.isVisibleAlarm = action.payload;
+        },
+        setCount(state, action) {
+            state.count = action.payload;
+        },
+        setCountTotal(state, action) {
+            state.countTotal = action.payload;
         },
     },
 });

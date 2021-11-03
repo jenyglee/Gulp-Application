@@ -79,6 +79,8 @@ const AlarmList = ({ navigation, alarmsStore }) => {
     const date = useSelector(stateAlarms).date;
     const day = useSelector(stateAlarms).day;
     const alarms = useSelector(stateAlarms).alarms;
+    const count = useSelector(stateAlarms).count;
+    const countTotal = useSelector(stateAlarms).countTotal;
 
     // console.log(filtered);
     const {
@@ -89,8 +91,8 @@ const AlarmList = ({ navigation, alarmsStore }) => {
         // deleteTask,
         // handlePressAlarmFilter,
         // toggleTask,
-        countTotal,
-        count,
+        // countTotal,
+        // count,
         isVisibleCompleteModal,
         setIsVisibleCompleteModal,
     } = alarmsStore;
@@ -190,11 +192,21 @@ const AlarmList = ({ navigation, alarmsStore }) => {
                                             })
                                             .then(() => {
                                                 dispatch(
+                                                    actionsAlarms.getAlarms({
+                                                        filtered,
+                                                        day,
+                                                    })
+                                                );
+                                            })
+                                            .then(() => {
+                                                dispatch(
                                                     actionsAlarms.allCompleted({
                                                         alarms,
                                                         year,
                                                         month,
                                                         date,
+                                                        count,
+                                                        countTotal,
                                                     })
                                                 );
                                             });

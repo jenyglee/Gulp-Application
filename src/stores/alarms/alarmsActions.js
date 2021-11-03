@@ -3,7 +3,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const actions = {
     // ✨ 전체알람 < > 오늘알람
-    handlePressAlarmFilter: (payload) => async (dispatch) => {
+    handlePressAlarmFilter: (payload) => (dispatch) => {
         dispatch(actionsAlarms.setFiltered(payload));
     },
 
@@ -11,12 +11,16 @@ const actions = {
     deleteTask:
         ({ selectedTaskKey, setIsVisibleMenu }) =>
         async (dispatch) => {
-            // console.log(selectedTaskKey, isVisibleMenu);
-            const loadedData = await AsyncStorage.getItem("alarm");
-            const parseData = JSON.parse(loadedData);
-            const copy = Object.assign({}, parseData);
-            delete copy[selectedTaskKey];
-            return copy;
+            try {
+                // console.log(selectedTaskKey, isVisibleMenu);
+                const loadedData = await AsyncStorage.getItem("alarm");
+                const parseData = JSON.parse(loadedData);
+                const copy = Object.assign({}, parseData);
+                delete copy[selectedTaskKey];
+                return copy;
+            } catch (error) {
+                throw error;
+            }
         },
 
     // ✨ 로컬에 저장하기
@@ -73,10 +77,11 @@ const actions = {
 
     // ✨전체 체크 시 복용일을 1일 증가
     allCompleted:
-        ({ alarms, year, month, date }) =>
+        ({ alarms, year, month, date, count, countTotal }) =>
         async (dispatch) => {
             // 🪲 오늘의 알람만 눌러야 완료체크 되도록 해야함. 🪲
             let num = 0;
+
             for (let i = 0; i < Object.values(alarms).length; i++) {
                 if (Object.values(alarms)[i].completed) {
                     num++;
@@ -84,35 +89,43 @@ const actions = {
                         const loadedDate = await AsyncStorage.getItem("date");
                         const parseDate = JSON.parse(loadedDate);
                         const todayDate = `${year}-${month + 1}-${date}`; // "2021-10-25"
-                        console.log(parseDate, todayDate);
-                        // if (parseDate !== todayDate) {
-                        //     this.plusDate();
-                        //     this.plusDateMAX();
-                        //     this.completeAlarm();
-                        //     await AsyncStorage.setItem(
-                        //         "date",
-                        //         JSON.stringify(todayDate)
-                        //     );
-                        //     return;
-                        // } else {
-                        //     return;
-                        // }
+                        if (parseDate !== todayDate) {
+                            dispatch(
+                                actionsAlarms.setCountTotal(countTotal + 1)
+                            );
+                            if (count === 13) {
+                                dispatch(actionsAlarms.setCount(0));
+                            } else {
+                                dispatch(actionsAlarms.setCount(count + 1));
+                            }
+                            // this.completeAlarm();
+                            await AsyncStorage.setItem(
+                                "date",
+                                JSON.stringify(todayDate)
+                            );
+                            return;
+                        } else {
+                            return;
+                        }
                     }
                 }
             }
         },
 
-    // // ✨복용완료
-    // plusDate = () => {
-    //     this.setCountTotal(this.countTotal + 1);
-    // };
-    // plusDateMAX = () => {
-    //     if (this.count === 13) {
-    //         this.setCount(0);
+    // ✨복용완료
+    // plusDate: (countTotal) => (dispatch) => {
+    //     // this.setCountTotal(this.countTotal + 1);
+    //     dispatch(actionsAlarms.setCountTotal(countTotal + 1));
+    // },
+
+    // plusDateMAX: (count) => (dispatch) => {
+    //     if (count === 13) {
+    //         dispatch(actionsAlarms.setCount(0));
     //     } else {
     //         this.setCount(this.count + 1);
+    //         dispatch(actionsAlarms.setCount(count + 1));
     //     }
-    // };
+    // },
 
     // // ✨복용완료
     // completeAlarm = () => {
