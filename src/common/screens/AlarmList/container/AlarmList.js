@@ -14,8 +14,6 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { FloatingAction } from "react-native-floating-action";
 import { inject, observer } from "mobx-react";
-// import { commonStore } from "@/stores/CommonStore";
-// import { commonStore } from "@/stores/CommonStore";
 
 const Wrap = styled.ScrollView`
     padding-top: ${({ insets }) => insets.top}px;
@@ -63,6 +61,7 @@ const ProfileName = styled.Text`
 //     },
 
 const AlarmList = ({ navigation, alarmsStore }) => {
+    console.log(alarmsStore);
     const {
         alarms,
         filtered,
@@ -75,6 +74,7 @@ const AlarmList = ({ navigation, alarmsStore }) => {
         count,
         isVisibleCompleteModal,
         setIsVisibleCompleteModal,
+        // asdasdasd,
     } = alarmsStore;
 
     const width = Dimensions.get("window").width;
@@ -83,8 +83,9 @@ const AlarmList = ({ navigation, alarmsStore }) => {
     const [gradeTable, setGradeTable] = useState(false); // 등급표
     const [isVisibleMenu, setIsVisibleMenu] = useState(false); // 알람메뉴 노출/숨김
 
-    // ✨ 로그인했는지 확인 + 약 추가 후 메인으로 복귀
+    // ✨ 로그인했는지 확인 + 약 추가 후 메인으로 복귀s
     useEffect(() => {
+        // asdasdasd();
         const removeFocusEvent = navigation.addListener("focus", () => {
             setFiltered(true);
             alarmsStore.getAlarms();
@@ -200,5 +201,5 @@ const AlarmList = ({ navigation, alarmsStore }) => {
 export default inject("alarmsStore")(observer(AlarmList));
 // export default inject((stores) => ({
 //     alarmsStore: stores.alarmsStore,
-//     commonStore: stores.commonStore,
+//     // commonStore: stores.commonStore,
 // }))(observer(AlarmList));

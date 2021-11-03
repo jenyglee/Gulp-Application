@@ -7,6 +7,7 @@ import { Provider } from "mobx-react";
 import { medicinesStore } from "./stores/MedicinesStore.js";
 import { alarmsStore } from "./stores/AlarmsStore";
 import { commonStore } from "./stores/CommonStore";
+// import memberStore from "./stores/MemberStore";
 
 export default function App() {
     return (
@@ -14,6 +15,7 @@ export default function App() {
             alarmsStore={alarmsStore}
             commonStore={commonStore}
             medicinesStore={medicinesStore}
+            // memberStore={memberStore}
         >
             <ThemeProvider theme={theme}>
                 <StatusBar style="auto" />

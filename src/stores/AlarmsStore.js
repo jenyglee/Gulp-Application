@@ -23,6 +23,10 @@ export default class AlarmsStore {
         this.alarms = alarms;
     }
 
+    asdasdasd() {
+        console.log("asjhsdh");
+    }
+
     // 알람 유무
     isVisibleAlarm = true;
     setIsVisibleAlarm(bool) {

@@ -10,6 +10,7 @@ import { logout, removeUser } from "@/member/api/memberApi";
 import RequireSignin from "@/common/components/RequireSignin";
 import { illust } from "@/images";
 import jwt_decode from "jwt-decode";
+import { inject, observer } from "mobx-react";
 
 const Container = styled.View`
     width: 100%;
@@ -26,6 +27,7 @@ const MyPageContainer = ({ navigation }) => {
 
     // ✨ 유저 정보 확인
     useEffect(() => {
+        setTasks();
         const removeFocusEvent = navigation.addListener("focus", () => {
             getUser();
         });
@@ -37,7 +39,6 @@ const MyPageContainer = ({ navigation }) => {
     // ✨ 로그인정보 가져오기
     const getUser = async () => {
         const token = await AsyncStorage.getItem("token");
-        // token ? setIsSignin(token) : setIsSignin(false);
         setIsSignin(token);
     };
 
@@ -86,3 +87,7 @@ const MyPageContainer = ({ navigation }) => {
 };
 
 export default MyPageContainer;
+
+// export default inject((stores) => ({
+//     memberStore: stores.memberStore,
+// }))(observer(MyPageContainer));
