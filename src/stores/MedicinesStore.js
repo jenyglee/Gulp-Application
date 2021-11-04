@@ -40,15 +40,15 @@ export default class MedicinesStore {
     };
 
     // ✨로컬에서 약 가져오기
-    getMedicine = async () => {
-        try {
-            // const alarm = await AsyncStorage.getItem("alarm");
-            const loadedData = await AsyncStorage.getItem("medicine");
-            this.setMedicineList(JSON.parse(loadedData));
-        } catch (error) {
-            throw error;
-        }
-    };
+    // getMedicine = async () => {
+    //     try {
+    //         // const alarm = await AsyncStorage.getItem("alarm");
+    //         const loadedData = await AsyncStorage.getItem("medicine");
+    //         this.setMedicineList(JSON.parse(loadedData));
+    //     } catch (error) {
+    //         throw error;
+    //     }
+    // };
 }
 
 export const medicinesStore = new MedicinesStore();

@@ -11,6 +11,18 @@ import { icons14px } from "@/icons";
 import { ScrollView } from "react-native-gesture-handler";
 import { deleteMedicine } from "@/medicine/api/medicineApi";
 import { inject, observer } from "mobx-react";
+import { useSelector, useDispatch } from "react-redux";
+
+import { stateAlarms } from "stores/alarms/alarmsSlice.js";
+import actionsAlarms from "stores/alarms/alarmsActions.js";
+
+import { stateCommon } from "stores/common/commonSlice";
+import actionsCommon from "stores/common/commonActions";
+
+import { stateMedicines } from "stores/medicines/medicinesSlice";
+import actionsMedicines from "stores/medicines/medicineActions";
+
+
 
 const Container = styled.View`
     width: ${({ width }) => width - 48}px;
@@ -42,24 +54,27 @@ const WeekButtonContainer = styled.View`
     background-color: ${({ theme }) => theme.background};
 `;
 
-const AddMedicine = ({
-    navigation,
-    medicinesStore,
-    commonStore,
-    alarmsStore,
-}) => {
-    const { medicineList, deleteTask, getMedicine } = medicinesStore;
-    const { weekAll, week, allWeekCheck, weekCheck, whatTime, time } =
-        commonStore;
-    const { saveMedicine } = alarmsStore;
+const AddMedicine = ({ navigation, medicinesStore, commonStore, alarmsStore }) => {
+    const dispatch = useDispatch();
     const width = Dimensions.get("window").width;
     const height = Dimensions.get("window").height;
     const theme = useContext(ThemeContext);
+    const {  deleteTask } = medicinesStore;
+    const { allWeekCheck, weekCheck, weekAll, week } = commonStore;
+    const { saveMedicine } = alarmsStore;
+
+    const medicineList = useSelector(stateMedicines).medicineList;
+    // const weekAll = useSelector(stateCommon).weekAll;
+    // const week = useSelector(stateCommon).week;
+    const time = useSelector(stateCommon).time;
+    
+
+    
     const weekCheckList = []; // 체크된 요일
 
     useEffect(() => {
         const removeFocusEvent = navigation.addListener("focus", () => {
-            getMedicine();
+            dispatch(actionsMedicines.getMedicine())
         });
         return () => removeFocusEvent();
     }, []);
@@ -70,13 +85,19 @@ const AddMedicine = ({
                 <Container width={width} height={height}>
                     <StyledForm>
                         <StyledTitle>복용시간</StyledTitle>
-                        <TimePicker onPress={whatTime} />
+                        <TimePicker onPress={()=>{
+                            dispatch(actionsCommon.whatTime(time))
+                        }} />
                     </StyledForm>
                     <StyledForm>
                         <StyledTitle>복용 요일</StyledTitle>
                         <WeekButtonContainer>
                             <WeekButton
                                 title={weekAll[0].day}
+                                // onPress={()=>{
+                                //     // 👀❓ copy본을 손대면 오류남
+                                //     dispatch(actionsCommon.allWeekCheck({week, weekAll}))
+                                // }}
                                 onPress={allWeekCheck}
                                 checked={weekAll[0].checked}
                             />
@@ -86,6 +107,10 @@ const AddMedicine = ({
                                         title={item.day}
                                         id={item.id}
                                         key={item.id}
+                                        // onPress={(id)=>{
+                                        //     // 👀❓ copy본을 손대면 오류남
+                                        //     dispatch(actionsCommon.weekCheck({id, week}))
+                                        // }}
                                         onPress={weekCheck}
                                         checked={item.checked}
                                     />
@@ -103,7 +128,10 @@ const AddMedicine = ({
                                         brand={item.brand}
                                         id={item.id}
                                         key={item.id}
-                                        deleteTask={deleteTask}
+                                        // deleteTask={deleteTask}
+                                        deleteTask={(id)=>{
+                                            dispatch(actionsMedicines.deleteTask(id, medicineList))
+                                        }}
                                     />
                                 );
                             })}
@@ -131,13 +159,8 @@ const AddMedicine = ({
             <Button
                 title="저장하기"
                 onPress={() => {
-                    saveMedicine(
-                        medicineList,
-                        time,
-                        week,
-                        weekCheckList,
-                        navigation
-                    );
+                    const response = dispatch(actionsAlarms.confirmValue(medicineList, time, week))
+                    dispatch(actionsAlarms.saveMedicine(response, medicineList, time, week, weekCheckList, navigation))
                 }}
             />
         </>

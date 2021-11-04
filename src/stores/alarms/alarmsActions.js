@@ -1,13 +1,9 @@
 import { actionsAlarms } from "./alarmsSlice.js";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { Alert } from "react-native";
 
 const actions = {
-    // ✨ 전체알람 < > 오늘알람
-    // handlePressAlarmFilter: (payload) => (dispatch) => {
-    //     dispatch(actionsAlarms.setFiltered(payload));
-    // },
-
-    // ✨ 알람 삭제
+    // ✨ 알람 삭제(alarmList)
     deleteTask: ( selectedTaskKey ) => async (dispatch) => {
             try {
                 // console.log(selectedTaskKey, isVisibleMenu);
@@ -21,7 +17,7 @@ const actions = {
             }
         },
 
-    // ✨ 로컬에 저장하기
+    // ✨ 로컬에 저장하기(alarmList)
     storeData: (alarms) => async (dispatch) => {
         try {
             await AsyncStorage.setItem("alarm", JSON.stringify(alarms));
@@ -31,7 +27,7 @@ const actions = {
         }
     },
 
-    // ✨ 알람 불러오기
+    // ✨ 알람 불러오기(alarmList)
     getAlarms:({ filtered, day }) =>async (dispatch) => {
             try {
                 const loadedData = await AsyncStorage.getItem("alarm");
@@ -52,14 +48,14 @@ const actions = {
             }
         },
 
-    // ✨ 알람이 아예 없는지 검사
+    // ✨ 알람이 아예 없는지 검사(alarmList)
     confirmList: ({alarms,setIsVisibleAlarm}) => async (dispatch) => {
         Object.values(alarms).length === 0
             ? setIsVisibleAlarm(false)
             : setIsVisibleAlarm(true)
     },
 
-    // ✨복용완료
+    // ✨복용완료(alarmList)
     toggleTask: (id) => async (dispatch) => {
         const loadedData = await AsyncStorage.getItem("alarm");
         const parseData = JSON.parse(loadedData);
@@ -68,7 +64,7 @@ const actions = {
         return copy;
     },
 
-    // ✨전체 체크 시 복용일을 1일 증가
+    // ✨전체 체크 시 복용일을 1일 증가(alarmList)
     allCompleted:({ alarms, year, month, date, count, countTotal,setIsVisibleCompleteModal }) =>async (dispatch) => {
             // 🪲 오늘의 알람만 눌러야 완료체크 되도록 해야함. 🪲
             let num = 0;
@@ -104,69 +100,64 @@ const actions = {
             }
         },
 
-    // ✨완료모달 닫기
+    // ✨완료모달 닫기(alarmList)
     setIsVisibleCompleteModal : (payload) => (dispatch) => {
         dispatch(actionsAlarms.setIsVisibleCompleteModal(payload))
     },
 
+     //  ✨빈칸검수(AddAlarm)
+    confirmValue : (medicineList, time, week) => (dispatch) => {
+        // ① 복용중인 영양제에 등록된 약이 있는지
+        if (Object.values(medicineList).length != 0) {
+            // ② 시간을 설정했는지
+            if (time !== "") {
+                // ③ 체크된 요일이 하나라도 존재하는지
+                const result = week.some((item) => {
+                    return item.checked;
+                });
+                if (result) {
+                    // ①②③ 모두 통과 시 true 반환
+                    return true;
+                } else return false;
+            } else return false;
+        } else return false;
+    },
 
-    // 👇 AddAlarm 컴포넌트용
-    //  ✨ 알람 저장
-    // saveMedicine : (medicineList, time, week, weekCheckList, navigation) => async (dispatch) => {
-    //     // 빈칸 검수
-    //     const confirmed = this.ConfirmValue(medicineList, time, week);
-
-    //     // 빈칸 검수가 완료된 경우 저장 진행
-    //     if (confirmed) {
-    //         const ID = Date.now();
-    //         {
-    //             // ⓵ 체크된 요일의 id만 가져와 빈 배열(weekCheckList)에 넣기
-    //             week.map((checkedDay) => {
-    //                 if (checkedDay.checked) {
-    //                     weekCheckList.push(checkedDay.id);
-    //                 }
-    //             });
-    //         }
-    //         // ⓶ 채워진 배열을 변수화
-    //         const newTask = {
-    //             [ID]: {
-    //                 id: ID,
-    //                 time: time,
-    //                 name: medicineList,
-    //                 day: weekCheckList, // 숫자로 전달됨 ex) [2, 3]
-    //                 completed: false,
-    //             },
-    //         };
-    //         try {
-    //             const value = await AsyncStorage.getItem("alarm");
-    //             const alarm = JSON.parse(value);
-    //             await AsyncStorage.setItem( "alarm", JSON.stringify({ ...alarm, ...newTask }) );
-    //             navigation.navigate("AlarmList");
-    //         } catch (error) {
-    //             Alert.alert(error);
-    //         }
-    //     } else if (!confirmed) {
-    //         Alert.alert("설정이 전부 입력되었는지 확인해주세요.");
-    //     }
-    // },
-    //  ✨빈칸검수
-    // ConfirmValue = (medicine, time, day) => {
-    //     // ① 복용중인 영양제에 등록된 약이 있는지
-    //     if (Object.values(medicine).length != 0) {
-    //         // ② 시간을 설정했는지
-    //         if (time !== "") {
-    //             // ③ 체크된 요일이 하나라도 존재하는지
-    //             const result = day.some((item) => {
-    //                 return item.checked;
-    //             });
-    //             if (result) {
-    //                 // ①②③ 모두 통과 시 true 반환
-    //                 return true;
-    //             } else return false;
-    //         } else return false;
-    //     } else return false;
-    // }
-
+    //  ✨ 알람 저장(AddAlarm)
+    saveMedicine : (response, medicineList, time, week, weekCheckList, navigation) => async (dispatch) => {
+        // 빈칸 검수(response)가 완료된 경우 저장 진행
+        if (response) {
+            const ID = Date.now();
+            {
+                // ⓵ 체크된 요일의 id만 가져와 빈 배열(weekCheckList)에 넣기
+                week.map((checkedDay) => {
+                    if (checkedDay.checked) {
+                        weekCheckList.push(checkedDay.id);
+                    }
+                });
+            }
+            // ⓶ 채워진 배열을 변수화
+            const newTask = {
+                [ID]: {
+                    id: ID,
+                    time: time,
+                    name: medicineList,
+                    day: weekCheckList, // 숫자로 전달됨 ex) [2, 3]
+                    completed: false,
+                },
+            };
+            try {
+                const value = await AsyncStorage.getItem("alarm");
+                const alarm = JSON.parse(value);
+                await AsyncStorage.setItem( "alarm", JSON.stringify({ ...alarm, ...newTask }) );
+                navigation.navigate("AlarmList");
+            } catch (error) {
+                Alert.alert(error);
+            }
+        } else if (!response) {
+            Alert.alert("설정이 전부 입력되었는지 확인해주세요.");
+        }
+    },
 };
 
 export default actions;

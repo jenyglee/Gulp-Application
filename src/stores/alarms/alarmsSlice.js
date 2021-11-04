@@ -7,7 +7,7 @@ export const alarmsSlice = createSlice({
 
         // filtered: true,
         // isVisibleAlarm: true,
-        isVisibleCompleteModal : false,
+        // isVisibleCompleteModal : false,
 
         year: new Date().getFullYear(),
         month: new Date().getMonth(),
@@ -21,12 +21,6 @@ export const alarmsSlice = createSlice({
         setAlarms(state, action) {
             state.alarms = action.payload;
         },
-        // setFiltered(state, action) {
-        //     state.filtered = action.payload;
-        // },
-        // setIsVisibleAlarm(state, action) {
-        //     state.isVisibleAlarm = action.payload;
-        // },
         setCount(state, action) {
             state.count = action.payload;
         },

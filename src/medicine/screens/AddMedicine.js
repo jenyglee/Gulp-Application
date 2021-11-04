@@ -92,13 +92,16 @@ const AddMedicine = ({ navigation }) => {
             }
 
             // ② 저장 진행
+            // const newMedicineServer = {
+            //     name: "오메가 3",
+            //     // brand: brand,
+            //     brand: { id: 1 },
+            //     // category: "기타",
+            //     category: { id: 1 },
+            // };
             const newMedicineServer = {
-                name: medicine,
-                // brand: brand,
-                brand: { id: 1 },
-                // category: "기타",
-                category: { id: 1 },
-            };
+                name:"오메가 3", brand:{ id:1 }, category: { id:1 }
+            }
             await addMedicine(newMedicineServer);
 
             navigation.navigate("AddAlarm");

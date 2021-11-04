@@ -10,8 +10,23 @@ export default class CommonStore {
     constructor() {
         makeAutoObservable(this);
     }
-    allCheckWeek = [{ id: 0, day: "All", checked: false }];
-    checkWeek = [
+    // allCheckWeek = [{ id: 0, day: "All", checked: false }];
+    // checkWeek = [
+    //     { id: 1, day: "월", checked: false },
+    //     { id: 2, day: "화", checked: false },
+    //     { id: 3, day: "수", checked: false },
+    //     { id: 4, day: "목", checked: false },
+    //     { id: 5, day: "금", checked: false },
+    //     { id: 6, day: "토", checked: false },
+    //     { id: 7, day: "일", checked: false },
+    // ];
+
+    weekAll = [{ id: 0, day: "All", checked: false }];
+    setWeekAll(arr) {
+        this.weekAll = arr;
+    }
+
+    week = [
         { id: 1, day: "월", checked: false },
         { id: 2, day: "화", checked: false },
         { id: 3, day: "수", checked: false },
@@ -20,21 +35,14 @@ export default class CommonStore {
         { id: 6, day: "토", checked: false },
         { id: 7, day: "일", checked: false },
     ];
-
-    weekAll = this.allCheckWeek;
-    setWeekAll(arr) {
-        this.weekAll = arr;
-    }
-
-    week = this.checkWeek;
     setWeek(arr) {
         this.week = arr;
     }
 
-    time = "";
-    setTime(date) {
-        this.time = date;
-    }
+    // time = "";
+    // setTime(date) {
+    //     this.time = date;
+    // }
 
     // ✨요일 전채선택(common)
     allWeekCheck = () => {
@@ -67,10 +75,10 @@ export default class CommonStore {
         this.setWeek(copy);
     };
 
-    // ✨ 설정한 시간 가져오기
-    whatTime = (date) => {
-        this.setTime(date);
-    };
+    // // ✨ 설정한 시간 가져오기
+    // whatTime = (date) => {
+    //     this.setTime(date);
+    // };
 }
 
 export const commonStore = new CommonStore();

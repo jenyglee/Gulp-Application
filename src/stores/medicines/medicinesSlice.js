@@ -1,25 +1,30 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-export const alarmsSlice = createSlice({
-    name: "alarms",
+export const medicinesSlice = createSlice({
+    name: "medicines",
     initialState: {
-        // alarms: [],
-        // alarm: {
+        // medicines: [],
+        // medicine: {
         //     name: "",
         //     age: "",
         // },
+
+        medicineList : {},
     },
     reducers: {
-        // alarmSet: (state, action) => {
-        //     state.alarm = action.payload;
+        // medicineSet: (state, action) => {
+        //     state.medicine = action.payload;
         // },
-        // alarmsCreate: (state, action) => {
-        //     state.alarms.push(action.payload);
+        // medicinesCreate: (state, action) => {
+        //     state.medicines.push(action.payload);
         // },
+        setMedicineList(state, action) {
+            state.medicineList = action.payload;
+        },
     },
 });
 
-export const stateAlarms = (state) => state.alarms;
-export const actionsAlarms = alarmsSlice.actions;
+export const stateMedicines = (state) => state.medicines;
+export const actionsMedicines = medicinesSlice.actions;
 
-export default alarmsSlice.reducer;
+export default medicinesSlice.reducer;
