@@ -124,7 +124,7 @@ const actions = {
     },
 
     //  ✨ 알람 저장(AddAlarm)
-    saveMedicine : (response, medicineList, time, week, weekCheckList, navigation) => async (dispatch) => {
+    saveAlarm : (response, medicineList, time, week, weekCheckList, navigation) => async (dispatch) => {
         // 빈칸 검수(response)가 완료된 경우 저장 진행
         if (response) {
             const ID = Date.now();

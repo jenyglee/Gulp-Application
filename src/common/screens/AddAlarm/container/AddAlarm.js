@@ -59,18 +59,28 @@ const AddMedicine = ({ navigation, medicinesStore, commonStore, alarmsStore }) =
     const width = Dimensions.get("window").width;
     const height = Dimensions.get("window").height;
     const theme = useContext(ThemeContext);
-    const {  deleteTask } = medicinesStore;
-    const { allWeekCheck, weekCheck, weekAll, week } = commonStore;
-    const { saveMedicine } = alarmsStore;
+    const {  } = medicinesStore;
+    const {  } = alarmsStore;
+    const { } = commonStore;
 
     const medicineList = useSelector(stateMedicines).medicineList;
-    // const weekAll = useSelector(stateCommon).weekAll;
-    // const week = useSelector(stateCommon).week;
     const time = useSelector(stateCommon).time;
-    
+    // const week = useSelector(stateCommon).week;
+    // const weekAll = useSelector(stateCommon).weekAll;
 
-    
+
+    const [week, setWeek] = useState([
+        { id: 1, day: "월", checked: false },
+        { id: 2, day: "화", checked: false },
+        { id: 3, day: "수", checked: false },
+        { id: 4, day: "목", checked: false },
+        { id: 5, day: "금", checked: false },
+        { id: 6, day: "토", checked: false },
+        { id: 7, day: "일", checked: false },
+    ])
+    const [weekAll, setWeekAll] = useState([{ id: 0, day: "All", checked: false }])
     const weekCheckList = []; // 체크된 요일
+    
 
     useEffect(() => {
         const removeFocusEvent = navigation.addListener("focus", () => {
@@ -94,11 +104,10 @@ const AddMedicine = ({ navigation, medicinesStore, commonStore, alarmsStore }) =
                         <WeekButtonContainer>
                             <WeekButton
                                 title={weekAll[0].day}
-                                // onPress={()=>{
-                                //     // 👀❓ copy본을 손대면 오류남
-                                //     dispatch(actionsCommon.allWeekCheck({week, weekAll}))
-                                // }}
-                                onPress={allWeekCheck}
+                                onPress={()=>{
+                                    dispatch(actionsCommon.allWeekCheck({week, setWeek, weekAll, setWeekAll}))
+                                }}
+                                // onPress={allWeekCheck}
                                 checked={weekAll[0].checked}
                             />
                             {week.map((item) => {
@@ -107,11 +116,9 @@ const AddMedicine = ({ navigation, medicinesStore, commonStore, alarmsStore }) =
                                         title={item.day}
                                         id={item.id}
                                         key={item.id}
-                                        // onPress={(id)=>{
-                                        //     // 👀❓ copy본을 손대면 오류남
-                                        //     dispatch(actionsCommon.weekCheck({id, week}))
-                                        // }}
-                                        onPress={weekCheck}
+                                        onPress={(id)=>{
+                                            dispatch(actionsCommon.weekCheck({id, week, setWeek, weekAll, setWeekAll}))
+                                        }}
                                         checked={item.checked}
                                     />
                                 );
@@ -131,6 +138,10 @@ const AddMedicine = ({ navigation, medicinesStore, commonStore, alarmsStore }) =
                                         // deleteTask={deleteTask}
                                         deleteTask={(id)=>{
                                             dispatch(actionsMedicines.deleteTask(id, medicineList))
+                                            .then((medicines)=>{
+                                                dispatch(actionsMedicines.storeData(medicines))
+                                            })
+                                            
                                         }}
                                     />
                                 );
@@ -160,7 +171,7 @@ const AddMedicine = ({ navigation, medicinesStore, commonStore, alarmsStore }) =
                 title="저장하기"
                 onPress={() => {
                     const response = dispatch(actionsAlarms.confirmValue(medicineList, time, week))
-                    dispatch(actionsAlarms.saveMedicine(response, medicineList, time, week, weekCheckList, navigation))
+                    dispatch(actionsAlarms.saveAlarm(response, medicineList, time, week, weekCheckList, navigation))
                 }}
             />
         </>

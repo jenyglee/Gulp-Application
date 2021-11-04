@@ -67,47 +67,51 @@ const AddMedicine = ({ navigation }) => {
     // ✨ 로컬에 저장하기
     const getMedicineData = async () => {
         try {
-            // ① 이미 등록된 약인지 확인
+            // // ① 이미 등록된 약인지 확인
             const loadedData = await AsyncStorage.getItem("medicine");
             const Item = JSON.parse(loadedData);
-            // 🍎 값이 있을 경우 알럿 뜨게 하기(이건 api에서도 또 체크해야함.)
-            let duplicate = Object.values(Item).some((v) => {
-                const sameBrand = () => {
-                    if (v.brand === brand) {
-                        return true;
-                    } else return false;
-                };
-                const sameMedicine = () => {
-                    if (v.name === medicine) {
-                        return true;
-                    } else return false;
-                };
-                //
-                sameBrand && sameMedicine;
-            });
-            if (duplicate) {
-                // 🪲알럿이 안뜸
-                Alert.alert("이 약은 이미 등록되어 있습니다.");
-                return;
-            }
+            // // 🍎 값이 있을 경우 알럿 뜨게 하기(이건 api에서도 또 체크해야함.)
+            // let duplicate = Object.values(Item).some((v) => {
+            //     const sameBrand = () => {
+            //         if (v.brand === brand) {
+            //             return true;
+            //         } else return false;
+            //     };
+            //     const sameMedicine = () => {
+            //         if (v.name === medicine) {
+            //             return true;
+            //         } else return false;
+            //     };
+            //     //
+            //     sameBrand && sameMedicine;
+            // });
+            // if (duplicate) {
+            //     // 🪲알럿이 안뜸
+            //     Alert.alert("이 약은 이미 등록되어 있습니다.");
+            //     return;
+            // }
 
             // ② 저장 진행
             // const newMedicineServer = {
-            //     name: "오메가 3",
+            //     name: name,
             //     // brand: brand,
             //     brand: { id: 1 },
             //     // category: "기타",
             //     category: { id: 1 },
             // };
-            const newMedicineServer = {
-                name:"오메가 3", brand:{ id:1 }, category: { id:1 }
-            }
-            await addMedicine(newMedicineServer);
+            
+            // await addMedicine(newMedicineServer);
 
+            // 👇 api가 에러떠서 버리고 일단 이걸로 저장진행
+            const ID = Date.now();
+            const newMedicine = {
+                [ID]: { id: ID, name: medicine, brand: 1 },
+            };
+            await AsyncStorage.setItem("medicine", JSON.stringify({ ...Item, ...newMedicine }));
             navigation.navigate("AddAlarm");
-        } catch (e) {
-            console.log(e);
-        }
+            } catch (e) {
+                console.log(e);
+            }
     };
 
     // ✨ medicine 검색창에 입력

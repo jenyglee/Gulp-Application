@@ -13,6 +13,12 @@ const addMedicine = async (medicine) => {
             data: medicine,
         });
         console.log(response)
+        const ID = Date.now();
+        const newMedicine = {
+            [ID]: { id: ID, name: medicine.name, brand: medicine.brand.id },
+        };
+
+        await AsyncStorage.setItem("medicine", JSON.stringify({ ...Item, ...newMedicine }));
 
         // if (response.status === 200) {
         //     console.log(response.data);
