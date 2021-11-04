@@ -10,19 +10,12 @@ import TopLogo from "@/common/screens/AlarmList/component/TopLogo";
 import ButtonFilter from "@/common/screens/AlarmList/component/ButtonFilter";
 import { GradeTable } from "@components/modal/index";
 import CompleteModal from "@screens/AlarmList/component/CompleteModal";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { FloatingAction } from "react-native-floating-action";
 import { inject, observer } from "mobx-react";
 import { useSelector, useDispatch } from "react-redux";
-// import {
-//     stateAlarms,
-//     actionsAlrams,
-//     actionsAlarms,
-// } from "@/stores/alarms/alarmsSlice";
 import { stateAlarms } from "stores/alarms/alarmsSlice.js";
 import actionsAlarms from "stores/alarms/alarmsActions.js";
-import { Button } from "@/common/components";
 
 const Wrap = styled.ScrollView`
     padding-top: ${({ insets }) => insets.top}px;
@@ -70,10 +63,7 @@ const ProfileName = styled.Text`
 //     },
 
 const AlarmList = ({ navigation, alarmsStore }) => {
-    // console.log(alarmsStore);
     const dispatch = useDispatch(); //dispatch : 해당 state 값을 수정하는 액션
-    // const filtered = { ...useSelector(stateAlarms).filtered };
-    const filtered = useSelector(stateAlarms).filtered;
     const year = useSelector(stateAlarms).year;
     const month = useSelector(stateAlarms).month;
     const date = useSelector(stateAlarms).date;
@@ -82,33 +72,24 @@ const AlarmList = ({ navigation, alarmsStore }) => {
     const count = useSelector(stateAlarms).count;
     const countTotal = useSelector(stateAlarms).countTotal;
 
-    // console.log(filtered);
-    const {
-        // alarms,
-        // filtered,
-        setFiltered,
-        isVisibleAlarm,
-        // deleteTask,
-        // handlePressAlarmFilter,
-        // toggleTask,
-        // countTotal,
-        // count,
-        isVisibleCompleteModal,
-        setIsVisibleCompleteModal,
-    } = alarmsStore;
-
     const width = Dimensions.get("window").width;
     const insets = useSafeAreaInsets();
     const [selectedTaskKey, setSelectedTaskKey] = useState();
     const [gradeTable, setGradeTable] = useState(false); // 등급표
     const [isVisibleMenu, setIsVisibleMenu] = useState(false); // 알람메뉴 노출/숨김
+    const [filtered, setFiltered] = useState(true); // 전체알람 < > 오늘알람
+    const [isVisibleAlarm, setIsVisibleAlarm] = useState(true); // 알람 유무
+    const [isVisibleCompleteModal, setIsVisibleCompleteModal] = useState(false); // 완료모달 노출/숨김
+    
+    
 
     // ✨ 로그인했는지 확인 + 약 추가 후 메인으로 복귀
     useEffect(() => {
         const removeFocusEvent = navigation.addListener("focus", () => {
             setFiltered(true);
             dispatch(actionsAlarms.getAlarms({ filtered, day }));
-            dispatch(actionsAlarms.confirmList(alarms));
+            // 👀❓ 무조건 alarms가 빈 배열로 들어감
+            // dispatch(actionsAlarms.confirmList(alarms))
         });
         return () => {
             removeFocusEvent();
@@ -118,7 +99,8 @@ const AlarmList = ({ navigation, alarmsStore }) => {
     // ✨ Today <-> All 필터링 됐을 때
     useEffect(() => {
         dispatch(actionsAlarms.getAlarms({ filtered, day }));
-        dispatch(actionsAlarms.confirmList(alarms));
+        // 👀❓ 무조건 alarms가 빈 배열로 들어감
+        // dispatch(actionsAlarms.confirmList({alarms, setIsVisibleAlarm}));
     }, [filtered]);
 
     // ✨ 등급표 노출/숨김
@@ -141,6 +123,10 @@ const AlarmList = ({ navigation, alarmsStore }) => {
         setIsVisibleMenu(false);
     };
 
+    const handlePressAlarmFilter = ()=>{
+        setFiltered(!filtered)
+    }
+
     return (
         <>
             <Wrap insets={insets}>
@@ -156,22 +142,7 @@ const AlarmList = ({ navigation, alarmsStore }) => {
                         <StyledText>내 알람</StyledText>
                         <ButtonFilter
                             filtered={filtered}
-                            // onPress={handlePressAlarmFilter}
-                            // onPress={() => {
-                            //     console.log(filtered);
-                            // }}
-                            onPress={() => {
-                                dispatch(
-                                    actionsAlarms.handlePressAlarmFilter(
-                                        !filtered
-                                    )
-                                );
-                            }}
-                            // onPress={() => {
-                            //     dispatch(
-                            //         actionsAlarms.setAlarm({ filtered, day })
-                            //     );
-                            // }}
+                            onPress={handlePressAlarmFilter}
                         />
                     </TitleContainer>
                     {isVisibleAlarm ? (
@@ -180,35 +151,16 @@ const AlarmList = ({ navigation, alarmsStore }) => {
                                 <Alarm
                                     alarmInfo={item}
                                     menuIcon={icons.dot}
-                                    // toggleTask={toggleTask}
                                     toggleTask={(id) => {
                                         dispatch(actionsAlarms.toggleTask(id))
                                             .then((alarms) => {
-                                                dispatch(
-                                                    actionsAlarms.storeData(
-                                                        alarms
-                                                    )
-                                                );
+                                                dispatch(actionsAlarms.storeData(alarms));
                                             })
                                             .then(() => {
-                                                dispatch(
-                                                    actionsAlarms.getAlarms({
-                                                        filtered,
-                                                        day,
-                                                    })
-                                                );
+                                                dispatch(actionsAlarms.getAlarms({filtered, day}));
                                             })
                                             .then(() => {
-                                                dispatch(
-                                                    actionsAlarms.allCompleted({
-                                                        alarms,
-                                                        year,
-                                                        month,
-                                                        date,
-                                                        count,
-                                                        countTotal,
-                                                    })
-                                                );
+                                                dispatch(actionsAlarms.allCompleted({alarms, year, month, date, count, countTotal, setIsVisibleCompleteModal}));
                                             });
                                     }}
                                     showAlarmMenu={showAlarmMenu}
@@ -223,48 +175,22 @@ const AlarmList = ({ navigation, alarmsStore }) => {
                     {gradeTable ? (
                         <GradeTable onPress={showGradeTable} />
                     ) : null}
-                    <Button
-                        containerStyle={{
-                            marginTop: 300,
-                        }}
-                        title="deleteTask"
-                        onPress={() => {}}
-                    />
 
                     <AlarmMenu
                         isVisibleMenu={isVisibleMenu}
                         setIsVisibleMenu={setIsVisibleMenu}
                         deleteTask={() => {
-                            dispatch(
-                                actionsAlarms.deleteTask({
-                                    selectedTaskKey,
-                                    setIsVisibleMenu,
-                                })
-                            )
+                            dispatch(actionsAlarms.deleteTask(selectedTaskKey))
                                 .then((otherAlarms) => {
-                                    dispatch(
-                                        actionsAlarms.storeData(otherAlarms)
-                                    );
+                                    dispatch(actionsAlarms.storeData(otherAlarms));
                                 })
                                 .then(() => {
-                                    dispatch(
-                                        actionsAlarms.getAlarms({
-                                            filtered,
-                                            day,
-                                        })
-                                    );
+                                    dispatch(actionsAlarms.getAlarms({filtered, day}));
                                 });
                         }}
-                        editMedicine={editMedicine.bind(
-                            undefined,
-                            selectedTaskKey
-                        )}
+                        editMedicine={editMedicine.bind( undefined, selectedTaskKey )}
                     />
-                    <CompleteModal
-                        isVisible={isVisibleCompleteModal}
-                        setIsVisible={setIsVisibleCompleteModal}
-                        count={count}
-                    />
+                    <CompleteModal isVisible={isVisibleCompleteModal} setIsVisible={setIsVisibleCompleteModal} count={count} />
                 </Container>
             </Wrap>
             <FloatingAction
@@ -279,9 +205,7 @@ const AlarmList = ({ navigation, alarmsStore }) => {
                 buttonSize={50}
                 animated={false}
                 showBackground={false}
-                onPressMain={() => {
-                    navigation.navigate("AddAlarm");
-                }}
+                onPressMain={() => { navigation.navigate("AddAlarm"); }}
             />
         </>
     );

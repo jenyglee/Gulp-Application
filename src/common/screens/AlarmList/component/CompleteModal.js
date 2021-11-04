@@ -1,14 +1,5 @@
 import React, { useEffect, useRef } from "react";
-import {
-    View,
-    StyleSheet,
-    Image,
-    Text,
-    Modal,
-    Animated,
-    TouchableWithoutFeedback,
-    Dimensions,
-    PanResponder,
+import { View, StyleSheet, Modal, Animated, TouchableWithoutFeedback, Dimensions, PanResponder,
 } from "react-native";
 import { illust } from "@/images";
 import Button from "@components/modal/Button";
@@ -92,7 +83,7 @@ const CompleteModal = ({ isVisible, setIsVisible, count }) => {
 
     const closeModal = () => {
         closeBottomSheet.start(() => {
-            setIsVisible(false);
+            setIsVisible(false)
         });
     };
 

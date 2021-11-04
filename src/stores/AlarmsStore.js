@@ -12,66 +12,66 @@ export default class AlarmsStore {
         makeAutoObservable(this);
     }
 
-    globalDate = new Date();
-    year = this.globalDate.getFullYear();
-    month = this.globalDate.getMonth();
-    date = this.globalDate.getDate();
-    day = this.globalDate.getDay();
+    // globalDate = new Date();
+    // year = this.globalDate.getFullYear();
+    // month = this.globalDate.getMonth();
+    // date = this.globalDate.getDate();
+    // day = this.globalDate.getDay();
 
-    alarms = [];
-    setAlarm(alarms) {
-        this.alarms = alarms;
-    }
+    // alarms = [];
+    // setAlarm(alarms) {
+    //     this.alarms = alarms;
+    // }
 
     // 알람 유무
-    isVisibleAlarm = true;
-    setIsVisibleAlarm(bool) {
-        this.isVisibleAlarm = bool;
-    }
+    // isVisibleAlarm = true;
+    // setIsVisibleAlarm(bool) {
+    //     this.isVisibleAlarm = bool;
+    // }
 
     // Today <-> All 필터링
-    filtered = false;
-    setFiltered(bool) {
-        this.filtered = bool;
-    }
+    // filtered = false;
+    // setFiltered(bool) {
+    //     this.filtered = bool;
+    // }
 
-    count = 0;
-    setCount(num) {
-        this.count = num;
-    }
+    // count = 0;
+    // setCount(num) {
+    //     this.count = num;
+    // }
 
-    countTotal = 0;
-    setCountTotal(num) {
-        this.countTotal = num;
-    }
+    // countTotal = 0;
+    // setCountTotal(num) {
+    //     this.countTotal = num;
+    // }
 
     //전체복용 완료
-    isVisibleCompleteModal = false;
-    setIsVisibleCompleteModal(bool) {
-        this.isVisibleCompleteModal = bool;
-    }
+    // isVisibleCompleteModal = false;
+    // setIsVisibleCompleteModal(bool) {
+    //     this.isVisibleCompleteModal = bool;
+    // }
 
     // ✨ 알람 삭제
-    deleteTask = async (id, setIsVisibleMenu) => {
-        const loadedData = await AsyncStorage.getItem("alarm");
-        const parseData = JSON.parse(loadedData);
-        const copy = Object.assign({}, parseData);
-        delete copy[id];
-        this.storeData(copy);
-        this.getAlarms(this.filtered);
-        setIsVisibleMenu(false);
-    };
+    // deleteTask = async (id, setIsVisibleMenu) => {
+    //     const loadedData = await AsyncStorage.getItem("alarm");
+    //     const parseData = JSON.parse(loadedData);
+    //     const copy = Object.assign({}, parseData);
+    //     delete copy[id];
+    //     this.storeData(copy);
+    //     this.getAlarms(this.filtered);
+    //     setIsVisibleMenu(false);
+    // };
 
     // ✨ 로컬에 저장하기
-    storeData = async (alarms) => {
-        try {
-            await AsyncStorage.setItem("alarm", JSON.stringify(alarms));
-            this.setAlarm(alarms);
-            // confirmList(alarms); // 알람이 아예 없는지 검사
-        } catch (error) {
-            throw error;
-        }
-    };
+    // storeData = async (alarms) => {
+    //     try {
+    //         await AsyncStorage.setItem("alarm", JSON.stringify(alarms));
+    //         this.setAlarm(alarms);
+    //         // confirmList(alarms); // 알람이 아예 없는지 검사
+    //     } catch (error) {
+    //         throw error;
+    //     }
+    // };
 
     // ✨ 알람 불러오기
     // getAlarms = async () => {
@@ -116,59 +116,59 @@ export default class AlarmsStore {
     // };
 
     // ✨복용완료
-    toggleTask = (id) => {
-        // 🪲 완료시 알람을 가져와서 변경해주는데 전체알람쪽이 사라진다.
-        var copy = Object.assign({}, this.alarms);
-        copy[id].completed = !copy[id].completed;
-        this.storeData(copy); // 로컬에 저장하기
-        this.allCompleted(); // 전체 복용했는지 확인
-    };
+    // toggleTask = (id) => {
+    //     // 🪲 완료시 알람을 가져와서 변경해주는데 전체알람쪽이 사라진다.
+    //     var copy = Object.assign({}, this.alarms);
+    //     copy[id].completed = !copy[id].completed;
+    //     this.storeData(copy); // 로컬에 저장하기
+    //     this.allCompleted(); // 전체 복용했는지 확인
+    // };
 
     // ✨전체 체크 시 복용일을 1일 증가
-    allCompleted = async () => {
-        // 🪲 오늘의 알람만 눌러야 완료체크 되도록 해야함. 🪲
-        let num = 0;
-        for (let i = 0; i < Object.values(this.alarms).length; i++) {
-            if (Object.values(this.alarms)[i].completed) {
-                num++;
-                if (num == Object.values(this.alarms).length) {
-                    const loadedDate = await AsyncStorage.getItem("date");
-                    const parseDate = JSON.parse(loadedDate);
-                    const todayDate = `${this.year}-${this.month + 1}-${
-                        this.date
-                    }`; // "2021-10-25"
-                    // console.log(parseDate, todayDate);
-                    if (parseDate !== todayDate) {
-                        this.plusDate();
-                        this.plusDateMAX();
-                        this.completeAlarm();
-                        await AsyncStorage.setItem(
-                            "date",
-                            JSON.stringify(todayDate)
-                        );
-                        return;
-                    } else {
-                        return;
-                    }
-                }
-            }
-        }
-    };
+    // allCompleted = async () => {
+    //     // 🪲 오늘의 알람만 눌러야 완료체크 되도록 해야함. 🪲
+    //     let num = 0;
+    //     for (let i = 0; i < Object.values(this.alarms).length; i++) {
+    //         if (Object.values(this.alarms)[i].completed) {
+    //             num++;
+    //             if (num == Object.values(this.alarms).length) {
+    //                 const loadedDate = await AsyncStorage.getItem("date");
+    //                 const parseDate = JSON.parse(loadedDate);
+    //                 const todayDate = `${this.year}-${this.month + 1}-${
+    //                     this.date
+    //                 }`; // "2021-10-25"
+    //                 // console.log(parseDate, todayDate);
+    //                 if (parseDate !== todayDate) {
+    //                     this.plusDate();
+    //                     this.plusDateMAX();
+    //                     this.completeAlarm();
+    //                     await AsyncStorage.setItem(
+    //                         "date",
+    //                         JSON.stringify(todayDate)
+    //                     );
+    //                     return;
+    //                 } else {
+    //                     return;
+    //                 }
+    //             }
+    //         }
+    //     }
+    // };
     // ✨복용완료
-    plusDate = () => {
-        this.setCountTotal(this.countTotal + 1);
-    };
-    plusDateMAX = () => {
-        if (this.count === 13) {
-            this.setCount(0);
-        } else {
-            this.setCount(this.count + 1);
-        }
-    };
+    // plusDate = () => {
+    //     this.setCountTotal(this.countTotal + 1);
+    // };
+    // plusDateMAX = () => {
+    //     if (this.count === 13) {
+    //         this.setCount(0);
+    //     } else {
+    //         this.setCount(this.count + 1);
+    //     }
+    // };
     // ✨복용완료
-    completeAlarm = () => {
-        this.setIsVisibleCompleteModal(true);
-    };
+    // completeAlarm = () => {
+    //     this.setIsVisibleCompleteModal(true);
+    // };
 
     //  ✨ 알람 저장
     saveMedicine = async (
