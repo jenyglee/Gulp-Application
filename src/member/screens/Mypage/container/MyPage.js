@@ -10,10 +10,13 @@ import { logout, removeUser } from "@/member/api/memberApi";
 import RequireSignin from "@/common/components/RequireSignin";
 import { illust } from "@/images";
 import jwt_decode from "jwt-decode";
-import { inject, observer } from "mobx-react";
 import { useSelector, useDispatch } from "react-redux";
 import { stateMembers } from "stores/members/membersSlice";
 import actionsMembers from "stores/members/memberActions";
+
+// import { useSelector, useDispatch } from "react-redux";
+// import { stateAlarms } from "stores/alarms/alarmsSlice.js";
+// import actionsAlarms from "stores/alarms/alarmsActions.js";
 
 const Container = styled.View`
     width: 100%;
@@ -89,9 +92,6 @@ const MyPageContainer = ({ navigation }) => {
     );
 };
 
-export default inject("memberStore")(observer(MyPageContainer));
-// export default MyPageContainer;
+export default MyPageContainer;
 
-// export default inject((stores) => ({
-//     memberStore: stores.memberStore,
-// }))(observer(MyPageContainer));
+

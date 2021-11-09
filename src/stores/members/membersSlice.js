@@ -1,14 +1,14 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-export const memberSlice = createSlice({
-    name: "member",
+export const membersSlice = createSlice({
+    name: "members",
     initialState: {
-        // memberList : {},
+        memberList : {},
     },
     reducers: {
-        // setMemberList(state, action) {
-        //     state.memberList = action.payload;
-        // },
+        setMemberList(state, action) {
+            state.memberList = action.payload;
+        },
     },
 });
 

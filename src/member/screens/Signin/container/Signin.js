@@ -11,6 +11,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { stateMembers } from "stores/members/membersSlice";
 import actionsMembers from "stores/members/memberActions";
 
+
 const Container = styled.View`
     align-items: center;
     height: 100%;
@@ -118,5 +119,4 @@ const SigninContainer = ({ navigation }) => {
     );
 };
 
-// export default SigninContainer;
-export default inject("memberStore")(observer(SigninContainer));
+export default SigninContainer;
