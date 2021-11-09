@@ -5,7 +5,9 @@ import { Button, TextButton, Input, Image } from "@components/index";
 import { isEmail, removeWhiteSpace } from "@/util";
 import { emailValidation, signup } from "@/member/api/memberApi";
 import { Alert, Animated, Dimensions } from "react-native";
-// import { createUser } from "@/firebase";
+import { useSelector, useDispatch } from "react-redux";
+import { stateMembers } from "stores/members/membersSlice";
+import actionsMembers from "stores/members/memberActions";
 
 const Container = styled.View`
     flex: 1;
@@ -28,12 +30,9 @@ const StyledTitle = styled.Text`
     margin-bottom: 20px;
 `;
 
-const DEFAULT_PHOTO =
-    "https://firebasestorage.googleapis.com/v0/b/medicine-cc1f6.appspot.com/o/face.png?alt=media";
-
 const SignupContainer00 = ({ navigation }) => {
+    const dispatch = useDispatch();
     const theme = useContext(ThemeContext);
-    const [photo, setPhoto] = useState(DEFAULT_PHOTO);
     const width = Dimensions.get("window").width;
     const [nickname, setNickname] = useState("");
     const [email, setEmail] = useState("");
@@ -48,21 +47,7 @@ const SignupContainer00 = ({ navigation }) => {
     // ✨ 포커스 아웃이 되면 다음 인풋 노출
     const [showEmail, setShowEmail] = useState(false);
     const [showPassword, setShowPassword] = useState(false);
-
-    // ✨ 회원가입
-    const handleSignupBtnPress = async () => {
-        try {
-            const response = await signup({ nickname, email, password });
-            if (response === 200) {
-                navigation.navigate("Signup02");
-            } else {
-                Alert.alert(response);
-            }
-        } catch (error) {
-            Alert.alert(error.message);
-        }
-    };
-
+    
     // ✨ 애니메이션 'opacity'
     const inputAnimation = (opacityItem) => {
         Animated.timing(opacityItem, {
@@ -129,8 +114,6 @@ const SignupContainer00 = ({ navigation }) => {
         } else {
             setAllValue(false);
         }
-        // const confirmAllValue = () => {
-        // };
     });
 
     return (
@@ -141,7 +124,6 @@ const SignupContainer00 = ({ navigation }) => {
             extraScrollHeight={20}
         >
             <Container>
-                {/* <Image url={photo} onChangePhoto={setPhoto} /> */}
                 <InputContainer>
                     <StyledTitle>닉네임을 입력해주세요</StyledTitle>
                     <Input
@@ -252,7 +234,7 @@ const SignupContainer00 = ({ navigation }) => {
                     onPress={() => {
                         if ((nickname, email, password, passwordConfirm)) {
                             if (password === passwordConfirm) {
-                                handleSignupBtnPress();
+                                dispatch(actionsMembers.handleSignupBtnPress(nickname, email, password, navigation))
                             } else {
                                 Alert.alert("비밀번호가 일치하지 않습니다.");
                             }

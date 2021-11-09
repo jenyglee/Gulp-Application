@@ -3,11 +3,12 @@ import { View, ScrollView, Dimensions } from "react-native";
 import styled, { ThemeContext } from "styled-components";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import CalendarTable from "@/common/screens/Calendar/component/CalendarTable";
-import CalendarTitle from "@/common/screens/Calendar/component/CalendarTitle";
-import CalendarTitleNotSignin from "@/common/screens/Calendar/component/CalendarTitleNotSignin";
 import RequireSignin from "@/common/components/RequireSignin";
 import { badge } from "@/icons";
 import { illust } from "@/images";
+import { useSelector, useDispatch } from "react-redux";
+import { stateCalendar } from "stores/calendar/calendarSlice";
+import actionsCalendar from "stores/calendar/calendarActions";
 
 const Container = styled.View`
     width: ${({ width }) => width - 48}px;
@@ -67,6 +68,7 @@ const Line = styled.View`
 `;
 
 const Calendar = ({ navigation }) => {
+    const dispatch = useDispatch();
     const width = Dimensions.get("window").width;
     const height = Dimensions.get("window").height;
     const theme = useContext(ThemeContext);
@@ -77,7 +79,7 @@ const Calendar = ({ navigation }) => {
 
     useEffect(() => {
         const removeFocusEvent = navigation.addListener("focus", () => {
-            getData();
+            dispatch(actionsCalendar.getData(setAlarm, setFoundMedicine))
             getUser();
         });
         return () => {
@@ -89,28 +91,12 @@ const Calendar = ({ navigation }) => {
     const getUser = async () => {
         const token = await AsyncStorage.getItem("token");
         setIsSignin(token);
-
-        const dec = decodeURI(token);
-        console.log(dec);
-    };
-
-    // ✨ 등록된 알람 가져오기
-    const getData = async () => {
-        const loadedData = await AsyncStorage.getItem("alarm");
-        setAlarm(JSON.parse(loadedData));
-
-        if (Object.values(JSON.parse(loadedData)).length == 0) {
-            setFoundMedicine(false);
-        } else {
-            setFoundMedicine(true);
-        }
     };
 
     return (
         <ScrollView>
             {isSignin ? (
                 <Container width={width} height={height} isSignin={isSignin}>
-                    {/* <CalendarTitle /> */}
                     <CalendarTable alarm={alarm} />
                     <HistoryContainer>
                         <Date>8월 18일</Date>

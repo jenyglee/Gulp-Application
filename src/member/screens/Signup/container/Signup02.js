@@ -44,9 +44,6 @@ const StyledImage = styled.Image`
 const SignupContainer04 = ({ navigation }) => {
     const width = Dimensions.get("window").width;
     const height = Dimensions.get("window").height;
-    const insets = useSafeAreaInsets();
-    console.log(insets);
-    const [name, setName] = useState("");
     return (
         <Container>
             <ContentContainer width={width}>

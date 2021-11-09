@@ -4,6 +4,9 @@ import styled, { ThemeContext } from "styled-components";
 import { icons14px } from "@/icons";
 import { Button } from "@components/index";
 import CheckList from "@/member/screens/Signup/component/CheckList";
+import { useSelector, useDispatch } from "react-redux";
+import { stateMembers } from "stores/members/membersSlice";
+import actionsMembers from "stores/members/memberActions";
 
 const Wrap = styled.View`
     width: ${({ width }) => width - 48}px;
@@ -43,73 +46,36 @@ const AllAgreeBtnTitle = styled.Text`
     color: ${({ theme, allAgree }) =>
         allAgree[0].checked ? theme.allAgreeTextChecked : theme.allAgreeText};
 `;
-
+const listData = [
+    {
+        id: 0,
+        name: "이용약관 동의 (필수)",
+        detailText:
+            "이용약관 동의 세부내용 이용약관 동의 세부내용 이용약관 동의 세부내용 이용약관 동의 세부내용 이용약관 동의 세부내용 이용약관 동의 세부내용 이용약관 동의 세부내용 이용약관 동의 세부내용 이용약관 동의 세부내용 이용약관 동의 세부내용 이용약관 동의 세부내용 이용약관 동의 세부내용 이용약관 동의 세부내용 이용약관 동의 세부내용 이용약관 동의 세부내용 이용약관 동의 세부내용 이용약관 동의 세부내용 이용약관 동의 세부내용이용약관 동의 세부내용 이용약관 동의 세부내용 이용약관 동의 세부내용 이용약관 동의 세부내용 이용약관 동의 세부내용 이용약관 동의 세부내용 이용약관 동의 세부내용 이용약관 동의 세부내용 이용약관 동의 세부내용 이용약관 동의 세부내용 이용약관 동의 세부내용 이용약관 동의 세부내용 이용약관 동의 세부내용 이용약관 동의 세부내용 이용약관 동의 세부내용 이용약관 동의 세부내용 이용약관 동의 세부내용 이용약관 동의 세부내용 ",
+        checked: false,
+        accordion: false,
+    },
+    {
+        id: 1,
+        name: "개인정보 수집 및 이용 동의 (필수)",
+        detailText: "개인정보 수집 및 이용 동의 세부내용",
+        checked: false,
+        accordion: false,
+    },
+];
 const Signup00 = ({ navigation }) => {
+    const dispatch = useDispatch();
     const width = Dimensions.get("window").width;
     const height = Dimensions.get("window").height;
     const theme = useContext(ThemeContext);
     const [allAgree, setAllAgree] = useState([{ checked: false }]);
-    const [allValue, setAllValue] = useState(false);
-    const listData = [
-        {
-            id: 0,
-            name: "이용약관 동의 (필수)",
-            detailText:
-                "이용약관 동의 세부내용 이용약관 동의 세부내용 이용약관 동의 세부내용 이용약관 동의 세부내용 이용약관 동의 세부내용 이용약관 동의 세부내용 이용약관 동의 세부내용 이용약관 동의 세부내용 이용약관 동의 세부내용 이용약관 동의 세부내용 이용약관 동의 세부내용 이용약관 동의 세부내용 이용약관 동의 세부내용 이용약관 동의 세부내용 이용약관 동의 세부내용 이용약관 동의 세부내용 이용약관 동의 세부내용 이용약관 동의 세부내용이용약관 동의 세부내용 이용약관 동의 세부내용 이용약관 동의 세부내용 이용약관 동의 세부내용 이용약관 동의 세부내용 이용약관 동의 세부내용 이용약관 동의 세부내용 이용약관 동의 세부내용 이용약관 동의 세부내용 이용약관 동의 세부내용 이용약관 동의 세부내용 이용약관 동의 세부내용 이용약관 동의 세부내용 이용약관 동의 세부내용 이용약관 동의 세부내용 이용약관 동의 세부내용 이용약관 동의 세부내용 이용약관 동의 세부내용 ",
-            checked: false,
-            accordion: false,
-        },
-        {
-            id: 1,
-            name: "개인정보 수집 및 이용 동의 (필수)",
-            detailText: "개인정보 수집 및 이용 동의 세부내용",
-            checked: false,
-            accordion: false,
-        },
-    ];
     const [list, setList] = useState(listData);
-
-    // ✨ 모두 동의 체크
-    const allCheck = () => {
-        const copyAllAgree = [...allAgree];
-        const copyList = [...list];
-        copyAllAgree[0].checked = !copyAllAgree[0].checked;
-        {
-            copyList.map((item) => {
-                if (copyAllAgree[0].checked) {
-                    item.checked = true;
-                } else {
-                    item.checked = false;
-                }
-            });
-        }
-        setAllAgree(copyAllAgree);
-        setList(copyList);
-    };
-
-    // ✨ 약관 체크 토글
-    const toggleList = (id) => {
-        const copy = [...list];
-        copy[id].checked = !copy[id].checked;
-        const result = copy.every((item) => {
-            return item.checked;
-        });
-        setAllAgree([{ checked: result }]);
-        setList(copy);
-    };
-
-    // ✨ 약관 상세보기
-    const toggleDetail = (id) => {
-        const copy = [...list];
-        copy[id].accordion = !copy[id].accordion;
-        setList(copy);
-    };
 
     return (
         <Wrap width={width} height={height}>
             <AllAgreeBtn
                 onPress={() => {
-                    allCheck();
+                    dispatch(actionsMembers.allCheck(allAgree, list, setAllAgree, setList))
                 }}
             >
                 <AllAgreeBtnContainer allAgree={allAgree}>
@@ -131,8 +97,12 @@ const Signup00 = ({ navigation }) => {
                     <CheckList
                         key={item.id}
                         item={item}
-                        toggleList={toggleList}
-                        toggleDetail={toggleDetail}
+                        toggleList={(id)=>{
+                            dispatch(actionsMembers.toggleList(id, list, setAllAgree, setList))
+                        }}
+                        toggleDetail={(id)=>{
+                            dispatch(actionsMembers.toggleDetail(id, list, setList))
+                        }}
                     />
                 );
             })}

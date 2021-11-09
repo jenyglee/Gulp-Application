@@ -14,10 +14,6 @@ import { useSelector, useDispatch } from "react-redux";
 import { stateMembers } from "stores/members/membersSlice";
 import actionsMembers from "stores/members/memberActions";
 
-// import { useSelector, useDispatch } from "react-redux";
-// import { stateAlarms } from "stores/alarms/alarmsSlice.js";
-// import actionsAlarms from "stores/alarms/alarmsActions.js";
-
 const Container = styled.View`
     width: 100%;
     height: ${({ height }) => height}px;
