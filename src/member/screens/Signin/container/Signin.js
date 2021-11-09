@@ -7,6 +7,9 @@ import { icons20px } from "@/icons";
 import { logo } from "@/images";
 import { isEmail, removeWhiteSpace } from "@/util";
 import { signin } from "@/member/api/memberApi";
+import { useSelector, useDispatch } from "react-redux";
+import { stateMembers } from "stores/members/membersSlice";
+import actionsMembers from "stores/members/memberActions";
 
 const Container = styled.View`
     align-items: center;
@@ -37,40 +40,12 @@ const StyledText = styled.Text`
 `;
 
 const SigninContainer = ({ navigation }) => {
+    const dispatch = useDispatch();
     const width = Dimensions.get("window").width;
     const height = Dimensions.get("window").height;
-    // const theme = useContext(ThemeContext);
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const refPassword = useRef(null);
-
-    // ✨ 이메일/비밀번호 검토 및 로그인 진행
-    const SigninButtonPress = async () => {
-        try {
-            if (email !== "") {
-                if (isEmail(email)) {
-                    if (password !== "") {
-                        await signin({ email, password });
-                        navigation.navigate("AlarmList");
-                    } else {
-                        Alert.alert("비밀번호를 입력해주세요.");
-                        return;
-                    }
-                } else {
-                    Alert.alert("이메일을 올바르게 입력해주세요.");
-                    return;
-                }
-            } else {
-                Alert.alert("이메일을 입력해주세요.");
-                return;
-            }
-            // const user = await signin({ email, password });
-            // console.log(user);
-            // navigation.navigate("AlarmList", { user });
-        } catch (e) {
-            Alert.alert(e.message);
-        }
-    };
 
     return (
         <Container>
@@ -104,7 +79,9 @@ const SigninContainer = ({ navigation }) => {
                         const changedPassword = removeWhiteSpace(password);
                         setPassword(changedPassword);
                     }}
-                    onSubmitEditing={SigninButtonPress}
+                    onSubmitEditing={()=>{
+                        dispatch(actionsMembers.SigninButtonPress(email, password, signin, isEmail, navigation))
+                    }}
                     secureTextEntry={true}
                     icon={icons20px.password}
                     containerStyle={{
@@ -112,7 +89,9 @@ const SigninContainer = ({ navigation }) => {
                     }}
                 />
 
-                <ButtonFloating title="로그인" onPress={SigninButtonPress} />
+                <ButtonFloating title="로그인" onPress={()=>{
+                    dispatch(actionsMembers.SigninButtonPress(email, password, signin, isEmail, navigation))
+                }} />
                 <TextButton
                     title="비밀번호 찾기"
                     btnStyle={{
@@ -139,4 +118,5 @@ const SigninContainer = ({ navigation }) => {
     );
 };
 
-export default SigninContainer;
+// export default SigninContainer;
+export default inject("memberStore")(observer(SigninContainer));

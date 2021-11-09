@@ -11,6 +11,9 @@ import RequireSignin from "@/common/components/RequireSignin";
 import { illust } from "@/images";
 import jwt_decode from "jwt-decode";
 import { inject, observer } from "mobx-react";
+import { useSelector, useDispatch } from "react-redux";
+import { stateMembers } from "stores/members/membersSlice";
+import actionsMembers from "stores/members/memberActions";
 
 const Container = styled.View`
     width: 100%;
@@ -21,13 +24,13 @@ const Container = styled.View`
 `;
 
 const MyPageContainer = ({ navigation }) => {
+    const dispatch = useDispatch();
     const height = Dimensions.get("window").height;
     const [gradeTable, setGradeTable] = useState(false); // 등급표
     const [isSignin, setIsSignin] = useState(true); // 마이페이지 노출(로그인시)
 
     // ✨ 유저 정보 확인
     useEffect(() => {
-        setTasks();
         const removeFocusEvent = navigation.addListener("focus", () => {
             getUser();
         });
@@ -86,7 +89,8 @@ const MyPageContainer = ({ navigation }) => {
     );
 };
 
-export default MyPageContainer;
+export default inject("memberStore")(observer(MyPageContainer));
+// export default MyPageContainer;
 
 // export default inject((stores) => ({
 //     memberStore: stores.memberStore,

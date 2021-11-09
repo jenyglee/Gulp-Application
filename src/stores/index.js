@@ -2,13 +2,15 @@ import { configureStore } from "@reduxjs/toolkit";
 import alarmsReducer from "./alarms/alarmsSlice.js";
 import commonReducer from "./common/commonSlice";
 import medicinesReducer from "./medicines/medicinesSlice";
+import membersReducer from "./members/membersSlice";
 import ReduxThunk from "redux-thunk";
 
 export default configureStore({
     reducer: {
         alarms: alarmsReducer,
         common : commonReducer,
-        medicines : medicinesReducer
+        medicines : medicinesReducer,
+        members : membersReducer
     },
     middleware: [
         //middleware: 본래 함수(reducer)를 호출하기 전에 중간에 실행하는 함수를 만든다

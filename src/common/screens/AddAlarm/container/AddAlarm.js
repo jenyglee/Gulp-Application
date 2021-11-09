@@ -65,8 +65,6 @@ const AddMedicine = ({ navigation, medicinesStore, commonStore, alarmsStore }) =
 
     const medicineList = useSelector(stateMedicines).medicineList;
     const time = useSelector(stateCommon).time;
-    // const week = useSelector(stateCommon).week;
-    // const weekAll = useSelector(stateCommon).weekAll;
 
 
     const [week, setWeek] = useState([
