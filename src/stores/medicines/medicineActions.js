@@ -1,7 +1,18 @@
 import { actionsMedicines } from "./medicinesSlice";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { Alert } from "react-native";
 
 const actions = {
+    // ✨ 약 삭제(medicineStore)
+    deleteMedicine : (id, medicineList) => async (dispatch)=>{
+        try {
+            const medicines = await (actions.deleteTask(id, medicineList))(dispatch)
+            await (actions.storeData(medicines))(dispatch)
+        } catch (error) {
+            Alert.alert(error)
+        }
+    },
+
     // ✨로컬에서 약 가져오기
     getMedicine : () =>  async (dispatch) => {
         try {

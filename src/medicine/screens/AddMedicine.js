@@ -9,7 +9,7 @@ import {
     ButtonCategorySelect,
 } from "@/medicine/components/index";
 import { Alert, Dimensions } from "react-native";
-import { debounce } from "lodash";
+import _ from "lodash";
 import { addMedicine } from "@/medicine/api/medicineApi";
 
 const Container = styled.View`
@@ -120,7 +120,7 @@ const AddMedicine = ({ navigation }) => {
         debounceSearchMedicine(text);
     };
     // ✨ medicine 검색어 자동완성 노출
-    const debounceSearchMedicine = debounce((text) => {
+    const debounceSearchMedicine = _.debounce((text) => {
         if (text) {
             setIsSearchingMedicine(true);
             const filteredMedicine = tempData.filter((item) => {
@@ -141,7 +141,7 @@ const AddMedicine = ({ navigation }) => {
     };
 
     //✨ brand 검색어 자동완성 노출
-    const debounceSearchBrand = debounce((text) => {
+    const debounceSearchBrand = _.debounce((text) => {
         if (text) {
             setIsSearchingBrand(true);
             const filteredMedicine = tempData.filter((item) => {

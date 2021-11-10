@@ -1,53 +1,66 @@
 import { actionsAlarms } from "./alarmsSlice.js";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Alert } from "react-native";
+import _ from 'lodash'
 
 const actions = {
     // ✨ 알람 삭제(alarmList)
-    deleteTask: ( selectedTaskKey ) => async (dispatch) => {
-            try {
-                // console.log(selectedTaskKey, isVisibleMenu);
-                const loadedData = await AsyncStorage.getItem("alarm");
-                const parseData = JSON.parse(loadedData);
-                const copy = Object.assign({}, parseData);
-                delete copy[selectedTaskKey];
-                return copy;
-            } catch (error) {
-                throw error;
-            }
-        },
-
-    // ✨ 로컬에 저장하기(alarmList)
-    storeData: (alarms) => async (dispatch) => {
+    deleteTask : ({selectedTaskKey, filtered, day }) => async (dispatch) => {
         try {
-            await AsyncStorage.setItem("alarm", JSON.stringify(alarms));
-            dispatch(actionsAlarms.setAlarms(alarms));
+            const alarms = await (actions.deleteAlarm(selectedTaskKey))(dispatch)
+            await (actions.storeData(alarms))(dispatch)
+            await (actions.getAlarms({filtered, day}))(dispatch)
         } catch (error) {
-            throw error;
+            Alert.alert(error)
         }
     },
 
-    // ✨ 알람 불러오기(alarmList)
+    // ✨ 알람토글(alarmList)
+    toggleTask : ({id, filtered, day, year, month, date, count, countTotal, setIsVisibleCompleteModal}) => async (dispatch) => {
+        try {
+            const alarms = await (actions.toggleAlarm(id))(dispatch)
+            await (actions.storeData(alarms))(dispatch);
+            const filteredAlarms = await (actions.getAlarms({ filtered, day}))(dispatch);
+            await (actions.allCompleted({ alarms: filteredAlarms, year, month, date, count, countTotal,setIsVisibleCompleteModal }))(dispatch);
+        } catch (error) {
+            Alert.alert(error)
+        }
+    },
+    
+    // ✨ 컴포넌트 삭제후 리턴(alarmList)
+    deleteAlarm: ( selectedTaskKey ) => async (dispatch) => {
+        try {
+            const loadedData = await AsyncStorage.getItem("alarm");
+            const parseData = JSON.parse(loadedData);
+            const copy = Object.assign({}, parseData);
+            delete copy[selectedTaskKey];
+            return copy;
+        } catch (error) {
+            console.log(error)
+        }
+    },
+
+        // ✨ 알람 불러오기(alarmList)
     getAlarms:({ filtered, day }) =>async (dispatch) => {
-            try {
-                const loadedData = await AsyncStorage.getItem("alarm");
-                const parseData = JSON.parse(loadedData);
-                const changedDay = day ? day : 7; //일요일을 0 👉 7 변환
+        try {
+            const loadedData = await AsyncStorage.getItem("alarm");
+            const parseData = JSON.parse(loadedData);
+            const changedDay = day ? day : 7; //일요일을 0 👉 7 변환
+            // true면 오늘의 요일만 ,  false면 전체요일
+            const filteredAlarms = filtered
+                ? Object.values(parseData)
+                      .filter((alarm) => alarm.day.includes(changedDay))
+                      .reduce((p, v) => ({ ...p, [v.id]: v }), {})
+                : parseData;
 
-                // true면 오늘의 요일만 ,  false면 전체요일
-                const alarm = filtered
-                    ? Object.values(parseData)
-                          .filter((alarm) => alarm.day.includes(changedDay))
-                          .reduce((p, v) => ({ ...p, [v.id]: v }), {})
-                    : parseData;
-
-                dispatch(actionsAlarms.setAlarms(alarm || []));
-                return alarm
-            } catch (error) {
-                throw error;
-            }
-        },
-
+            // 비교후에 아래진행 Lodash > _.isEqual
+            // import _ from 'lodash';
+            dispatch(actionsAlarms.setAlarms(filteredAlarms || []));
+            return filteredAlarms
+        } catch (error) {
+            Alert.alert(error)
+        }
+    },
     // ✨ 알람이 아예 없는지 검사(alarmList)
     confirmList: ({alarms,setIsVisibleAlarm}) => async (dispatch) => {
         Object.values(alarms).length === 0
@@ -55,13 +68,28 @@ const actions = {
             : setIsVisibleAlarm(true)
     },
 
-    // ✨복용완료(alarmList)
-    toggleTask: (id) => async (dispatch) => {
-        const loadedData = await AsyncStorage.getItem("alarm");
-        const parseData = JSON.parse(loadedData);
-        const copy = Object.assign({}, parseData);
-        copy[id].completed = !copy[id].completed;
-        return copy;
+    // ✨완료용 컴포넌트로 변경(alarmList)
+    toggleAlarm: (id) => async (dispatch) => {
+        try {
+            const loadedData = await AsyncStorage.getItem("alarm");
+            const parseData = JSON.parse(loadedData);
+            const copy = Object.assign({}, parseData);
+            copy[id].completed = !copy[id].completed;
+            return copy
+        } catch (error) {
+            Alert.alert(error)
+        }
+    },
+
+    // ✨ 로컬에 저장하기(alarmList)
+    storeData: (alarms) => async (dispatch) => {
+        try {
+            await AsyncStorage.setItem("alarm", JSON.stringify(alarms));
+            dispatch(actionsAlarms.setAlarms(alarms));
+            return alarms
+        } catch (error) {
+            Alert.alert(error)
+        }
     },
 
     // ✨전체 체크 시 복용일을 1일 증가(alarmList)
@@ -75,8 +103,7 @@ const actions = {
                     if (num == Object.values(alarms).length) {
                         const loadedDate = await AsyncStorage.getItem("date");
                         const parseDate = JSON.parse(loadedDate);
-                        // const todayDate = `${year}-${month + 1}-${date}`; // "2021-10-25"
-                        const todayDate = "2021-11-17";
+                        const todayDate = `${year}-${month + 1}-${date}`; // "2021-11-10"
                         if (parseDate !== todayDate) {
                             // ✨복용완료 일수 증가
                             dispatch(

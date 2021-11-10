@@ -133,13 +133,8 @@ const AddMedicine = ({ navigation, medicinesStore, commonStore, alarmsStore }) =
                                         brand={item.brand}
                                         id={item.id}
                                         key={item.id}
-                                        // deleteTask={deleteTask}
                                         deleteTask={(id)=>{
-                                            dispatch(actionsMedicines.deleteTask(id, medicineList))
-                                            .then((medicines)=>{
-                                                dispatch(actionsMedicines.storeData(medicines))
-                                            })
-                                            
+                                            dispatch(actionsMedicines.deleteMedicine(id, medicineList))
                                         }}
                                     />
                                 );

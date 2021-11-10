@@ -152,16 +152,7 @@ const AlarmList = ({ navigation, alarmsStore }) => {
                                     alarmInfo={item}
                                     menuIcon={icons.dot}
                                     toggleTask={(id) => {
-                                        dispatch(actionsAlarms.toggleTask(id))
-                                            .then((alarms) => {
-                                                dispatch(actionsAlarms.storeData(alarms));
-                                            })
-                                            .then(() => {
-                                                dispatch(actionsAlarms.getAlarms({filtered, day}));
-                                            })
-                                            .then(() => {
-                                                dispatch(actionsAlarms.allCompleted({alarms, year, month, date, count, countTotal, setIsVisibleCompleteModal}));
-                                            });
+                                        dispatch(actionsAlarms.toggleTask({id, filtered, day, year, month, date, count, countTotal, setIsVisibleCompleteModal}))
                                     }}
                                     showAlarmMenu={showAlarmMenu}
                                     key={item.id}
@@ -180,13 +171,7 @@ const AlarmList = ({ navigation, alarmsStore }) => {
                         isVisibleMenu={isVisibleMenu}
                         setIsVisibleMenu={setIsVisibleMenu}
                         deleteTask={() => {
-                            dispatch(actionsAlarms.deleteTask(selectedTaskKey))
-                                .then((otherAlarms) => {
-                                    dispatch(actionsAlarms.storeData(otherAlarms));
-                                })
-                                .then(() => {
-                                    dispatch(actionsAlarms.getAlarms({filtered, day}));
-                                });
+                            dispatch(actionsAlarms.test({selectedTaskKey, filtered, day }))
                         }}
                         editMedicine={editMedicine.bind( undefined, selectedTaskKey )}
                     />
