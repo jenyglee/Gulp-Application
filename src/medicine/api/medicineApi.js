@@ -42,7 +42,6 @@ const addMedicine = async (medicine) => {
     }
 };
 
-// 동일한 알람에서 같은id의 브랜드 안에 같은id의 약이있으면 에러
 
 // ✨약 삭제
 const deleteMedicine = async (token) => {
@@ -83,7 +82,7 @@ const getMedicines = async ({brandKey, text}) => {
             url: url + "medicines",
             params:{
                 brandId: brandKey,
-                name:text
+                name: text
             }
         });
         // console.log(response.data)
