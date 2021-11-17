@@ -33,6 +33,7 @@ const StyledTitle = styled.Text`
 const SignupContainer00 = ({ navigation }) => {
     const theme = useContext(ThemeContext);
     const width = Dimensions.get("window").width;
+    const [token, setToken] = useState("");
     const [email, setEmail] = useState("");
     const [nickname, setNickname] = useState("");
     const [password, setPassword] = useState("");
@@ -51,7 +52,9 @@ const SignupContainer00 = ({ navigation }) => {
 
     // ✨ 유저 정보 가져오기
     const getUser = async () => {
-        const user = jwt_decode(await AsyncStorage.getItem("token"));
+        const token = await AsyncStorage.getItem("token")
+        const user = jwt_decode(token);
+        setToken(token)
         setEmail(user.email);
         setNickname(user.nickname);
     };
@@ -66,9 +69,9 @@ const SignupContainer00 = ({ navigation }) => {
                 // if 패스워드와 패스워드컨펌이 6자리 이상이라면
                 if (password == passwordConfirm) {
                     // if 패스워드와 패스워드컨펌이 같다면
-                    await updateUser({ nickname, password });
-                    Alert.alert("회원정보 변경이 완료되었습니다.");
-                    navigation.goBack();
+                    await updateUser({ token, nickname, password });
+                    // Alert.alert("회원정보 변경이 완료되었습니다.");
+                    // navigation.goBack();
                 } else {
                     Alert.alert("비밀번호가 일치하지 않습니다.");
                 }
@@ -81,92 +84,93 @@ const SignupContainer00 = ({ navigation }) => {
     };
 
     return (
-        <KeyboardAwareScrollView
-            contentContainerStyle={{
-                flex: 1,
-            }}
-            extraScrollHeight={20}
-        >
-            <Container>
-                <InputContainer>
-                    <StyledTitle
-                        style={{
-                            color: theme.inputPlaceholderText,
-                        }}
-                    >
-                        이메일은 변경할 수 없어요
-                    </StyledTitle>
-                    <InputDisabled
-                        title="이메일"
-                        value={email}
-                        containerStyle={{
-                            marginBottom: 36,
-                        }}
-                    />
-                </InputContainer>
+        <>
+            <KeyboardAwareScrollView
+                contentContainerStyle={{
+                    flex: 1,
+                }}
+                extraScrollHeight={20}
+            >
+                <Container>
+                    <InputContainer>
+                        <StyledTitle
+                            style={{
+                                color: theme.inputPlaceholderText,
+                            }}
+                        >
+                            이메일은 변경할 수 없어요
+                        </StyledTitle>
+                        <InputDisabled
+                            title="이메일"
+                            value={email}
+                            containerStyle={{
+                                marginBottom: 36,
+                            }}
+                        />
+                    </InputContainer>
 
-                <View>
-                    <StyledTitle>변경할 닉네임을 입력해주세요</StyledTitle>
-                    <Input
-                        title="닉네임"
-                        value={nickname}
-                        placeholder="닉네임을 입력하세요"
-                        maxLenth={10}
-                        onChangeText={(text) => {
-                            const changedNickname = removeWhiteSpace(text);
-                            setNickname(changedNickname);
-                        }}
-                        onBlur={() => {}}
-                        returnKeyType="done"
-                        containerStyle={{
-                            marginBottom: 36,
-                        }}
-                    />
-                </View>
+                    <View>
+                        <StyledTitle>변경할 닉네임을 입력해주세요</StyledTitle>
+                        <Input
+                            title="닉네임"
+                            value={nickname}
+                            placeholder="닉네임을 입력하세요"
+                            maxLenth={10}
+                            onChangeText={(text) => {
+                                const changedNickname = removeWhiteSpace(text);
+                                setNickname(changedNickname);
+                            }}
+                            onBlur={() => {}}
+                            returnKeyType="done"
+                            containerStyle={{
+                                marginBottom: 36,
+                            }}
+                        />
+                    </View>
 
-                <View>
-                    <StyledTitle>변경할 비밀번호를 입력해주세요</StyledTitle>
-                    <Input
-                        // ref={refPassword}
-                        title="비밀번호"
-                        placeholder="비밀번호를 입력하세요"
-                        value={password}
-                        maxLenth={10}
-                        returnKeyType="next"
-                        onBlur={() => {}}
-                        onChangeText={(text) => {
-                            const changedPassword = removeWhiteSpace(text);
-                            setPassword(changedPassword);
-                        }}
-                        secureTextEntry={true}
-                    />
-                    <Input
-                        ref={refPasswordConfirm}
-                        title="비밀번호 재입력"
-                        placeholder="비밀번호를 한번 더 입력하세요"
-                        value={passwordConfirm}
-                        maxLenth={10}
-                        onBlur={() => {}}
-                        returnKeyType="done"
-                        onChangeText={(text) => {
-                            const changedPasswordConfirm =
-                                removeWhiteSpace(text);
-                            setPasswordConfirm(changedPasswordConfirm);
-                        }}
-                        secureTextEntry={true}
-                    />
-                </View>
-                <Button
-                    title="저장하기"
-                    onPress={confirmValue}
-                    btnWrapStyle={{
-                        width: width - 48,
-                        position: "absolute",
-                        bottom: 40,
-                    }}
-                />
-            </Container>
-        </KeyboardAwareScrollView>
+                    <View>
+                        <StyledTitle>변경할 비밀번호를 입력해주세요</StyledTitle>
+                        <Input
+                            // ref={refPassword}
+                            title="비밀번호"
+                            placeholder="비밀번호를 입력하세요"
+                            value={password}
+                            maxLenth={10}
+                            returnKeyType="next"
+                            onBlur={() => {}}
+                            onChangeText={(text) => {
+                                const changedPassword = removeWhiteSpace(text);
+                                setPassword(changedPassword);
+                            }}
+                            secureTextEntry={true}
+                        />
+                        <Input
+                            ref={refPasswordConfirm}
+                            title="비밀번호 재입력"
+                            placeholder="비밀번호를 한번 더 입력하세요"
+                            value={passwordConfirm}
+                            maxLenth={10}
+                            onBlur={() => {}}
+                            returnKeyType="done"
+                            onChangeText={(text) => {
+                                const changedPasswordConfirm =
+                                    removeWhiteSpace(text);
+                                setPasswordConfirm(changedPasswordConfirm);
+                            }}
+                            secureTextEntry={true}
+                        />
+                    </View>
+                </Container>
+            </KeyboardAwareScrollView>
+            <Button
+                title="저장하기"
+                onPress={confirmValue}
+                btnWrapStyle={{
+                    width: width,
+                    position: "absolute",
+                }}
+            />
+        </>
     );
 };
 

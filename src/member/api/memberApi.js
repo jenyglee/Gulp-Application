@@ -14,7 +14,8 @@ const signin = async (member) => {
         });
 
         if (response.data.statusCodeValue === 200) {
-            console.log(response.headers.authorization);
+            // console.log(response.headers.authorization);
+            console.log(response);
             await AsyncStorage.setItem("token", response.headers.authorization);
         } else if (response.data.statusCodeValue !== 200) {
             throw new Error(response.data.body.message);
@@ -34,12 +35,13 @@ const logout = async () => {
             headers: { authorization: token },
         });
         if (response.status === 200) {
-            // console.log(response.status);
+            Alert.alert("로그아웃이 정상적으로 완료되었습니다.");
             await AsyncStorage.removeItem("token");
+        } else if( response.status !== 200){
+            throw new Error(response.data.body.message);
         }
     } catch (error) {
-        // throw error;
-        console.log(error);
+        throw error;
     }
 };
 
@@ -51,7 +53,6 @@ const signup = async (member) => {
             url: url + "signup",
             data: member,
         });
-        // console.log(response.status);
         return response.status;
 
         // if (response.data?.statusCodeValue !== 200) {
@@ -65,13 +66,14 @@ const signup = async (member) => {
 // ✨회원탈퇴
 const removeUser = async () => {
     const token = await AsyncStorage.getItem("token");
-    console.log(token);
+    // console.log(token);
 
     const response = await axios({
         method: "DELETE",
         url: url + "member",
         headers: { authorization: token },
     });
+    console.log(response);
     if (response.status === 200) {
         Alert.alert("회원탈퇴가 정상적으로 완료되었습니다.");
         AsyncStorage.setItem("token", "");
@@ -86,25 +88,26 @@ const emailValidation = async (email) => {
             url: url + "email-validation",
             data: email,
         });
-        console.log(response);
+        console.log(response) 
 
-        if (response.status === 200) {
-            Alert.alert("사용할 수 있는 이메일입니다.");
-        }
+        // if (response.status === 200) {
+        //     Alert.alert("사용할 수 있는 이메일입니다.");
+        // }
     } catch (error) {
         throw error;
     }
 };
 
 // ✨회원정보 변경
-const updateUser = async (member) => {
+const updateUser = async ({ token, nickname, password }) => {
     try {
         const response = await axios({
             method: "PUT",
             url: url + "member",
-            data: member,
+            headers : {authorization : token},
+            data: {nickname, password}
         });
-        console.log(response.config.data);
+        console.log(response);
     } catch (error) {}
 };
 export { signin, logout, signup, removeUser, emailValidation, updateUser };

@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import { ScrollView, FlatList, TouchableOpacity } from "react-native";
+import { FlatList, TouchableOpacity } from "react-native";
 
 const Container = styled.View`
     width: 100%;
@@ -36,18 +36,16 @@ const PressDropList = ({
         );
     };
     return (
-        <ScrollView>
-            <Container>
-                <FlatList
-                    style={{
-                        marginTop: 10,
-                    }}
-                    data={categoryData}
-                    renderItem={renderItem}
-                    keyExtractor={(item, index) => index.toString()}
-                />
-            </Container>
-        </ScrollView>
+        <Container>
+            <FlatList
+                style={{
+                    marginTop: 10,
+                }}
+                data={categoryData}
+                renderItem={renderItem}
+                keyExtractor={(item, index) => index.toString()}
+            />
+        </Container>
     );
 };
 

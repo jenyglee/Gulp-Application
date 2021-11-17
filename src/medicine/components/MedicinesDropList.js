@@ -15,22 +15,18 @@ const StyledText = styled.Text`
     color: #000;
 `;
 
-const SearchDropList = ({ filtered, onSelectItem, searchType }) => {
+const MedicinesDropList = ({ filtered, onSelectItem }) => {
     return (
         <View>
-            {filtered.map((item) => {
+            {filtered.map((item, index) => {
                 return (
                     <TouchableOpacity
-                        key={item.id}
-                        onPress={onSelectItem.bind(undefined, item.id)}
+                        key={index}
+                        onPress={onSelectItem.bind(undefined, item.medicineId)}
                         // naming convention 이름짓는
                     >
                         <View>
-                            {searchType === "name" ? (
-                                <StyledText>{item.name}</StyledText>
-                            ) : (
-                                <StyledText>{item.brand}</StyledText>
-                            )}
+                            <StyledText>{item.name}</StyledText>
                         </View>
                     </TouchableOpacity>
                 );
@@ -39,4 +35,4 @@ const SearchDropList = ({ filtered, onSelectItem, searchType }) => {
     );
 };
 
-export default SearchDropList;
+export default MedicinesDropList;

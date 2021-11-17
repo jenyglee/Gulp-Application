@@ -21,6 +21,7 @@ const actions = {
             const alarms = await (actions.toggleAlarm(id))(dispatch)
             await (actions.storeData(alarms))(dispatch);
             const filteredAlarms = await (actions.getAlarms({ filtered, day}))(dispatch);
+            console.log(filteredAlarms, "toggleTask 24");
             await (actions.allCompleted({ alarms: filteredAlarms, year, month, date, count, countTotal,setIsVisibleCompleteModal }))(dispatch);
         } catch (error) {
             Alert.alert(error)
@@ -53,6 +54,7 @@ const actions = {
                       .reduce((p, v) => ({ ...p, [v.id]: v }), {})
                 : parseData;
 
+                // console.log(filteredAlarms, "getAlarms");
             // 비교후에 아래진행 Lodash > _.isEqual
             // import _ from 'lodash';
             dispatch(actionsAlarms.setAlarms(filteredAlarms || []));
@@ -85,8 +87,6 @@ const actions = {
     storeData: (alarms) => async (dispatch) => {
         try {
             await AsyncStorage.setItem("alarm", JSON.stringify(alarms));
-            dispatch(actionsAlarms.setAlarms(alarms));
-            return alarms
         } catch (error) {
             Alert.alert(error)
         }

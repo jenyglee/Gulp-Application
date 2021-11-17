@@ -175,7 +175,8 @@ const SignupContainer00 = ({ navigation }) => {
                         />
                         <TextButton
                             onPress={() => {
-                                emailValidation(email);
+                                const response = emailValidation(email);
+                                console.log(response)
                             }}
                             btnStyle={{
                                 marginLeft: 12,

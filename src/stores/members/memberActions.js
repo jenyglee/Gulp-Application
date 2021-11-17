@@ -65,17 +65,16 @@ const actions = {
 
     // ✨ 회원가입(Signup01)
     handleSignupBtnPress : (nickname, email, password, navigation) => async (dispatch) => {
-        // try {
-        //     const response = await signup({ nickname, email, password });
-        //     if (response === 200) {
-        //         navigation.navigate("Signup02");
-        //     } else {
-        //         Alert.alert(response);
-        //     }
-        // } catch (error) {
-        //     Alert.alert(error.message);
-        // }
-        navigation.navigate("Signup02");
+        try {
+            const response = await signup({ nickname, email, password });
+            if (response === 200) {
+                navigation.navigate("Signup02");
+            } else {
+                Alert.alert("에러가 발생했습니다. 잠시 후에 다시 시도해주세요.");
+            }
+        } catch (error) {
+            throw error
+        }
     },
 }
 

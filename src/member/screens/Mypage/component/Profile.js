@@ -62,7 +62,7 @@ const Grade = styled.Text`
 const DEFAULT_PHOTO =
     "https://firebasestorage.googleapis.com/v0/b/medicine-cc1f6.appspot.com/o/face.png?alt=media";
 
-const Profile = () => {
+const Profile = ({nickname}) => {
     const [photo, setPhoto] = useState(DEFAULT_PHOTO);
 
     useEffect(() => {
@@ -101,7 +101,7 @@ const Profile = () => {
                 </Camera>
             </ImageContainer>
             <TextContainer>
-                <NickName>꿀꺽이</NickName>
+                <NickName>{nickname}</NickName>
                 <Grade>자기관리 꿈나무</Grade>
             </TextContainer>
         </Container>

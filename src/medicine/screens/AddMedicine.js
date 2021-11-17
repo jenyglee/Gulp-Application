@@ -4,13 +4,14 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { Button, Input } from "@components/index";
 import {
-    SearchDropList,
+    BrandsDropList,
+    MedicinesDropList,
     PressDropList,
     ButtonCategorySelect,
 } from "@/medicine/components/index";
 import { Alert, Dimensions } from "react-native";
 import _ from "lodash";
-import { addMedicine } from "@/medicine/api/medicineApi";
+import { addMedicine, getBrands, getMedicines } from "@/medicine/api/medicineApi";
 
 const Container = styled.View`
     width: ${({ width }) => width - 48}px;
@@ -35,13 +36,13 @@ const StyledTitle = styled.Text`
 
 const AddMedicine = ({ navigation }) => {
     const width = Dimensions.get("window").width;
-    const tempData = [
-        { id: 0, name: "플래티넘 메가비타민c 3000", brand: "렛츠미" },
-        { id: 1, name: "고려은단 메가도스C 3000 3g", brand: "고려은단" },
-        { id: 2, name: "비타민C 골드플러스 파워업", brand: "고려은단" },
-        { id: 3, name: "비타민C 1000", brand: "고려은단" },
-        { id: 4, name: "비타민C 1000mg", brand: "종근당" },
-    ];
+    // const tempData = [
+    //     { id: 0, name: "플래티넘 메가비타민c 3000", brand: "렛츠미" },
+    //     { id: 1, name: "고려은단 메가도스C 3000 3g", brand: "고려은단" },
+    //     { id: 2, name: "비타민C 골드플러스 파워업", brand: "고려은단" },
+    //     { id: 3, name: "비타민C 1000", brand: "고려은단" },
+    //     { id: 4, name: "비타민C 1000mg", brand: "종근당" },
+    // ];
     const categoryData = [
         { id: 0, title: "비타민C" },
         { id: 1, title: "비타민B" },
@@ -54,11 +55,13 @@ const AddMedicine = ({ navigation }) => {
         { id: 8, title: "쏘팔메토/아연" },
         { id: 9, title: "밀크씨슬" },
         { id: 10, title: "철분" },
+        { id: 11, title: "기타" },
     ];
-    const [filtered, setFiltered] = useState(tempData);
-    const [category, setCategory] = useState("선택");
+    const [filtered, setFiltered] = useState([]);
+    const [category, setCategory] = useState({title:"선택"});
     const [medicine, setMedicine] = useState("");
     const [brand, setBrand] = useState("");
+    const [brandKey, setBrandKey] = useState("")
     const [isFocusedCategory, setIsFocusedCategory] = useState(false);
     const [isSelectingCategory, setIsSelectingCategory] = useState(false);
     const [isSearchingBrand, setIsSearchingBrand] = useState(false);
@@ -70,48 +73,58 @@ const AddMedicine = ({ navigation }) => {
             // // ① 이미 등록된 약인지 확인
             const loadedData = await AsyncStorage.getItem("medicine");
             const Item = JSON.parse(loadedData);
-            // // 🍎 값이 있을 경우 알럿 뜨게 하기(이건 api에서도 또 체크해야함.)
-            // let duplicate = Object.values(Item).some((v) => {
-            //     const sameBrand = () => {
-            //         if (v.brand === brand) {
-            //             return true;
-            //         } else return false;
-            //     };
-            //     const sameMedicine = () => {
-            //         if (v.name === medicine) {
-            //             return true;
-            //         } else return false;
-            //     };
-            //     //
-            //     sameBrand && sameMedicine;
-            // });
-            // if (duplicate) {
-            //     // 🪲알럿이 안뜸
-            //     Alert.alert("이 약은 이미 등록되어 있습니다.");
-            //     return;
-            // }
+            // 🍎 값이 있을 경우 알럿 뜨게 하기(이건 api에서도 또 체크해야함.)
+            let duplicate = Object.values(Item).some((v) => {
+                const sameBrand = () => {
+                    if (v.brand === brand) {
+                        return true;
+                    } else return false;
+                };
+                const sameMedicine = () => {
+                    if (v.name === medicine) {
+                        return true;
+                    } else return false;
+                };
+                //
+                sameBrand && sameMedicine;
+            });
+            if (duplicate) {
+                // 🪲알럿이 안뜸
+                Alert.alert("이 약은 이미 등록되어 있습니다.");
+                return;
+            }
 
             // ② 저장 진행
-            // const newMedicineServer = {
-            //     name: name,
-            //     // brand: brand,
-            //     brand: { id: 1 },
-            //     // category: "기타",
-            //     category: { id: 1 },
-            // };
+            const newMedicine = {
+                name: medicine,
+                brand: { id: brandKey },
+                category: { id: category.id },
+            };
             
-            // await addMedicine(newMedicineServer);
+            const response = await addMedicine(newMedicine);
+            if(response === 200){
+                navigation.navigate("AddAlarm");
+            } else if (response !== 200){
+                // 🍎 무조건 200 뜨므로 여기서 걸러내면 안됨!!!🍎
+                // Alert.alert("이 약은 이미 등록되어 있습니다.")
+            }
 
             // 👇 api가 에러떠서 버리고 일단 이걸로 저장진행
-            const ID = Date.now();
-            const newMedicine = {
-                [ID]: { id: ID, name: medicine, brand: 1 },
-            };
-            await AsyncStorage.setItem("medicine", JSON.stringify({ ...Item, ...newMedicine }));
-            navigation.navigate("AddAlarm");
+            // const ID = Date.now();
+            // const newMedicine = {
+            //     [ID]: { id: ID, name: medicine, brand: 1 },
+            // };
+            // await AsyncStorage.setItem("medicine", JSON.stringify({ ...Item, ...newMedicine }));
+            // navigation.navigate("AddAlarm");
             } catch (e) {
                 console.log(e);
             }
+    };
+
+    // ✨ brand 검색창에 입력
+    const onSearchBrand = (text) => {
+        setBrand(text);
+        debounceSearchBrand(text);
     };
 
     // ✨ medicine 검색창에 입력
@@ -120,36 +133,24 @@ const AddMedicine = ({ navigation }) => {
         debounceSearchMedicine(text);
     };
     // ✨ medicine 검색어 자동완성 노출
-    const debounceSearchMedicine = _.debounce((text) => {
+    const debounceSearchMedicine = _.debounce( async (text) => {
         if (text) {
             setIsSearchingMedicine(true);
-            const filteredMedicine = tempData.filter((item) => {
-                if (item.name.match(text)) {
-                    return item.name;
-                }
-            });
-            setFiltered(filteredMedicine);
+            const medicines = await getMedicines({brandKey, text});
+            setFiltered(medicines ?? []);
         } else {
             setIsSearchingMedicine(false);
         }
     }, 300);
 
-    // ✨ brand 검색창에 입력
-    const onSearchBrand = (text) => {
-        setBrand(text);
-        debounceSearchBrand(text);
-    };
 
     //✨ brand 검색어 자동완성 노출
-    const debounceSearchBrand = _.debounce((text) => {
+    const debounceSearchBrand = _.debounce( async (text) => {
         if (text) {
             setIsSearchingBrand(true);
-            const filteredMedicine = tempData.filter((item) => {
-                if (item.brand.match(text)) {
-                    return item.brand;
-                }
-            });
-            setFiltered(filteredMedicine);
+            // await getBrands(text)
+            const brands = await getBrands(text)
+            setFiltered(brands ?? []);
         } else {
             setIsSearchingBrand(false);
         }
@@ -158,17 +159,7 @@ const AddMedicine = ({ navigation }) => {
     const handleSelectCategory = (id) => {
         categoryData.map((item) => {
             if (item.id === id) {
-                setCategory(item.title);
-                return;
-            } else return;
-        });
-    };
-
-    // ✨ 항목에 있는 약을 인풋에 입력
-    const handleSelectMedicine = (id) => {
-        filtered.map((item) => {
-            if (item.id === id) {
-                setMedicine(item.name);
+                setCategory(item);
                 return;
             } else return;
         });
@@ -176,11 +167,22 @@ const AddMedicine = ({ navigation }) => {
 
     // ✨ 항목에 있는 브랜드를 인풋에 입력
     const handleSelectBrand = (id) => {
-        // console.log(id);
         filtered.map((item) => {
             if (item.id === id) {
-                setBrand(item.brand);
-                return;
+                setBrand(item.name);
+                setBrandKey(item.id)
+                setIsSearchingBrand(false)
+                setFiltered([])
+            } else return;
+        });
+    };
+
+    // ✨ 항목에 있는 약을 인풋에 입력
+    const handleSelectMedicine = (id) => {
+        filtered.map((item) => {
+            if (item.medicineId === id) {
+                setMedicine(item.name);
+                setIsSearchingMedicine(false)
             } else return;
         });
     };
@@ -204,7 +206,7 @@ const AddMedicine = ({ navigation }) => {
                             containerStyle={{
                                 marginBottom: 0,
                             }}
-                            value={category}
+                            value={category.title}
                             onVisibleDropList={handleVisibleDropList}
                             isFocused={isFocusedCategory}
                             setIsFocused={setIsFocusedCategory}
@@ -232,10 +234,9 @@ const AddMedicine = ({ navigation }) => {
                             placeholder="브랜드를 입력해주세요"
                         />
                         {isSearchingBrand && (
-                            <SearchDropList
+                            <BrandsDropList
                                 filtered={filtered}
                                 onSelectItem={handleSelectBrand}
-                                searchType="brand"
                             />
                         )}
                     </StyledForm>
@@ -251,10 +252,9 @@ const AddMedicine = ({ navigation }) => {
                             placeholder="약 이름을 입력해주세요"
                         />
                         {isSearchingMedicine && (
-                            <SearchDropList
+                            <MedicinesDropList
                                 filtered={filtered}
                                 onSelectItem={handleSelectMedicine}
-                                searchType="name"
                             />
                         )}
                     </StyledForm>

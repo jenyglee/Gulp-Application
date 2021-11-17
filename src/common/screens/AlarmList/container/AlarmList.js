@@ -64,14 +64,14 @@ const ProfileName = styled.Text`
 
 const AlarmList = ({ navigation, alarmsStore }) => {
     const dispatch = useDispatch(); //dispatch : 해당 state 값을 수정하는 액션
-    const year = useSelector(stateAlarms).year;
-    const month = useSelector(stateAlarms).month;
-    const date = useSelector(stateAlarms).date;
-    const day = useSelector(stateAlarms).day;
-    const alarms = useSelector(stateAlarms).alarms;
-    const count = useSelector(stateAlarms).count;
-    const countTotal = useSelector(stateAlarms).countTotal;
-
+    // const year = useSelector(stateAlarms).year;
+    // const month = useSelector(stateAlarms).month;
+    // const date = useSelector(stateAlarms).date;
+    // const day = useSelector(stateAlarms).day;
+    // const alarms = useSelector(stateAlarms).alarms;
+    // const count = useSelector(stateAlarms).count;
+    // const countTotal = useSelector(stateAlarms).countTotal;
+    const {year, month,date,day,alarms,count,countTotal} = useSelector(stateAlarms)
     const width = Dimensions.get("window").width;
     const insets = useSafeAreaInsets();
     const [selectedTaskKey, setSelectedTaskKey] = useState();
@@ -81,8 +81,6 @@ const AlarmList = ({ navigation, alarmsStore }) => {
     const [isVisibleAlarm, setIsVisibleAlarm] = useState(true); // 알람 유무
     const [isVisibleCompleteModal, setIsVisibleCompleteModal] = useState(false); // 완료모달 노출/숨김
     
-    
-
     // ✨ 로그인했는지 확인 + 약 추가 후 메인으로 복귀
     useEffect(() => {
         const removeFocusEvent = navigation.addListener("focus", () => {
@@ -171,7 +169,7 @@ const AlarmList = ({ navigation, alarmsStore }) => {
                         isVisibleMenu={isVisibleMenu}
                         setIsVisibleMenu={setIsVisibleMenu}
                         deleteTask={() => {
-                            dispatch(actionsAlarms.test({selectedTaskKey, filtered, day }))
+                            dispatch(actionsAlarms.deleteTask({selectedTaskKey, filtered, day }))
                         }}
                         editMedicine={editMedicine.bind( undefined, selectedTaskKey )}
                     />
