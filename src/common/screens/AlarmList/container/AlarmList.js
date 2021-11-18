@@ -47,8 +47,8 @@ const StyledText = styled.Text`
 const ProfileName = styled.Text`
     font-size: 18px;
 `;
-// ✨데이터형태(참고용)
 
+// ✨데이터형태(참고용)
 // const tempData = {
 //     1: {
 //         id: 1,
@@ -71,7 +71,7 @@ const AlarmList = ({ navigation, alarmsStore }) => {
     // const alarms = useSelector(stateAlarms).alarms;
     // const count = useSelector(stateAlarms).count;
     // const countTotal = useSelector(stateAlarms).countTotal;
-    const {year, month,date,day,alarms,count,countTotal} = useSelector(stateAlarms)
+    const {year, month, date, day, alarms, count, countTotal} = useSelector(stateAlarms)
     const width = Dimensions.get("window").width;
     const insets = useSafeAreaInsets();
     const [selectedTaskKey, setSelectedTaskKey] = useState();

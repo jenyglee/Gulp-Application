@@ -39,6 +39,56 @@ const actions = {
             throw error;
         }
     },
+
+    // ✨ 카테고리 선택
+    handleSelectCategory : (categoryData, id) => (dispatch) => {
+        categoryData.map((item) => {
+            if (item.id === id) {
+                dispatch(actionsMedicines.setCategory(item))
+                return;
+            } else return;
+        });
+    },
+
+    // ✨ brand 검색창에 입력
+    onSearchBrand : (text, debounceSearchBrand) => (dispatch) => {
+        // setBrand(text);
+        dispatch(actionsMedicines.setBrand(text))
+        debounceSearchBrand(text)
+    },
+
+    // ✨ medicine 검색창에 입력
+    onSearchMedicine : (text, debounceSearchMedicine) => (dispatch) => {
+        dispatch(actionsMedicines.setMedicine(text))
+        // setMedicine(text);
+        debounceSearchMedicine(text);
+    },
+
+ // ✨ 항목에 있는 브랜드를 인풋에 입력
+    handleSelectBrand : (id, filtered, setIsSearchingBrand, setFiltered) => (dispatch) => {
+        filtered.map((item) => {
+            if (item.id === id) {
+                dispatch(actionsMedicines.setBrand(item.name))
+                dispatch(actionsMedicines.setBrandKey(item.id))
+                setIsSearchingBrand(false)
+                setFiltered([])
+            } else return;
+        });
+    },
+
+    // ✨ 항목에 있는 약을 인풋에 입력
+    handleSelectMedicine : (id, filtered, setIsSearchingMedicine) => (dispatch) => {
+        filtered.map((item) => {
+            if (item.medicineId === id) {
+                dispatch(actionsMedicines.setMedicine(item.name))
+                setIsSearchingMedicine(false)
+            } else return;
+        });
+    },
+
+    setMedicine : (payload) => (dispatch) => {
+        dispatch(actionsMedicines.setMedicine(payload))
+    }
 }
 
 export default actions;
