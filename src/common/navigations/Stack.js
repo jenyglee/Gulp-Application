@@ -4,6 +4,7 @@ import styled, { ThemeContext } from "styled-components";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { createStackNavigator } from "@react-navigation/stack";
 import { AlarmList, Calendar, Rank, AddAlarm } from "@screens/index";
+import SearchMedicine from "@/medicine/screens/SearchMedicine";
 import AddMedicine from "@/medicine/screens/AddMedicine";
 import MyPage from "@/member/screens/Mypage/container/MyPage";
 import CustomInfo from "@/member/screens/CustomInfo/container/CustomInfo";
@@ -207,13 +208,30 @@ const HomeStackNav = () => {
                 }}
             />
             <HomeStack.Screen
+                name="SearchMedicine"
+                component={SearchMedicine}
+                options={() => {
+                    return {
+                        ...option,
+                        ...backImage,
+                        headerTitle: "복용약 검색",
+                        headerStyle: {
+                            shadowOffset: {
+                                header: 0,
+                            },
+                            backgroundColor: "#fff",
+                        },
+                    };
+                }}
+            />
+            <HomeStack.Screen
                 name="AddMedicine"
                 component={AddMedicine}
                 options={() => {
                     return {
                         ...option,
                         ...backImage,
-                        headerTitle: "알람추가",
+                        headerTitle: "복용약 추가",
                         headerStyle: {
                             shadowOffset: {
                                 header: 0,

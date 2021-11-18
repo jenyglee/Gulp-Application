@@ -153,7 +153,7 @@ const AddMedicine = ({ navigation, medicinesStore, commonStore, alarmsStore }) =
                                     color: theme.main,
                                 }}
                                 onPress={() => {
-                                    navigation.navigate("AddMedicine");
+                                    navigation.navigate("SearchMedicine");
                                 }}
                             />
                         </StyledTagForm>
