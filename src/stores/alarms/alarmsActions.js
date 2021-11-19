@@ -21,7 +21,7 @@ const actions = {
             const alarms = await (actions.toggleAlarm(id))(dispatch)
             await (actions.storeData(alarms))(dispatch);
             const filteredAlarms = await (actions.getAlarms({ filtered, day}))(dispatch);
-            console.log(filteredAlarms, "toggleTask 24");
+            // console.log(filteredAlarms, "toggleTask 24");
             await (actions.allCompleted({ alarms: filteredAlarms, year, month, date, count, countTotal,setIsVisibleCompleteModal }))(dispatch);
         } catch (error) {
             Alert.alert(error)

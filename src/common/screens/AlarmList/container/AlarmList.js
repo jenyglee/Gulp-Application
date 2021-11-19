@@ -153,6 +153,7 @@ const AlarmList = ({ navigation, alarmsStore }) => {
                                         dispatch(actionsAlarms.toggleTask({id, filtered, day, year, month, date, count, countTotal, setIsVisibleCompleteModal}))
                                     }}
                                     showAlarmMenu={showAlarmMenu}
+                                    day={day}
                                     key={item.id}
                                 />
                             );

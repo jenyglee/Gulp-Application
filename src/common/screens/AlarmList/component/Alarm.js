@@ -17,7 +17,7 @@ const Container = styled.View`
     height: auto;
     border-radius: 12px;
     padding: 20px;
-    background-color: ${({ theme }) => theme.white};
+    background-color: ${({ isNotTodayAlarm, theme }) => isNotTodayAlarm ? theme.white : theme.line};
 `;
 
 const TopWrap = styled.View`
@@ -34,15 +34,33 @@ const TimeContainer = styled.View`
 const Time = styled.Text`
     font-size: 30px;
     font-weight: bold;
-    color: ${({ theme, completed }) =>
-        completed ? theme.textDisable : theme.black};
+    color: ${({ theme, completed, isNotTodayAlarm }) => {
+        if(isNotTodayAlarm){
+            if(completed){
+                return theme.textDisable
+            } else {
+                return theme.black
+            }
+        } else if (!isNotTodayAlarm){
+            return theme.alarmDisabledText
+        } else return null;
+    }};
 `;
 
 const Ampm = styled.Text`
     font-size: 16px;
     font-weight: bold;
-    color: ${({ theme, completed }) =>
-        completed ? theme.textDisable : theme.black};
+    color: ${({ theme, completed, isNotTodayAlarm }) => {
+        if(isNotTodayAlarm){
+            if(completed){
+                return theme.textDisable
+            } else {
+                return theme.black
+            }
+        } else if (!isNotTodayAlarm){
+            return theme.alarmDisabledText
+        } else return null;
+    }};
 `;
 
 const TopWrapLeft = styled.View`
@@ -58,10 +76,20 @@ const MedicineContainer = styled.View`
     flex-direction: column;
 `;
 
-const Alarm = ({ alarmInfo, menuIcon, toggleTask, showAlarmMenu }) => {
+const Alarm = ({ alarmInfo, menuIcon, toggleTask, showAlarmMenu, day }) => {
     const theme = useContext(ThemeContext);
     const [alarmVisible, setAlarmVisible] = useState(true); // 알람 노출 / 미노출 (요일 맞춰서)
     const [completed, setCompleted] = useState(alarmInfo.completed); // 복용 / 미복용
+    const [isNotTodayAlarm, setIsNotTodayAlarm] = useState(false)
+
+    // ✨ 숫자로 넘어온 요일을 한글로 변환
+    useEffect(()=>{
+        if(alarmInfo.day.includes(day)){
+            setIsNotTodayAlarm(true)
+        }else {
+            setIsNotTodayAlarm(false)
+        }
+    }, [alarmInfo])
 
     // ✨ 숫자로 넘어온 요일을 한글로 변환
     const formatNumToKoreanDay = (numberDay) =>
@@ -78,156 +106,65 @@ const Alarm = ({ alarmInfo, menuIcon, toggleTask, showAlarmMenu }) => {
     };
 
     const changedDay = useMemo(() => formatNumToKoreanDay(alarmInfo.day), []);
-    const { hour, minute, ampm } = useMemo(
-        () => formatStrToTimeObj(alarmInfo.time),
-        []
-    );
-
-    // useEffect(() => {
-    //     if (filtered === true) {
-    //         // ✨오늘의 알람
-    //         const date = new Date();
-    //         const day = date.getDay(); // 0 : 일요일
-    //         const changedDay = changeDay(day); //일요일을 0 👉 7 변환
-    //         // console.log(alarmInfo.day);
-    //         const result = alarmInfo.day.some((num) => {
-    //             return num === changedDay;
-    //         });
-    //         setAlarmVisible(result);
-    //     } else {
-    //         // ✨모든 알람
-    //         setAlarmVisible(true);
-    //     }
-
-    //     formatNumToKoreanDay();
-    //     editTime();
-    // }, [filtered]);
-
-    // // ✨일요일은 7로 변환
-    // const changeDay = (day) => {
-    //     if (day === 0) {
-    //         return 7;
-    //     } else {
-    //         return day;
-    //     }
-    // };
-
-    // ✨오늘의 요일 출력
-    // const today = () => {
-    //     const date = new Date();
-    //     const day = date.getDay();
-    //     // 0 : 일, 1 : 월, 2 : 화, 3 : 수, 4 : 목, 5 : 금
-
-    //     const result = alarmInfo.day.some((num) => {
-    //         return num === day;
-    //     });
-    //     setAlarmVisible(result);
-    // };
+    const { hour, minute, ampm } = useMemo(() => formatStrToTimeObj(alarmInfo.time),[]);
 
     const _onPress = () => {
         toggleTask(alarmInfo.id);
         setCompleted(!completed);
     };
 
+
     return (
         <>
             {alarmVisible ? (
                 <TouchContainer onPress={_onPress}>
-                    <Container>
-                        {completed ? (
-                            <>
-                                <TopWrap>
-                                    <TopWrapLeft>
-                                        <Day dayArr={changedDay} />
-                                        <TimeContainer>
-                                            <Time completed={completed}>
-                                                {hour}:{minute}
-                                            </Time>
-                                            <Ampm completed={completed}>
-                                                {ampm}
-                                            </Ampm>
-                                        </TimeContainer>
-                                    </TopWrapLeft>
-                                    <TopWrapRight>
-                                        {/* ✨ 복용, 미복용 버튼 */}
-                                        <ButtonSmall
-                                            title="복용"
-                                            icon={icons14px.checkWhite}
-                                            onPress={_onPress}
+                    <Container isNotTodayAlarm={isNotTodayAlarm}>
+                        <TopWrap>
+                            <TopWrapLeft>
+                                <Day dayArr={changedDay} isNotTodayAlarm={isNotTodayAlarm} />
+                                <TimeContainer>
+                                    <Time completed={completed} isNotTodayAlarm={isNotTodayAlarm}>
+                                        {hour}:{minute}
+                                    </Time>
+                                    <Ampm completed={completed} isNotTodayAlarm={isNotTodayAlarm}>
+                                        {ampm}
+                                    </Ampm>
+                                </TimeContainer>
+                            </TopWrapLeft>
+                            <TopWrapRight>
+                                {/* ✨ 복용, 미복용 버튼 */}
+                                {
+                                    isNotTodayAlarm ? 
+                                    <ButtonSmall
+                                        title="복용"
+                                        icon={completed ? icons14px.checkWhite : icons14px.uncheck}
+                                        onPress={_onPress}
+                                        completed={completed}
+                                    /> 
+                                    : null
+                                }
+                                {/* ✨ 메뉴버튼 */}
+                                <IconButton
+                                    icon={menuIcon}
+                                    id={alarmInfo.id}
+                                    onPress={showAlarmMenu}
+                                />
+                            </TopWrapRight>
+                        </TopWrap>
+                        <MedicineContainer>
+                            {Object.values(alarmInfo.name).map(
+                                (item) => {
+                                    return (
+                                        <AlarmMedicine
+                                            completed={completed}
+                                            isNotTodayAlarm={isNotTodayAlarm}
+                                            name={item.name}
+                                            key={item.id}
                                         />
-
-                                        {/* ✨ 메뉴버튼 */}
-                                        <IconButton
-                                            icon={menuIcon}
-                                            id={alarmInfo.id}
-                                            onPress={showAlarmMenu}
-                                        />
-                                    </TopWrapRight>
-                                </TopWrap>
-                                <MedicineContainer>
-                                    {Object.values(alarmInfo.name).map(
-                                        (item) => {
-                                            return (
-                                                <AlarmMedicine
-                                                    completed={completed}
-                                                    name={item.name}
-                                                    key={item.id}
-                                                />
-                                            );
-                                        }
-                                    )}
-                                </MedicineContainer>
-                            </>
-                        ) : (
-                            <>
-                                <TopWrap>
-                                    <TopWrapLeft>
-                                        <Day dayArr={changedDay} />
-                                        <TimeContainer>
-                                            <Time>
-                                                {hour}:{minute}
-                                            </Time>
-                                            <Ampm>{ampm}</Ampm>
-                                        </TimeContainer>
-                                    </TopWrapLeft>
-                                    <TopWrapRight>
-                                        {/* ✨ 복용, 미복용 버튼 */}
-                                        <ButtonSmall
-                                            title="미복용"
-                                            icon={icons14px.uncheck}
-                                            containerStyle={{
-                                                backgroundColor:
-                                                    theme.smallBtnBackground,
-                                            }}
-                                            textStyle={{
-                                                color: theme.smallBtnText,
-                                            }}
-                                            onPress={_onPress}
-                                        />
-
-                                        {/* ✨ 메뉴버튼 */}
-                                        <IconButton
-                                            icon={menuIcon}
-                                            id={alarmInfo.id}
-                                            onPress={showAlarmMenu}
-                                        />
-                                    </TopWrapRight>
-                                </TopWrap>
-                                <MedicineContainer>
-                                    {Object.values(alarmInfo.name).map(
-                                        (item) => {
-                                            return (
-                                                <AlarmMedicine
-                                                    name={item.name}
-                                                    key={item.id}
-                                                    completed={completed}
-                                                />
-                                            );
-                                        }
-                                    )}
-                                </MedicineContainer>
-                            </>
-                        )}
+                                    );
+                                }
+                            )}
+                        </MedicineContainer>
                     </Container>
                 </TouchContainer>
             ) : null}

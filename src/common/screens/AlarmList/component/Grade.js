@@ -1,5 +1,5 @@
-import React from "react";
-import styled from "styled-components/native";
+import React, {useContext} from "react";
+import styled, {ThemeContext} from "styled-components/native";
 import { gauge, illust } from "@/images";
 import ButtonSmall from "@components/ButtonSmall";
 import { icons14px } from "@/icons";
@@ -57,6 +57,7 @@ const GradeTitle = styled.Text`
 `;
 
 const Grade = ({ countTotal, count, onPress }) => {
+    const theme = useContext(ThemeContext);
     const Gauge = () => {
         if (count === 1) {
             return <StyledImage source={gauge.gauge01} resizeMode="contain" />;
@@ -126,6 +127,12 @@ const Grade = ({ countTotal, count, onPress }) => {
                     title="등급표"
                     icon={icons14px.grade}
                     onPress={onPress}
+                    containerStyle={{
+                        backgroundColor:theme.smallBtnBackgroundChecked
+                    }}
+                    textStyle={{
+                        color:theme.smallBtnTextChecked
+                    }}
                 />
             </TextContainer>
         </Container>

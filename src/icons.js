@@ -5,6 +5,7 @@ import Dot from "@/../assets/icons/dot.png";
 import Password20px from "@/../assets/icons/20px_password.png";
 import User20px from "@/../assets/icons/20px_user.png";
 import Medicine20px from "@/../assets/icons/20px_medicine.png";
+import MedicineDisabled20px from "@/../assets/icons/20px_medicine_disabled.png";
 import Filter20px from "@/../assets/icons/20px_filter.png";
 import X20px from "@/../assets/icons/20px_X.png";
 import BottomSheetX20px from "@/../assets/icons/20px_BottomSheet_X.png";
@@ -55,6 +56,7 @@ export const icons20px = {
     user: User20px,
     filter: Filter20px,
     medicine: Medicine20px,
+    MedicineDisabled: MedicineDisabled20px,
     x: X20px,
     bottomSheetX: BottomSheetX20px,
 };

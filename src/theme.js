@@ -3,7 +3,7 @@ const Colors = {
     white: "#fff",
     black: "#111",
     deepGrey: "#666",
-    lightGrey: "#a5a5a5",
+    lightGrey: "#aeaeae",
     grey_3: "#e5e5e5",
     grey_4: "#cccccc",
     grey_5: "#f0f0f0",
@@ -27,6 +27,7 @@ export const theme = {
     textSub: Colors.deepGrey,
     textDisable: Colors.grey_4,
     background: Colors.grey_5,
+    alarmDisabledText : Colors.lightGrey,
 
     // ✨ 버튼
     btnBackground: Colors.main,

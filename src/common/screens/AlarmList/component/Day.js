@@ -8,14 +8,20 @@ const DayContainer = styled.View`
 const StyledText = styled.Text`
     font-size: 12px;
     font-weight: bold;
-    color: ${({ theme }) => theme.main};
+    color: ${({ theme, isNotTodayAlarm }) => {
+        if(isNotTodayAlarm){
+            return theme.main;
+        } else {
+            return theme.alarmDisabledText;
+        }
+    }};
 `;
 
-const Day = ({ dayArr }) => {
+const Day = ({ dayArr, isNotTodayAlarm }) => {
     return (
         <DayContainer>
             {dayArr.map((item, i) => {
-                return <StyledText key={i}>{item} </StyledText>;
+                return <StyledText isNotTodayAlarm={isNotTodayAlarm} key={i}>{item} </StyledText>;
             })}
         </DayContainer>
     );
