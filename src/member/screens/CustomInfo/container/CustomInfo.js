@@ -69,6 +69,7 @@ const SignupContainer00 = ({ navigation }) => {
                 // if 패스워드와 패스워드컨펌이 6자리 이상이라면
                 if (password == passwordConfirm) {
                     // if 패스워드와 패스워드컨펌이 같다면
+                    // console.log(token, nickname, password)
                     await updateUser({ token, nickname, password });
                     // Alert.alert("회원정보 변경이 완료되었습니다.");
                     // navigation.goBack();

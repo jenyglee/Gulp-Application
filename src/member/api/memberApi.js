@@ -86,7 +86,7 @@ const emailValidation = async (email) => {
         const response = await axios({
             method: "GET",
             url: url + "email-validation",
-            data: email,
+            Param: email,
         });
         console.log(response) 
 
