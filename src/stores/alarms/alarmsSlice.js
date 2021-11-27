@@ -31,6 +31,9 @@ export const alarmsSlice = createSlice({
         setIsVisibleCompleteModal(state, action) {
             state.isVisibleCompleteModal = action.payload;
         },
+        setDay(state, action){
+            state.day = action.payload
+        }
     },
 });
 

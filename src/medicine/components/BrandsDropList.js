@@ -1,20 +1,8 @@
-import React, { useEffect, useState } from "react";
-import { TouchableOpacity, View } from "react-native";
+import React from "react";
+import { View } from "react-native";
 import styled from "styled-components";
-import { BrandsDropListItem } from "@/medicine/components/index";
+import BrandsDropListItem from "./BrandsDropListItem";
 
-const Container = styled.View`
-    width: 100%;
-    height: 70px;
-    margin: 5px;
-    background-color: #fefefe;
-    border: 1px solid #ddd;
-`;
-
-const StyledText = styled.Text`
-    font-size: 18px;
-    color: #000;
-`;
 
 const BrandsDropList = ({ filtered, onSelectItem }) => {
     return (

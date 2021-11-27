@@ -185,6 +185,14 @@ const actions = {
             Alert.alert("설정이 전부 입력되었는지 확인해주세요.");
         }
     },
+    changeSunday : (day) => (dispatch) =>{
+        return day === 0 ? 7 : day;
+        // if(todayNumber === 0) {
+        //     return 7
+        // } else {
+        //     return todayNumber
+        // }
+    }
 };
 
 export default actions;

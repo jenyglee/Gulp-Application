@@ -93,7 +93,7 @@ const AddMedicine = ({ navigation, medicinesStore, commonStore, alarmsStore }) =
                 <Container width={width} height={height}>
                     <StyledForm>
                         <StyledTitle>복용시간</StyledTitle>
-                        <TimePicker onPress={()=>{
+                        <TimePicker onPress={(time)=>{
                             dispatch(actionsCommon.whatTime(time))
                         }} />
                     </StyledForm>
@@ -126,6 +126,7 @@ const AddMedicine = ({ navigation, medicinesStore, commonStore, alarmsStore }) =
                     <StyledForm>
                         <StyledTitle>복용중인 영양제</StyledTitle>
                         <StyledTagForm>
+                            {/* 👀✨ 전체 약조회 api 나오면 적용 */}
                             {Object.values(medicineList).map((item) => {
                                 return (
                                     <TagButton
@@ -164,7 +165,10 @@ const AddMedicine = ({ navigation, medicinesStore, commonStore, alarmsStore }) =
                 title="저장하기"
                 onPress={() => {
                     const response = dispatch(actionsAlarms.confirmValue(medicineList, time, week))
-                    dispatch(actionsAlarms.saveAlarm(response, medicineList, time, week, weekCheckList, navigation))
+                    
+                    // 👀✨ (임시용) 우선 무조건 저장 진행
+                    dispatch(actionsAlarms.saveAlarm(true, medicineList, time, week, weekCheckList, navigation))
+                    // dispatch(actionsAlarms.saveAlarm(response, medicineList, time, week, weekCheckList, navigation))
                 }}
             />
         </>

@@ -85,6 +85,7 @@ const AlarmList = ({ navigation, alarmsStore }) => {
     useEffect(() => {
         const removeFocusEvent = navigation.addListener("focus", () => {
             setFiltered(true);
+            // const todayNumber = dispatch(actionsAlarms.changeSunday(day));
             dispatch(actionsAlarms.getAlarms({ filtered, day }));
             // 👀❓ 무조건 alarms가 빈 배열로 들어감
             // dispatch(actionsAlarms.confirmList(alarms))
@@ -153,7 +154,7 @@ const AlarmList = ({ navigation, alarmsStore }) => {
                                         dispatch(actionsAlarms.toggleTask({id, filtered, day, year, month, date, count, countTotal, setIsVisibleCompleteModal}))
                                     }}
                                     showAlarmMenu={showAlarmMenu}
-                                    day={day}
+                                    day={day ? day : 7}
                                     key={item.id}
                                 />
                             );
