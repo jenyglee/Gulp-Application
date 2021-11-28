@@ -10,6 +10,7 @@ import WeekButton from "@/common/screens/AddAlarm/component/WeekButton";
 import { icons14px } from "@/icons";
 import { ScrollView } from "react-native-gesture-handler";
 import { deleteMedicine } from "@/medicine/api/medicineApi";
+import { addAlarm } from "@/common/api/alarmApi";
 import { inject, observer } from "mobx-react";
 import { useSelector, useDispatch } from "react-redux";
 
@@ -21,8 +22,6 @@ import actionsCommon from "stores/common/commonActions";
 
 import { stateMedicines } from "stores/medicines/medicinesSlice";
 import actionsMedicines from "stores/medicines/medicineActions";
-
-
 
 const Container = styled.View`
     width: ${({ width }) => width - 48}px;
@@ -54,18 +53,22 @@ const WeekButtonContainer = styled.View`
     background-color: ${({ theme }) => theme.background};
 `;
 
-const AddMedicine = ({ navigation, medicinesStore, commonStore, alarmsStore }) => {
+const AddMedicine = ({
+    navigation,
+    medicinesStore,
+    commonStore,
+    alarmsStore,
+}) => {
     const dispatch = useDispatch();
     const width = Dimensions.get("window").width;
     const height = Dimensions.get("window").height;
     const theme = useContext(ThemeContext);
-    const {  } = medicinesStore;
-    const {  } = alarmsStore;
-    const { } = commonStore;
+    const {} = medicinesStore;
+    const {} = alarmsStore;
+    const {} = commonStore;
 
     const medicineList = useSelector(stateMedicines).medicineList;
     const time = useSelector(stateCommon).time;
-
 
     const [week, setWeek] = useState([
         { id: 1, day: "월", checked: false },
@@ -75,14 +78,15 @@ const AddMedicine = ({ navigation, medicinesStore, commonStore, alarmsStore }) =
         { id: 5, day: "금", checked: false },
         { id: 6, day: "토", checked: false },
         { id: 7, day: "일", checked: false },
-    ])
-    const [weekAll, setWeekAll] = useState([{ id: 0, day: "All", checked: false }])
-    const weekCheckList = []; // 체크된 요일
-    
+    ]);
+    const [weekAll, setWeekAll] = useState([
+        { id: 0, day: "All", checked: false },
+    ]);
+    const [weekCheckList, setWeekCheckList] = useState(""); // 체크된 요일
 
     useEffect(() => {
         const removeFocusEvent = navigation.addListener("focus", () => {
-            dispatch(actionsMedicines.getMedicine())
+            dispatch(actionsMedicines.getMedicine());
         });
         return () => removeFocusEvent();
     }, []);
@@ -93,17 +97,26 @@ const AddMedicine = ({ navigation, medicinesStore, commonStore, alarmsStore }) =
                 <Container width={width} height={height}>
                     <StyledForm>
                         <StyledTitle>복용시간</StyledTitle>
-                        <TimePicker onPress={(time)=>{
-                            dispatch(actionsCommon.whatTime(time))
-                        }} />
+                        <TimePicker
+                            onPress={(time) => {
+                                dispatch(actionsCommon.whatTime(time));
+                            }}
+                        />
                     </StyledForm>
                     <StyledForm>
                         <StyledTitle>복용 요일</StyledTitle>
                         <WeekButtonContainer>
                             <WeekButton
                                 title={weekAll[0].day}
-                                onPress={()=>{
-                                    dispatch(actionsCommon.allWeekCheck({week, setWeek, weekAll, setWeekAll}))
+                                onPress={() => {
+                                    dispatch(
+                                        actionsCommon.allWeekCheck({
+                                            week,
+                                            setWeek,
+                                            weekAll,
+                                            setWeekAll,
+                                        })
+                                    );
                                 }}
                                 // onPress={allWeekCheck}
                                 checked={weekAll[0].checked}
@@ -114,8 +127,16 @@ const AddMedicine = ({ navigation, medicinesStore, commonStore, alarmsStore }) =
                                         title={item.day}
                                         id={item.id}
                                         key={item.id}
-                                        onPress={(id)=>{
-                                            dispatch(actionsCommon.weekCheck({id, week, setWeek, weekAll, setWeekAll}))
+                                        onPress={(id) => {
+                                            dispatch(
+                                                actionsCommon.weekCheck({
+                                                    id,
+                                                    week,
+                                                    setWeek,
+                                                    weekAll,
+                                                    setWeekAll,
+                                                })
+                                            );
                                         }}
                                         checked={item.checked}
                                     />
@@ -126,16 +147,21 @@ const AddMedicine = ({ navigation, medicinesStore, commonStore, alarmsStore }) =
                     <StyledForm>
                         <StyledTitle>복용중인 영양제</StyledTitle>
                         <StyledTagForm>
-                            {/* 👀✨ 전체 약조회 api 나오면 적용 */}
                             {Object.values(medicineList).map((item) => {
+                                console.log(item);
                                 return (
                                     <TagButton
                                         name={item.name}
-                                        brand={item.brand}
+                                        brand={item.brandName}
                                         id={item.id}
                                         key={item.id}
-                                        deleteTask={(id)=>{
-                                            dispatch(actionsMedicines.deleteMedicine(id, medicineList))
+                                        deleteTask={(id) => {
+                                            dispatch(
+                                                actionsMedicines.deleteMedicine(
+                                                    id,
+                                                    medicineList
+                                                )
+                                            );
                                         }}
                                     />
                                 );
@@ -163,12 +189,26 @@ const AddMedicine = ({ navigation, medicinesStore, commonStore, alarmsStore }) =
             </ScrollView>
             <Button
                 title="저장하기"
-                onPress={() => {
-                    const response = dispatch(actionsAlarms.confirmValue(medicineList, time, week))
-                    
-                    // 👀✨ (임시용) 우선 무조건 저장 진행
-                    dispatch(actionsAlarms.saveAlarm(true, medicineList, time, week, weekCheckList, navigation))
-                    // dispatch(actionsAlarms.saveAlarm(response, medicineList, time, week, weekCheckList, navigation))
+                onPress={async () => {
+                    const response = dispatch(
+                        actionsAlarms.confirmValue(medicineList, time, week)
+                    );
+                    dispatch(
+                        actionsAlarms.saveAlarm(
+                            response,
+                            medicineList,
+                            time,
+                            week,
+                            weekCheckList,
+                            setWeekCheckList,
+                            navigation
+                        )
+                    );
+                    // await addAlarm({
+                    //     time: "11:11:11",
+                    //     day: 111,
+                    //     medicines: [1, 2, 3],
+                    // });
                 }}
             />
         </>

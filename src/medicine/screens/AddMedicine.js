@@ -1,7 +1,6 @@
 import React, { useState, useRef } from "react";
 import styled from "styled-components";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { Button, Input } from "@components/index";
 import {
     PressDropList,
@@ -46,14 +45,13 @@ const AddMedicine = ({ navigation }) => {
         { id: 11, title: "기타" },
     ];
     const [filtered, setFiltered] = useState([]);
-    const [category, setCategory] = useState({title:"선택"});
+    const [category, setCategory] = useState({ title: "선택" });
     const [brand, setBrand] = useState("");
     const [medicine, setMedicine] = useState("");
     const [isFocusedCategory, setIsFocusedCategory] = useState(false);
     const [isSelectingCategory, setIsSelectingCategory] = useState(false);
     const refBrand = useRef(null);
     const refMedicine = useRef(null);
-
 
     // ✨ 로컬에 저장하기
     const setMedicineData = async () => {
@@ -88,11 +86,11 @@ const AddMedicine = ({ navigation }) => {
                 brand: { id: brandKey },
                 category: { id: category.id },
             };
-            
+
             const response = await addMedicine(newMedicine);
-            if(response === 200){
+            if (response === 200) {
                 navigation.navigate("AddAlarm");
-            } else if (response !== 200){
+            } else if (response !== 200) {
                 // 🍎 무조건 200 뜨므로 여기서 걸러내면 안됨!!!🍎
                 // Alert.alert("이 약은 이미 등록되어 있습니다.")
             }
@@ -104,9 +102,9 @@ const AddMedicine = ({ navigation }) => {
             // };
             // await AsyncStorage.setItem("medicine", JSON.stringify({ ...Item, ...newMedicine }));
             // navigation.navigate("AddAlarm");
-            } catch (e) {
-                console.log(e);
-            }
+        } catch (e) {
+            console.log(e);
+        }
     };
 
     const handleSelectCategory = (id) => {
@@ -125,67 +123,59 @@ const AddMedicine = ({ navigation }) => {
 
     return (
         <>
-            <KeyboardAwareScrollView
-                contentContainerStyle={{
-                    flex: 1,
-                }}
-                extraScrollHeight={20}
-            >
-                <Container width={width}>
-                    <StyledForm>
-                        <StyledTitle>영양제 종류</StyledTitle>
-                        <ButtonCategorySelect
-                            containerStyle={{
-                                marginBottom: 0,
-                            }}
-                            value={category.title}
+            <Container width={width}>
+                <StyledForm>
+                    <StyledTitle>영양제 종류</StyledTitle>
+                    <ButtonCategorySelect
+                        containerStyle={{
+                            marginBottom: 0,
+                        }}
+                        value={category.title}
+                        onVisibleDropList={handleVisibleDropList}
+                        isFocused={isFocusedCategory}
+                        setIsFocused={setIsFocusedCategory}
+                    />
+                    {isSelectingCategory && (
+                        <PressDropList
+                            filtered={filtered}
+                            onSelectItem={handleSelectCategory}
                             onVisibleDropList={handleVisibleDropList}
+                            categoryData={categoryData}
                             isFocused={isFocusedCategory}
                             setIsFocused={setIsFocusedCategory}
                         />
-                        {isSelectingCategory && (
-                            <PressDropList
-                                filtered={filtered}
-                                onSelectItem={handleSelectCategory}
-                                onVisibleDropList={handleVisibleDropList}
-                                categoryData={categoryData}
-                                isFocused={isFocusedCategory}
-                                setIsFocused={setIsFocusedCategory}
-                            />
-                        )}
-                    </StyledForm>
-                    <StyledForm>
-                        <StyledTitle>브랜드 이름</StyledTitle>
-                        <Input
-                            ref={refBrand}
-                            containerStyle={{
-                                marginBottom: 0,
-                            }}
-                            value={brand}
-                            onBlur={() => {}}
-                            onChangeText={(text) => setBrand(text)}
-                            placeholder="브랜드를 입력해주세요"
-                            onSubmitEditing={()=>{
-                                refMedicine.current.focus();
-                            }}
-                        />
-                    </StyledForm>
-                    <StyledForm>
-                        <StyledTitle>영양제 이름</StyledTitle>
-                        <Input
-                            ref={refMedicine}
-                            containerStyle={{
-                                marginBottom: 0,
-                            }}
-                            value={medicine}
-                            onBlur={() => {}}
-                            onChangeText={(text) => setMedicine(text)}
-                            placeholder="약 이름을 입력해주세요"
-                        />
-                    </StyledForm> 
-                </Container>
-            </KeyboardAwareScrollView>
-            
+                    )}
+                </StyledForm>
+                <StyledForm>
+                    <StyledTitle>브랜드 이름</StyledTitle>
+                    <Input
+                        ref={refBrand}
+                        containerStyle={{
+                            marginBottom: 0,
+                        }}
+                        value={brand}
+                        onBlur={() => {}}
+                        onChangeText={(text) => setBrand(text)}
+                        placeholder="브랜드를 입력해주세요"
+                        onSubmitEditing={() => {
+                            refMedicine.current.focus();
+                        }}
+                    />
+                </StyledForm>
+                <StyledForm>
+                    <StyledTitle>영양제 이름</StyledTitle>
+                    <Input
+                        ref={refMedicine}
+                        containerStyle={{
+                            marginBottom: 0,
+                        }}
+                        value={medicine}
+                        onBlur={() => {}}
+                        onChangeText={(text) => setMedicine(text)}
+                        placeholder="약 이름을 입력해주세요"
+                    />
+                </StyledForm>
+            </Container>
             <Button title="저장" onPress={setMedicineData} />
         </>
     );

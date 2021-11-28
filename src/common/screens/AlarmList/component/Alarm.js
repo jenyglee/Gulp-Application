@@ -17,7 +17,8 @@ const Container = styled.View`
     height: auto;
     border-radius: 12px;
     padding: 20px;
-    background-color: ${({ isNotTodayAlarm, theme }) => isNotTodayAlarm ? theme.white : theme.line};
+    background-color: ${({ isNotTodayAlarm, theme }) =>
+        isNotTodayAlarm ? theme.white : theme.line};
 `;
 
 const TopWrap = styled.View`
@@ -35,14 +36,14 @@ const Time = styled.Text`
     font-size: 30px;
     font-weight: bold;
     color: ${({ theme, completed, isNotTodayAlarm }) => {
-        if(isNotTodayAlarm){
-            if(completed){
-                return theme.textDisable
+        if (isNotTodayAlarm) {
+            if (completed) {
+                return theme.textDisable;
             } else {
-                return theme.black
+                return theme.black;
             }
-        } else if (!isNotTodayAlarm){
-            return theme.alarmDisabledText
+        } else if (!isNotTodayAlarm) {
+            return theme.alarmDisabledText;
         } else return null;
     }};
 `;
@@ -51,14 +52,14 @@ const Ampm = styled.Text`
     font-size: 16px;
     font-weight: bold;
     color: ${({ theme, completed, isNotTodayAlarm }) => {
-        if(isNotTodayAlarm){
-            if(completed){
-                return theme.textDisable
+        if (isNotTodayAlarm) {
+            if (completed) {
+                return theme.textDisable;
             } else {
-                return theme.black
+                return theme.black;
             }
-        } else if (!isNotTodayAlarm){
-            return theme.alarmDisabledText
+        } else if (!isNotTodayAlarm) {
+            return theme.alarmDisabledText;
         } else return null;
     }};
 `;
@@ -80,16 +81,16 @@ const Alarm = ({ alarmInfo, menuIcon, toggleTask, showAlarmMenu, day }) => {
     const theme = useContext(ThemeContext);
     const [alarmVisible, setAlarmVisible] = useState(true); // 알람 노출 / 미노출 (요일 맞춰서)
     const [completed, setCompleted] = useState(alarmInfo.completed); // 복용 / 미복용
-    const [isNotTodayAlarm, setIsNotTodayAlarm] = useState(false)
+    const [isNotTodayAlarm, setIsNotTodayAlarm] = useState(false);
 
     // ✨ 숫자로 넘어온 요일을 한글로 변환
-    useEffect(()=>{
-        if(alarmInfo.day.includes(day)){
-            setIsNotTodayAlarm(true)
-        }else {
-            setIsNotTodayAlarm(false)
+    useEffect(() => {
+        if (alarmInfo.day.includes(day)) {
+            setIsNotTodayAlarm(true);
+        } else {
+            setIsNotTodayAlarm(false);
         }
-    }, [alarmInfo])
+    }, [alarmInfo]);
 
     // ✨ 숫자로 넘어온 요일을 한글로 변환
     const formatNumToKoreanDay = (numberDay) =>
@@ -106,13 +107,15 @@ const Alarm = ({ alarmInfo, menuIcon, toggleTask, showAlarmMenu, day }) => {
     };
 
     const changedDay = useMemo(() => formatNumToKoreanDay(alarmInfo.day), []);
-    const { hour, minute, ampm } = useMemo(() => formatStrToTimeObj(alarmInfo.time),[]);
+    const { hour, minute, ampm } = useMemo(
+        () => formatStrToTimeObj(alarmInfo.time),
+        []
+    );
 
     const _onPress = () => {
         toggleTask(alarmInfo.id);
         setCompleted(!completed);
     };
-
 
     return (
         <>
@@ -121,28 +124,39 @@ const Alarm = ({ alarmInfo, menuIcon, toggleTask, showAlarmMenu, day }) => {
                     <Container isNotTodayAlarm={isNotTodayAlarm}>
                         <TopWrap>
                             <TopWrapLeft>
-                                <Day dayArr={changedDay} isNotTodayAlarm={isNotTodayAlarm} />
+                                <Day
+                                    dayArr={changedDay}
+                                    isNotTodayAlarm={isNotTodayAlarm}
+                                />
                                 <TimeContainer>
-                                    <Time completed={completed} isNotTodayAlarm={isNotTodayAlarm}>
+                                    <Time
+                                        completed={completed}
+                                        isNotTodayAlarm={isNotTodayAlarm}
+                                    >
                                         {hour}:{minute}
                                     </Time>
-                                    <Ampm completed={completed} isNotTodayAlarm={isNotTodayAlarm}>
+                                    <Ampm
+                                        completed={completed}
+                                        isNotTodayAlarm={isNotTodayAlarm}
+                                    >
                                         {ampm}
                                     </Ampm>
                                 </TimeContainer>
                             </TopWrapLeft>
                             <TopWrapRight>
                                 {/* ✨ 복용, 미복용 버튼 */}
-                                {
-                                    isNotTodayAlarm ? 
+                                {isNotTodayAlarm ? (
                                     <ButtonSmall
                                         title="복용"
-                                        icon={completed ? icons14px.checkWhite : icons14px.uncheck}
+                                        icon={
+                                            completed
+                                                ? icons14px.checkWhite
+                                                : icons14px.uncheck
+                                        }
                                         onPress={_onPress}
                                         completed={completed}
-                                    /> 
-                                    : null
-                                }
+                                    />
+                                ) : null}
                                 {/* ✨ 메뉴버튼 */}
                                 <IconButton
                                     icon={menuIcon}
@@ -152,18 +166,16 @@ const Alarm = ({ alarmInfo, menuIcon, toggleTask, showAlarmMenu, day }) => {
                             </TopWrapRight>
                         </TopWrap>
                         <MedicineContainer>
-                            {Object.values(alarmInfo.name).map(
-                                (item) => {
-                                    return (
-                                        <AlarmMedicine
-                                            completed={completed}
-                                            isNotTodayAlarm={isNotTodayAlarm}
-                                            name={item.name}
-                                            key={item.id}
-                                        />
-                                    );
-                                }
-                            )}
+                            {Object.values(alarmInfo.name).map((item) => {
+                                return (
+                                    <AlarmMedicine
+                                        completed={completed}
+                                        isNotTodayAlarm={isNotTodayAlarm}
+                                        name={item.name}
+                                        key={item.id}
+                                    />
+                                );
+                            })}
                         </MedicineContainer>
                     </Container>
                 </TouchContainer>

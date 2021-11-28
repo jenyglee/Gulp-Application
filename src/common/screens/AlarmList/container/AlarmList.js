@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components/native";
 import { View, Text, ScrollView, Dimensions, Alert } from "react-native";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import { StatusBar } from "expo-status-bar";
 import { icons } from "@/icons";
 import AlarmMenu from "@/common/components/modal/AlarmMenu";
@@ -16,6 +17,7 @@ import { inject, observer } from "mobx-react";
 import { useSelector, useDispatch } from "react-redux";
 import { stateAlarms } from "stores/alarms/alarmsSlice.js";
 import actionsAlarms from "stores/alarms/alarmsActions.js";
+import { Button } from "@/common/components";
 
 const Wrap = styled.ScrollView`
     padding-top: ${({ insets }) => insets.top}px;
@@ -71,7 +73,8 @@ const AlarmList = ({ navigation, alarmsStore }) => {
     // const alarms = useSelector(stateAlarms).alarms;
     // const count = useSelector(stateAlarms).count;
     // const countTotal = useSelector(stateAlarms).countTotal;
-    const {year, month, date, day, alarms, count, countTotal} = useSelector(stateAlarms)
+    const { year, month, date, day, alarms, count, countTotal } =
+        useSelector(stateAlarms);
     const width = Dimensions.get("window").width;
     const insets = useSafeAreaInsets();
     const [selectedTaskKey, setSelectedTaskKey] = useState();
@@ -80,7 +83,7 @@ const AlarmList = ({ navigation, alarmsStore }) => {
     const [filtered, setFiltered] = useState(true); // 전체알람 < > 오늘알람
     const [isVisibleAlarm, setIsVisibleAlarm] = useState(true); // 알람 유무
     const [isVisibleCompleteModal, setIsVisibleCompleteModal] = useState(false); // 완료모달 노출/숨김
-    
+    console.log(day);
     // ✨ 로그인했는지 확인 + 약 추가 후 메인으로 복귀
     useEffect(() => {
         const removeFocusEvent = navigation.addListener("focus", () => {
@@ -122,9 +125,9 @@ const AlarmList = ({ navigation, alarmsStore }) => {
         setIsVisibleMenu(false);
     };
 
-    const handlePressAlarmFilter = ()=>{
-        setFiltered(!filtered)
-    }
+    const handlePressAlarmFilter = () => {
+        setFiltered(!filtered);
+    };
 
     return (
         <>
@@ -144,6 +147,8 @@ const AlarmList = ({ navigation, alarmsStore }) => {
                             onPress={handlePressAlarmFilter}
                         />
                     </TitleContainer>
+
+                    {/* 👀❓ day가 문자열로 만들어진 게 뻑나서 잠시 가림 */}
                     {isVisibleAlarm ? (
                         Object.values(alarms).map((item) => {
                             return (
@@ -151,7 +156,19 @@ const AlarmList = ({ navigation, alarmsStore }) => {
                                     alarmInfo={item}
                                     menuIcon={icons.dot}
                                     toggleTask={(id) => {
-                                        dispatch(actionsAlarms.toggleTask({id, filtered, day, year, month, date, count, countTotal, setIsVisibleCompleteModal}))
+                                        dispatch(
+                                            actionsAlarms.toggleTask({
+                                                id,
+                                                filtered,
+                                                day,
+                                                year,
+                                                month,
+                                                date,
+                                                count,
+                                                countTotal,
+                                                setIsVisibleCompleteModal,
+                                            })
+                                        );
                                     }}
                                     showAlarmMenu={showAlarmMenu}
                                     day={day ? day : 7}
@@ -171,12 +188,40 @@ const AlarmList = ({ navigation, alarmsStore }) => {
                         isVisibleMenu={isVisibleMenu}
                         setIsVisibleMenu={setIsVisibleMenu}
                         deleteTask={() => {
-                            dispatch(actionsAlarms.deleteTask({selectedTaskKey, filtered, day }))
+                            dispatch(
+                                actionsAlarms.deleteTask({
+                                    selectedTaskKey,
+                                    filtered,
+                                    day,
+                                })
+                            );
                         }}
-                        editMedicine={editMedicine.bind( undefined, selectedTaskKey )}
+                        editMedicine={editMedicine.bind(
+                            undefined,
+                            selectedTaskKey
+                        )}
                     />
-                    <CompleteModal isVisible={isVisibleCompleteModal} setIsVisible={setIsVisibleCompleteModal} count={count} />
+                    <CompleteModal
+                        isVisible={isVisibleCompleteModal}
+                        setIsVisible={setIsVisibleCompleteModal}
+                        count={count}
+                    />
                 </Container>
+                {/* <Button
+                    title="모든 알람 삭제"
+                    onPress={async () => {
+                        const loadedData = await AsyncStorage.getItem("alarm");
+                        const parseData = JSON.parse(loadedData);
+                        // console.log(Object.values(parseData));
+                        const copy = Object.assign({}, parseData);
+                        delete copy["1638057106143"];
+                        await AsyncStorage.setItem(
+                            "alarm",
+                            JSON.stringify(copy)
+                        );
+                        console.log(parseData);
+                    }}
+                /> */}
             </Wrap>
             <FloatingAction
                 color="#27C47D"
@@ -190,7 +235,9 @@ const AlarmList = ({ navigation, alarmsStore }) => {
                 buttonSize={50}
                 animated={false}
                 showBackground={false}
-                onPressMain={() => { navigation.navigate("AddAlarm"); }}
+                onPressMain={() => {
+                    navigation.navigate("AddAlarm");
+                }}
             />
         </>
     );
