@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from "react";
-import styled from "styled-components/native";
+import React, { useState, useEffect, useContext } from "react";
+import styled, { ThemeContext } from "styled-components/native";
 import { View, Text, ScrollView, Dimensions, Alert } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { StatusBar } from "expo-status-bar";
@@ -66,13 +66,9 @@ const ProfileName = styled.Text`
 
 const AlarmList = ({ navigation, alarmsStore }) => {
     const dispatch = useDispatch(); //dispatch : 해당 state 값을 수정하는 액션
+    const theme = useContext(ThemeContext);
     // const year = useSelector(stateAlarms).year;
     // const month = useSelector(stateAlarms).month;
-    // const date = useSelector(stateAlarms).date;
-    // const day = useSelector(stateAlarms).day;
-    // const alarms = useSelector(stateAlarms).alarms;
-    // const count = useSelector(stateAlarms).count;
-    // const countTotal = useSelector(stateAlarms).countTotal;
     const { year, month, date, day, alarms, count, countTotal } =
         useSelector(stateAlarms);
     const width = Dimensions.get("window").width;
@@ -133,8 +129,8 @@ const AlarmList = ({ navigation, alarmsStore }) => {
         <>
             <Wrap insets={insets}>
                 <Container width={width}>
-                    <StatusBar style="auto" />
-                    <TopLogo />
+                    <StatusBar backgroundColor={theme.background} />
+                    {/* <TopLogo /> */}
                     <Grade
                         countTotal={countTotal}
                         count={count}

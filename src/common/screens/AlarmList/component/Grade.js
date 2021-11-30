@@ -1,5 +1,5 @@
-import React, {useContext} from "react";
-import styled, {ThemeContext} from "styled-components/native";
+import React, { useContext } from "react";
+import styled, { ThemeContext } from "styled-components/native";
 import { gauge, illust } from "@/images";
 import ButtonSmall from "@components/ButtonSmall";
 import { icons14px } from "@/icons";
@@ -9,6 +9,7 @@ const Container = styled.View`
     align-items: center;
     justify-content: space-between;
     flex-direction: row;
+    margin-top: 20px;
     margin-bottom: 20px;
     width: 100%;
 `;
@@ -28,7 +29,6 @@ const MedicineIllust = styled.Image`
     position: absolute;
     top: 19px;
     width: 60px;
-
 `;
 
 const Count = styled.Text`
@@ -128,10 +128,10 @@ const Grade = ({ countTotal, count, onPress }) => {
                     icon={icons14px.grade}
                     onPress={onPress}
                     containerStyle={{
-                        backgroundColor:theme.smallBtnBackgroundChecked
+                        backgroundColor: theme.smallBtnBackgroundChecked,
                     }}
                     textStyle={{
-                        color:theme.smallBtnTextChecked
+                        color: theme.smallBtnTextChecked,
                     }}
                 />
             </TextContainer>

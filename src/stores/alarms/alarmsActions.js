@@ -16,7 +16,7 @@ const actions = {
                 await actions.storeData(alarms)(dispatch);
                 await actions.getAlarms({ filtered, day })(dispatch);
             } catch (error) {
-                Alert.alert(error);
+                console.log(JSON.stringify(error));
             }
         },
 
@@ -52,7 +52,8 @@ const actions = {
                     setIsVisibleCompleteModal,
                 })(dispatch);
             } catch (error) {
-                Alert.alert(error);
+                // 🍎
+                // Alert.alert(JSON.stringify(error));
             }
         },
 
@@ -91,7 +92,8 @@ const actions = {
                 dispatch(actionsAlarms.setAlarms(filteredAlarms || []));
                 return filteredAlarms;
             } catch (error) {
-                Alert.alert(error);
+                // 🍎
+                console.log(error);
             }
         },
     // ✨ 알람이 아예 없는지 검사(alarmList)
@@ -112,7 +114,7 @@ const actions = {
             copy[id].completed = !copy[id].completed;
             return copy;
         } catch (error) {
-            Alert.alert(error);
+            console.log(JSON.stringify(error));
         }
     },
 
@@ -121,7 +123,7 @@ const actions = {
         try {
             await AsyncStorage.setItem("alarm", JSON.stringify(alarms));
         } catch (error) {
-            Alert.alert(error);
+            console.log(JSON.stringify(error));
         }
     },
 
@@ -284,14 +286,6 @@ const actions = {
                 Alert.alert("설정이 전부 입력되었는지 확인해주세요.");
             }
         },
-    changeSunday: (day) => (dispatch) => {
-        return day === 0 ? 7 : day;
-        // if(todayNumber === 0) {
-        //     return 7
-        // } else {
-        //     return todayNumber
-        // }
-    },
 };
 
 export default actions;

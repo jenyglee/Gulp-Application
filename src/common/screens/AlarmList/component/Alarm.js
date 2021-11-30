@@ -81,20 +81,21 @@ const Alarm = ({ alarmInfo, menuIcon, toggleTask, showAlarmMenu, day }) => {
     const theme = useContext(ThemeContext);
     const [alarmVisible, setAlarmVisible] = useState(true); // 알람 노출 / 미노출 (요일 맞춰서)
     const [completed, setCompleted] = useState(alarmInfo.completed); // 복용 / 미복용
-    const [isNotTodayAlarm, setIsNotTodayAlarm] = useState(false);
+    const [isNotTodayAlarm, setIsNotTodayAlarm] = useState(true); //(day 정리될때까지 임시용)
+    // const [isNotTodayAlarm, setIsNotTodayAlarm] = useState(false);
+
+    // ✨ 오늘 요일에 맞는 알람만 노출(문자열 기준으로 변경 필요)
+    // useEffect(() => {
+    //     if (alarmInfo.day.includes(day)) {
+    //         setIsNotTodayAlarm(true);
+    //     } else {
+    //         setIsNotTodayAlarm(false);
+    //     }
+    // }, [alarmInfo]);
 
     // ✨ 숫자로 넘어온 요일을 한글로 변환
-    useEffect(() => {
-        if (alarmInfo.day.includes(day)) {
-            setIsNotTodayAlarm(true);
-        } else {
-            setIsNotTodayAlarm(false);
-        }
-    }, [alarmInfo]);
-
-    // ✨ 숫자로 넘어온 요일을 한글로 변환
-    const formatNumToKoreanDay = (numberDay) =>
-        numberDay.map((num) => koreanDaysArr[num - 1]);
+    // const formatNumToKoreanDay = (numberDay) =>
+    //     numberDay.map((num) => koreanDaysArr[num - 1]);
 
     // ✨ HH:mm:dd로 들어온 시간 전환 => "14:30:30" => "PM 2:30"
     const formatStrToTimeObj = (timeStr) => {
@@ -106,7 +107,7 @@ const Alarm = ({ alarmInfo, menuIcon, toggleTask, showAlarmMenu, day }) => {
         };
     };
 
-    const changedDay = useMemo(() => formatNumToKoreanDay(alarmInfo.day), []);
+    // const changedDay = useMemo(() => formatNumToKoreanDay(alarmInfo.day), []);
     const { hour, minute, ampm } = useMemo(
         () => formatStrToTimeObj(alarmInfo.time),
         []
@@ -124,10 +125,10 @@ const Alarm = ({ alarmInfo, menuIcon, toggleTask, showAlarmMenu, day }) => {
                     <Container isNotTodayAlarm={isNotTodayAlarm}>
                         <TopWrap>
                             <TopWrapLeft>
-                                <Day
+                                {/* <Day
                                     dayArr={changedDay}
                                     isNotTodayAlarm={isNotTodayAlarm}
-                                />
+                                /> */}
                                 <TimeContainer>
                                     <Time
                                         completed={completed}

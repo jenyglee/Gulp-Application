@@ -27,10 +27,11 @@ export const theme = {
     textSub: Colors.deepGrey,
     textDisable: Colors.grey_4,
     background: Colors.grey_5,
-    alarmDisabledText : Colors.lightGrey,
+    alarmDisabledText: Colors.lightGrey,
 
     // ✨ 버튼
     btnBackground: Colors.main,
+    btnBackgroundWhite: Colors.white,
     btnBackgroundDisable: Colors.grey_3,
     btnText: Colors.white,
 

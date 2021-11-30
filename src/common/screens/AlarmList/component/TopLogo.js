@@ -9,6 +9,7 @@ const Container = styled.View`
 const LogoAndTitle = styled.Image`
     width: 75px;
     height: 25px;
+    margin-top: 15px;
     margin-bottom: 18px;
     /* background-color: red; */
 `;

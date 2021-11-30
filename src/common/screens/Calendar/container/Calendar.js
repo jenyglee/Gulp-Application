@@ -79,7 +79,7 @@ const Calendar = ({ navigation }) => {
 
     useEffect(() => {
         const removeFocusEvent = navigation.addListener("focus", () => {
-            dispatch(actionsCalendar.getData(setAlarm, setFoundMedicine))
+            dispatch(actionsCalendar.getData(setAlarm, setFoundMedicine));
             getUser();
         });
         return () => {

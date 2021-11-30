@@ -3,8 +3,8 @@ import { createSlice } from "@reduxjs/toolkit";
 export const medicinesSlice = createSlice({
     name: "medicines",
     initialState: {
-        medicineList : {},
-        categoryData : [
+        medicineList: {},
+        categoryData: [
             { id: 0, title: "비타민C" },
             { id: 1, title: "비타민B" },
             { id: 2, title: "멀티비타민" },
@@ -18,27 +18,27 @@ export const medicinesSlice = createSlice({
             { id: 10, title: "철분" },
             { id: 11, title: "기타" },
         ],
-        category : {title:"선택"},
-        brand : "",
-        brandKey : "",
-        medicine : ""
+        category: { title: "선택" },
+        brand: "",
+        brandKey: "", // 이걸로 해당 브랜드의 약만 노출하게 한다.
+        medicine: "",
         // filtered : [],
     },
     reducers: {
         setMedicineList(state, action) {
             state.medicineList = action.payload;
         },
-        setCategory(state, action){
-            state.category = action.payload
+        setCategory(state, action) {
+            state.category = action.payload;
         },
-        setBrand(state, action){
-            state.brand = action.payload
+        setBrand(state, action) {
+            state.brand = action.payload;
         },
-        setBrandKey(state, action){
-            state.brandKey = action.payload
+        setBrandKey(state, action) {
+            state.brandKey = action.payload;
         },
-        setMedicine(state, action){
-            state.medicine = action.payload
+        setMedicine(state, action) {
+            state.medicine = action.payload;
         },
         // setFiltered(state, action){
         //     state.filtered = action.payload

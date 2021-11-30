@@ -3,7 +3,7 @@ import { Dimensions, Animated } from "react-native";
 import styled from "styled-components";
 
 const Container = styled.View`
-    width: ${({ width }) => width - 48}px;
+    width: 100%;
     background: ${({ theme }) => theme.white};
     margin-bottom: 12px;
     border: 1px solid
@@ -39,6 +39,10 @@ const Input = forwardRef(
             secureTextEntry,
             containerStyle,
             textStyle,
+            isFocusedOther,
+            setIsFocusedOther,
+            isSearching,
+            isSearchMedicine,
         },
         ref
     ) => {
@@ -48,7 +52,7 @@ const Input = forwardRef(
         return (
             <Container
                 width={width}
-                isFocused={isFocused}
+                isFocused={isSearchMedicine ? isFocusedOther : isFocused}
                 style={containerStyle}
             >
                 <StyledInput
@@ -59,11 +63,19 @@ const Input = forwardRef(
                     maxLength={maxLength}
                     value={value}
                     onChangeText={onChangeText}
-                    isFocused={isFocused}
-                    onFocus={() => setIsFocused(true)}
+                    isFocused={isSearchMedicine ? isFocusedOther : isFocused}
+                    onFocus={() =>
+                        isSearchMedicine
+                            ? setIsFocusedOther(true)
+                            : setIsFocused(true)
+                    }
                     onBlur={() => {
                         onBlur();
-                        setIsFocused(false);
+                        if (!isSearchMedicine) {
+                            setIsFocused(false);
+                        } else if (isSearchMedicine && !isSearching) {
+                            setIsFocusedOther(false);
+                        }
                     }}
                     returnKeyType={returnKeyType}
                     onSubmitEditing={onSubmitEditing}

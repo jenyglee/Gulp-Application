@@ -1,5 +1,11 @@
 import React, { useContext } from "react";
-import { Image, View, TouchableWithoutFeedback } from "react-native";
+import {
+    Image,
+    View,
+    TouchableWithoutFeedback,
+    Platform,
+    StyleSheet,
+} from "react-native";
 import styled, { ThemeContext } from "styled-components";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { createStackNavigator } from "@react-navigation/stack";
@@ -51,6 +57,13 @@ const rightText = styled.Text`
     color: ${({ theme }) => theme.main};
 `;
 
+const styles = StyleSheet.create({
+    tab:
+        Platform.OS === "ios"
+            ? {}
+            : { paddingTop: 5, paddingBottom: 5, height: 60 },
+});
+
 const Tab = createBottomTabNavigator();
 const HomeTabs = () => {
     const theme = useContext(ThemeContext);
@@ -59,6 +72,7 @@ const HomeTabs = () => {
             screenOptions={{
                 tabBarLabelPosition: "below-icon",
                 tabBarStyle: {
+                    ...styles.tab,
                     borderTopColor: theme.line,
                     borderTopWidth: 2,
                 },
@@ -165,6 +179,7 @@ const HomeStackNav = () => {
                 cardStyle: {
                     backgroundColor: "#fff",
                 },
+                headerShadowVisible: false,
             }}
         >
             <HomeStack.Screen

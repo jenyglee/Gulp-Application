@@ -1,27 +1,32 @@
 import React, { useState, useRef, useEffect, useContext } from "react";
+import { KeyboardAvoidingView } from "react-native";
 import styled, { ThemeContext } from "styled-components";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
-import { Button, TextButton, Input, Image } from "@components/index";
+import {
+    Button,
+    TextButton,
+    Input,
+    Image,
+    ButtonFloating,
+} from "@components/index";
 import { isEmail, removeWhiteSpace } from "@/util";
 import { emailValidation, signup } from "@/member/api/memberApi";
-import { Alert, Animated, Dimensions } from "react-native";
+import { Alert, Animated, Dimensions, Platform } from "react-native";
 import { useSelector, useDispatch } from "react-redux";
 import { stateMembers } from "stores/members/membersSlice";
 import actionsMembers from "stores/members/memberActions";
 
 const Container = styled.View`
-    flex: 1;
-    width: 100%;
-    height: 100%;
+    align-self: center;
+    width: ${({ width }) => width - 40}px;
     background: ${({ theme }) => theme.white};
     display: flex;
-    /* justify-content: center; */
-    margin-top: 50px;
     align-items: center;
 `;
 
 const InputContainer = styled.View`
-    /* margin-bottom: 36px; */
+    margin-top: 50px;
+    margin-bottom: 36px;
 `;
 
 const StyledTitle = styled.Text`
@@ -47,7 +52,7 @@ const SignupContainer00 = ({ navigation }) => {
     // ✨ 포커스 아웃이 되면 다음 인풋 노출
     const [showEmail, setShowEmail] = useState(false);
     const [showPassword, setShowPassword] = useState(false);
-    
+
     // ✨ 애니메이션 'opacity'
     const inputAnimation = (opacityItem) => {
         Animated.timing(opacityItem, {
@@ -117,13 +122,23 @@ const SignupContainer00 = ({ navigation }) => {
     });
 
     return (
+        // <KeyboardAvoidingView
+        //     behavior="height"
+        //     style={{
+        //         flex: 1,
+        //     }}
+        // >
         <KeyboardAwareScrollView
+            enableOnAndroid={true}
             contentContainerStyle={{
                 flex: 1,
+                width: "100%",
+                // height: 2000,
+                // backgroundColor: "blue",
             }}
-            extraScrollHeight={20}
+            extraScrollHeight={50}
         >
-            <Container>
+            <Container width={width}>
                 <InputContainer>
                     <StyledTitle>닉네임을 입력해주세요</StyledTitle>
                     <Input
@@ -142,9 +157,9 @@ const SignupContainer00 = ({ navigation }) => {
                         onSubmitEditing={() => {
                             confirmNickname();
                         }}
-                        containerStyle={{
-                            marginBottom: 36,
-                        }}
+                        // containerStyle={{
+                        //     marginBottom: 36,
+                        // }}
                     />
                 </InputContainer>
                 {showEmail ? (
@@ -152,6 +167,7 @@ const SignupContainer00 = ({ navigation }) => {
                         style={{
                             opacity: opacityEmail,
                             marginBottom: 36,
+                            // backgroundColor: "red",
                         }}
                     >
                         <StyledTitle>이메일을 입력해주세요</StyledTitle>
@@ -229,13 +245,21 @@ const SignupContainer00 = ({ navigation }) => {
                         />
                     </Animated.View>
                 ) : null}
-
+            </Container>
+            {Platform.OS === "ios" ? (
                 <Button
                     title="회원가입하기"
                     onPress={() => {
                         if ((nickname, email, password, passwordConfirm)) {
                             if (password === passwordConfirm) {
-                                dispatch(actionsMembers.handleSignupBtnPress(nickname, email, password, navigation))
+                                dispatch(
+                                    actionsMembers.handleSignupBtnPress(
+                                        nickname,
+                                        email,
+                                        password,
+                                        navigation
+                                    )
+                                );
                             } else {
                                 Alert.alert("비밀번호가 일치하지 않습니다.");
                             }
@@ -252,8 +276,19 @@ const SignupContainer00 = ({ navigation }) => {
                             : theme.btnBackgroundDisable,
                     }}
                 />
-            </Container>
+            ) : (
+                <ButtonFloating
+                    btnWrapStyle={{
+                        position: "absolute",
+                        top: 628,
+                        left: 0,
+                    }}
+                    title="회원가입하기"
+                    onPress={() => {}}
+                />
+            )}
         </KeyboardAwareScrollView>
+        // </KeyboardAvoidingView>
     );
 };
 

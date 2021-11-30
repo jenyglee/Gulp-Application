@@ -12,7 +12,7 @@ const actions = {
             )(dispatch);
             await actions.storeData(medicines)(dispatch);
         } catch (error) {
-            Alert.alert(error);
+            console.log(JSON.stringify(error));
         }
     },
 
@@ -22,7 +22,7 @@ const actions = {
             const loadedData = await AsyncStorage.getItem("medicine");
             dispatch(actionsMedicines.setMedicineList(JSON.parse(loadedData)));
         } catch (error) {
-            throw error;
+            throw JSON.stringify(error);
         }
     },
 
@@ -82,11 +82,12 @@ const actions = {
 
     // ✨ 항목에 있는 약을 인풋에 입력
     handleSelectMedicine:
-        (id, filtered, setIsSearchingMedicine) => (dispatch) => {
+        (id, filtered, setIsSearchingMedicine, setFiltered) => (dispatch) => {
             filtered.map((item) => {
                 if (item.medicineId === id) {
                     dispatch(actionsMedicines.setMedicine(item.name));
                     setIsSearchingMedicine(false);
+                    setFiltered([]);
                 } else return;
             });
         },

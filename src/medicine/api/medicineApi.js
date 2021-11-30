@@ -18,7 +18,7 @@ const addMedicine = async (medicine) => {
         // };
 
         // await AsyncStorage.setItem("medicine", JSON.stringify({ ...Item, ...newMedicine }));
-        return response.status
+        return response.status;
         // if (response.status === 200) {
         //     console.log(response.data);
         //     // 서버 저장 완료 후, AsyncStorage(medicine)에 저장
@@ -38,10 +38,10 @@ const addMedicine = async (medicine) => {
         //     Alert.alert("500");
         // }
     } catch (error) {
-        Alert.alert(error);
+        // 🍎
+        // Alert.alert(JSON.stringify(error));
     }
 };
-
 
 // ✨약 삭제
 const deleteMedicine = async (token) => {
@@ -65,29 +65,27 @@ const getBrands = async (text) => {
         const response = await axios({
             method: "GET",
             url: url + "brand",
-            params:{
-                name:text
-            }
+            params: {
+                name: text,
+            },
         });
-        return response.data
-        
+        return response.data;
     } catch (error) {}
 };
 
 // ✨약 조회
-const getMedicines = async ({brandKey, text}) => {
+const getMedicines = async ({ brandKey, text }) => {
     try {
         const response = await axios({
             method: "GET",
             url: url + "medicines",
-            params:{
+            params: {
                 brandId: brandKey,
-                name: text
-            }
+                name: text,
+            },
         });
         // console.log(response.data)
-        return response.data
-        
+        return response.data;
     } catch (error) {}
 };
 // ✨약 삭제
@@ -106,4 +104,4 @@ const getMedicines = async ({brandKey, text}) => {
 //     } catch (error) {}
 // };
 
-export { addMedicine, deleteMedicine , getBrands, getMedicines };
+export { addMedicine, deleteMedicine, getBrands, getMedicines };

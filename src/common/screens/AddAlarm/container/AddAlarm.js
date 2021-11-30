@@ -147,25 +147,26 @@ const AddMedicine = ({
                     <StyledForm>
                         <StyledTitle>복용중인 영양제</StyledTitle>
                         <StyledTagForm>
-                            {Object.values(medicineList).map((item) => {
-                                console.log(item);
-                                return (
-                                    <TagButton
-                                        name={item.name}
-                                        brand={item.brandName}
-                                        id={item.id}
-                                        key={item.id}
-                                        deleteTask={(id) => {
-                                            dispatch(
-                                                actionsMedicines.deleteMedicine(
-                                                    id,
-                                                    medicineList
-                                                )
-                                            );
-                                        }}
-                                    />
-                                );
-                            })}
+                            {medicineList
+                                ? Object.values(medicineList).map((item) => {
+                                      return (
+                                          <TagButton
+                                              name={item.name}
+                                              brand={item.brandName}
+                                              id={item.id}
+                                              key={item.id}
+                                              deleteTask={(id) => {
+                                                  dispatch(
+                                                      actionsMedicines.deleteMedicine(
+                                                          id,
+                                                          medicineList
+                                                      )
+                                                  );
+                                              }}
+                                          />
+                                      );
+                                  })
+                                : null}
                         </StyledTagForm>
                         <StyledTagForm>
                             <ButtonSmall

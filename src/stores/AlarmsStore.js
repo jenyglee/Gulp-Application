@@ -211,7 +211,7 @@ export default class AlarmsStore {
                 );
                 navigation.navigate("AlarmList");
             } catch (error) {
-                Alert.alert(error);
+                console.log(JSON.stringify(error));
             }
         } else if (!confirmed) {
             console.log(confirmed);
