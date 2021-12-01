@@ -124,19 +124,29 @@ const SearchMedicine = ({ navigation }) => {
                 Alert.alert("이 약은 이미 등록되어 있습니다.");
                 return;
             } else {
-                // ② 저장 진행
-                const ID = Date.now();
-                const newMedicine = {
-                    [ID]: { id: ID, name: medicine, brandName: brand },
-                    // name: medicine,
-                    // brand: { id: brandKey },
-                    // category: { id: category.id },
-                };
-                await AsyncStorage.setItem(
-                    "medicine",
-                    JSON.stringify({ ...medicines, ...newMedicine })
-                );
-                navigation.navigate("AddAlarm");
+                // 영양제 추가 클릭 시 medicine 값을 가져와 api 약이름 조회를 걸고
+                // response 값이 []이면 Alert.alert("신규 등록이 필요한 영양제입니다.")
+                const medicines = await getMedicines(brandKey, medicine);
+                if (medicines[0] !== undefined) {
+                    // ② 저장 진행
+                    const ID = Date.now();
+                    const newMedicine = {
+                        [ID]: { id: ID, name: medicine, brandName: brand },
+                        // name: medicine,
+                        // brand: { id: brandKey },
+                        // category: { id: category.id },
+                    };
+                    await AsyncStorage.setItem(
+                        "medicine",
+                        JSON.stringify({ ...medicines, ...newMedicine })
+                    );
+                    navigation.navigate("AddAlarm");
+                } else {
+                    Alert.alert(
+                        "신규 등록이 필요한 영양제입니다. 신규 등록 화면으로 이동합니다."
+                    );
+                    navigation.navigate("AddMedicine");
+                }
             }
         } catch (e) {
             console.log(e);
@@ -147,7 +157,7 @@ const SearchMedicine = ({ navigation }) => {
     const debounceSearchMedicine = _.debounce(async (text) => {
         if (text) {
             setIsSearchingMedicine(true);
-            const medicines = await getMedicines({ brandKey, text });
+            const medicines = await getMedicines(brandKey, text);
             setFiltered(medicines ?? []);
         } else {
             setIsSearchingMedicine(false);
@@ -157,8 +167,8 @@ const SearchMedicine = ({ navigation }) => {
     //✨ brand 검색어 자동완성 노출
     const debounceSearchBrand = _.debounce(async (text) => {
         if (text) {
-            setIsSearchingBrand(true);
             const brands = await getBrands(text);
+            brands ? setIsSearchingBrand(true) : setIsSearchingBrand(false);
             setFiltered(brands ?? []);
         } else {
             setIsSearchingBrand(false);
@@ -167,10 +177,6 @@ const SearchMedicine = ({ navigation }) => {
 
     const handleVisibleDropList = () => {
         setIsSelectingCategory(!isSelectingCategory);
-    };
-
-    const onBlur = () => {
-        Alert.alert("asdkjwh");
     };
 
     return (
@@ -263,6 +269,7 @@ const SearchMedicine = ({ navigation }) => {
                                             );
                                         }}
                                         setIsFocusedBrand={setIsFocusedBrand}
+                                        navigation={navigation}
                                     />
                                 )}
                             </Animated.View>
@@ -315,6 +322,7 @@ const SearchMedicine = ({ navigation }) => {
                                         setIsFocusedMedicine={
                                             setIsFocusedMedicine
                                         }
+                                        navigation={navigation}
                                     />
                                 )}
                             </Animated.View>

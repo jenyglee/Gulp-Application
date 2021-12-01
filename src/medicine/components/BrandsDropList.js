@@ -1,11 +1,12 @@
 import React from "react";
+import { TextButton } from "@/common/components";
 import { TouchableOpacity } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
 import styled from "styled-components";
 
 const Container = styled.View`
     width: 100%;
-    height: 160px;
+    max-height: 130px;
     border-radius: 12px;
     padding: 0 15px;
     margin-top: 5px;
@@ -35,6 +36,15 @@ const BrandsDropList = ({ filtered, onSelectItem, setIsFocusedBrand }) => {
                         </TouchableOpacity>
                     );
                 })}
+                <TouchableOpacity
+                    onPress={() => {
+                        // ‘기타’는 어떤 id로 전달해야하는지
+                        // onSelectItem(item.id);
+                        setIsFocusedBrand(false);
+                    }}
+                >
+                    <StyledText>기타</StyledText>
+                </TouchableOpacity>
             </ScrollView>
         </Container>
     );

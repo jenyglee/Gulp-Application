@@ -17,11 +17,11 @@ const StyledText = styled.Text`
     color: ${({ theme }) => theme.textBtnText};
 `;
 
-const TextButton = ({ onPress, title, btnStyle }) => {
+const TextButton = ({ onPress, title, btnStyle, textStyle }) => {
     return (
         <BtnWrap onPress={onPress} style={btnStyle}>
             <Container>
-                <StyledText>{title}</StyledText>
+                <StyledText style={textStyle}>{title}</StyledText>
             </Container>
         </BtnWrap>
     );

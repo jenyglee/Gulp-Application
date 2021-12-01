@@ -229,7 +229,7 @@ const HomeStackNav = () => {
                     return {
                         ...option,
                         ...backImage,
-                        headerTitle: "복용약 검색",
+                        headerTitle: "영양제 찾기",
                         headerStyle: {
                             shadowOffset: {
                                 header: 0,
@@ -246,7 +246,7 @@ const HomeStackNav = () => {
                     return {
                         ...option,
                         ...backImage,
-                        headerTitle: "복용약 추가",
+                        headerTitle: "영양제 직접 등록",
                         headerStyle: {
                             shadowOffset: {
                                 header: 0,

@@ -74,7 +74,7 @@ const getBrands = async (text) => {
 };
 
 // ✨약 조회
-const getMedicines = async ({ brandKey, text }) => {
+const getMedicines = async (brandKey, text) => {
     try {
         const response = await axios({
             method: "GET",
