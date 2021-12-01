@@ -145,7 +145,9 @@ const SearchMedicine = ({ navigation }) => {
                     Alert.alert(
                         "신규 등록이 필요한 영양제입니다. 신규 등록 화면으로 이동합니다."
                     );
-                    navigation.navigate("AddMedicine");
+                    navigation.navigate("AddMedicine", {
+                        medicine,
+                    });
                 }
             }
         } catch (e) {
@@ -322,6 +324,7 @@ const SearchMedicine = ({ navigation }) => {
                                         setIsFocusedMedicine={
                                             setIsFocusedMedicine
                                         }
+                                        medicine={medicine}
                                         navigation={navigation}
                                     />
                                 )}
@@ -346,7 +349,9 @@ const SearchMedicine = ({ navigation }) => {
                                 }}
                                 title="찾으시는 영양제가 없으세요?"
                                 onPress={() =>
-                                    navigation.navigate("AddMedicine")
+                                    navigation.navigate("AddMedicine", {
+                                        medicine,
+                                    })
                                 }
                             />
                             <ButtonFloating
@@ -367,7 +372,9 @@ const SearchMedicine = ({ navigation }) => {
                             <Line />
                             <TextButton
                                 onPress={() => {
-                                    navigation.navigate("AddMedicine");
+                                    navigation.navigate("AddMedicine", {
+                                        medicine,
+                                    });
                                 }}
                                 btnStyle={{
                                     width: "100%",

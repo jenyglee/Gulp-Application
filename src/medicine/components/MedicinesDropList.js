@@ -40,6 +40,7 @@ const MedicinesDropList = ({
     filtered,
     onSelectItem,
     setIsFocusedMedicine,
+    medicine,
     navigation,
 }) => {
     return (
@@ -70,6 +71,11 @@ const MedicinesDropList = ({
                             textStyle={{
                                 fontWeight: "400",
                             }}
+                            onPress={() => {
+                                navigation.navigate("AddMedicine", {
+                                    medicine,
+                                });
+                            }}
                         />
                     </>
                 ) : (
@@ -93,7 +99,9 @@ const MedicinesDropList = ({
                                 fontWeight: "400",
                             }}
                             onPress={() => {
-                                navigation.navigate("AddMedicine");
+                                navigation.navigate("AddMedicine", {
+                                    medicine,
+                                });
                             }}
                         />
                     </>

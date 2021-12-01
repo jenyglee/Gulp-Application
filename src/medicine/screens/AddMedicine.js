@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import styled from "styled-components";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Button, Input } from "@components/index";
@@ -34,25 +34,11 @@ const StyledTitle = styled.Text`
     margin-bottom: 10px;
 `;
 
-const AddMedicine = ({ navigation }) => {
+const AddMedicine = ({ navigation, route }) => {
     const dispatch = useDispatch();
     const width = Dimensions.get("window").width;
     const { categoryData, category, brand, brandKey } =
         useSelector(stateMedicines);
-    // const categoryData = [
-    //     { id: 0, title: "비타민C" },
-    //     { id: 1, title: "비타민B" },
-    //     { id: 2, title: "멀티비타민" },
-    //     { id: 3, title: "칼슘/마그네슘/비타민D" },
-    //     { id: 4, title: "오메가 3" },
-    //     { id: 5, title: "프로바이오틱스" },
-    //     { id: 6, title: "프로폴리스" },
-    //     { id: 7, title: "눈영양루테인" },
-    //     { id: 8, title: "쏘팔메토/아연" },
-    //     { id: 9, title: "밀크씨슬" },
-    //     { id: 10, title: "철분" },
-    //     { id: 11, title: "기타" },
-    // ];
     const [filtered, setFiltered] = useState([]);
     // const [category, setCategory] = useState({ title: "선택" });
     // const [brand, setBrand] = useState("");
@@ -64,55 +50,52 @@ const AddMedicine = ({ navigation }) => {
     const refBrand = useRef(null);
     const refMedicine = useRef(null);
 
+    useEffect(() => {
+        setMedicine(route.params.medicine || "");
+    }, []);
+
     // ✨ 로컬에 저장하기
     const setMedicineData = async () => {
         try {
-            // // ① 이미 등록된 약인지 확인
+            // ① 이미 등록된 약인지 확인
             const loadedData = await AsyncStorage.getItem("medicine");
-            const Item = JSON.parse(loadedData);
-            // 🍎 값이 있을 경우 알럿 뜨게 하기(이건 api에서도 또 체크해야함.)
-            let duplicate = Object.values(Item).some((v) => {
-                const sameBrand = () => {
-                    if (v.brand === brand) {
-                        return true;
-                    } else return false;
-                };
-                const sameMedicine = () => {
-                    if (v.name === medicine) {
-                        return true;
-                    } else return false;
-                };
-                //
-                sameBrand && sameMedicine;
-            });
-            if (duplicate) {
-                // 🪲알럿이 안뜸
+            const medicines = JSON.parse(loadedData);
+            let isSameMedicinesArr = medicines
+                ? Object.values(medicines).map((item) => {
+                      // 브랜드 명이 이미 있는 것 인지 확인 -> 약 이름까지 이미 있는 것 인지 확인
+                      if (item.brandName === brand) {
+                          if (item.name === medicine) {
+                              return false;
+                          } else return true;
+                      } else return true;
+                  })
+                : [];
+            if (isSameMedicinesArr.includes(false)) {
                 Alert.alert("이 약은 이미 등록되어 있습니다.");
                 return;
-            }
-
-            // ② 저장 진행
-            const newMedicine = {
-                name: medicine,
-                brand: { id: brandKey },
-                category: { id: category.id },
-            };
-
-            const response = await addMedicine(newMedicine);
-            if (response === 200) {
+            } else {
+                // ② 저장 진행
+                const ID = Date.now();
+                const newMedicine = {
+                    [ID]: { id: ID, name: medicine, brandName: brand },
+                    // name: medicine,
+                    // brand: { id: brandKey },
+                    // category: { id: category.id },.
+                };
+                await AsyncStorage.setItem(
+                    "medicine",
+                    JSON.stringify({ ...medicines, ...newMedicine })
+                );
                 navigation.navigate("AddAlarm");
-            } else if (response !== 200) {
-                // 🍎 무조건 200 뜨므로 여기서 걸러내면 안됨!!!🍎
-                // Alert.alert("이 약은 이미 등록되어 있습니다.")
             }
 
-            // 👇 api가 에러떠서 버리고 일단 이걸로 저장진행
-            // const ID = Date.now();
-            // const newMedicine = {
-            //     [ID]: { id: ID, name: medicine, brand: 1 },
-            // };
-            // await AsyncStorage.setItem("medicine", JSON.stringify({ ...Item, ...newMedicine }));
-            // navigation.navigate("AddAlarm");
+            // const response = await addMedicine(newMedicine);
+            // if (response === 200) {
+            //     navigation.navigate("AddAlarm");
+            // } else if (response !== 200) {
+            //     // 🍎 무조건 200 뜨므로 여기서 걸러내면 안됨!!!🍎
+            //     // Alert.alert("이 약은 이미 등록되어 있습니다.")
+            // }
         } catch (e) {
             console.log(e);
         }
@@ -121,7 +104,8 @@ const AddMedicine = ({ navigation }) => {
     const handleSelectCategory = (id) => {
         categoryData.map((item) => {
             if (item.id === id) {
-                setCategory(item);
+                dispatch(actionsMedicines.setCategory(item));
+                // setCategory(item);
                 refBrand.current.focus();
                 return;
             } else return;
