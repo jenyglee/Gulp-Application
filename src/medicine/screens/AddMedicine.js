@@ -42,8 +42,6 @@ const AddMedicine = ({ navigation, route }) => {
         useSelector(stateMedicines);
     const { token } = useSelector(stateMembers);
     const [filtered, setFiltered] = useState([]);
-    // const [category, setCategory] = useState({ title: "선택" });
-    // const [brand, setBrand] = useState("");
     const [medicine, setMedicine] = useState("");
     const [isFocusedCategory, setIsFocusedCategory] = useState(false);
     const [isSelectingCategory, setIsSelectingCategory] = useState(false);
@@ -55,57 +53,6 @@ const AddMedicine = ({ navigation, route }) => {
     useEffect(() => {
         setMedicine(route.params.medicine || "");
     }, []);
-
-    // ✨ 로컬에 저장하기
-    // const setMedicineData = async () => {
-    //     try {
-    //         // ① 이미 등록된 약인지 확인
-    //         const loadedData = await AsyncStorage.getItem("medicine");
-    //         const medicines = JSON.parse(loadedData);
-    //         let isSameMedicinesArr = medicines
-    //             ? Object.values(medicines).map((item) => {
-    //                   // 브랜드 명이 이미 있는 것 인지 확인 -> 약 이름까지 이미 있는 것 인지 확인
-    //                   if (item.brandName === brand) {
-    //                       if (item.name === medicine) {
-    //                           return false;
-    //                       } else return true;
-    //                   } else return true;
-    //               })
-    //             : [];
-    //         if (isSameMedicinesArr.includes(false)) {
-    //             Alert.alert("이 약은 이미 등록되어 있습니다.");
-    //             return;
-    //         } else {
-    //             // 🪲 추가는 되는데 MySQL에 보면 brandId 랑 categoryId가 빈칸으로 나옴 ㅠ
-    //             const response = await addMedicine(
-    //                 {
-    //                     name: medicine,
-    //                     brandId: brandKey,
-    //                     categoryId: category.id,
-    //                 },
-    //                 token
-    //             );
-
-    //             if (response.status === 200) {
-    //                 // ② 저장 진행
-    //                 const newMedicine = {
-    //                     [response.data]: {
-    //                         id: response.data,
-    //                         name: medicine,
-    //                         brandName: brand,
-    //                     },
-    //                 };
-    //                 await AsyncStorage.setItem(
-    //                     "medicine",
-    //                     JSON.stringify({ ...medicines, ...newMedicine })
-    //                 );
-    //                 navigation.navigate("AddAlarm");
-    //             }
-    //         }
-    //     } catch (e) {
-    //         console.log(e);
-    //     }
-    // };
 
     const handleSelectCategory = (id) => {
         console.log(id);

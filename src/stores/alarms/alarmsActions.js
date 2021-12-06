@@ -203,42 +203,55 @@ const actions = {
     //  ✨ 알람 저장(AddAlarm)
     saveAlarm:
         (
-            confirm, // 빈칸검수
             medicineList,
             time,
             week,
             weekCheckList,
-            setWeekCheckList,
+            medicinesId,
+            token,
             navigation
         ) =>
         async (dispatch) => {
-            // console.log(medicineList)
-            if (confirm) {
-                {
-                    // ⓵ 체크된 요일의 id만 가져와 빈 문자열(weekCheckList)에 넣기
-                    week.map((checkedDay) => {
-                        if (checkedDay.checked) {
-                            weekCheckList += checkedDay.id; // "456"
-                        }
-                    });
-                }
+            const confirm = await actions.confirmValue(
+                medicineList,
+                time,
+                week
+            )(dispatch);
 
-                // 임시용 api 전달 데이터
-                const response = await addAlarm({
-                    time: "20:30:00",
-                    day: "135",
-                    medicines: [1, 3, 6],
+            if (confirm) {
+                // ⓵ 체크된 요일의 id만 가져와 빈 문자열(weekCheckList)에 넣기
+                week.map((checkedDay) => {
+                    if (checkedDay.checked) {
+                        weekCheckList += checkedDay.id; // "456"
+                    }
                 });
+
+                Object.values(medicineList).map((medicine) => {
+                    medicinesId.push(medicine.id);
+                });
+
+                console.log(time);
+                console.log(weekCheckList);
+                console.log(medicinesId);
+
+                const response = await addAlarm(
+                    {
+                        time: time,
+                        day: weekCheckList,
+                        medicines: medicinesId,
+                    },
+                    token
+                );
                 // const response = await addAlarm({
                 //     time: time,
                 //     day: weekCheckList,
                 //     medicines: [1, 3, 6],
                 // });
 
-                if (response === 200) {
-                }
-                if (response !== 200) {
-                }
+                // if (response === 200) {
+                // }
+                // if (response !== 200) {
+                // }
                 //     // ⓶ 채워진 배열을 변수화
                 //     const ID = Date.now();
                 //     const newAlarm = {

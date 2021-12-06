@@ -13,6 +13,7 @@ import { deleteMedicine } from "@/medicine/api/medicineApi";
 import { addAlarm } from "@/common/api/alarmApi";
 import { inject, observer } from "mobx-react";
 import { useSelector, useDispatch } from "react-redux";
+import { stateMembers } from "@/stores/members/membersSlice";
 
 import { stateAlarms } from "stores/alarms/alarmsSlice.js";
 import actionsAlarms from "stores/alarms/alarmsActions.js";
@@ -58,6 +59,7 @@ const AddMedicine = ({
     medicinesStore,
     commonStore,
     alarmsStore,
+    route,
 }) => {
     const dispatch = useDispatch();
     const width = Dimensions.get("window").width;
@@ -67,6 +69,7 @@ const AddMedicine = ({
     const {} = alarmsStore;
     const {} = commonStore;
 
+    const token = useSelector(stateMembers).token;
     const medicineList = useSelector(stateMedicines).medicineList;
     const time = useSelector(stateCommon).time;
 
@@ -83,9 +86,11 @@ const AddMedicine = ({
         { id: 0, day: "All", checked: false },
     ]);
     const [weekCheckList, setWeekCheckList] = useState(""); // 체크된 요일
+    const [medicinesId, setMedicinesId] = useState([]);
 
     useEffect(() => {
         const removeFocusEvent = navigation.addListener("focus", () => {
+            // 알람의 아이디가 없으면 안불러오고
             dispatch(actionsMedicines.getMedicine());
         });
         return () => removeFocusEvent();
@@ -191,17 +196,14 @@ const AddMedicine = ({
             <Button
                 title="저장하기"
                 onPress={async () => {
-                    const confirm = dispatch(
-                        actionsAlarms.confirmValue(medicineList, time, week)
-                    );
                     dispatch(
                         actionsAlarms.saveAlarm(
-                            confirm,
                             medicineList,
                             time,
                             week,
                             weekCheckList,
-                            setWeekCheckList,
+                            medicinesId,
+                            token,
                             navigation
                         )
                     );

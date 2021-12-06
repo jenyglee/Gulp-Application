@@ -4,12 +4,13 @@ import { Alert } from "react-native";
 const url = "https://gulp.jenyglee.com/";
 
 // ✨ 알람생성
-const addAlarm = async (alarm) => {
+const addAlarm = async (alarm, token) => {
     try {
         const response = await axios({
             method: "POST",
             url: url + "alarm",
             data: alarm,
+            headers: { authorization: token },
         });
         return response.status;
     } catch (error) {
