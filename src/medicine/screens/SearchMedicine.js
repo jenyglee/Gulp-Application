@@ -112,58 +112,6 @@ const SearchMedicine = ({ navigation }) => {
         }).start();
     };
 
-    // ✨ 로컬에 저장하기
-    const setMedicine = async () => {
-        try {
-            // ① 이미 등록된 약인지 확인
-            const loadedData = await AsyncStorage.getItem("medicine");
-            const medicines = JSON.parse(loadedData);
-            let isSameMedicinesArr = medicines
-                ? Object.values(medicines).map((item) => {
-                      // 브랜드 명이 이미 있는 것 인지 확인 -> 약 이름까지 이미 있는 것 인지 확인
-                      if (item.brandName === brand) {
-                          if (item.name === medicine) {
-                              return false;
-                          } else return true;
-                      } else return true;
-                  })
-                : [];
-            if (isSameMedicinesArr.includes(false)) {
-                Alert.alert("이 약은 이미 등록되어 있습니다.");
-                return;
-            } else {
-                const response = await getMedicines({
-                    brandKey,
-                    medicine,
-                });
-                if (response[0]) {
-                    // ② 저장 진행
-                    const newMedicine = {
-                        [response[0].id]: {
-                            id: response[0].id,
-                            name: medicine,
-                            brandName: brand,
-                        },
-                    };
-                    await AsyncStorage.setItem(
-                        "medicine",
-                        JSON.stringify({ ...medicines, ...newMedicine })
-                    );
-                    navigation.navigate("AddAlarm");
-                } else {
-                    Alert.alert(
-                        "신규 등록이 필요한 영양제입니다. 신규 등록 화면으로 이동합니다."
-                    );
-                    navigation.navigate("AddMedicine", {
-                        medicine,
-                    });
-                }
-            }
-        } catch (error) {
-            console.log(JSON.stringify(error));
-        }
-    };
-
     //✨ brand 검색어 자동완성 노출
     const debounceSearchBrand = _.debounce(async (text) => {
         if (text) {
@@ -372,7 +320,16 @@ const SearchMedicine = ({ navigation }) => {
                                     left: 0,
                                 }}
                                 title="영양제 추가"
-                                onPress={setMedicine}
+                                onPress={() => {
+                                    dispatch(
+                                        actionsMedicines.saveMedicine(
+                                            brand,
+                                            brandKey,
+                                            medicine,
+                                            navigation
+                                        )
+                                    );
+                                }}
                             />
                         </>
                     ) : null}
@@ -397,7 +354,20 @@ const SearchMedicine = ({ navigation }) => {
                                 title="찾으시는 영양제가 없으세요?"
                             />
                         </TextButtonContainer>
-                        <Button title="영양제 추가" onPress={setMedicine} />
+                        <Button
+                            title="영양제 추가"
+                            onPress={() => {
+                                dispatch(
+                                    actionsMedicines.saveMedicine(
+                                        category,
+                                        brand,
+                                        brandKey,
+                                        medicine,
+                                        navigation
+                                    )
+                                );
+                            }}
+                        />
                     </>
                 )}
             </KeyboardAwareScrollView>

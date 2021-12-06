@@ -1,9 +1,93 @@
 import { actionsMedicines } from "./medicinesSlice";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Alert } from "react-native";
-import { getCategory } from "@/medicine/api/medicineApi";
+import { getCategory, getMedicines } from "@/medicine/api/medicineApi";
 
 const actions = {
+    // ✨ 약 저장(medicineStore)
+    saveMedicine:
+        (category, brand, brandKey, medicine, navigation) =>
+        async (dispatch) => {
+            try {
+                // ① 값이 모두 있는지 확인
+                const confirm = await actions.confirmValue(
+                    category.name,
+                    brand,
+                    medicine
+                )(dispatch);
+                if (confirm) {
+                    // ② 이미 등록된 약인지 확인
+                    const isSameMedicinesArr =
+                        await actions.confirmSameMedicine(
+                            brand,
+                            medicine
+                        )(dispatch);
+                    if (isSameMedicinesArr.includes(false)) {
+                        Alert.alert("이 약은 이미 등록되어 있습니다.");
+                        return;
+                    } else {
+                        const response = await getMedicines({
+                            brandKey,
+                            medicine,
+                        });
+                        if (response[0]) {
+                            const newMedicine = {
+                                [response[0].id]: {
+                                    id: response[0].id,
+                                    name: medicine,
+                                    brandName: brand,
+                                },
+                            };
+                            await AsyncStorage.setItem(
+                                "medicine",
+                                JSON.stringify({ ...medicines, ...newMedicine })
+                            );
+                            navigation.navigate("AddAlarm");
+                        } else {
+                            Alert.alert(
+                                "신규 등록이 필요한 영양제입니다. 신규 등록 화면으로 이동합니다."
+                            );
+                            navigation.navigate("AddMedicine", {
+                                medicine,
+                            });
+                        }
+                    }
+                } else {
+                    Alert.alert("전부 입력되었는지 확인해주세요.");
+                }
+            } catch (error) {
+                console.log(JSON.stringify(error));
+            }
+        },
+
+    // ✨ 빈칸검수(medicineStore)
+    confirmValue: (category, brand, medicine) => async (dispatch) => {
+        if (category !== "선택") {
+            if (brand !== "") {
+                if (medicine !== "") {
+                    return true;
+                } else return false;
+            } else return false;
+        } else return false;
+    },
+
+    // ✨ 이미 등록된 약인지 검수 (medicineStore)
+    confirmSameMedicine: (brand, medicine) => async (dispatch) => {
+        const loadedData = await AsyncStorage.getItem("medicine");
+        const medicines = JSON.parse(loadedData);
+        let isSameMedicinesArr = medicines
+            ? Object.values(medicines).map((item) => {
+                  // 브랜드 명이 이미 있는 것 인지 확인 -> 약 이름까지 이미 있는 것 인지 확인
+                  if (item.brandName === brand) {
+                      if (item.name === medicine) {
+                          return false;
+                      } else return true;
+                  } else return true;
+              })
+            : [];
+        return isSameMedicinesArr;
+    },
+
     // ✨ 약 삭제(medicineStore)
     deleteMedicine: (id, medicineList) => async (dispatch) => {
         try {
