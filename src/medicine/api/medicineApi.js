@@ -76,16 +76,15 @@ const getBrands = async (text, token) => {
 };
 
 // ✨약 조회
-const getMedicines = async (brandKey, text, token) => {
+const getMedicines = async ({ brandKey, medicine }) => {
     try {
         const response = await axios({
             method: "GET",
             url: url + "medicines",
             params: {
                 brandId: brandKey,
-                name: text,
+                name: medicine,
             },
-            headers: { authorization: token },
         });
         // console.log(response.data)
         return response.data;

@@ -61,6 +61,7 @@ const SearchMedicine = ({ navigation }) => {
         useSelector(stateMedicines);
     const { token } = useSelector(stateMembers);
     const [filtered, setFiltered] = useState([]);
+    const [medicineNeedSave, setMedicineNeedSave] = useState("");
     const [showBrand, setShowBrand] = useState(false);
     const [showMedicine, setShowMedicine] = useState(false);
     const [isFocusedCategory, setIsFocusedCategory] = useState(false);
@@ -131,23 +132,24 @@ const SearchMedicine = ({ navigation }) => {
                 Alert.alert("이 약은 이미 등록되어 있습니다.");
                 return;
             } else {
-                // 영양제 추가 클릭 시 medicine 값을 가져와 api 약이름 조회를 걸고
-                // response 값이 []이면 Alert.alert("신규 등록이 필요한 영양제입니다.")
-                const medicines = await getMedicines(brandKey, medicine);
-                if (medicines[0] !== undefined) {
+                const response = await getMedicines({
+                    brandKey,
+                    medicine,
+                });
+                if (response[0]) {
                     // ② 저장 진행
-                    // const ID = Date.now();
-                    // const newMedicine = {
-                    //     [ID]: { id: ID, name: medicine, brandName: brand },
-                    //     // name: medicine,
-                    //     // brand: { id: brandKey },
-                    //     // category: { id: category.id },
-                    // };
-                    // await AsyncStorage.setItem(
-                    //     "medicine",
-                    //     JSON.stringify({ ...medicines, ...newMedicine })
-                    // );
-                    // navigation.navigate("AddAlarm");
+                    const newMedicine = {
+                        [response[0].id]: {
+                            id: response[0].id,
+                            name: medicine,
+                            brandName: brand,
+                        },
+                    };
+                    await AsyncStorage.setItem(
+                        "medicine",
+                        JSON.stringify({ ...medicines, ...newMedicine })
+                    );
+                    navigation.navigate("AddAlarm");
                 } else {
                     Alert.alert(
                         "신규 등록이 필요한 영양제입니다. 신규 등록 화면으로 이동합니다."
@@ -157,8 +159,8 @@ const SearchMedicine = ({ navigation }) => {
                     });
                 }
             }
-        } catch (e) {
-            console.log(e);
+        } catch (error) {
+            console.log(JSON.stringify(error));
         }
     };
 
@@ -177,7 +179,10 @@ const SearchMedicine = ({ navigation }) => {
     const debounceSearchMedicine = _.debounce(async (text) => {
         if (text) {
             setIsSearchingMedicine(true);
-            const medicines = await getMedicines(brandKey, text, token);
+            const medicines = await getMedicines({
+                brandKey,
+                medicine: text,
+            });
             setFiltered(medicines ?? []);
         } else {
             setIsSearchingMedicine(false);
