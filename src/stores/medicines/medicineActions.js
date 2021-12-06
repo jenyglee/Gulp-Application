@@ -1,11 +1,76 @@
 import { actionsMedicines } from "./medicinesSlice";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Alert } from "react-native";
-import { getCategory, getMedicines } from "@/medicine/api/medicineApi";
+import {
+    getCategory,
+    getMedicines,
+    addMedicine,
+} from "@/medicine/api/medicineApi";
 
 const actions = {
-    // ✨ 약 저장(medicineStore)
+    // ✨ 약 저장 'api 적용'
     saveMedicine:
+        (category, brand, brandKey, medicine, navigation, token) =>
+        async (dispatch) => {
+            try {
+                // ① 값이 모두 있는지 확인
+                const confirm = await actions.confirmValue(
+                    category.name,
+                    brand,
+                    medicine
+                )(dispatch);
+
+                if (confirm) {
+                    const loadedData = await AsyncStorage.getItem("medicine");
+                    const medicines = JSON.parse(loadedData);
+                    // ② 이미 등록된 약인지 확인
+                    const isSameMedicinesArr =
+                        await actions.confirmSameMedicine(
+                            brand,
+                            medicine,
+                            medicines
+                        )(dispatch);
+
+                    if (isSameMedicinesArr.includes(false)) {
+                        Alert.alert("이 약은 이미 등록되어 있습니다.");
+                        return;
+                    } else {
+                        // 🪲 추가는 되는데 MySQL에 보면 brandId 랑 categoryId가 빈칸으로 나옴 ㅠ
+                        const response = await addMedicine(
+                            {
+                                name: medicine,
+                                brandId: brandKey,
+                                categoryId: category.id,
+                            },
+                            token
+                        );
+
+                        if (response.status === 200) {
+                            // ② 저장 진행
+                            const newMedicine = {
+                                [response.data]: {
+                                    id: response.data,
+                                    name: medicine,
+                                    brandName: brand,
+                                },
+                            };
+                            await AsyncStorage.setItem(
+                                "medicine",
+                                JSON.stringify({ ...medicines, ...newMedicine })
+                            );
+                            navigation.navigate("AddAlarm");
+                        }
+                    }
+                } else {
+                    Alert.alert("전부 입력되었는지 확인해주세요.");
+                }
+            } catch (error) {
+                console.log(JSON.stringify(error));
+            }
+        },
+
+    // ✨ 약 저장 'Storage 전용' (medicineStore)
+    saveMedicineOnlyStorage:
         (category, brand, brandKey, medicine, navigation) =>
         async (dispatch) => {
             try {
@@ -17,10 +82,13 @@ const actions = {
                 )(dispatch);
                 if (confirm) {
                     // ② 이미 등록된 약인지 확인
+                    const loadedData = await AsyncStorage.getItem("medicine");
+                    const medicines = JSON.parse(loadedData);
                     const isSameMedicinesArr =
                         await actions.confirmSameMedicine(
                             brand,
-                            medicine
+                            medicine,
+                            medicines
                         )(dispatch);
                     if (isSameMedicinesArr.includes(false)) {
                         Alert.alert("이 약은 이미 등록되어 있습니다.");
@@ -30,19 +98,28 @@ const actions = {
                             brandKey,
                             medicine,
                         });
+                        // ③ 약이 하나라도 있는 지 확인
                         if (response[0]) {
-                            const newMedicine = {
-                                [response[0].id]: {
-                                    id: response[0].id,
-                                    name: medicine,
-                                    brandName: brand,
-                                },
-                            };
-                            await AsyncStorage.setItem(
-                                "medicine",
-                                JSON.stringify({ ...medicines, ...newMedicine })
-                            );
-                            navigation.navigate("AddAlarm");
+                            // ④약 조회했을 때 여러개 나온 것 중 '이름이 일치할 때' 저장 진행
+                            response.map((item) => {
+                                if (item.name === medicine) {
+                                    const newMedicine = {
+                                        [item.id]: {
+                                            id: item.id,
+                                            name: medicine,
+                                            brandName: brand,
+                                        },
+                                    };
+                                    AsyncStorage.setItem(
+                                        "medicine",
+                                        JSON.stringify({
+                                            ...medicines,
+                                            ...newMedicine,
+                                        })
+                                    );
+                                    navigation.navigate("AddAlarm");
+                                }
+                            });
                         } else {
                             Alert.alert(
                                 "신규 등록이 필요한 영양제입니다. 신규 등록 화면으로 이동합니다."
@@ -72,9 +149,7 @@ const actions = {
     },
 
     // ✨ 이미 등록된 약인지 검수 (medicineStore)
-    confirmSameMedicine: (brand, medicine) => async (dispatch) => {
-        const loadedData = await AsyncStorage.getItem("medicine");
-        const medicines = JSON.parse(loadedData);
+    confirmSameMedicine: (brand, medicine, medicines) => async (dispatch) => {
         let isSameMedicinesArr = medicines
             ? Object.values(medicines).map((item) => {
                   // 브랜드 명이 이미 있는 것 인지 확인 -> 약 이름까지 이미 있는 것 인지 확인
@@ -105,6 +180,7 @@ const actions = {
     getMedicine: () => async (dispatch) => {
         try {
             const loadedData = await AsyncStorage.getItem("medicine");
+            console.log(JSON.parse(loadedData));
             dispatch(actionsMedicines.setMedicineList(JSON.parse(loadedData)));
         } catch (error) {
             throw JSON.stringify(error);

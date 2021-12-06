@@ -358,7 +358,7 @@ const SearchMedicine = ({ navigation }) => {
                             title="영양제 추가"
                             onPress={() => {
                                 dispatch(
-                                    actionsMedicines.saveMedicine(
+                                    actionsMedicines.saveMedicineOnlyStorage(
                                         category,
                                         brand,
                                         brandKey,
