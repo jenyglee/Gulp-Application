@@ -191,12 +191,12 @@ const AddMedicine = ({
             <Button
                 title="저장하기"
                 onPress={async () => {
-                    const response = dispatch(
+                    const confirm = dispatch(
                         actionsAlarms.confirmValue(medicineList, time, week)
                     );
                     dispatch(
                         actionsAlarms.saveAlarm(
-                            response,
+                            confirm,
                             medicineList,
                             time,
                             week,
@@ -205,11 +205,6 @@ const AddMedicine = ({
                             navigation
                         )
                     );
-                    // await addAlarm({
-                    //     time: "11:11:11",
-                    //     day: 111,
-                    //     medicines: [1, 2, 3],
-                    // });
                 }}
             />
         </>

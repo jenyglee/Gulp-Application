@@ -79,13 +79,20 @@ const AlarmList = ({ navigation, alarmsStore }) => {
     const [filtered, setFiltered] = useState(true); // 전체알람 < > 오늘알람
     const [isVisibleAlarm, setIsVisibleAlarm] = useState(true); // 알람 유무
     const [isVisibleCompleteModal, setIsVisibleCompleteModal] = useState(false); // 완료모달 노출/숨김
-    console.log(day);
+    const [isSignin, setIsSignin] = useState("");
+
     // ✨ 로그인했는지 확인 + 약 추가 후 메인으로 복귀
     useEffect(() => {
         const removeFocusEvent = navigation.addListener("focus", () => {
             setFiltered(true);
             // const todayNumber = dispatch(actionsAlarms.changeSunday(day));
-            dispatch(actionsAlarms.getAlarms({ filtered, day }));
+
+            // ✨ 로그인정보 가져오기
+            const getUser = async () => {
+                const token = await AsyncStorage.getItem("token");
+                setIsSignin(token);
+            };
+            dispatch(actionsAlarms.getAlarms({ filtered, day, isSignin }));
             // 👀❓ 무조건 alarms가 빈 배열로 들어감
             // dispatch(actionsAlarms.confirmList(alarms))
         });

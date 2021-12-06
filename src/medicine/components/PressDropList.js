@@ -31,7 +31,7 @@ const PressDropList = ({
                     setIsFocused(!isFocused);
                 }}
             >
-                <StyledText>{item.title}</StyledText>
+                <StyledText>{item.name}</StyledText>
             </TouchableOpacity>
         );
     };

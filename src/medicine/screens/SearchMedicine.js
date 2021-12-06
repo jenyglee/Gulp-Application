@@ -15,6 +15,8 @@ import { getBrands, getMedicines } from "@/medicine/api/medicineApi";
 import { useSelector, useDispatch } from "react-redux";
 import { stateMedicines } from "stores/medicines/medicinesSlice";
 import actionsMedicines from "stores/medicines/medicineActions";
+import { stateMembers } from "stores/members/membersSlice";
+import actionsMembers from "stores/members/memberActions";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 
 const Container = styled.View`
@@ -57,6 +59,7 @@ const SearchMedicine = ({ navigation }) => {
     const theme = useContext(ThemeContext);
     const { categoryData, category, brand, brandKey, medicine } =
         useSelector(stateMedicines);
+    const { token } = useSelector(stateMembers);
     const [filtered, setFiltered] = useState([]);
     const [showBrand, setShowBrand] = useState(false);
     const [showMedicine, setShowMedicine] = useState(false);
@@ -74,9 +77,13 @@ const SearchMedicine = ({ navigation }) => {
     useEffect(() => {
         dispatch(actionsMedicines.setMedicine(""));
         dispatch(actionsMedicines.setBrand(""));
-        dispatch(actionsMedicines.setCategory({ title: "선택" }));
+        dispatch(actionsMedicines.setCategory({ name: "선택" }));
         setShowBrand(false);
         setShowMedicine(false);
+
+        // 카테고리 조회 api 적용
+        dispatch(actionsMembers.getUser());
+        dispatch(actionsMedicines.setCategoryData(token));
     }, []);
 
     // ✨ '브랜드 이름' 노출
@@ -129,18 +136,18 @@ const SearchMedicine = ({ navigation }) => {
                 const medicines = await getMedicines(brandKey, medicine);
                 if (medicines[0] !== undefined) {
                     // ② 저장 진행
-                    const ID = Date.now();
-                    const newMedicine = {
-                        [ID]: { id: ID, name: medicine, brandName: brand },
-                        // name: medicine,
-                        // brand: { id: brandKey },
-                        // category: { id: category.id },
-                    };
-                    await AsyncStorage.setItem(
-                        "medicine",
-                        JSON.stringify({ ...medicines, ...newMedicine })
-                    );
-                    navigation.navigate("AddAlarm");
+                    // const ID = Date.now();
+                    // const newMedicine = {
+                    //     [ID]: { id: ID, name: medicine, brandName: brand },
+                    //     // name: medicine,
+                    //     // brand: { id: brandKey },
+                    //     // category: { id: category.id },
+                    // };
+                    // await AsyncStorage.setItem(
+                    //     "medicine",
+                    //     JSON.stringify({ ...medicines, ...newMedicine })
+                    // );
+                    // navigation.navigate("AddAlarm");
                 } else {
                     Alert.alert(
                         "신규 등록이 필요한 영양제입니다. 신규 등록 화면으로 이동합니다."
@@ -155,25 +162,25 @@ const SearchMedicine = ({ navigation }) => {
         }
     };
 
-    // ✨ medicine 검색어 자동완성 노출
-    const debounceSearchMedicine = _.debounce(async (text) => {
-        if (text) {
-            setIsSearchingMedicine(true);
-            const medicines = await getMedicines(brandKey, text);
-            setFiltered(medicines ?? []);
-        } else {
-            setIsSearchingMedicine(false);
-        }
-    }, 300);
-
     //✨ brand 검색어 자동완성 노출
     const debounceSearchBrand = _.debounce(async (text) => {
         if (text) {
-            const brands = await getBrands(text);
+            const brands = await getBrands(text, token);
             brands ? setIsSearchingBrand(true) : setIsSearchingBrand(false);
             setFiltered(brands ?? []);
         } else {
             setIsSearchingBrand(false);
+        }
+    }, 300);
+
+    // ✨ medicine 검색어 자동완성 노출
+    const debounceSearchMedicine = _.debounce(async (text) => {
+        if (text) {
+            setIsSearchingMedicine(true);
+            const medicines = await getMedicines(brandKey, text, token);
+            setFiltered(medicines ?? []);
+        } else {
+            setIsSearchingMedicine(false);
         }
     }, 300);
 
@@ -203,7 +210,7 @@ const SearchMedicine = ({ navigation }) => {
                             containerStyle={{
                                 marginBottom: 0,
                             }}
-                            value={category.title}
+                            value={category.name}
                             onVisibleDropList={handleVisibleDropList}
                             isFocused={isFocusedCategory}
                             setIsFocused={setIsFocusedCategory}
@@ -311,7 +318,6 @@ const SearchMedicine = ({ navigation }) => {
                                     <MedicinesDropList
                                         filtered={filtered}
                                         onSelectItem={(id) => {
-                                            // console.log(id);
                                             dispatch(
                                                 actionsMedicines.handleSelectMedicine(
                                                     id,

@@ -1,6 +1,7 @@
 import { actionsMedicines } from "./medicinesSlice";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Alert } from "react-native";
+import { getCategory } from "@/medicine/api/medicineApi";
 
 const actions = {
     // ✨ 약 삭제(medicineStore)
@@ -84,13 +85,23 @@ const actions = {
     handleSelectMedicine:
         (id, filtered, setIsSearchingMedicine, setFiltered) => (dispatch) => {
             filtered.map((item) => {
-                if (item.medicineId === id) {
+                if (item.id === id) {
                     dispatch(actionsMedicines.setMedicine(item.name));
                     setIsSearchingMedicine(false);
                     setFiltered([]);
                 } else return;
             });
         },
+
+    // ✨ 카테고리 조회
+    setCategoryData: (token) => async (dispatch) => {
+        try {
+            const response = await getCategory(token);
+            dispatch(actionsMedicines.setCategoryData(response.data));
+        } catch (error) {
+            console.log(JSON.stringify(error));
+        }
+    },
 
     setCategory: (payload) => (dispatch) => {
         dispatch(actionsMedicines.setCategory(payload));

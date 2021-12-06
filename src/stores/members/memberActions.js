@@ -1,6 +1,7 @@
 import { actionsMembers } from "./membersSlice";
 import { Alert } from "react-native";
 import { emailValidation, signup } from "@/member/api/memberApi";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const actions = {
     // ✨ 이메일/비밀번호 검토 및 로그인 진행(Signin)
@@ -80,6 +81,12 @@ const actions = {
                 console.log(JSON.stringify(error));
             }
         },
+
+    // ✨ 유저정보 가져오기
+    getUser: () => async (dispatch) => {
+        const token = await AsyncStorage.getItem("token");
+        dispatch(actionsMembers.setToken(token));
+    },
 };
 
 export default actions;

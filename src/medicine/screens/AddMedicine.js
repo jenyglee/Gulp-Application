@@ -12,6 +12,7 @@ import { getBrands, getMedicines } from "@/medicine/api/medicineApi";
 import _ from "lodash";
 import { addMedicine } from "@/medicine/api/medicineApi";
 import { useSelector, useDispatch } from "react-redux";
+import { stateMembers } from "stores/members/membersSlice";
 import { stateMedicines } from "stores/medicines/medicinesSlice";
 import actionsMedicines from "stores/medicines/medicineActions";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
@@ -39,6 +40,7 @@ const AddMedicine = ({ navigation, route }) => {
     const width = Dimensions.get("window").width;
     const { categoryData, category, brand, brandKey } =
         useSelector(stateMedicines);
+    const { token } = useSelector(stateMembers);
     const [filtered, setFiltered] = useState([]);
     // const [category, setCategory] = useState({ title: "선택" });
     // const [brand, setBrand] = useState("");
@@ -74,38 +76,42 @@ const AddMedicine = ({ navigation, route }) => {
                 Alert.alert("이 약은 이미 등록되어 있습니다.");
                 return;
             } else {
-                // ② 저장 진행
-                const ID = Date.now();
-                const newMedicine = {
-                    [ID]: { id: ID, name: medicine, brandName: brand },
-                    // name: medicine,
-                    // brand: { id: brandKey },
-                    // category: { id: category.id },.
-                };
-                await AsyncStorage.setItem(
-                    "medicine",
-                    JSON.stringify({ ...medicines, ...newMedicine })
+                // 🪲 추가는 되는데 MySQL에 보면 brandId 랑 categoryId가 빈칸으로 나옴 ㅠ
+                const response = await addMedicine(
+                    {
+                        name: medicine,
+                        brandId: brandKey,
+                        categoryId: category.id,
+                    },
+                    token
                 );
-                navigation.navigate("AddAlarm");
-            }
 
-            // const response = await addMedicine(newMedicine);
-            // if (response === 200) {
-            //     navigation.navigate("AddAlarm");
-            // } else if (response !== 200) {
-            //     // 🍎 무조건 200 뜨므로 여기서 걸러내면 안됨!!!🍎
-            //     // Alert.alert("이 약은 이미 등록되어 있습니다.")
-            // }
+                if (response.status === 200) {
+                    // ② 저장 진행
+                    const newMedicine = {
+                        [response.data]: {
+                            id: response.data,
+                            name: medicine,
+                            brandName: brand,
+                        },
+                    };
+                    await AsyncStorage.setItem(
+                        "medicine",
+                        JSON.stringify({ ...medicines, ...newMedicine })
+                    );
+                    navigation.navigate("AddAlarm");
+                }
+            }
         } catch (e) {
             console.log(e);
         }
     };
 
     const handleSelectCategory = (id) => {
+        console.log(id);
         categoryData.map((item) => {
             if (item.id === id) {
                 dispatch(actionsMedicines.setCategory(item));
-                // setCategory(item);
                 refBrand.current.focus();
                 return;
             } else return;
@@ -127,7 +133,7 @@ const AddMedicine = ({ navigation, route }) => {
     const debounceSearchBrand = _.debounce(async (text) => {
         if (text) {
             setIsSearchingBrand(true);
-            const brands = await getBrands(text);
+            const brands = await getBrands(text, token);
             setFiltered(brands ?? []);
         } else {
             setIsSearchingBrand(false);
@@ -155,7 +161,7 @@ const AddMedicine = ({ navigation, route }) => {
                             containerStyle={{
                                 marginBottom: 0,
                             }}
-                            value={category.title}
+                            value={category.name}
                             onVisibleDropList={handleVisibleDropList}
                             isFocused={isFocusedCategory}
                             setIsFocused={setIsFocusedCategory}
@@ -180,7 +186,6 @@ const AddMedicine = ({ navigation, route }) => {
                             }}
                             value={brand}
                             onBlur={() => {}}
-                            // onChangeText={(text) => setBrand(text)}
                             onChangeText={(text) =>
                                 dispatch(
                                     actionsMedicines.onSearchBrand(

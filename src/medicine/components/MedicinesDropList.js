@@ -52,9 +52,8 @@ const MedicinesDropList = ({
                             return (
                                 <TouchableOpacity
                                     onPress={() => {
-                                        onSelectItem(item.medicineId);
+                                        onSelectItem(item.id);
                                         setIsFocusedMedicine(false);
-                                        // onSelectItem.bind(undefined, item.id);
                                     }}
                                     key={index}
                                 >
@@ -83,7 +82,7 @@ const MedicinesDropList = ({
                         <NotFoundContainer>
                             <StyledImage
                                 source={illust.error}
-                                resizeMode="containe"
+                                resizeMode="contain"
                             />
                             <NotFoundText>
                                 등록되어있는 약이 없어요...

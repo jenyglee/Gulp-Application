@@ -72,12 +72,13 @@ const actions = {
 
     // ✨ 알람 불러오기(alarmList)
     getAlarms:
-        ({ filtered, day }) =>
+        ({ filtered, day, isSignin }) =>
         async (dispatch) => {
             try {
+                console.log(isSignin);
                 const loadedData = await AsyncStorage.getItem("alarm");
                 const parseData = JSON.parse(loadedData);
-                // console.log(parseData);
+
                 const changedDay = day ? day : 7; //일요일을 0 👉 7 변환
                 // true면 오늘의 요일만 ,  false면 전체요일
                 const filteredAlarms = filtered
@@ -87,10 +88,11 @@ const actions = {
                     : parseData;
 
                 // console.log(filteredAlarms, "getAlarms");
-                // 비교후에 아래진행 Lodash > _.isEqual
-                // import _ from 'lodash';
                 dispatch(actionsAlarms.setAlarms(filteredAlarms || []));
                 return filteredAlarms;
+
+                // 비교후에 아래진행 Lodash > _.isEqual
+                // import _ from 'lodash';
             } catch (error) {
                 // 🍎
                 console.log(error);
@@ -201,7 +203,7 @@ const actions = {
     //  ✨ 알람 저장(AddAlarm)
     saveAlarm:
         (
-            response,
+            confirm, // 빈칸검수
             medicineList,
             time,
             week,
@@ -210,8 +212,8 @@ const actions = {
             navigation
         ) =>
         async (dispatch) => {
-            // 빈칸 검수(response)가 완료된 경우 저장 진행
-            if (response) {
+            // console.log(medicineList)
+            if (confirm) {
                 {
                     // ⓵ 체크된 요일의 id만 가져와 빈 문자열(weekCheckList)에 넣기
                     week.map((checkedDay) => {
@@ -220,38 +222,32 @@ const actions = {
                         }
                     });
                 }
-                // ⓶ 채워진 배열을 변수화
 
+                // 임시용 api 전달 데이터
                 const response = await addAlarm({
-                    time: time,
-                    day: weekCheckList,
-                    medicines: [1, 2, 3],
+                    time: "20:30:00",
+                    day: "135",
+                    medicines: [1, 3, 6],
                 });
-                const ID = Date.now();
-                const newAlarm = {
-                    [ID]: {
-                        id: ID,
-                        time: time,
-                        name: medicineList,
-                        day: weekCheckList, // 숫자로 전달됨 ex) [2, 3] 👀❓배열 풀어줘야함.
-                        completed: false,
-                    },
-                };
-                const value = await AsyncStorage.getItem("alarm");
-                const alarms = JSON.parse(value);
-                await AsyncStorage.setItem(
-                    "alarm",
-                    JSON.stringify({ ...alarms, ...newAlarm })
-                );
-                navigation.navigate("AlarmList");
-                // if (response === 200) {
+                // const response = await addAlarm({
+                //     time: time,
+                //     day: weekCheckList,
+                //     medicines: [1, 3, 6],
+                // });
+
+                if (response === 200) {
+                }
+                if (response !== 200) {
+                }
+                //     // ⓶ 채워진 배열을 변수화
                 //     const ID = Date.now();
                 //     const newAlarm = {
                 //         [ID]: {
                 //             id: ID,
                 //             time: time,
                 //             name: medicineList,
-                //             day: weekCheckList, // 숫자로 전달됨 ex) [2, 3] 👀❓배열 풀어줘야함.
+                //             // day: weekCheckList,   🥸"456"  >> 현재 컴포넌트들이 배열로 되어있어서 수정필요
+                //             day: [4, 5, 6],
                 //             completed: false,
                 //         },
                 //     };
@@ -265,24 +261,7 @@ const actions = {
                 // } else if (response !== 200) {
                 //     Alert.alert("생성오류");
                 // }
-
-                // ①time 값이 어떤 형태인지 확인 👌
-                // ②day의 배열을 풀어주기 👌
-                // ③약 조회기능으로 복용중인 영양제의 약이름을 넣어서 번호를 가져온다.
-                // const api용 = {time:"20:30:00", day:135, medicines:[1,3,6]}
-
-                // try {
-                //     const value = await AsyncStorage.getItem("alarm");
-                //     const alarm = JSON.parse(value);
-                //     await AsyncStorage.setItem(
-                //         "alarm",
-                //         JSON.stringify({ ...alarm, ...newTask })
-                //     );
-                //     navigation.navigate("AlarmList");
-                // } catch (error) {
-                //     Alert.alert(error);
-                // }
-            } else if (!response) {
+            } else if (!confirm) {
                 Alert.alert("설정이 전부 입력되었는지 확인해주세요.");
             }
         },

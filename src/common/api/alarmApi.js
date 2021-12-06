@@ -17,4 +17,18 @@ const addAlarm = async (alarm) => {
     }
 };
 
-export { addAlarm };
+// ✨ 알람 가져오기(진행중)
+const getAlarm = async (alarm) => {
+    try {
+        const response = await axios({
+            method: "GET",
+            url: url + "alarms",
+            headers: { authorization: token },
+        });
+        return response.status;
+    } catch (error) {
+        console.log(error);
+    }
+};
+
+export { addAlarm, getAlarm };
