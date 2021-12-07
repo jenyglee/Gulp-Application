@@ -207,11 +207,17 @@ const actions = {
             time,
             week,
             weekCheckList,
+            setWeekCheckList,
             medicinesId,
+            setMedicinesId,
             token,
             navigation
         ) =>
         async (dispatch) => {
+            // 초기화
+            setWeekCheckList("");
+            setMedicinesId([]);
+            // ⓵ 빈칸검수
             const confirm = await actions.confirmValue(
                 medicineList,
                 time,
@@ -219,7 +225,7 @@ const actions = {
             )(dispatch);
 
             if (confirm) {
-                // ⓵ 체크된 요일의 id만 가져와 빈 문자열(weekCheckList)에 넣기
+                // ②체크된 요일의 id만 가져와 빈 문자열(weekCheckList)에 넣기
                 week.map((checkedDay) => {
                     if (checkedDay.checked) {
                         weekCheckList += checkedDay.id; // "456"
@@ -230,8 +236,8 @@ const actions = {
                     medicinesId.push(medicine.id);
                 });
 
-                console.log(time);
-                console.log(weekCheckList);
+                console.log(typeof time);
+                console.log(typeof weekCheckList);
                 console.log(medicinesId);
 
                 const response = await addAlarm(
@@ -242,11 +248,6 @@ const actions = {
                     },
                     token
                 );
-                // const response = await addAlarm({
-                //     time: time,
-                //     day: weekCheckList,
-                //     medicines: [1, 3, 6],
-                // });
 
                 // if (response === 200) {
                 // }

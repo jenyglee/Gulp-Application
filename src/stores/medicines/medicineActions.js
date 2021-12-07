@@ -10,7 +10,7 @@ import {
 const actions = {
     // ✨ 약 저장 'api 적용'
     saveMedicine:
-        (category, brand, brandKey, medicine, navigation, token) =>
+        (category, brand, brandKey, medicine, navigation, fromScreen, token) =>
         async (dispatch) => {
             try {
                 // ① 값이 모두 있는지 확인
@@ -58,7 +58,7 @@ const actions = {
                                 "medicine",
                                 JSON.stringify({ ...medicines, ...newMedicine })
                             );
-                            navigation.navigate("AddAlarm");
+                            navigation.navigate("AddAlarm", { fromScreen });
                         }
                     }
                 } else {
@@ -71,7 +71,7 @@ const actions = {
 
     // ✨ 약 저장 'Storage 전용' (medicineStore)
     saveMedicineOnlyStorage:
-        (category, brand, brandKey, medicine, navigation) =>
+        (category, brand, brandKey, medicine, navigation, isScreen) =>
         async (dispatch) => {
             try {
                 // ① 값이 모두 있는지 확인
@@ -117,7 +117,9 @@ const actions = {
                                             ...newMedicine,
                                         })
                                     );
-                                    navigation.navigate("AddAlarm");
+                                    navigation.navigate("AddAlarm", {
+                                        isScreen,
+                                    });
                                 }
                             });
                         } else {
@@ -176,11 +178,20 @@ const actions = {
         }
     },
 
+    // ✨ 모든 약 삭제(medicineStore)
+    deleteAllMedicine: (payload) => async (dispatch) => {
+        try {
+            AsyncStorage.removeItem("medicine");
+            dispatch(actionsMedicines.setMedicineList({}));
+        } catch (error) {
+            console.log(JSON.stringify(error));
+        }
+    },
+
     // ✨로컬에서 약 가져오기
     getMedicine: () => async (dispatch) => {
         try {
             const loadedData = await AsyncStorage.getItem("medicine");
-            console.log(JSON.parse(loadedData));
             dispatch(actionsMedicines.setMedicineList(JSON.parse(loadedData)));
         } catch (error) {
             throw JSON.stringify(error);

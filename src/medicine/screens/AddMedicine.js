@@ -49,6 +49,7 @@ const AddMedicine = ({ navigation, route }) => {
     const [isFocusedBrand, setIsFocusedBrand] = useState(false);
     const refBrand = useRef(null);
     const refMedicine = useRef(null);
+    const fromScreen = "AddMedicine";
 
     useEffect(() => {
         setMedicine(route.params.medicine || "");
@@ -191,6 +192,7 @@ const AddMedicine = ({ navigation, route }) => {
                                 brandKey,
                                 medicine,
                                 navigation,
+                                fromScreen,
                                 token
                             )
                         );

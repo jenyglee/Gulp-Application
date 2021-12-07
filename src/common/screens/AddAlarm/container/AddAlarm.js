@@ -90,11 +90,23 @@ const AddMedicine = ({
 
     useEffect(() => {
         const removeFocusEvent = navigation.addListener("focus", () => {
-            // 알람의 아이디가 없으면 안불러오고
             dispatch(actionsMedicines.getMedicine());
         });
         return () => removeFocusEvent();
     }, []);
+
+    // AlarmList에서 왔을 땐 Storage 비우기
+    // SearchMedicine, AddMedicine에서 왔을 땐 Storage 가져오기
+    useEffect(() => {
+        if (route.params.fromScreen === "AlarmList") {
+            dispatch(actionsMedicines.deleteAllMedicine());
+        } else if (
+            route.params.fromScreen === "SearchMedicine" ||
+            route.params.fromScreen === "AddMedicine"
+        ) {
+            dispatch(actionsMedicines.getMedicine());
+        }
+    }, [route.params.fromScreen]);
 
     return (
         <>
@@ -202,7 +214,9 @@ const AddMedicine = ({
                             time,
                             week,
                             weekCheckList,
+                            setWeekCheckList,
                             medicinesId,
+                            setMedicinesId,
                             token,
                             navigation
                         )

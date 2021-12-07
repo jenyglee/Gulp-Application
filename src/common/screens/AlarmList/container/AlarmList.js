@@ -80,6 +80,7 @@ const AlarmList = ({ navigation, alarmsStore }) => {
     const [isVisibleAlarm, setIsVisibleAlarm] = useState(true); // 알람 유무
     const [isVisibleCompleteModal, setIsVisibleCompleteModal] = useState(false); // 완료모달 노출/숨김
     const [isSignin, setIsSignin] = useState("");
+    const fromScreen = "AlarmList";
 
     // ✨ 로그인했는지 확인 + 약 추가 후 메인으로 복귀
     useEffect(() => {
@@ -121,7 +122,7 @@ const AlarmList = ({ navigation, alarmsStore }) => {
 
     // ✨ 알람 변경 페이지로 이동
     const editMedicine = (id) => {
-        // 🍎
+        // 🍎 아이디가 있으면 api 요청보내기
         navigation.navigate("AddAlarm", {
             alarmId: id,
         });
@@ -239,7 +240,7 @@ const AlarmList = ({ navigation, alarmsStore }) => {
                 animated={false}
                 showBackground={false}
                 onPressMain={() => {
-                    navigation.navigate("AddAlarm");
+                    navigation.navigate("AddAlarm", { fromScreen });
                 }}
             />
         </>

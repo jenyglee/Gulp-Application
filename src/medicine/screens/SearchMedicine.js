@@ -70,6 +70,7 @@ const SearchMedicine = ({ navigation }) => {
     const [isSearchingMedicine, setIsSearchingMedicine] = useState(false);
     const [isFocusedBrand, setIsFocusedBrand] = useState(false);
     const [isFocusedMedicine, setIsFocusedMedicine] = useState(false);
+    const fromScreen = "SearchMedicine";
 
     const opacityBrand = useRef(new Animated.Value(0)).current;
     const opacityMedicine = useRef(new Animated.Value(0)).current;
@@ -363,7 +364,8 @@ const SearchMedicine = ({ navigation }) => {
                                         brand,
                                         brandKey,
                                         medicine,
-                                        navigation
+                                        navigation,
+                                        fromScreen
                                     )
                                 );
                             }}
