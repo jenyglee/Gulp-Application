@@ -217,7 +217,6 @@ const AddMedicine = ({
                             setWeekCheckList,
                             medicinesId,
                             setMedicinesId,
-                            token,
                             navigation
                         )
                     );

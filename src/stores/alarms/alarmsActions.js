@@ -1,6 +1,6 @@
 import { actionsAlarms } from "./alarmsSlice.js";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { addAlarm } from "@/common/api/alarmApi";
+import { addAlarm, getAlarm } from "@/common/api/alarmApi";
 import { Alert } from "react-native";
 import _ from "lodash";
 
@@ -70,34 +70,45 @@ const actions = {
         }
     },
 
-    // ✨ 알람 불러오기(alarmList)
-    getAlarms:
-        ({ filtered, day, isSignin }) =>
-        async (dispatch) => {
-            try {
-                console.log(isSignin);
-                const loadedData = await AsyncStorage.getItem("alarm");
-                const parseData = JSON.parse(loadedData);
+    // // ✨ 알람 불러오기(alarmList) 'storage 전용'
+    // getAlarms:
+    //     ({ filtered, day }) =>
+    //     async (dispatch) => {
+    //         try {
+    //             const loadedData = await AsyncStorage.getItem("alarm");
+    //             const parseData = JSON.parse(loadedData);
 
-                const changedDay = day ? day : 7; //일요일을 0 👉 7 변환
-                // true면 오늘의 요일만 ,  false면 전체요일
-                const filteredAlarms = filtered
-                    ? Object.values(parseData)
-                          .filter((alarm) => alarm.day.includes(changedDay))
-                          .reduce((p, v) => ({ ...p, [v.id]: v }), {})
-                    : parseData;
+    //             const changedDay = day ? day : 7; //일요일을 0 👉 7 변환
+    //             // true면 오늘의 요일만 ,  false면 전체요일
+    //             const filteredAlarms = filtered
+    //                 ? Object.values(parseData)
+    //                       .filter((alarm) => alarm.day.includes(changedDay))
+    //                       .reduce((p, v) => ({ ...p, [v.id]: v }), {})
+    //                 : parseData;
 
-                // console.log(filteredAlarms, "getAlarms");
-                dispatch(actionsAlarms.setAlarms(filteredAlarms || []));
-                return filteredAlarms;
+    //             dispatch(actionsAlarms.setAlarms(filteredAlarms || []));
+    //             return filteredAlarms;
 
-                // 비교후에 아래진행 Lodash > _.isEqual
-                // import _ from 'lodash';
-            } catch (error) {
-                // 🍎
-                console.log(error);
-            }
-        },
+    //             // 비교후에 아래진행 Lodash > _.isEqual
+    //             // import _ from 'lodash';
+    //         } catch (error) {
+    //             // 🍎
+    //             console.log(error);
+    //         }
+    //     },
+
+    // ✨ 알람 불러오기(alarmList) 'api 전용'
+    getAlarms: (payload) => async (dispatch) => {
+        try {
+            const token = await AsyncStorage.getItem("token");
+            // console.log("불러온 토큰정보 :" + token);
+            const response = await getAlarm(token);
+            console.log(response);
+        } catch (error) {
+            console.log(JSON.stringify(error));
+        }
+    },
+
     // ✨ 알람이 아예 없는지 검사(alarmList)
     confirmList:
         ({ alarms, setIsVisibleAlarm }) =>
@@ -210,7 +221,6 @@ const actions = {
             setWeekCheckList,
             medicinesId,
             setMedicinesId,
-            token,
             navigation
         ) =>
         async (dispatch) => {
@@ -236,10 +246,7 @@ const actions = {
                     medicinesId.push(medicine.id);
                 });
 
-                console.log(typeof time);
-                console.log(typeof weekCheckList);
-                console.log(medicinesId);
-
+                const token = await AsyncStorage.getItem("token");
                 const response = await addAlarm(
                     {
                         time: time,
@@ -248,31 +255,27 @@ const actions = {
                     },
                     token
                 );
-
-                // if (response === 200) {
-                // }
-                // if (response !== 200) {
-                // }
+                console.log(response);
+                // if (response.status === 200) {
                 //     // ⓶ 채워진 배열을 변수화
-                //     const ID = Date.now();
-                //     const newAlarm = {
-                //         [ID]: {
-                //             id: ID,
-                //             time: time,
-                //             name: medicineList,
-                //             // day: weekCheckList,   🥸"456"  >> 현재 컴포넌트들이 배열로 되어있어서 수정필요
-                //             day: [4, 5, 6],
-                //             completed: false,
-                //         },
-                //     };
-                //     const value = await AsyncStorage.getItem("alarm");
-                //     const alarms = JSON.parse(value);
-                //     await AsyncStorage.setItem(
-                //         "alarm",
-                //         JSON.stringify({ ...alarms, ...newAlarm })
-                //     );
+                //     // const newAlarm = {
+                //     //     [response.data]: {
+                //     //         id: response.data,
+                //     //         time: time,
+                //     //         name: medicineList,
+                //     //         // day: weekCheckList,   🥸"456"  >> 현재 컴포넌트들이 배열로 되어있어서 수정필요
+                //     //         day: [4, 5, 6],
+                //     //         completed: false,
+                //     //     },
+                //     // };
+                //     // const value = await AsyncStorage.getItem("alarm");
+                //     // const alarms = JSON.parse(value);
+                //     // await AsyncStorage.setItem(
+                //     //     "alarm",
+                //     //     JSON.stringify({ ...alarms, ...newAlarm })
+                //     // );
                 //     navigation.navigate("AlarmList");
-                // } else if (response !== 200) {
+                // } else {
                 //     Alert.alert("생성오류");
                 // }
             } else if (!confirm) {

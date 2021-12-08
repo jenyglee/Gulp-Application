@@ -18,6 +18,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { stateAlarms } from "stores/alarms/alarmsSlice.js";
 import actionsAlarms from "stores/alarms/alarmsActions.js";
 import { Button } from "@/common/components";
+import { getAlarm } from "@/common/api/alarmApi";
 
 const Wrap = styled.ScrollView`
     padding-top: ${({ insets }) => insets.top}px;
@@ -79,21 +80,14 @@ const AlarmList = ({ navigation, alarmsStore }) => {
     const [filtered, setFiltered] = useState(true); // 전체알람 < > 오늘알람
     const [isVisibleAlarm, setIsVisibleAlarm] = useState(true); // 알람 유무
     const [isVisibleCompleteModal, setIsVisibleCompleteModal] = useState(false); // 완료모달 노출/숨김
-    const [isSignin, setIsSignin] = useState("");
     const fromScreen = "AlarmList";
 
     // ✨ 로그인했는지 확인 + 약 추가 후 메인으로 복귀
     useEffect(() => {
         const removeFocusEvent = navigation.addListener("focus", () => {
             setFiltered(true);
-            // const todayNumber = dispatch(actionsAlarms.changeSunday(day));
-
-            // ✨ 로그인정보 가져오기
-            const getUser = async () => {
-                const token = await AsyncStorage.getItem("token");
-                setIsSignin(token);
-            };
-            dispatch(actionsAlarms.getAlarms({ filtered, day, isSignin }));
+            dispatch(actionsAlarms.getAlarms());
+            // dispatch(actionsAlarms.getAlarms({ filtered, day }));
             // 👀❓ 무조건 alarms가 빈 배열로 들어감
             // dispatch(actionsAlarms.confirmList(alarms))
         });
@@ -104,7 +98,7 @@ const AlarmList = ({ navigation, alarmsStore }) => {
 
     // ✨ Today <-> All 필터링 됐을 때
     useEffect(() => {
-        dispatch(actionsAlarms.getAlarms({ filtered, day }));
+        // dispatch(actionsAlarms.getAlarms({ filtered, day }));
         // 👀❓ 무조건 alarms가 빈 배열로 들어감
         // dispatch(actionsAlarms.confirmList({alarms, setIsVisibleAlarm}));
     }, [filtered]);

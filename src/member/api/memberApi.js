@@ -14,8 +14,7 @@ const signin = async (member) => {
         });
 
         if (response.data.statusCodeValue === 200) {
-            // console.log(response.headers.authorization);
-            console.log(response);
+            console.log("로그인 토큰정보 : " + response.headers.authorization);
             await AsyncStorage.setItem("token", response.headers.authorization);
         } else if (response.data.statusCodeValue !== 200) {
             throw new Error(response.data.body.message);
@@ -37,7 +36,7 @@ const logout = async () => {
         if (response.status === 200) {
             Alert.alert("로그아웃이 정상적으로 완료되었습니다.");
             await AsyncStorage.removeItem("token");
-        } else if( response.status !== 200){
+        } else if (response.status !== 200) {
             throw new Error(response.data.body.message);
         }
     } catch (error) {
@@ -88,7 +87,7 @@ const emailValidation = async (email) => {
             url: url + "email-validation",
             Param: email,
         });
-        console.log(response) 
+        console.log(response);
 
         // if (response.status === 200) {
         //     Alert.alert("사용할 수 있는 이메일입니다.");
@@ -104,8 +103,8 @@ const updateUser = async ({ token, nickname, password }) => {
         const response = await axios({
             method: "PUT",
             url: url + "member",
-            headers : {authorization : token},
-            data: {nickname, password}
+            headers: { authorization: token },
+            data: { nickname, password },
         });
         console.log(response);
     } catch (error) {}

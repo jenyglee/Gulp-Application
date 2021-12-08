@@ -44,6 +44,7 @@ const actions = {
                             },
                             token
                         );
+                        // console.log(response)
 
                         if (response.status === 200) {
                             // ② 저장 진행
