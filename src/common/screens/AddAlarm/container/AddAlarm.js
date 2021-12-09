@@ -24,6 +24,8 @@ import actionsCommon from "stores/common/commonActions";
 import { stateMedicines } from "stores/medicines/medicinesSlice";
 import actionsMedicines from "stores/medicines/medicineActions";
 
+const koreanDaysArr = ["월", "화", "수", "목", "금", "토", "일"];
+
 const Container = styled.View`
     width: ${({ width }) => width - 48}px;
     margin-top: 50px;
@@ -68,7 +70,6 @@ const AddMedicine = ({
 
     const { medicineList } = useSelector(stateMedicines);
     const { time } = useSelector(stateAlarms);
-
     const [week, setWeek] = useState([
         { id: 1, day: "월", checked: false },
         { id: 2, day: "화", checked: false },
@@ -91,26 +92,30 @@ const AddMedicine = ({
         return () => removeFocusEvent();
     }, []);
 
-    // AlarmList에서 왔을 땐 Storage 비우기
-    // SearchMedicine, AddMedicine에서 왔을 땐 Storage 가져오기
     useEffect(() => {
+        // 알람 변경 시
         if (route.params.alarmId) {
             dispatch(
                 actionsAlarms.getAlarmObj(
                     route.params.alarmId,
-                    setWeekCheckList
+                    setWeekCheckList,
+                    koreanDaysArr,
+                    week,
+                    setWeek
                 )
             );
         }
+        // 알람 추가 시
         if (route.params.fromScreen === "AlarmList") {
             dispatch(actionsMedicines.deleteAllMedicine());
         } else if (
+            // 복용제 추가 시
             route.params.fromScreen === "SearchMedicine" ||
             route.params.fromScreen === "AddMedicine"
         ) {
             dispatch(actionsMedicines.getMedicine());
         }
-    }, [route.params.fromScreen]);
+    }, [route.params]);
 
     return (
         <>
@@ -132,7 +137,7 @@ const AddMedicine = ({
                                 title={weekAll[0].day}
                                 onPress={() => {
                                     dispatch(
-                                        actionsCommon.allWeekCheck({
+                                        actionsAlarms.allWeekCheck({
                                             week,
                                             setWeek,
                                             weekAll,
@@ -140,7 +145,6 @@ const AddMedicine = ({
                                         })
                                     );
                                 }}
-                                // onPress={allWeekCheck}
                                 checked={weekAll[0].checked}
                             />
                             {week.map((item) => {
@@ -151,7 +155,7 @@ const AddMedicine = ({
                                         key={item.id}
                                         onPress={(id) => {
                                             dispatch(
-                                                actionsCommon.weekCheck({
+                                                actionsAlarms.weekCheck({
                                                     id,
                                                     week,
                                                     setWeek,

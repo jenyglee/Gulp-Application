@@ -4,12 +4,7 @@ export const alarmsSlice = createSlice({
     name: "alarms",
     initialState: {
         alarms: [],
-
         time: "",
-
-        // filtered: true,
-        // isVisibleAlarm: true,
-        // isVisibleCompleteModal : false,
 
         year: new Date().getFullYear(),
         month: new Date().getMonth(),

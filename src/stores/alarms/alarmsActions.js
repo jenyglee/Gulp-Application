@@ -112,25 +112,49 @@ const actions = {
     },
 
     // ✨ 알람 단건 가져오기(알람 변경 시)
-    getAlarmObj: (alarmId, setWeekCheckList) => async (dispatch) => {
-        try {
-            const token = await AsyncStorage.getItem("token");
-            const response = await getAlarmObj(token, alarmId);
-            // console.log(
-            //     // `${response.data.time[0]}:${response.data.time[1]}:${response.data.time[2]}`
-            //     response.data.time,
-            //     response.data.day,
-            //     response.data.alarmMedicines
-            // );
+    getAlarmObj:
+        (alarmId, setWeekCheckList, koreanDaysArr, week, setWeek) =>
+        async (dispatch) => {
+            try {
+                // console.log("alarmId : " + alarmId);
+                const token = await AsyncStorage.getItem("token");
+                const response = await getAlarmObj(token, alarmId);
+                const selectedKoreanDayArr = [];
+                // console.log(
+                //     // koreanDaysArr
+                //     // response.data.time,
+                //     // response.data.day //"456"
+                //     // response.data.alarmMedicines
+                // );
+                const arrDayNum = response.data.day.split("");
+                arrDayNum.map((item) => {
+                    selectedKoreanDayArr.push(koreanDaysArr[item]);
+                });
+                const copyWeek = [...week];
+                copyWeek.map((weekObj) => {
+                    arrDayNum.map((num) => {
+                        // console.log(
+                        //     "weekObj.id : " + typeof weekObj.id,
+                        //     "num : " + typeof Number(num)
+                        // );
+                        if (weekObj.id === Number(num)) {
+                            weekObj.checked = !weekObj.checked;
+                        }
+                        setWeek(copyWeek);
+                    });
+                });
+                // { id: 1, day: "월", checked: false },
+                // 이 형태로 만들어서,
+                // console.log(selectedKoreanDayArr); //['금','토','일']
 
-            await actions.setTime(
-                `${response.data.time[0]}:${response.data.time[1]}:${response.data.time[2]}`
-            )(dispatch);
-            // setWeekCheckList(response.data.day);
-        } catch (error) {
-            console.log(JSON.stringify(error));
-        }
-    },
+                await actions.setTime(
+                    `${response.data.time[0]}:${response.data.time[1]}:${response.data.time[2]}`
+                )(dispatch);
+                // setWeekCheckList(response.data.day);
+            } catch (error) {
+                console.log(JSON.stringify(error));
+            }
+        },
 
     // ✨ 알람이 아예 없는지 검사(alarmList)
     confirmList:
@@ -287,6 +311,39 @@ const actions = {
             } else if (!confirm) {
                 Alert.alert("설정이 전부 입력되었는지 확인해주세요.");
             }
+        },
+
+    // ✨요일 전채선택(common)
+    allWeekCheck:
+        ({ week, setWeek, weekAll, setWeekAll }) =>
+        (dispatch) => {
+            const copyWeekAll = [...weekAll];
+            const copyWeek = [...week];
+            copyWeekAll[0].checked = !copyWeekAll[0].checked;
+            {
+                copyWeek.map((item) => {
+                    if (weekAll[0].checked) {
+                        item.checked = true;
+                    } else {
+                        item.checked = false;
+                    }
+                });
+            }
+            setWeekAll(copyWeekAll);
+            setWeek(copyWeek);
+        },
+
+    // ✨요일 개별선택
+    weekCheck:
+        ({ id, week, setWeek, weekAll, setWeekAll }) =>
+        (dispatch) => {
+            const copy = [...week];
+            copy[id - 1].checked = !copy[id - 1].checked;
+            // 체크 하나라도 빠지면 false
+            const result = copy.every((item) => {
+                return item.checked;
+            });
+            setWeekAll([{ id: 0, day: "All", checked: result }]);
         },
 
     setTime: (time) => (dispatch) => {
