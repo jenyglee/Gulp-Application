@@ -1,7 +1,9 @@
 import { actionsAlarms } from "./alarmsSlice.js";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { addAlarm, getAlarm } from "@/common/api/alarmApi";
+import { addAlarm, getAlarm, getAlarmObj } from "@/common/api/alarmApi";
 import { Alert } from "react-native";
+import { stateCommon } from "stores/common/commonSlice";
+import actionsCommon from "stores/common/commonActions";
 import _ from "lodash";
 
 const actions = {
@@ -109,12 +111,22 @@ const actions = {
         }
     },
 
-    // ✨ 알람변경 시 해당 데이터만 가져오기
-    getAlarmObj: (alarmId) => async (dispatch) => {
+    // ✨ 알람 단건 가져오기(알람 변경 시)
+    getAlarmObj: (alarmId, setWeekCheckList) => async (dispatch) => {
         try {
             const token = await AsyncStorage.getItem("token");
             const response = await getAlarmObj(token, alarmId);
-            console.log(response);
+            // console.log(
+            //     // `${response.data.time[0]}:${response.data.time[1]}:${response.data.time[2]}`
+            //     response.data.time,
+            //     response.data.day,
+            //     response.data.alarmMedicines
+            // );
+
+            await actions.setTime(
+                `${response.data.time[0]}:${response.data.time[1]}:${response.data.time[2]}`
+            )(dispatch);
+            // setWeekCheckList(response.data.day);
         } catch (error) {
             console.log(JSON.stringify(error));
         }
@@ -276,6 +288,10 @@ const actions = {
                 Alert.alert("설정이 전부 입력되었는지 확인해주세요.");
             }
         },
+
+    setTime: (time) => (dispatch) => {
+        dispatch(actionsAlarms.setTime(time));
+    },
 };
 
 export default actions;

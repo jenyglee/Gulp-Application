@@ -5,6 +5,8 @@ export const alarmsSlice = createSlice({
     initialState: {
         alarms: [],
 
+        time: "",
+
         // filtered: true,
         // isVisibleAlarm: true,
         // isVisibleCompleteModal : false,
@@ -20,6 +22,9 @@ export const alarmsSlice = createSlice({
     reducers: {
         setAlarms(state, action) {
             state.alarms = action.payload;
+        },
+        setTime(state, action) {
+            state.time = action.payload;
         },
         setCount(state, action) {
             state.count = action.payload;

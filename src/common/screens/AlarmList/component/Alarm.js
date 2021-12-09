@@ -87,7 +87,6 @@ const Alarm = ({ alarmInfo, menuIcon, toggleTask, showAlarmMenu }) => {
     const [minute, setMinute] = useState("");
     const [ampm, setAmpm] = useState("");
     const [day, setDay] = useState([]);
-    console.log(alarmInfo.completed);
 
     useEffect(() => {
         formatArrToTimeObj(alarmInfo.time);

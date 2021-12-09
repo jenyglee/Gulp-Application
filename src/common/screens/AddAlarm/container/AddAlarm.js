@@ -65,13 +65,9 @@ const AddMedicine = ({
     const width = Dimensions.get("window").width;
     const height = Dimensions.get("window").height;
     const theme = useContext(ThemeContext);
-    const {} = medicinesStore;
-    const {} = alarmsStore;
-    const {} = commonStore;
 
-    const token = useSelector(stateMembers).token;
-    const medicineList = useSelector(stateMedicines).medicineList;
-    const time = useSelector(stateCommon).time;
+    const { medicineList } = useSelector(stateMedicines);
+    const { time } = useSelector(stateAlarms);
 
     const [week, setWeek] = useState([
         { id: 1, day: "월", checked: false },
@@ -99,9 +95,12 @@ const AddMedicine = ({
     // SearchMedicine, AddMedicine에서 왔을 땐 Storage 가져오기
     useEffect(() => {
         if (route.params.alarmId) {
-            // console.log(route.params.alarmId);
-            // alarmId를 조회하여 정보 가져오기
-            dispatch(actionsAlarms.getAlarmObj(route.params.alarmId));
+            dispatch(
+                actionsAlarms.getAlarmObj(
+                    route.params.alarmId,
+                    setWeekCheckList
+                )
+            );
         }
         if (route.params.fromScreen === "AlarmList") {
             dispatch(actionsMedicines.deleteAllMedicine());
@@ -121,8 +120,9 @@ const AddMedicine = ({
                         <StyledTitle>복용시간</StyledTitle>
                         <TimePicker
                             onPress={(time) => {
-                                dispatch(actionsCommon.whatTime(time));
+                                dispatch(actionsAlarms.setTime(time));
                             }}
+                            getTime={time}
                         />
                     </StyledForm>
                     <StyledForm>

@@ -74,9 +74,11 @@ Number.prototype.zf = function (len) {
     return this.toString().zf(len);
 };
 
-function TimePicker({ onPress }) {
+function TimePicker({ onPress, getTime }) {
     const theme = useContext(ThemeContext);
     const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
+    const placeholder = "알람시간을 설정해주세요.";
+    const [text, setText] = useState(getTime);
 
     const showDatePicker = () => {
         setDatePickerVisibility(true);
@@ -92,9 +94,6 @@ function TimePicker({ onPress }) {
         setText(date.format("a/p hh:mm"));
         onPress(date.format("HH:mm:dd"));
     };
-
-    const placeholder = "알람시간을 설정해주세요.";
-    const [text, setText] = useState("");
 
     return (
         <TouchableOpacity onPress={showDatePicker}>

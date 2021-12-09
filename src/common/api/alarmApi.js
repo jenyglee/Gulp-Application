@@ -40,10 +40,7 @@ const getAlarmObj = async (token, alarmId) => {
     try {
         const response = await axios({
             method: "GET",
-            url: url + "alarms",
-            params: {
-                alarm_id: alarmId,
-            },
+            url: url + `alarms/${alarmId}`,
             headers: { authorization: token },
         });
         return response;

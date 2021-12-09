@@ -153,7 +153,6 @@ const AlarmList = ({ navigation, alarmsStore }) => {
 
     // ✨ 알람 변경 페이지로 이동
     const editMedicine = (id) => {
-        // 🍎 아이디가 있으면 api 요청보내기
         navigation.navigate("AddAlarm", {
             alarmId: id,
         });
