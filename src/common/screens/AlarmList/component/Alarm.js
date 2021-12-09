@@ -80,52 +80,19 @@ const MedicineContainer = styled.View`
 const Alarm = ({ alarmInfo, menuIcon, toggleTask, showAlarmMenu }) => {
     const theme = useContext(ThemeContext);
     const [alarmVisible, setAlarmVisible] = useState(true); // 알람 노출 / 미노출 (요일 맞춰서)
-    const [completed, setCompleted] = useState(alarmInfo.completed); // 복용 / 미복용
+    const [completed, setCompleted] = useState(false); // 복용 / 미복용
     const [isNotTodayAlarm, setIsNotTodayAlarm] = useState(true); //(day 정리될때까지 임시용)
     // const [isNotTodayAlarm, setIsNotTodayAlarm] = useState(false);
     const [hour, setHour] = useState("");
     const [minute, setMinute] = useState("");
     const [ampm, setAmpm] = useState("");
     const [day, setDay] = useState([]);
+    console.log(alarmInfo.completed);
 
     useEffect(() => {
         formatArrToTimeObj(alarmInfo.time);
-        formatStrToDayArr();
+        formatStrToDayArr(alarmInfo.day);
     }, []);
-
-    // console.log(alarmInfo.day);
-    const formatStrToDayArr = () => {
-        const numberDay = Number(alarmInfo.day);
-        // const arrDay = numberDay.split("");
-        // console.log(arrDay);
-    };
-    // ❌ 오늘 요일에 맞는 알람만 노출(문자열 기준으로 변경 필요)
-    // useEffect(() => {
-    //     if (alarmInfo.day.includes(day)) {
-    //         setIsNotTodayAlarm(true);
-    //     } else {
-    //         setIsNotTodayAlarm(false);
-    //     }
-    // }, [alarmInfo]);
-
-    // ✨ 숫자로 넘어온 요일을 한글로 변환
-    // const formatNumToKoreanDay = (numberDay) =>
-    //     numberDay.map((num) => koreanDaysArr[num - 1]);
-
-    // const { hour, minute, ampm } = useMemo(
-    //     () => formatStrToTimeObj(alarmInfo.time),
-    //     []
-    // );
-
-    // ✨ HH:mm:dd로 들어온 시간 전환 => "14:30:30" => "PM 2:30"
-    // const formatStrToTimeObj = (timeStr) => {
-    //     const [hour, minute] = timeStr.split(":").map((str) => Number(str));
-    //     return {
-    //         hour: hour > 12 ? hour - 12 : hour,
-    //         minute: minute > 10 ? minute : `0${minute}`,
-    //         ampm: hour < 12 ? "AM" : "PM",
-    //     };
-    // };
 
     // ✨ HH:mm:dd로 들어온 시간 전환 => "14:30:30" => "PM 2:30"
     const formatArrToTimeObj = (timeArr) => {
@@ -134,8 +101,18 @@ const Alarm = ({ alarmInfo, menuIcon, toggleTask, showAlarmMenu }) => {
         setAmpm(timeArr[0] < 12 ? "AM" : "PM");
     };
 
+    // ✨ day를 배열로 변환
+    const formatStrToDayArr = (dayStr) => {
+        const arrDay = dayStr.split("");
+        const koreanDay = [];
+        arrDay.map((num) => {
+            koreanDay.push(koreanDaysArr[num - 1]);
+        });
+        setDay(koreanDay);
+    };
+
     const _onPress = () => {
-        toggleTask(alarmInfo.id);
+        // toggleTask(alarmInfo.id);
         setCompleted(!completed);
     };
 
@@ -146,10 +123,10 @@ const Alarm = ({ alarmInfo, menuIcon, toggleTask, showAlarmMenu }) => {
                     <Container isNotTodayAlarm={isNotTodayAlarm}>
                         <TopWrap>
                             <TopWrapLeft>
-                                {/* <Day
-                                    dayArr={changedDay}
+                                <Day
+                                    dayArr={day}
                                     isNotTodayAlarm={isNotTodayAlarm}
-                                /> */}
+                                />
                                 <TimeContainer>
                                     <Time
                                         completed={completed}
@@ -188,16 +165,16 @@ const Alarm = ({ alarmInfo, menuIcon, toggleTask, showAlarmMenu }) => {
                             </TopWrapRight>
                         </TopWrap>
                         <MedicineContainer>
-                            {/* {Object.values(alarmInfo.name).map((item) => {
+                            {alarmInfo.alarmMedicines.map((item) => {
                                 return (
                                     <AlarmMedicine
                                         completed={completed}
                                         isNotTodayAlarm={isNotTodayAlarm}
-                                        name={item.name}
+                                        name={item.medicine.name}
                                         key={item.id}
                                     />
                                 );
-                            })} */}
+                            })}
                         </MedicineContainer>
                     </Container>
                 </TouchContainer>

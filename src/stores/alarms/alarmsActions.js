@@ -101,14 +101,9 @@ const actions = {
     getAlarms: (day) => async (dispatch) => {
         try {
             const token = await AsyncStorage.getItem("token");
-            const changedDay = 6;
-            // const changedDay = day ? day : 7; //일요일을 0 👉 7 변환
-            // console.log(changedDay);
+            const changedDay = day ? day : 7; //일요일을 0 👉 7 변환
             const response = await getAlarm(token, changedDay);
-            // console.log(response.data);
             dispatch(actionsAlarms.setAlarms(response.data));
-            // dispatch(actionsAlarms.setAlarms(response.data || []));
-            // return filteredAlarms;
         } catch (error) {
             console.log(JSON.stringify(error));
         }
@@ -251,10 +246,6 @@ const actions = {
                     medicinesId.push(medicine.id);
                 });
 
-                // console.log(typeof time, time);
-                // console.log(typeof weekCheckList, weekCheckList);
-                // console.log(medicinesId);
-
                 const token = await AsyncStorage.getItem("token");
                 const response = await addAlarm(
                     {
@@ -266,23 +257,6 @@ const actions = {
                 );
                 console.log(response);
                 if (response.status === 200) {
-                    // ⓶ 채워진 배열을 변수화
-                    // const newAlarm = {
-                    //     [response.data]: {
-                    //         id: response.data,
-                    //         time: time,
-                    //         name: medicineList,
-                    //         // day: weekCheckList,   🥸"456"  >> 현재 컴포넌트들이 배열로 되어있어서 수정필요
-                    //         day: [4, 5, 6],
-                    //         completed: false,
-                    //     },
-                    // };
-                    // const value = await AsyncStorage.getItem("alarm");
-                    // const alarms = JSON.parse(value);
-                    // await AsyncStorage.setItem(
-                    //     "alarm",
-                    //     JSON.stringify({ ...alarms, ...newAlarm })
-                    // );
                     navigation.navigate("AlarmList");
                 } else {
                     Alert.alert("생성오류");
