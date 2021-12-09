@@ -109,6 +109,17 @@ const actions = {
         }
     },
 
+    // ✨ 알람변경 시 해당 데이터만 가져오기
+    getAlarmObj: (alarmId) => async (dispatch) => {
+        try {
+            const token = await AsyncStorage.getItem("token");
+            const response = await getAlarmObj(token, alarmId);
+            console.log(response);
+        } catch (error) {
+            console.log(JSON.stringify(error));
+        }
+    },
+
     // ✨ 알람이 아예 없는지 검사(alarmList)
     confirmList:
         ({ alarms, setIsVisibleAlarm }) =>

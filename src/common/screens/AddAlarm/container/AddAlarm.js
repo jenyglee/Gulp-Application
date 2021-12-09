@@ -98,6 +98,11 @@ const AddMedicine = ({
     // AlarmList에서 왔을 땐 Storage 비우기
     // SearchMedicine, AddMedicine에서 왔을 땐 Storage 가져오기
     useEffect(() => {
+        if (route.params.alarmId) {
+            // console.log(route.params.alarmId);
+            // alarmId를 조회하여 정보 가져오기
+            dispatch(actionsAlarms.getAlarmObj(route.params.alarmId));
+        }
         if (route.params.fromScreen === "AlarmList") {
             dispatch(actionsMedicines.deleteAllMedicine());
         } else if (
