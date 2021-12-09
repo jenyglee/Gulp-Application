@@ -65,6 +65,43 @@ const ProfileName = styled.Text`
 //         completed: false,
 //     },
 
+// ✨데이터형태(api)
+// const tempData = [
+//     {
+//         id: 1,
+//         time: [15, 6, 9],
+//         day: "456",
+//         alarmMedicines: [
+//             {
+//                 id: 58,
+//                 medicine: {
+//                     id: 1,
+//                     member: null,
+//                     name: "알티지 오메가3",
+//                     category: {
+//                         id: 3,
+//                         name: "오메가",
+//                     },
+//                     brand: {
+//                         id: 1,
+//                         name: "종근당건강",
+//                     },
+//                 },
+//             },
+//         ],
+//         member: {
+//             email: "test@zzzz.zzz",
+//             gradeId: null,
+//             id: 24,
+//             imgPath:
+//                 "https://firebasestorage.googleapis.com/v0/b/medicine-cc1f6.appspot.com/o/face.png?alt=media",
+//             nickname: "리재",
+//             password:
+//                 "$2a$10$ZNmNbeTBKUzsKk6qu1rcR.DwwI9IIONO1XB.j8Aj3emdD6xIfqNT2",
+//         },
+//     },
+// ];
+
 const AlarmList = ({ navigation, alarmsStore }) => {
     const dispatch = useDispatch(); //dispatch : 해당 state 값을 수정하는 액션
     const theme = useContext(ThemeContext);
@@ -86,7 +123,7 @@ const AlarmList = ({ navigation, alarmsStore }) => {
     useEffect(() => {
         const removeFocusEvent = navigation.addListener("focus", () => {
             setFiltered(true);
-            dispatch(actionsAlarms.getAlarms());
+            dispatch(actionsAlarms.getAlarms(day));
             // dispatch(actionsAlarms.getAlarms({ filtered, day }));
             // 👀❓ 무조건 alarms가 빈 배열로 들어감
             // dispatch(actionsAlarms.confirmList(alarms))
@@ -169,7 +206,7 @@ const AlarmList = ({ navigation, alarmsStore }) => {
                                         );
                                     }}
                                     showAlarmMenu={showAlarmMenu}
-                                    day={day ? day : 7}
+                                    // day={day ? day : 7}
                                     key={item.id}
                                 />
                             );

@@ -77,14 +77,29 @@ const MedicineContainer = styled.View`
     flex-direction: column;
 `;
 
-const Alarm = ({ alarmInfo, menuIcon, toggleTask, showAlarmMenu, day }) => {
+const Alarm = ({ alarmInfo, menuIcon, toggleTask, showAlarmMenu }) => {
     const theme = useContext(ThemeContext);
     const [alarmVisible, setAlarmVisible] = useState(true); // 알람 노출 / 미노출 (요일 맞춰서)
     const [completed, setCompleted] = useState(alarmInfo.completed); // 복용 / 미복용
     const [isNotTodayAlarm, setIsNotTodayAlarm] = useState(true); //(day 정리될때까지 임시용)
     // const [isNotTodayAlarm, setIsNotTodayAlarm] = useState(false);
+    const [hour, setHour] = useState("");
+    const [minute, setMinute] = useState("");
+    const [ampm, setAmpm] = useState("");
+    const [day, setDay] = useState([]);
 
-    // ✨ 오늘 요일에 맞는 알람만 노출(문자열 기준으로 변경 필요)
+    useEffect(() => {
+        formatArrToTimeObj(alarmInfo.time);
+        formatStrToDayArr();
+    }, []);
+
+    // console.log(alarmInfo.day);
+    const formatStrToDayArr = () => {
+        const numberDay = Number(alarmInfo.day);
+        // const arrDay = numberDay.split("");
+        // console.log(arrDay);
+    };
+    // ❌ 오늘 요일에 맞는 알람만 노출(문자열 기준으로 변경 필요)
     // useEffect(() => {
     //     if (alarmInfo.day.includes(day)) {
     //         setIsNotTodayAlarm(true);
@@ -97,21 +112,27 @@ const Alarm = ({ alarmInfo, menuIcon, toggleTask, showAlarmMenu, day }) => {
     // const formatNumToKoreanDay = (numberDay) =>
     //     numberDay.map((num) => koreanDaysArr[num - 1]);
 
-    // ✨ HH:mm:dd로 들어온 시간 전환 => "14:30:30" => "PM 2:30"
-    const formatStrToTimeObj = (timeStr) => {
-        const [hour, minute] = timeStr.split(":").map((str) => Number(str));
-        return {
-            hour: hour > 12 ? hour - 12 : hour,
-            minute: minute > 10 ? minute : `0${minute}`,
-            ampm: hour < 12 ? "AM" : "PM",
-        };
-    };
+    // const { hour, minute, ampm } = useMemo(
+    //     () => formatStrToTimeObj(alarmInfo.time),
+    //     []
+    // );
 
-    // const changedDay = useMemo(() => formatNumToKoreanDay(alarmInfo.day), []);
-    const { hour, minute, ampm } = useMemo(
-        () => formatStrToTimeObj(alarmInfo.time),
-        []
-    );
+    // ✨ HH:mm:dd로 들어온 시간 전환 => "14:30:30" => "PM 2:30"
+    // const formatStrToTimeObj = (timeStr) => {
+    //     const [hour, minute] = timeStr.split(":").map((str) => Number(str));
+    //     return {
+    //         hour: hour > 12 ? hour - 12 : hour,
+    //         minute: minute > 10 ? minute : `0${minute}`,
+    //         ampm: hour < 12 ? "AM" : "PM",
+    //     };
+    // };
+
+    // ✨ HH:mm:dd로 들어온 시간 전환 => "14:30:30" => "PM 2:30"
+    const formatArrToTimeObj = (timeArr) => {
+        setHour(timeArr[0] > 12 ? timeArr[0] - 12 : timeArr[0]);
+        setMinute(timeArr[1] > 10 ? timeArr[1] : `0${timeArr[1]}`);
+        setAmpm(timeArr[0] < 12 ? "AM" : "PM");
+    };
 
     const _onPress = () => {
         toggleTask(alarmInfo.id);
@@ -167,7 +188,7 @@ const Alarm = ({ alarmInfo, menuIcon, toggleTask, showAlarmMenu, day }) => {
                             </TopWrapRight>
                         </TopWrap>
                         <MedicineContainer>
-                            {Object.values(alarmInfo.name).map((item) => {
+                            {/* {Object.values(alarmInfo.name).map((item) => {
                                 return (
                                     <AlarmMedicine
                                         completed={completed}
@@ -176,7 +197,7 @@ const Alarm = ({ alarmInfo, menuIcon, toggleTask, showAlarmMenu, day }) => {
                                         key={item.id}
                                     />
                                 );
-                            })}
+                            })} */}
                         </MedicineContainer>
                     </Container>
                 </TouchContainer>

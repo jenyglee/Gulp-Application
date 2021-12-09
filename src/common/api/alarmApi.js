@@ -19,11 +19,14 @@ const addAlarm = async (alarm, token) => {
 };
 
 // ✨ 알람 가져오기(진행중)
-const getAlarm = async (token) => {
+const getAlarm = async (token, day) => {
     try {
         const response = await axios({
             method: "GET",
             url: url + "alarms",
+            params: {
+                day: day,
+            },
             headers: { authorization: token },
         });
         return response;

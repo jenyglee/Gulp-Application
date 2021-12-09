@@ -19,7 +19,6 @@ export const alarmsSlice = createSlice({
     },
     reducers: {
         setAlarms(state, action) {
-            console.log(state.alarms, action);
             state.alarms = action.payload;
         },
         setCount(state, action) {
