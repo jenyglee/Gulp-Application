@@ -96,7 +96,7 @@ const Alarm = ({ alarmInfo, menuIcon, toggleTask, showAlarmMenu }) => {
     // ✨ HH:mm:dd로 들어온 시간 전환 => "14:30:30" => "PM 2:30"
     const formatArrToTimeObj = (timeArr) => {
         setHour(timeArr[0] > 12 ? timeArr[0] - 12 : timeArr[0]);
-        setMinute(timeArr[1] > 10 ? timeArr[1] : `0${timeArr[1]}`);
+        setMinute(timeArr[1] >= 10 ? timeArr[1] : `0${timeArr[1]}`);
         setAmpm(timeArr[0] < 12 ? "AM" : "PM");
     };
 

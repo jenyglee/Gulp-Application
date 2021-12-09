@@ -111,6 +111,10 @@ const actions = {
                                             brandName: brand,
                                         },
                                     };
+                                    // console.log(
+                                    //     "약추가에서 온 약 : ",
+                                    //     newMedicine
+                                    // );
                                     AsyncStorage.setItem(
                                         "medicine",
                                         JSON.stringify({

@@ -119,38 +119,73 @@ const actions = {
                 // console.log("alarmId : " + alarmId);
                 const token = await AsyncStorage.getItem("token");
                 const response = await getAlarmObj(token, alarmId);
-                const selectedKoreanDayArr = [];
+                const arrDayNum = response.data.day.split(""); // 복용 요일 숫자 배열
+                const selectedKoreanDayArr = []; // 복용 요일 한글 배열(push용)
+                const copyWeek = [...week]; // 복용 요일 카피본
+                const loadedData = await AsyncStorage.getItem("medicine");
+                const medicines = JSON.parse(loadedData);
                 // console.log(
                 //     // koreanDaysArr
                 //     // response.data.time,
                 //     // response.data.day //"456"
-                //     // response.data.alarmMedicines
+                //     "오브젝트 id : ",
+                //     response.data.alarmMedicines[0].id,
+                //     "카테고리 : ",
+                //     response.data.alarmMedicines[0].medicine.category,
+                //     "브랜드 : ",
+                //     response.data.alarmMedicines[0].medicine.brand,
+                //     "이름 : ",
+                //     response.data.alarmMedicines[0].medicine.name,
+                //     "약 id : ",
+                //     response.data.alarmMedicines[0].medicine.id
+                //     // "스토레이지 약",
+                //     // JSON.parse(loadedData)
                 // );
-                const arrDayNum = response.data.day.split("");
+
+                // 복용요일(숫자배열)이 한글로 바뀌면서 배열에 들어감
                 arrDayNum.map((item) => {
                     selectedKoreanDayArr.push(koreanDaysArr[item]);
                 });
-                const copyWeek = [...week];
+
+                // 전체요일의 id와 복용요일(숫자)이 같을 때 해당 요일 체크시키기
                 copyWeek.map((weekObj) => {
                     arrDayNum.map((num) => {
-                        // console.log(
-                        //     "weekObj.id : " + typeof weekObj.id,
-                        //     "num : " + typeof Number(num)
-                        // );
                         if (weekObj.id === Number(num)) {
                             weekObj.checked = !weekObj.checked;
                         }
                         setWeek(copyWeek);
                     });
                 });
-                // { id: 1, day: "월", checked: false },
-                // 이 형태로 만들어서,
+                // Object {
+                //     "1": Object {
+                //       "brandName": "종근당건강",
+                //       "id": 1,
+                //       "name": "알티지 오메가3",
+                //     },
+                //   }
+
+                // 필요한것 : 오브젝트 id, 약의 id, 약 이름, 약 브랜드
+
                 // console.log(selectedKoreanDayArr); //['금','토','일']
 
                 await actions.setTime(
                     `${response.data.time[0]}:${response.data.time[1]}:${response.data.time[2]}`
                 )(dispatch);
-                // setWeekCheckList(response.data.day);
+
+                const newMedicine = {
+                    [response.data.alarmMedicines[0].medicine.id]: {
+                        id: response.data.alarmMedicines[0].medicine.id,
+                        name: response.data.alarmMedicines[0].medicine.name,
+                        brandName:
+                            response.data.alarmMedicines[0].medicine.brand.name,
+                    },
+                };
+                // console.log("변경에서 온 약 : ", newMedicine);
+                await AsyncStorage.setItem(
+                    "medicine",
+                    JSON.stringify({ ...newMedicine })
+                );
+                setWeekCheckList(response.data.day);
             } catch (error) {
                 console.log(JSON.stringify(error));
             }
