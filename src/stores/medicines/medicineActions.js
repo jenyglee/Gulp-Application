@@ -6,6 +6,8 @@ import {
     getMedicines,
     addMedicine,
 } from "@/medicine/api/medicineApi";
+import { stateAlarms } from "stores/alarms/alarmsSlice.js";
+import actionsAlarms from "stores/alarms/alarmsActions.js";
 
 const actions = {
     // ✨ 약 저장 'api 적용'
@@ -183,11 +185,12 @@ const actions = {
         }
     },
 
-    // ✨ 모든 약 삭제(medicineStore)
-    deleteAllMedicine: (payload) => async (dispatch) => {
+    // ✨ 모든 값 삭제(medicineStore)
+    deleteAllValue: (payload) => async (dispatch) => {
         try {
             AsyncStorage.removeItem("medicine");
             dispatch(actionsMedicines.setMedicineList({}));
+            dispatch(actionsAlarms.setTime("")); // 🪲두번째에 작동됨.
         } catch (error) {
             console.log(JSON.stringify(error));
         }

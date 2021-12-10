@@ -116,38 +116,19 @@ const actions = {
         (alarmId, setWeekCheckList, koreanDaysArr, week, setWeek) =>
         async (dispatch) => {
             try {
-                // console.log("alarmId : " + alarmId);
                 const token = await AsyncStorage.getItem("token");
                 const response = await getAlarmObj(token, alarmId); // api 데이터
 
-                const selectedKoreanDayArr = []; // 복용 요일 한글 배열(push용)
-                const copyWeek = [...week]; // 복용 요일 카피본
-                // console.log(
-                //     // koreanDaysArr
-                //     // response.data.time,
-                //     // response.data.day //"456"
-                //     "오브젝트 id : ",
-                //     response.data.alarmMedicines[0].id,
-                //     "카테고리 : ",
-                //     response.data.alarmMedicines[0].medicine.category,
-                //     "브랜드 : ",
-                //     response.data.alarmMedicines[0].medicine.brand,
-                //     "이름 : ",
-                //     response.data.alarmMedicines[0].medicine.name,
-                //     "약 id : ",
-                //     response.data.alarmMedicines[0].medicine.id
-                //     // "스토레이지 약",
-                //     // JSON.parse(loadedData)
-                // );
-
                 // ① 등록된 요일로 체크시키기
                 // ex. ["1", "2", "3"] -> ["월", "화", "수"]
+                const selectedKoreanDayArr = []; // 복용 요일 한글 배열(push용)
                 const arrDayNum = response.data.day.split("");
                 arrDayNum.map((item) => {
                     selectedKoreanDayArr.push(koreanDaysArr[item]);
                 });
 
                 // week 데이터에서 체크된 날짜 배열과 id가 같은 것을 {checked : true}로 변경
+                const copyWeek = [...week]; // 복용 요일 카피본
                 copyWeek.map((weekObj) => {
                     arrDayNum.map((num) => {
                         if (weekObj.id === Number(num)) {
@@ -159,27 +140,17 @@ const actions = {
                 setWeekCheckList(response.data.day);
 
                 // ② 등록된 time 값 넣기
-                await actions.setTime(
-                    `${response.data.time[0]}:${response.data.time[1]}:${response.data.time[2]}`
-                )(dispatch);
+                const ampm = response.data.time[0] > 12 ? "오후" : "오전";
+                const hour =
+                    response.data.time[0] > 12
+                        ? response.data.time[0] - 12
+                        : response.data.time[0];
+                const minute = response.data.time[1];
+                await actions.setTime(`${ampm} ${hour}:${minute}`)(dispatch);
 
                 // ③ 등록된 영양제 넣기
-
-                // Object {
-                //     "1": Object {
-                //       "brandName": "종근당건강",
-                //       "id": 1,
-                //       "name": "알티지 오메가3",
-                //     },
-                //   }
-
-                // 필요한것 : 오브젝트 id, 약의 id, 약 이름, 약 브랜드
-
-                // console.log(selectedKoreanDayArr); //['금','토','일']
-
                 const loadedData = await AsyncStorage.getItem("medicine");
-                const medicines = JSON.parse(loadedData);
-                // console.log(medicines); // {brandName: "종근당건강", id: 1, name: "알티지 오메가3"}
+                const medicines = JSON.parse(loadedData); //{brandName: "종근당건강", id: 1, name: "알티지 오메가3"}
 
                 // 🪲 약 갯수만큼 반복문을 돌리고 싶은데, 반복문 안에 AsyncStorage를 쓸 수가 없다.
                 const newMedicine01 = {
@@ -207,21 +178,6 @@ const actions = {
                     },
                 };
 
-                // 🪲 약 갯수만큼 반복문을 돌리고 싶은데, 반복문 안에 AsyncStorage를 쓸 수가 없다.
-                // const arrNewMedicines = [];
-                // response.data.alarmMedicines.map((alarmMedicine) => {
-                //     // console.log(medicines); // null
-                //     const newMedicine = {
-                //         [alarmMedicine.medicine.id]: {
-                //             id: alarmMedicine.medicine.id,
-                //             name: alarmMedicine.medicine.name,
-                //             brandName: alarmMedicine.medicine.brand.name,
-                //         },
-                //     };
-                //     console.log(newMedicine);
-                //     // arrNewMedicines.push(newMedicine);
-                // });
-
                 AsyncStorage.setItem(
                     "medicine",
                     JSON.stringify({
@@ -231,6 +187,24 @@ const actions = {
                         ...newMedicine03,
                     })
                 );
+
+                // 🪲 약 갯수만큼 반복문을 돌리고 싶은데, 반복문 안에 AsyncStorage를 쓸 수가 없다.
+                // // const arrNewMedicines = [];
+                // response.data.alarmMedicines.map((alarmMedicine) => {
+                //     // console.log(medicines); // null
+                //     const newMedicine = {
+                //         [alarmMedicine.medicine.id]: {
+                //             id: alarmMedicine.medicine.id,
+                //             name: alarmMedicine.medicine.name,
+                //             brandName: alarmMedicine.medicine.brand.name,
+                //         },
+                //     };
+                //     AsyncStorage.setItem(
+                //         "medicine",
+                //         JSON.stringify({ ...medicines, ...newMedicine })
+                //     );
+                //     // arrNewMedicines.push(newMedicine);
+                // });
             } catch (error) {
                 console.log(JSON.stringify(error));
             }

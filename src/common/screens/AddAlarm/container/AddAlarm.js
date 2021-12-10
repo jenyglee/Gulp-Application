@@ -49,15 +49,6 @@ const StyledTitle = styled.Text`
     margin-bottom: 10px;
 `;
 
-// const WeekButtonContainer = styled.View`
-//     height: 60px;
-//     flex-direction: row;
-//     border-radius: 12px;
-//     align-items: center;
-//     justify-content: center;
-//     background-color: ${({ theme }) => theme.background};
-// `;
-
 const AddMedicine = ({
     navigation,
     medicinesStore,
@@ -109,7 +100,7 @@ const AddMedicine = ({
         }
         // 알람 추가 시
         if (route.params.fromScreen === "AlarmList") {
-            dispatch(actionsMedicines.deleteAllMedicine());
+            dispatch(actionsMedicines.deleteAllValue());
         } else if (
             // 복용제 추가 시
             route.params.fromScreen === "SearchMedicine" ||
