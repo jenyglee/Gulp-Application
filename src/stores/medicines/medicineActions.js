@@ -112,7 +112,7 @@ const actions = {
                                         },
                                     };
                                     // console.log(
-                                    //     "약추가에서 온 약 : ",
+                                    //     { ...newMedicine },
                                     //     newMedicine
                                     // );
                                     AsyncStorage.setItem(
