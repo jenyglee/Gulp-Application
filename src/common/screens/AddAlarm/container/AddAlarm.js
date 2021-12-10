@@ -5,8 +5,10 @@ import { Alert, Dimensions } from "react-native";
 import Button from "@components/Button";
 import ButtonSmall from "@components/ButtonSmall";
 import TagButton from "@/common/screens/AddAlarm/component/TagButton";
+import TagButtonContainer from "@/common/screens/AddAlarm/component/TagButtonContainer";
 import TimePicker from "@/common/screens/AddAlarm/component/TimePicker";
 import WeekButton from "@/common/screens/AddAlarm/component/WeekButton";
+import WeekButtonContainer from "@/common/screens/AddAlarm/component/WeekButtonContainer";
 import { icons14px } from "@/icons";
 import { ScrollView } from "react-native-gesture-handler";
 import { deleteMedicine } from "@/medicine/api/medicineApi";
@@ -47,14 +49,14 @@ const StyledTitle = styled.Text`
     margin-bottom: 10px;
 `;
 
-const WeekButtonContainer = styled.View`
-    height: 60px;
-    flex-direction: row;
-    border-radius: 12px;
-    align-items: center;
-    justify-content: center;
-    background-color: ${({ theme }) => theme.background};
-`;
+// const WeekButtonContainer = styled.View`
+//     height: 60px;
+//     flex-direction: row;
+//     border-radius: 12px;
+//     align-items: center;
+//     justify-content: center;
+//     background-color: ${({ theme }) => theme.background};
+// `;
 
 const AddMedicine = ({
     navigation,
@@ -132,67 +134,17 @@ const AddMedicine = ({
                     </StyledForm>
                     <StyledForm>
                         <StyledTitle>복용 요일</StyledTitle>
-                        <WeekButtonContainer>
-                            <WeekButton
-                                title={weekAll[0].day}
-                                onPress={() => {
-                                    dispatch(
-                                        actionsAlarms.allWeekCheck({
-                                            week,
-                                            setWeek,
-                                            weekAll,
-                                            setWeekAll,
-                                        })
-                                    );
-                                }}
-                                checked={weekAll[0].checked}
-                            />
-                            {week.map((item) => {
-                                return (
-                                    <WeekButton
-                                        title={item.day}
-                                        id={item.id}
-                                        key={item.id}
-                                        onPress={(id) => {
-                                            dispatch(
-                                                actionsAlarms.weekCheck({
-                                                    id,
-                                                    week,
-                                                    setWeek,
-                                                    weekAll,
-                                                    setWeekAll,
-                                                })
-                                            );
-                                        }}
-                                        checked={item.checked}
-                                    />
-                                );
-                            })}
-                        </WeekButtonContainer>
+                        <WeekButtonContainer
+                            weekAll={weekAll}
+                            week={week}
+                            setWeekAll={setWeekAll}
+                            setWeek={setWeek}
+                        />
                     </StyledForm>
                     <StyledForm>
                         <StyledTitle>복용중인 영양제</StyledTitle>
                         <StyledTagForm>
-                            {medicineList
-                                ? Object.values(medicineList).map((item) => {
-                                      return (
-                                          <TagButton
-                                              name={item.name}
-                                              brand={item.brandName}
-                                              id={item.id}
-                                              key={item.id}
-                                              deleteTask={(id) => {
-                                                  dispatch(
-                                                      actionsMedicines.deleteMedicine(
-                                                          id,
-                                                          medicineList
-                                                      )
-                                                  );
-                                              }}
-                                          />
-                                      );
-                                  })
-                                : null}
+                            <TagButtonContainer medicineList={medicineList} />
                         </StyledTagForm>
                         <StyledTagForm>
                             <ButtonSmall
