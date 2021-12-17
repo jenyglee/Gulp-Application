@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import { Button, TouchableOpacity } from "react-native";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import styled, { ThemeContext } from "styled-components/native";
@@ -75,10 +75,15 @@ Number.prototype.zf = function (len) {
 };
 
 function TimePicker({ onPress, getTime }) {
+    // console.log(getTime, "==============78");
     const theme = useContext(ThemeContext);
     const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
     const placeholder = "알람시간을 설정해주세요.";
     const [text, setText] = useState(getTime);
+
+    useEffect(() => {
+        setText(getTime);
+    }, [getTime]);
 
     const showDatePicker = () => {
         setDatePickerVisibility(true);

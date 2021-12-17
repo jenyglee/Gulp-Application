@@ -5,7 +5,7 @@ import { Alert } from "react-native";
 const url = "https://gulp.jenyglee.com/";
 
 // ✨약 생성
-const addMedicine = async (medicine, token) => {
+const apiAddMedicine = async (medicine, token) => {
     try {
         const response = await axios({
             method: "POST",
@@ -76,12 +76,13 @@ const getBrands = async (text, token) => {
 };
 
 // ✨약 조회
-const getMedicines = async ({ brandKey, medicine }) => {
+const getMedicines = async ({ categoryKey, brandKey, medicine }) => {
     try {
         const response = await axios({
             method: "GET",
             url: url + "medicines",
             params: {
+                categoryId: categoryKey,
                 brandId: brandKey,
                 name: medicine,
             },
@@ -107,4 +108,4 @@ const getCategory = async (token) => {
     }
 };
 
-export { addMedicine, deleteMedicine, getBrands, getMedicines, getCategory };
+export { apiAddMedicine, deleteMedicine, getBrands, getMedicines, getCategory };

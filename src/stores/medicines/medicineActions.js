@@ -4,14 +4,14 @@ import { Alert } from "react-native";
 import {
     getCategory,
     getMedicines,
-    addMedicine,
+    apiAddMedicine,
 } from "@/medicine/api/medicineApi";
 import { stateAlarms } from "stores/alarms/alarmsSlice.js";
 import actionsAlarms from "stores/alarms/alarmsActions.js";
 
 const actions = {
     // ✨ 약 저장 'api 적용'
-    saveMedicine:
+    addAndSaveMedicine:
         (category, brand, brandKey, medicine, navigation, fromScreen, token) =>
         async (dispatch) => {
             try {
@@ -32,13 +32,12 @@ const actions = {
                             medicine,
                             medicines
                         )(dispatch);
-
                     if (isSameMedicinesArr.includes(false)) {
                         Alert.alert("이 약은 이미 등록되어 있습니다.");
                         return;
                     } else {
                         // 🪲 추가는 되는데 MySQL에 보면 brandId 랑 categoryId가 빈칸으로 나옴 ㅠ
-                        const response = await addMedicine(
+                        const response = await apiAddMedicine(
                             {
                                 name: medicine,
                                 brandId: brandKey,
@@ -73,59 +72,57 @@ const actions = {
         },
 
     // ✨ 약 저장 'Storage 전용' (medicineStore)
-    saveMedicineOnlyStorage:
-        (category, brand, brandKey, medicine, navigation, isScreen) =>
+    saveMedicine:
+        (
+            category,
+            brand,
+            brandKey,
+            categoryKey,
+            medicine,
+            medicineList,
+            navigation,
+            fromScreen
+        ) =>
         async (dispatch) => {
             try {
                 // ① 값이 모두 있는지 확인
-                const confirm = await actions.confirmValue(
+                const confirm = actions.confirmValue(
                     category.name,
                     brand,
                     medicine
                 )(dispatch);
                 if (confirm) {
                     // ② 이미 등록된 약인지 확인
-                    const loadedData = await AsyncStorage.getItem("medicine");
-                    const medicines = JSON.parse(loadedData);
                     const isSameMedicinesArr =
                         await actions.confirmSameMedicine(
                             brand,
                             medicine,
-                            medicines
+                            medicineList
                         )(dispatch);
                     if (isSameMedicinesArr.includes(false)) {
                         Alert.alert("이 약은 이미 등록되어 있습니다.");
                         return;
                     } else {
                         const response = await getMedicines({
+                            categoryKey,
                             brandKey,
                             medicine,
                         });
                         // ③ 약이 하나라도 있는 지 확인
                         if (response[0]) {
                             // ④약 조회했을 때 여러개 나온 것 중 '이름이 일치할 때' 저장 진행
-                            response.map((item) => {
-                                if (item.name === medicine) {
-                                    const newMedicine = {
-                                        [item.id]: {
-                                            id: item.id,
+                            response.map((medicineObj) => {
+                                if (medicineObj.name === medicine) {
+                                    actions.setMedicineList([
+                                        ...medicineList,
+                                        {
                                             name: medicine,
                                             brandName: brand,
+                                            id: medicineObj.id,
                                         },
-                                    };
-                                    // console.log(
-                                    //     { ...newMedicine },
-                                    //     newMedicine
-                                    // );
-                                    AsyncStorage.setItem(
-                                        "medicine",
-                                        JSON.stringify({
-                                            ...medicines,
-                                            ...newMedicine,
-                                        })
-                                    );
+                                    ])(dispatch);
                                     navigation.navigate("AddAlarm", {
-                                        isScreen,
+                                        fromScreen,
                                     });
                                 }
                             });
@@ -147,7 +144,7 @@ const actions = {
         },
 
     // ✨ 빈칸검수(medicineStore)
-    confirmValue: (category, brand, medicine) => async (dispatch) => {
+    confirmValue: (category, brand, medicine) => (dispatch) => {
         if (category !== "선택") {
             if (brand !== "") {
                 if (medicine !== "") {
@@ -158,28 +155,28 @@ const actions = {
     },
 
     // ✨ 이미 등록된 약인지 검수 (medicineStore)
-    confirmSameMedicine: (brand, medicine, medicines) => async (dispatch) => {
-        let isSameMedicinesArr = medicines
-            ? Object.values(medicines).map((item) => {
-                  // 브랜드 명이 이미 있는 것 인지 확인 -> 약 이름까지 이미 있는 것 인지 확인
-                  if (item.brandName === brand) {
-                      if (item.name === medicine) {
-                          return false;
+    confirmSameMedicine:
+        (brand, medicine, medicineList) => async (dispatch) => {
+            let isSameMedicinesArr = medicineList
+                ? Object.values(medicineList).map((medicineObj) => {
+                      // 브랜드 명이 이미 있는 것 인지 확인 -> 약 이름까지 이미 있는 것 인지 확인
+                      if (medicineObj.brandName === brand) {
+                          if (medicineObj.name === medicine) {
+                              return false;
+                          } else return true;
                       } else return true;
-                  } else return true;
-              })
-            : [];
-        return isSameMedicinesArr;
-    },
+                  })
+                : [true];
+            return isSameMedicinesArr;
+        },
 
     // ✨ 약 삭제(medicineStore)
     deleteMedicine: (id, medicineList) => async (dispatch) => {
         try {
-            const medicines = await actions.deleteTask(
-                id,
-                medicineList
-            )(dispatch);
-            await actions.storeData(medicines)(dispatch);
+            const deletedMedicineList = medicineList.filter(
+                (medicine) => medicine.id !== id
+            );
+            actions.setMedicineList(deletedMedicineList)(dispatch);
         } catch (error) {
             console.log(JSON.stringify(error));
         }
@@ -188,8 +185,7 @@ const actions = {
     // ✨ 모든 값 삭제(medicineStore)
     deleteAllValue: (payload) => async (dispatch) => {
         try {
-            AsyncStorage.removeItem("medicine");
-            dispatch(actionsMedicines.setMedicineList({}));
+            dispatch(actionsMedicines.setMedicineList([]));
             dispatch(actionsAlarms.setTime("")); // 🪲두번째에 작동됨.
         } catch (error) {
             console.log(JSON.stringify(error));
@@ -199,8 +195,8 @@ const actions = {
     // ✨로컬에서 약 가져오기
     getMedicine: () => async (dispatch) => {
         try {
-            const loadedData = await AsyncStorage.getItem("medicine");
-            dispatch(actionsMedicines.setMedicineList(JSON.parse(loadedData)));
+            // const loadedData = await AsyncStorage.getItem("medicine");
+            // dispatch(actionsMedicines.setMedicineList(JSON.parse(loadedData)));
         } catch (error) {
             throw JSON.stringify(error);
         }
@@ -228,6 +224,7 @@ const actions = {
         categoryData.map((item) => {
             if (item.id === id) {
                 dispatch(actionsMedicines.setCategory(item));
+                dispatch(actionsMedicines.setCategoryKey(item.id));
                 return;
             } else return;
         });
@@ -290,6 +287,9 @@ const actions = {
     },
     setMedicine: (payload) => (dispatch) => {
         dispatch(actionsMedicines.setMedicine(payload));
+    },
+    setMedicineList: (payload) => (dispatch) => {
+        dispatch(actionsMedicines.setMedicineList(payload));
     },
 };
 

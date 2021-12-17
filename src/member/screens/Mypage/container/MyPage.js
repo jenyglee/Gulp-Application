@@ -40,10 +40,10 @@ const MyPageContainer = ({ navigation }) => {
 
     // ✨ 로그인정보 가져오기
     const getUser = async () => {
-        const token = await AsyncStorage.getItem("token")
+        const token = await AsyncStorage.getItem("token");
         // console.log(token);
         const user = await jwt_decode(token);
-        await user ? setIsSignin(true) : setIsSignin(false)
+        (await user) ? setIsSignin(true) : setIsSignin(false);
         await setNickname(user.nickname);
     };
 
@@ -92,5 +92,3 @@ const MyPageContainer = ({ navigation }) => {
 };
 
 export default MyPageContainer;
-
-

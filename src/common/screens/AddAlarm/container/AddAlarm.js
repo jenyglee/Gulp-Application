@@ -62,7 +62,15 @@ const AddMedicine = ({
     const theme = useContext(ThemeContext);
 
     const { medicineList } = useSelector(stateMedicines);
-    const { time } = useSelector(stateAlarms);
+    const time = useSelector(stateAlarms).time;
+    // console.log(time);
+    // console.log(
+    //     useSelector(
+    //         (state) => ({ time: state.time }),
+    //         (left, right) => left.time === right.time
+    //     )
+    // );
+
     const [week, setWeek] = useState([
         { id: 1, day: "월", checked: false },
         { id: 2, day: "화", checked: false },
@@ -72,6 +80,7 @@ const AddMedicine = ({
         { id: 6, day: "토", checked: false },
         { id: 7, day: "일", checked: false },
     ]);
+
     const [weekAll, setWeekAll] = useState([
         { id: 0, day: "All", checked: false },
     ]);
@@ -87,9 +96,11 @@ const AddMedicine = ({
 
     useEffect(() => {
         // 알람 변경 시
+        // 한글변환작업은 여기서
+        // 요일 데이터는 스토어에 정리
         if (route.params.alarmId) {
             dispatch(
-                actionsAlarms.getAlarmObj(
+                actionsAlarms.getOneAlarm(
                     route.params.alarmId,
                     setWeekCheckList,
                     koreanDaysArr,
@@ -100,13 +111,16 @@ const AddMedicine = ({
         }
         // 알람 추가 시
         if (route.params.fromScreen === "AlarmList") {
+            // 시간도 초기화
             dispatch(actionsMedicines.deleteAllValue());
         } else if (
             // 복용제 추가 시
             route.params.fromScreen === "SearchMedicine" ||
             route.params.fromScreen === "AddMedicine"
         ) {
-            dispatch(actionsMedicines.getMedicine());
+            // dispatch(actionsMedicines.getMedicine());
+            console.log(medicineList);
+            // console.log(medicineList);
         }
     }, [route.params]);
 
@@ -135,7 +149,7 @@ const AddMedicine = ({
                     <StyledForm>
                         <StyledTitle>복용중인 영양제</StyledTitle>
                         <StyledTagForm>
-                            <TagButtonContainer medicineList={medicineList} />
+                            <TagButtonContainer />
                         </StyledTagForm>
                         <StyledTagForm>
                             <ButtonSmall
@@ -172,6 +186,7 @@ const AddMedicine = ({
                             navigation
                         )
                     );
+                    // console.log(medicinesId);
                 }}
             />
         </>

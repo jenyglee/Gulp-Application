@@ -105,8 +105,6 @@ const ProfileName = styled.Text`
 const AlarmList = ({ navigation, alarmsStore }) => {
     const dispatch = useDispatch(); //dispatch : 해당 state 값을 수정하는 액션
     const theme = useContext(ThemeContext);
-    // const year = useSelector(stateAlarms).year;
-    // const month = useSelector(stateAlarms).month;
     const { year, month, date, day, alarms, count, countTotal } =
         useSelector(stateAlarms);
     const width = Dimensions.get("window").width;
@@ -135,7 +133,7 @@ const AlarmList = ({ navigation, alarmsStore }) => {
 
     // ✨ Today <-> All 필터링 됐을 때
     useEffect(() => {
-        // dispatch(actionsAlarms.getAlarms({ filtered, day }));
+        dispatch(actionsAlarms.getAllAlarms());
         // 👀❓ 무조건 alarms가 빈 배열로 들어감
         // dispatch(actionsAlarms.confirmList({alarms, setIsVisibleAlarm}));
     }, [filtered]);

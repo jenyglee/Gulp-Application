@@ -57,8 +57,15 @@ const SearchMedicine = ({ navigation }) => {
     const dispatch = useDispatch();
     const width = Dimensions.get("window").width;
     const theme = useContext(ThemeContext);
-    const { categoryData, category, brand, brandKey, medicine } =
-        useSelector(stateMedicines);
+    const {
+        categoryData,
+        category,
+        categoryKey,
+        brand,
+        brandKey,
+        medicine,
+        medicineList,
+    } = useSelector(stateMedicines);
     const { token } = useSelector(stateMembers);
     const [filtered, setFiltered] = useState([]);
     const [medicineNeedSave, setMedicineNeedSave] = useState("");
@@ -90,7 +97,7 @@ const SearchMedicine = ({ navigation }) => {
 
     // ✨ '브랜드 이름' 노출
     useEffect(() => {
-        if (category.title !== "선택") {
+        if (category.name !== "선택") {
             setShowBrand(true);
             inputAnimation(opacityBrand);
         }
@@ -129,6 +136,7 @@ const SearchMedicine = ({ navigation }) => {
         if (text) {
             setIsSearchingMedicine(true);
             const medicines = await getMedicines({
+                categoryKey,
                 brandKey,
                 medicine: text,
             });
@@ -291,6 +299,8 @@ const SearchMedicine = ({ navigation }) => {
                             </Animated.View>
                         ) : null}
                     </StyledForm>
+
+                    {/* 안드로이드용 '영양제찾기/추가' 버튼 */}
                     {Platform.OS === "android" ? (
                         <>
                             <ButtonFloating
@@ -324,10 +334,14 @@ const SearchMedicine = ({ navigation }) => {
                                 onPress={() => {
                                     dispatch(
                                         actionsMedicines.saveMedicine(
+                                            category,
                                             brand,
                                             brandKey,
+                                            categoryKey,
                                             medicine,
-                                            navigation
+                                            medicineList,
+                                            navigation,
+                                            fromScreen
                                         )
                                     );
                                 }}
@@ -335,6 +349,8 @@ const SearchMedicine = ({ navigation }) => {
                         </>
                     ) : null}
                 </Container>
+
+                {/* IOS용 '영양제찾기/추가' 버튼 */}
                 {Platform.OS === "android" ? null : (
                     <>
                         <TextButtonContainer>
@@ -359,11 +375,13 @@ const SearchMedicine = ({ navigation }) => {
                             title="영양제 추가"
                             onPress={() => {
                                 dispatch(
-                                    actionsMedicines.saveMedicineOnlyStorage(
+                                    actionsMedicines.saveMedicine(
                                         category,
                                         brand,
                                         brandKey,
+                                        categoryKey,
                                         medicine,
+                                        medicineList,
                                         navigation,
                                         fromScreen
                                     )

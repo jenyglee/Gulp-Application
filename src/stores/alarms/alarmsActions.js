@@ -1,6 +1,12 @@
 import { actionsAlarms } from "./alarmsSlice.js";
+import { actionsMedicines } from "../medicines/medicinesSlice.js";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { addAlarm, getAlarm, getAlarmObj } from "@/common/api/alarmApi";
+import {
+    addAlarm,
+    apiGetAlarm,
+    apiGetAllAlarm,
+    apiGetOneAlarm,
+} from "@/common/api/alarmApi";
 import { Alert } from "react-native";
 import { stateCommon } from "stores/common/commonSlice";
 import actionsCommon from "stores/common/commonActions";
@@ -104,20 +110,34 @@ const actions = {
         try {
             const token = await AsyncStorage.getItem("token");
             const changedDay = day ? day : 7; //일요일을 0 👉 7 변환
-            const response = await getAlarm(token, changedDay);
+            const response = await apiGetAlarm(token, changedDay);
             dispatch(actionsAlarms.setAlarms(response.data));
         } catch (error) {
             console.log(JSON.stringify(error));
         }
     },
 
+    // ✨ 알람 전체 불러오기(alarmList) 'api 전용'
+    getAllAlarms: (payload) => async (dispatch) => {
+        try {
+            const token = await AsyncStorage.getItem("token");
+            // const changedDay = day ? day : 7; //일요일을 0 👉 7 변환
+            const response = await apiGetAllAlarm(token);
+            // console.log("getAllAlarms");
+            // console.log(response);
+            // dispatch(actionsAlarms.setAlarms(response.data));
+        } catch (error) {
+            console.log(JSON.stringify(error));
+        }
+    },
+
     // ✨ 알람 단건 가져오기(알람 변경 시)
-    getAlarmObj:
+    getOneAlarm:
         (alarmId, setWeekCheckList, koreanDaysArr, week, setWeek) =>
         async (dispatch) => {
             try {
                 const token = await AsyncStorage.getItem("token");
-                const response = await getAlarmObj(token, alarmId); // api 데이터
+                const response = await apiGetOneAlarm(token, alarmId); // api 데이터
 
                 // ① 등록된 요일로 체크시키기
                 // ex. ["1", "2", "3"] -> ["월", "화", "수"]
@@ -146,47 +166,61 @@ const actions = {
                         ? response.data.time[0] - 12
                         : response.data.time[0];
                 const minute = response.data.time[1];
+
                 await actions.setTime(`${ampm} ${hour}:${minute}`)(dispatch);
 
-                // ③ 등록된 영양제 넣기
-                const loadedData = await AsyncStorage.getItem("medicine");
-                const medicines = JSON.parse(loadedData); //{brandName: "종근당건강", id: 1, name: "알티지 오메가3"}
-
-                // 🪲 약 갯수만큼 반복문을 돌리고 싶은데, 반복문 안에 AsyncStorage를 쓸 수가 없다.
-                const newMedicine01 = {
-                    [response.data.alarmMedicines[0].medicine.id]: {
-                        id: response.data.alarmMedicines[0].medicine.id,
-                        name: response.data.alarmMedicines[0].medicine.name,
-                        brandName:
-                            response.data.alarmMedicines[0].medicine.brand.name,
-                    },
-                };
-                const newMedicine02 = {
-                    [response.data.alarmMedicines[1].medicine.id]: {
-                        id: response.data.alarmMedicines[1].medicine.id,
-                        name: response.data.alarmMedicines[1].medicine.name,
-                        brandName:
-                            response.data.alarmMedicines[1].medicine.brand.name,
-                    },
-                };
-                const newMedicine03 = {
-                    [response.data.alarmMedicines[2].medicine.id]: {
-                        id: response.data.alarmMedicines[2].medicine.id,
-                        name: response.data.alarmMedicines[2].medicine.name,
-                        brandName:
-                            response.data.alarmMedicines[2].medicine.brand.name,
-                    },
-                };
-
-                AsyncStorage.setItem(
-                    "medicine",
-                    JSON.stringify({
-                        ...medicines,
-                        ...newMedicine01,
-                        ...newMedicine02,
-                        ...newMedicine03,
-                    })
+                dispatch(
+                    actionsMedicines.setMedicineList(
+                        response.data.alarmMedicines.map(({ medicine }) => ({
+                            name: medicine.name,
+                            brandName: medicine.brand.name,
+                            id: medicine.id,
+                        }))
+                    )
                 );
+
+                // // ③ 등록된 영양제 넣기
+                // const loadedData = await AsyncStorage.getItem("medicine");
+
+                // actionsAlarms.setM;
+
+                // const medicines = JSON.parse(loadedData); //{brandName: "종근당건강", id: 1, name: "알티지 오메가3"}
+
+                // // 🪲 약 갯수만큼 반복문을 돌리고 싶은데, 반복문 안에 AsyncStorage를 쓸 수가 없다.
+                // const newMedicine01 = {
+                //     [response.data.alarmMedicines[0].medicine.id]: {
+                //         id: response.data.alarmMedicines[0].medicine.id,
+                //         name: response.data.alarmMedicines[0].medicine.name,
+                //         brandName:
+                //             response.data.alarmMedicines[0].medicine.brand.name,
+                //     },
+                // };
+                // const newMedicine02 = {
+                //     [response.data.alarmMedicines[1].medicine.id]: {
+                //         id: response.data.alarmMedicines[1].medicine.id,
+                //         name: response.data.alarmMedicines[1].medicine.name,
+                //         brandName:
+                //             response.data.alarmMedicines[1].medicine.brand.name,
+                //     },
+                // };
+                // const newMedicine03 = {
+                //     [response.data.alarmMedicines[2].medicine.id]: {
+                //         id: response.data.alarmMedicines[2].medicine.id,
+                //         name: response.data.alarmMedicines[2].medicine.name,
+                //         brandName:
+                //             response.data.alarmMedicines[2].medicine.brand.name,
+                //     },
+                // };
+
+                // AsyncStorage.setItem(
+                //     "medicine",
+                //     JSON.stringify({
+                //         ...medicines,
+                //         ...newMedicine01,
+                //         ...newMedicine02,
+                //         ...newMedicine03,
+                //     })
+                // );
 
                 // 🪲 약 갯수만큼 반복문을 돌리고 싶은데, 반복문 안에 AsyncStorage를 쓸 수가 없다.
                 // // const arrNewMedicines = [];
@@ -334,7 +368,6 @@ const actions = {
                 time,
                 week
             )(dispatch);
-
             if (confirm) {
                 // ②체크된 요일의 id만 가져와 빈 문자열(weekCheckList)에 넣기
                 week.map((checkedDay) => {
@@ -342,11 +375,15 @@ const actions = {
                         weekCheckList += checkedDay.id; // "456"
                     }
                 });
-
                 Object.values(medicineList).map((medicine) => {
                     medicinesId.push(medicine.id);
                 });
 
+                // console.log(time)
+                // console.log(weekCheckList)
+                // console.log(medicinesId)
+
+                // ③ api 저장 진행
                 const token = await AsyncStorage.getItem("token");
                 const response = await addAlarm(
                     {

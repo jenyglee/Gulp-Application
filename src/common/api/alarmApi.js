@@ -18,8 +18,8 @@ const addAlarm = async (alarm, token) => {
     }
 };
 
-// ✨ 알람 가져오기
-const getAlarm = async (token, day) => {
+// ✨ 오늘의 알람 가져오기
+const apiGetAlarm = async (token, day) => {
     try {
         const response = await axios({
             method: "GET",
@@ -35,8 +35,22 @@ const getAlarm = async (token, day) => {
     }
 };
 
+// ✨ 모든 알람 가져오기
+const apiGetAllAlarm = async (token) => {
+    try {
+        const response = await axios({
+            method: "GET",
+            url: url + "alarms",
+            headers: { authorization: token },
+        });
+        return response;
+    } catch (error) {
+        console.log(error);
+    }
+};
+
 // ✨ 알람 단건 가져오기
-const getAlarmObj = async (token, alarmId) => {
+const apiGetOneAlarm = async (token, alarmId) => {
     try {
         const response = await axios({
             method: "GET",
@@ -49,4 +63,4 @@ const getAlarmObj = async (token, alarmId) => {
     }
 };
 
-export { addAlarm, getAlarm, getAlarmObj };
+export { addAlarm, apiGetAlarm, apiGetAllAlarm, apiGetOneAlarm };
