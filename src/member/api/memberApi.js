@@ -14,7 +14,8 @@ const signin = async (member) => {
         });
 
         if (response.data.statusCodeValue === 200) {
-            console.log("로그인 토큰정보 : " + response.headers.authorization);
+            // console.log("로그인 토큰정보 : " + response.headers.authorization);
+            console.log(response);
             await AsyncStorage.setItem("token", response.headers.authorization);
         } else if (response.data.statusCodeValue !== 200) {
             throw new Error(response.data.body.message);
@@ -98,7 +99,7 @@ const emailValidation = async (email) => {
 };
 
 // ✨회원정보 변경
-const updateUser = async ({ token, nickname, password }) => {
+const apiUpdateUser = async ({ token, nickname, password }) => {
     try {
         const response = await axios({
             method: "PUT",
@@ -109,4 +110,4 @@ const updateUser = async ({ token, nickname, password }) => {
         console.log(response);
     } catch (error) {}
 };
-export { signin, logout, signup, removeUser, emailValidation, updateUser };
+export { signin, logout, signup, removeUser, emailValidation, apiUpdateUser };

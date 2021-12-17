@@ -6,7 +6,7 @@ import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view
 import { Button, Input, InputDisabled } from "@components/index";
 import { removeWhiteSpace } from "@/util";
 import { View, Alert, Animated, Dimensions } from "react-native";
-import { updateUser } from "@/member/api/memberApi";
+import { apiUpdateUser } from "@/member/api/memberApi";
 // import { createUser } from "@/firebase";
 
 const Container = styled.View`
@@ -52,9 +52,10 @@ const SignupContainer00 = ({ navigation }) => {
 
     // ✨ 유저 정보 가져오기
     const getUser = async () => {
-        const token = await AsyncStorage.getItem("token")
+        const token = await AsyncStorage.getItem("token");
         const user = jwt_decode(token);
-        setToken(token)
+        console.log(user);
+        setToken(token);
         setEmail(user.email);
         setNickname(user.nickname);
     };
@@ -69,10 +70,10 @@ const SignupContainer00 = ({ navigation }) => {
                 // if 패스워드와 패스워드컨펌이 6자리 이상이라면
                 if (password == passwordConfirm) {
                     // if 패스워드와 패스워드컨펌이 같다면
-                    // console.log(token, nickname, password)
-                    await updateUser({ token, nickname, password });
-                    // Alert.alert("회원정보 변경이 완료되었습니다.");
-                    // navigation.goBack();
+                    // console.log(token, nickname, password);
+                    await apiUpdateUser({ token, nickname, password });
+                    Alert.alert("회원정보 변경이 완료되었습니다.");
+                    navigation.goBack();
                 } else {
                     Alert.alert("비밀번호가 일치하지 않습니다.");
                 }
@@ -130,7 +131,9 @@ const SignupContainer00 = ({ navigation }) => {
                     </View>
 
                     <View>
-                        <StyledTitle>변경할 비밀번호를 입력해주세요</StyledTitle>
+                        <StyledTitle>
+                            변경할 비밀번호를 입력해주세요
+                        </StyledTitle>
                         <Input
                             // ref={refPassword}
                             title="비밀번호"
