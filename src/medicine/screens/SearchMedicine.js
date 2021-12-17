@@ -66,6 +66,7 @@ const SearchMedicine = ({ navigation }) => {
         medicine,
         medicineList,
     } = useSelector(stateMedicines);
+    console.log(categoryData);
     const { token } = useSelector(stateMembers);
     const [filtered, setFiltered] = useState([]);
     const [medicineNeedSave, setMedicineNeedSave] = useState("");

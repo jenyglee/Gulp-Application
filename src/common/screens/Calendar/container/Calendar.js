@@ -9,6 +9,7 @@ import { illust } from "@/images";
 import { useSelector, useDispatch } from "react-redux";
 import { stateCalendar } from "stores/calendar/calendarSlice";
 import actionsCalendar from "stores/calendar/calendarActions";
+import { stateAlarms } from "@/stores/alarms/alarmsSlice";
 
 const Container = styled.View`
     width: ${({ width }) => width - 48}px;
@@ -19,7 +20,7 @@ const Container = styled.View`
 
 const HistoryContainer = styled.View`
     background-color: ${({ theme }) => theme.white};
-    padding: 20px;
+    padding: 20px 20px 0 20px;
     border-radius: 12px;
 `;
 
@@ -30,7 +31,7 @@ const Date = styled.Text`
 
 const Alarm = styled.View`
     background-color: ${({ theme }) => theme.white};
-    padding: 20px;
+    padding: 20px 0;
 `;
 
 const TimeContainer = styled.View`
@@ -56,7 +57,7 @@ const NotCompleteBadge = styled.Image`
     height: 19px;
 `;
 
-const Medicine = styled.Text`
+const Name = styled.Text`
     font-size: 16px;
     margin: 10px 0;
 `;
@@ -69,18 +70,21 @@ const Line = styled.View`
 
 const Calendar = ({ navigation }) => {
     const dispatch = useDispatch();
+    const { alarms } = useSelector(stateAlarms);
     const width = Dimensions.get("window").width;
     const height = Dimensions.get("window").height;
     const theme = useContext(ThemeContext);
     const [alarm, setAlarm] = useState({});
-    const [foundMedicine, setFoundMedicine] = useState(false); // 약 리스트 유무
+    const [foundMedicine, setFoundMedicine] = useState(true); // 약 리스트 유무
     const [completed, setCompleted] = useState(true); // 복용 완료 여부
     const [isSignin, setIsSignin] = useState(true); // 캘린더 노출(로그인시)
 
     useEffect(() => {
         const removeFocusEvent = navigation.addListener("focus", () => {
-            dispatch(actionsCalendar.getData(setAlarm, setFoundMedicine));
+            // dispatch(actionsCalendar.getData(setAlarm, setFoundMedicine));
             getUser();
+            console.log("=========86");
+            console.log(alarms);
         });
         return () => {
             removeFocusEvent();
@@ -97,61 +101,44 @@ const Calendar = ({ navigation }) => {
         <ScrollView>
             {isSignin ? (
                 <Container width={width} height={height} isSignin={isSignin}>
-                    <CalendarTable alarm={alarm} />
+                    <CalendarTable />
                     <HistoryContainer>
                         <Date>8월 18일</Date>
+                        {alarms.map((alarm) => {
+                            return (
+                                <Alarm key={alarm.id}>
+                                    <TimeContainer>
+                                        <Time>
+                                            {alarm.time[0]}
+                                            {alarm.time[1]}
+                                            {alarm.time[2]}
+                                        </Time>
+                                        {completed ? (
+                                            <CompleteBadge
+                                                source={badge.complete}
+                                                resizeMode="contain"
+                                            />
+                                        ) : (
+                                            <NotCompleteBadge
+                                                source={badge.notComplete}
+                                                resizeMode="contain"
+                                            />
+                                        )}
+                                    </TimeContainer>
+                                    {alarm.alarmMedicines.map((medicine) => {
+                                        return (
+                                            <View key={medicine.id}>
+                                                <Name>
+                                                    {medicine.medicine.name}
+                                                </Name>
+                                                <Line />
+                                            </View>
+                                        );
+                                    })}
+                                </Alarm>
+                            );
+                        })}
                     </HistoryContainer>
-                    {foundMedicine
-                        ? Object.values(alarm).map((item) => {
-                              return (
-                                  <Alarm key={item.id}>
-                                      <TimeContainer>
-                                          <Time>오후 9시 30분</Time>
-                                          {completed ? (
-                                              <CompleteBadge
-                                                  source={badge.complete}
-                                                  resizeMode="contain"
-                                              />
-                                          ) : (
-                                              <NotCompleteBadge
-                                                  source={badge.notComplete}
-                                                  resizeMode="contain"
-                                              />
-                                          )}
-                                      </TimeContainer>
-
-                                      {Object.values(item.name).map(
-                                          (item, i) => {
-                                              return (
-                                                  <View key={i}>
-                                                      {completed ? (
-                                                          <Medicine
-                                                              style={{
-                                                                  color: theme.textBasic,
-                                                              }}
-                                                              key={item.id}
-                                                          >
-                                                              {item.name}
-                                                          </Medicine>
-                                                      ) : (
-                                                          <Medicine
-                                                              style={{
-                                                                  color: theme.textDisable,
-                                                              }}
-                                                              key={item.id}
-                                                          >
-                                                              {item.name}
-                                                          </Medicine>
-                                                      )}
-                                                      <Line />
-                                                  </View>
-                                              );
-                                          }
-                                      )}
-                                  </Alarm>
-                              );
-                          })
-                        : null}
                 </Container>
             ) : (
                 <Container

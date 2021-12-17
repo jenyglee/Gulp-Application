@@ -9,10 +9,10 @@ import Grade from "@/common/screens/AlarmList/component/Grade";
 import Alarm from "@/common/screens/AlarmList/component/Alarm";
 import TopLogo from "@/common/screens/AlarmList/component/TopLogo";
 import ButtonFilter from "@/common/screens/AlarmList/component/ButtonFilter";
+import FloatingButton from "@/common/screens/AlarmList/component/FloatingButton";
 import { GradeTable } from "@components/modal/index";
 import CompleteModal from "@screens/AlarmList/component/CompleteModal";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { FloatingAction } from "react-native-floating-action";
 import { inject, observer } from "mobx-react";
 import { useSelector, useDispatch } from "react-redux";
 import { stateAlarms } from "stores/alarms/alarmsSlice.js";
@@ -243,35 +243,9 @@ const AlarmList = ({ navigation, alarmsStore }) => {
                         count={count}
                     />
                 </Container>
-                {/* <Button
-                    title="모든 알람 삭제"
-                    onPress={async () => {
-                        const loadedData = await AsyncStorage.getItem("alarm");
-                        const parseData = JSON.parse(loadedData);
-                        // console.log(Object.values(parseData));
-                        const copy = Object.assign({}, parseData);
-                        delete copy["1638057106143"];
-                        await AsyncStorage.setItem(
-                            "alarm",
-                            JSON.stringify(copy)
-                        );
-                        console.log(parseData);
-                    }}
-                /> */}
             </Wrap>
-            <FloatingAction
-                color="#27C47D"
-                shadow={{
-                    shadowOpacity: 0,
-                    shadowOffset: {
-                        width: 5,
-                        height: 10,
-                    },
-                }}
-                buttonSize={50}
-                animated={false}
-                showBackground={false}
-                onPressMain={() => {
+            <FloatingButton
+                onPress={() => {
                     navigation.navigate("AddAlarm", { fromScreen });
                 }}
             />

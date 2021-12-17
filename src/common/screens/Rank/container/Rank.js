@@ -8,6 +8,13 @@ import RequireSignin from "@/common/components/RequireSignin";
 import { illust } from "@/images";
 import { tempData, categoryData } from "@/common/screens/Rank/data";
 
+import { apiGetCategory } from "@/medicine/api/medicineApi";
+import { useSelector, useDispatch } from "react-redux";
+import { stateMedicines } from "stores/medicines/medicinesSlice";
+import actionsMedicines from "stores/medicines/medicineActions";
+import { stateMembers } from "stores/members/membersSlice";
+import actionsMembers from "stores/members/memberActions";
+
 const Container = styled.View`
     width: 100%;
     justify-content: center;
@@ -33,18 +40,22 @@ const Block = styled.View`
 `;
 
 const Ranking = ({ navigation }) => {
+    const dispatch = useDispatch();
+    const theme = useContext(ThemeContext);
     const width = Dimensions.get("window").width;
     const height = Dimensions.get("window").height;
-    const theme = useContext(ThemeContext);
+    const { token } = useSelector(stateMembers);
+    const { categoryData } = useSelector(stateMedicines);
+    const [categoryList, setCategoryList] = useState(categoryData);
     const [medicineList, setMedicineList] = useState(tempData);
     const [isSignin, setIsSignin] = useState(false); // 랭킹 노출(로그인시)
     const [selectedItem, setSelectedItem] = useState(null);
-    const [categoryList, setCategoryList] = useState(categoryData);
 
     useEffect(() => {
         setSelectedItem(0);
         const removeFocusEvent = navigation.addListener("focus", () => {
             getUser();
+            dispatch(actionsMedicines.setCategoryData(token));
         });
         return () => {
             removeFocusEvent();
@@ -67,7 +78,7 @@ const Ranking = ({ navigation }) => {
                     <Category
                         selectedItem={selectedItem}
                         setSelectedItem={setSelectedItem}
-                        categoryList={categoryList}
+                        categoryData={categoryData}
                     />
                     <ListContainer width={width}>
                         <Block

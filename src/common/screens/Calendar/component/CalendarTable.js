@@ -7,11 +7,14 @@ import { AntDesign } from "@expo/vector-icons";
 import CalendarTitle from "@/common/screens/Calendar/component/CalendarTitle";
 import { icons30px } from "@/icons";
 
+import { useDispatch } from "react-redux";
+import { stateCalendar } from "@/stores/calendar/calendarSlice";
+
 const Arrow = () => {
     return <AntDesign name="caretleft" size={24} color="black" />;
 };
 
-const CalendarTable = ({ alarm }) => {
+const CalendarTable = () => {
     LocaleConfig.locales["fr"] = {
         monthNames: [
             "1월",
@@ -151,17 +154,17 @@ const CalendarTable = ({ alarm }) => {
                 markingType="dot"
                 onDayPress={(day) => {
                     // ✨ 배열에 클릭한 날짜 추가
-                    const selectedDay = `${day.year}-${
-                        day.month > 9 ? day.month : `0${day.month}`
-                    }-${day.day > 9 ? day.day : `0${day.day}`}`;
-                    setDate(selectedDay);
+                    // const selectedDay = `${day.year}-${
+                    //     day.month > 9 ? day.month : `0${day.month}`
+                    // }-${day.day > 9 ? day.day : `0${day.day}`}`;
+                    setDate(day.dateString);
                     console.log(day);
                 }}
                 markedDates={{
                     // ✨ 배열에 추가된 날짜에 효과주기
                     [date]: {
                         selected: true,
-                        marked: true,
+                        // marked: true,
                         selectedColor: theme.main,
                     },
                 }}

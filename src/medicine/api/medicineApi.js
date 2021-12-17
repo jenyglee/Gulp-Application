@@ -95,7 +95,7 @@ const getMedicines = async ({ categoryKey, brandKey, medicine }) => {
 };
 
 // ✨카테고리 조회
-const getCategory = async (token) => {
+const apiGetCategory = async (token) => {
     try {
         const response = axios({
             method: "GET",
@@ -108,4 +108,10 @@ const getCategory = async (token) => {
     }
 };
 
-export { apiAddMedicine, deleteMedicine, getBrands, getMedicines, getCategory };
+export {
+    apiAddMedicine,
+    deleteMedicine,
+    getBrands,
+    getMedicines,
+    apiGetCategory,
+};

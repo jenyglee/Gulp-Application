@@ -18,7 +18,8 @@ const CategoryText = styled.Text`
         selectedItem === item.id ? theme.main : theme.textDisable};
 `;
 
-const Category = ({ selectedItem, setSelectedItem, categoryList }) => {
+const Category = ({ selectedItem, setSelectedItem, categoryData }) => {
+    console.log(categoryData);
     const renderItem = ({ item }) => {
         if (item.id === 10) {
         }
@@ -37,7 +38,7 @@ const Category = ({ selectedItem, setSelectedItem, categoryList }) => {
             >
                 <CategoryWrap>
                     <CategoryText selectedItem={selectedItem} item={item}>
-                        {item.title}
+                        {item.name}
                     </CategoryText>
                 </CategoryWrap>
             </TouchableOpacity>
@@ -47,7 +48,7 @@ const Category = ({ selectedItem, setSelectedItem, categoryList }) => {
     return (
         <Container>
             <FlatList
-                data={categoryList}
+                data={categoryData}
                 renderItem={renderItem}
                 keyExtractor={(item, index) => index.toString()}
                 horizontal={true}

@@ -2,7 +2,7 @@ import { actionsMedicines } from "./medicinesSlice";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Alert } from "react-native";
 import {
-    getCategory,
+    apiGetCategory,
     getMedicines,
     apiAddMedicine,
 } from "@/medicine/api/medicineApi";
@@ -265,7 +265,7 @@ const actions = {
     // ✨ 카테고리 조회
     setCategoryData: (token) => async (dispatch) => {
         try {
-            const response = await getCategory(token);
+            const response = await apiGetCategory(token);
             dispatch(actionsMedicines.setCategoryData(response.data));
         } catch (error) {
             console.log(JSON.stringify(error));
