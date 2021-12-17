@@ -133,7 +133,11 @@ const AlarmList = ({ navigation, alarmsStore }) => {
 
     // ✨ Today <-> All 필터링 됐을 때
     useEffect(() => {
-        dispatch(actionsAlarms.getAllAlarms());
+        if (filtered) {
+            dispatch(actionsAlarms.getAlarms(day));
+        } else {
+            dispatch(actionsAlarms.getAllAlarms());
+        }
         // 👀❓ 무조건 alarms가 빈 배열로 들어감
         // dispatch(actionsAlarms.confirmList({alarms, setIsVisibleAlarm}));
     }, [filtered]);

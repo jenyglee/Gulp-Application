@@ -12,7 +12,17 @@ import actionsAlarms from "stores/alarms/alarmsActions.js";
 const actions = {
     // ✨ 약 저장 'api 적용'
     addAndSaveMedicine:
-        (category, brand, brandKey, medicine, navigation, fromScreen, token) =>
+        (
+            category,
+            brand,
+            brandKey,
+            categoryKey,
+            medicine,
+            medicineList,
+            navigation,
+            fromScreen,
+            token
+        ) =>
         async (dispatch) => {
             try {
                 // ① 값이 모두 있는지 확인
@@ -23,43 +33,35 @@ const actions = {
                 )(dispatch);
 
                 if (confirm) {
-                    const loadedData = await AsyncStorage.getItem("medicine");
-                    const medicines = JSON.parse(loadedData);
                     // ② 이미 등록된 약인지 확인
                     const isSameMedicinesArr =
                         await actions.confirmSameMedicine(
                             brand,
                             medicine,
-                            medicines
+                            medicineList
                         )(dispatch);
                     if (isSameMedicinesArr.includes(false)) {
                         Alert.alert("이 약은 이미 등록되어 있습니다.");
                         return;
                     } else {
-                        // 🪲 추가는 되는데 MySQL에 보면 brandId 랑 categoryId가 빈칸으로 나옴 ㅠ
                         const response = await apiAddMedicine(
                             {
                                 name: medicine,
                                 brandId: brandKey,
-                                categoryId: category.id,
+                                categoryId: categoryKey,
                             },
                             token
                         );
-                        // console.log(response)
-
                         if (response.status === 200) {
                             // ② 저장 진행
-                            const newMedicine = {
-                                [response.data]: {
-                                    id: response.data,
+                            actions.setMedicineList([
+                                ...medicineList,
+                                {
                                     name: medicine,
                                     brandName: brand,
+                                    id: response.data,
                                 },
-                            };
-                            await AsyncStorage.setItem(
-                                "medicine",
-                                JSON.stringify({ ...medicines, ...newMedicine })
-                            );
+                            ])(dispatch);
                             navigation.navigate("AddAlarm", { fromScreen });
                         }
                     }
@@ -208,15 +210,6 @@ const actions = {
         delete copy[id];
         dispatch(actionsMedicines.setMedicineList(copy));
         return copy;
-    },
-
-    // ✨ 약을 삭제하고 나면 "medicine"로컬에 다시 저장(medicineStore)
-    storeData: (item) => async (dispatch) => {
-        try {
-            await AsyncStorage.setItem("medicine", JSON.stringify(item));
-        } catch (error) {
-            throw error;
-        }
     },
 
     // ✨ 카테고리 선택

@@ -4,12 +4,32 @@ import { Alert } from "react-native";
 const url = "https://gulp.jenyglee.com/";
 
 // ✨ 알람생성
-const addAlarm = async (alarm, token) => {
+const apiAddAlarm = async (alarm, token) => {
     try {
         const response = await axios({
             method: "POST",
             url: url + "alarm",
             data: alarm,
+            headers: { authorization: token },
+        });
+        return response;
+    } catch (error) {
+        console.log(error);
+    }
+};
+
+// ✨ 알람변경
+const apiEditAlarm = async (alarm, token) => {
+    try {
+        const response = await axios({
+            method: "PUT",
+            url: url + "alarm",
+            data: {
+                alarmId: 213,
+                time: "15:30:00",
+                day: "45",
+                medicines: [9, 10],
+            },
             headers: { authorization: token },
         });
         return response;
@@ -63,4 +83,10 @@ const apiGetOneAlarm = async (token, alarmId) => {
     }
 };
 
-export { addAlarm, apiGetAlarm, apiGetAllAlarm, apiGetOneAlarm };
+export {
+    apiAddAlarm,
+    apiEditAlarm,
+    apiGetAlarm,
+    apiGetAllAlarm,
+    apiGetOneAlarm,
+};

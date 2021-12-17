@@ -2,7 +2,8 @@ import { actionsAlarms } from "./alarmsSlice.js";
 import { actionsMedicines } from "../medicines/medicinesSlice.js";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import {
-    addAlarm,
+    apiAddAlarm,
+    apiEditAlarm,
     apiGetAlarm,
     apiGetAllAlarm,
     apiGetOneAlarm,
@@ -125,7 +126,7 @@ const actions = {
             const response = await apiGetAllAlarm(token);
             // console.log("getAllAlarms");
             // console.log(response);
-            // dispatch(actionsAlarms.setAlarms(response.data));
+            dispatch(actionsAlarms.setAlarms(response.data));
         } catch (error) {
             console.log(JSON.stringify(error));
         }
@@ -347,7 +348,7 @@ const actions = {
     },
 
     //  ✨ 알람 저장(AddAlarm)
-    saveAlarm:
+    addAlarm:
         (
             medicineList,
             time,
@@ -378,14 +379,12 @@ const actions = {
                 Object.values(medicineList).map((medicine) => {
                     medicinesId.push(medicine.id);
                 });
-
-                // console.log(time)
-                // console.log(weekCheckList)
-                // console.log(medicinesId)
-
                 // ③ api 저장 진행
                 const token = await AsyncStorage.getItem("token");
-                const response = await addAlarm(
+                // console.log(typeof time, time);
+                // console.log(typeof weekCheckList, weekCheckList);
+                // console.log(medicinesId);
+                const response = await apiAddAlarm(
                     {
                         time: time,
                         day: weekCheckList,
@@ -403,6 +402,12 @@ const actions = {
                 Alert.alert("설정이 전부 입력되었는지 확인해주세요.");
             }
         },
+
+    // ✨알람 변경
+    editAlarm: (payload) => async (dispatch) => {
+        const response = await apiEditAlarm();
+        console.log(response);
+    },
 
     // ✨요일 전채선택(common)
     allWeekCheck:

@@ -38,8 +38,14 @@ const StyledTitle = styled.Text`
 const AddMedicine = ({ navigation, route }) => {
     const dispatch = useDispatch();
     const width = Dimensions.get("window").width;
-    const { categoryData, category, brand, brandKey } =
-        useSelector(stateMedicines);
+    const {
+        categoryData,
+        category,
+        brand,
+        brandKey,
+        categoryKey,
+        medicineList,
+    } = useSelector(stateMedicines);
     const { token } = useSelector(stateMembers);
     const [filtered, setFiltered] = useState([]);
     const [medicine, setMedicine] = useState("");
@@ -186,11 +192,13 @@ const AddMedicine = ({ navigation, route }) => {
                     title="등록"
                     onPress={() => {
                         dispatch(
-                            actionsMedicines.saveMedicine(
+                            actionsMedicines.addAndSaveMedicine(
                                 category,
                                 brand,
                                 brandKey,
+                                categoryKey,
                                 medicine,
+                                medicineList,
                                 navigation,
                                 fromScreen,
                                 token

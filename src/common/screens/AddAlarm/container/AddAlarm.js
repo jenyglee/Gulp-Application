@@ -49,13 +49,7 @@ const StyledTitle = styled.Text`
     margin-bottom: 10px;
 `;
 
-const AddMedicine = ({
-    navigation,
-    medicinesStore,
-    commonStore,
-    alarmsStore,
-    route,
-}) => {
+const AddMedicine = ({ navigation, route }) => {
     const dispatch = useDispatch();
     const width = Dimensions.get("window").width;
     const height = Dimensions.get("window").height;
@@ -63,13 +57,6 @@ const AddMedicine = ({
 
     const { medicineList } = useSelector(stateMedicines);
     const time = useSelector(stateAlarms).time;
-    // console.log(time);
-    // console.log(
-    //     useSelector(
-    //         (state) => ({ time: state.time }),
-    //         (left, right) => left.time === right.time
-    //     )
-    // );
 
     const [week, setWeek] = useState([
         { id: 1, day: "월", checked: false },
@@ -111,16 +98,7 @@ const AddMedicine = ({
         }
         // 알람 추가 시
         if (route.params.fromScreen === "AlarmList") {
-            // 시간도 초기화
             dispatch(actionsMedicines.deleteAllValue());
-        } else if (
-            // 복용제 추가 시
-            route.params.fromScreen === "SearchMedicine" ||
-            route.params.fromScreen === "AddMedicine"
-        ) {
-            // dispatch(actionsMedicines.getMedicine());
-            console.log(medicineList);
-            // console.log(medicineList);
         }
     }, [route.params]);
 
@@ -173,20 +151,37 @@ const AddMedicine = ({
             </ScrollView>
             <Button
                 title="저장하기"
-                onPress={async () => {
-                    dispatch(
-                        actionsAlarms.saveAlarm(
-                            medicineList,
-                            time,
-                            week,
-                            weekCheckList,
-                            setWeekCheckList,
-                            medicinesId,
-                            setMedicinesId,
-                            navigation
-                        )
-                    );
-                    // console.log(medicinesId);
+                onPress={() => {
+                    if (route.params.alarmId) {
+                        // ✨ 알람 변경 하기
+                        dispatch(
+                            actionsAlarms
+                                .editAlarm
+                                // medicineList,
+                                // time,
+                                // week,
+                                // weekCheckList,
+                                // setWeekCheckList,
+                                // medicinesId,
+                                // setMedicinesId,
+                                // navigation
+                                ()
+                        );
+                    } else if (route.params.fromScreen) {
+                        // ✨ 알람 추가하기
+                        dispatch(
+                            actionsAlarms.addAlarm(
+                                medicineList,
+                                time,
+                                week,
+                                weekCheckList,
+                                setWeekCheckList,
+                                medicinesId,
+                                setMedicinesId,
+                                navigation
+                            )
+                        );
+                    }
                 }}
             />
         </>
