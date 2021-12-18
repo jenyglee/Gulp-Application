@@ -46,7 +46,6 @@ const Ranking = ({ navigation }) => {
     const height = Dimensions.get("window").height;
     const { token } = useSelector(stateMembers);
     const { categoryData } = useSelector(stateMedicines);
-    const [categoryList, setCategoryList] = useState(categoryData);
     const [medicineList, setMedicineList] = useState(tempData);
     const [isSignin, setIsSignin] = useState(false); // 랭킹 노출(로그인시)
     const [selectedItem, setSelectedItem] = useState(null);

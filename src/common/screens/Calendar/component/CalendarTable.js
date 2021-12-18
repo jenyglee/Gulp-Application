@@ -8,13 +8,14 @@ import CalendarTitle from "@/common/screens/Calendar/component/CalendarTitle";
 import { icons30px } from "@/icons";
 
 import { useDispatch } from "react-redux";
-import { stateCalendar } from "@/stores/calendar/calendarSlice";
+import actionsCalendar from "stores/calendar/calendarActions";
 
 const Arrow = () => {
     return <AntDesign name="caretleft" size={24} color="black" />;
 };
 
 const CalendarTable = () => {
+    const dispatch = useDispatch();
     LocaleConfig.locales["fr"] = {
         monthNames: [
             "1월",
@@ -55,8 +56,6 @@ const CalendarTable = () => {
     const [date, setDate] = useState("");
     const theme = useContext(ThemeContext);
     const [month, setMonth] = useState("");
-
-    useEffect(() => {}, []);
 
     return (
         <View>
@@ -136,19 +135,6 @@ const CalendarTable = () => {
                 disableArrowRight={false}
                 // Disable all touch events for disabled days. can be override with disableTouchEvent in markedDates
                 disableAllTouchEventsForDisabledDays={true}
-                // Replace default month and year title with custom one. the function receive a date as parameter
-                // renderHeader={(date) => {
-                //     return (
-                //         <Text
-                //             style={{
-                //                 fontSize: 30,
-                //                 padding: 30,
-                //             }}
-                //         >
-                //             {date.getFullYear()}년 {date.getMonth()}월
-                //         </Text>
-                //     );
-                // }}
                 // Enable the option to swipe between months. Default = false
                 enableSwipeMonths={true}
                 markingType="dot"
@@ -158,7 +144,7 @@ const CalendarTable = () => {
                     //     day.month > 9 ? day.month : `0${day.month}`
                     // }-${day.day > 9 ? day.day : `0${day.day}`}`;
                     setDate(day.dateString);
-                    console.log(day);
+                    dispatch(actionsCalendar.setSelectedDate(day.dateString));
                 }}
                 markedDates={{
                     // ✨ 배열에 추가된 날짜에 효과주기

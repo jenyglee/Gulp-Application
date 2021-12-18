@@ -6,10 +6,8 @@ import CalendarTable from "@/common/screens/Calendar/component/CalendarTable";
 import RequireSignin from "@/common/components/RequireSignin";
 import { badge } from "@/icons";
 import { illust } from "@/images";
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
 import { stateCalendar } from "stores/calendar/calendarSlice";
-import actionsCalendar from "stores/calendar/calendarActions";
-import { stateAlarms } from "@/stores/alarms/alarmsSlice";
 
 const Container = styled.View`
     width: ${({ width }) => width - 48}px;
@@ -20,13 +18,14 @@ const Container = styled.View`
 
 const HistoryContainer = styled.View`
     background-color: ${({ theme }) => theme.white};
-    padding: 20px 20px 0 20px;
+    padding: ${({ alarms }) => (alarms ? `20px 20px 0 20px` : 0)};
     border-radius: 12px;
 `;
 
 const Date = styled.Text`
     font-size: 24px;
     font-weight: bold;
+    margin-bottom: 10px;
 `;
 
 const Alarm = styled.View`
@@ -69,22 +68,27 @@ const Line = styled.View`
 `;
 
 const Calendar = ({ navigation }) => {
-    const dispatch = useDispatch();
-    const { alarms } = useSelector(stateAlarms);
+    const { historyData, selectedDate } = useSelector(stateCalendar);
+    // const { alarms } = useSelector(stateAlarms);
     const width = Dimensions.get("window").width;
     const height = Dimensions.get("window").height;
-    const theme = useContext(ThemeContext);
-    const [alarm, setAlarm] = useState({});
-    const [foundMedicine, setFoundMedicine] = useState(true); // 약 리스트 유무
-    const [completed, setCompleted] = useState(true); // 복용 완료 여부
     const [isSignin, setIsSignin] = useState(true); // 캘린더 노출(로그인시)
+    const [selectedData, setSelectedData] = useState({});
+    const [changedDate, setChangedDate] = useState({});
+
+    useEffect(() => {
+        historyData.map((info) => {
+            if (info.date === selectedDate) {
+                setSelectedData(info);
+                changeDate(info.date);
+            }
+            return;
+        });
+    }, [selectedDate]);
 
     useEffect(() => {
         const removeFocusEvent = navigation.addListener("focus", () => {
-            // dispatch(actionsCalendar.getData(setAlarm, setFoundMedicine));
             getUser();
-            console.log("=========86");
-            console.log(alarms);
         });
         return () => {
             removeFocusEvent();
@@ -97,47 +101,58 @@ const Calendar = ({ navigation }) => {
         setIsSignin(token);
     };
 
+    // ✨ 날짜 변환하기
+    const changeDate = (date) => {
+        const arrDate = date.split("-");
+        setChangedDate({
+            month: arrDate[1].replace(/(^0+)/, ""),
+            day: arrDate[2].replace(/(^0+)/, ""),
+        });
+    };
+
     return (
         <ScrollView>
             {isSignin ? (
                 <Container width={width} height={height} isSignin={isSignin}>
                     <CalendarTable />
-                    <HistoryContainer>
-                        <Date>8월 18일</Date>
-                        {alarms.map((alarm) => {
-                            return (
-                                <Alarm key={alarm.id}>
-                                    <TimeContainer>
-                                        <Time>
-                                            {alarm.time[0]}
-                                            {alarm.time[1]}
-                                            {alarm.time[2]}
-                                        </Time>
-                                        {completed ? (
-                                            <CompleteBadge
-                                                source={badge.complete}
-                                                resizeMode="contain"
-                                            />
-                                        ) : (
-                                            <NotCompleteBadge
-                                                source={badge.notComplete}
-                                                resizeMode="contain"
-                                            />
-                                        )}
-                                    </TimeContainer>
-                                    {alarm.alarmMedicines.map((medicine) => {
-                                        return (
-                                            <View key={medicine.id}>
-                                                <Name>
-                                                    {medicine.medicine.name}
-                                                </Name>
-                                                <Line />
-                                            </View>
-                                        );
-                                    })}
-                                </Alarm>
-                            );
-                        })}
+                    <HistoryContainer alarms={selectedData.alarms}>
+                        {changedDate.month ? (
+                            <Date>
+                                {changedDate.month}월 {changedDate.day}일
+                            </Date>
+                        ) : null}
+                        {selectedData.alarms
+                            ? selectedData.alarms.map((alarm) => {
+                                  return (
+                                      <Alarm key={alarm.id}>
+                                          <TimeContainer>
+                                              <Time>{alarm.time}</Time>
+                                              {alarm.completed ? (
+                                                  <CompleteBadge
+                                                      source={badge.complete}
+                                                      resizeMode="contain"
+                                                  />
+                                              ) : (
+                                                  <NotCompleteBadge
+                                                      source={badge.notComplete}
+                                                      resizeMode="contain"
+                                                  />
+                                              )}
+                                          </TimeContainer>
+                                          {alarm.medicines.map((medicine) => {
+                                              return (
+                                                  <View key={medicine.id}>
+                                                      <Name>
+                                                          {medicine.name}
+                                                      </Name>
+                                                      <Line />
+                                                  </View>
+                                              );
+                                          })}
+                                      </Alarm>
+                                  );
+                              })
+                            : null}
                     </HistoryContainer>
                 </Container>
             ) : (
