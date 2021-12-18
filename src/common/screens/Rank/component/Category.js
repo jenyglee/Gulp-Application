@@ -8,7 +8,11 @@ const Container = styled.View`
 `;
 
 const CategoryWrap = styled.View`
+    height: 26px;
     margin: 0 9px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 `;
 
 const CategoryText = styled.Text`
@@ -19,17 +23,14 @@ const CategoryText = styled.Text`
 `;
 
 const Category = ({ selectedItem, setSelectedItem, categoryData }) => {
-    console.log(categoryData);
     const renderItem = ({ item }) => {
-        if (item.id === 10) {
-        }
         return (
             <TouchableOpacity
                 onPress={() => {
                     setSelectedItem(item.id);
                 }}
                 style={
-                    item.id === 10
+                    item.id === 6
                         ? {
                               paddingRight: 40,
                           }

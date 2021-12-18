@@ -51,6 +51,7 @@ const Time = styled.Text`
 const Ampm = styled.Text`
     font-size: 16px;
     font-weight: bold;
+    line-height: 25px;
     color: ${({ theme, completed, isNotTodayAlarm }) => {
         if (isNotTodayAlarm) {
             if (completed) {
@@ -82,7 +83,6 @@ const Alarm = ({ alarmInfo, menuIcon, toggleTask, showAlarmMenu }) => {
     const [alarmVisible, setAlarmVisible] = useState(true); // 알람 노출 / 미노출 (요일 맞춰서)
     const [completed, setCompleted] = useState(false); // 복용 / 미복용
     const [isNotTodayAlarm, setIsNotTodayAlarm] = useState(true); //(day 정리될때까지 임시용)
-    // const [isNotTodayAlarm, setIsNotTodayAlarm] = useState(false);
     const [hour, setHour] = useState("");
     const [minute, setMinute] = useState("");
     const [ampm, setAmpm] = useState("");

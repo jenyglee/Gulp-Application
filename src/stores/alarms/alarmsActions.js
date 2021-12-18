@@ -30,7 +30,7 @@ const actions = {
         },
 
     // ✨ 알람토글(alarmList)
-    toggleTask:
+    toggleAlarm:
         ({
             id,
             filtered,
@@ -44,7 +44,7 @@ const actions = {
         }) =>
         async (dispatch) => {
             try {
-                const alarms = await actions.toggleAlarm(id)(dispatch);
+                const alarms = await actions.changeCompleted(id)(dispatch);
                 await actions.storeData(alarms)(dispatch);
                 const filteredAlarms = await actions.getAlarms({
                     filtered,
@@ -255,7 +255,7 @@ const actions = {
         },
 
     // ✨완료용 컴포넌트로 변경(alarmList)
-    toggleAlarm: (id) => async (dispatch) => {
+    changeCompleted: (id) => async (dispatch) => {
         try {
             const loadedData = await AsyncStorage.getItem("alarm");
             const parseData = JSON.parse(loadedData);

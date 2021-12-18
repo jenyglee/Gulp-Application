@@ -193,7 +193,7 @@ const AlarmList = ({ navigation, alarmsStore }) => {
                                     menuIcon={icons.dot}
                                     toggleTask={(id) => {
                                         dispatch(
-                                            actionsAlarms.toggleTask({
+                                            actionsAlarms.toggleAlarm({
                                                 id,
                                                 filtered,
                                                 day,

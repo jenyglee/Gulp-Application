@@ -48,10 +48,10 @@ const Ranking = ({ navigation }) => {
     const { categoryData } = useSelector(stateMedicines);
     const [medicineList, setMedicineList] = useState(tempData);
     const [isSignin, setIsSignin] = useState(false); // 랭킹 노출(로그인시)
-    const [selectedItem, setSelectedItem] = useState(null);
+    const [selectedItem, setSelectedItem] = useState(12);
 
     useEffect(() => {
-        setSelectedItem(0);
+        setSelectedItem(12);
         const removeFocusEvent = navigation.addListener("focus", () => {
             getUser();
             dispatch(actionsMedicines.setCategoryData(token));

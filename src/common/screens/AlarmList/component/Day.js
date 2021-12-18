@@ -23,7 +23,7 @@ const Day = ({ dayArr, isNotTodayAlarm }) => {
             {dayArr.map((item, i) => {
                 return (
                     <StyledText isNotTodayAlarm={isNotTodayAlarm} key={i}>
-                        {item}
+                        {item + " "}
                     </StyledText>
                 );
             })}
