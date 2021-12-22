@@ -47,7 +47,7 @@ const AddMedicine = ({ navigation, route }) => {
     const theme = useContext(ThemeContext);
 
     const { medicineList } = useSelector(stateMedicines);
-    const time = useSelector(stateAlarms).time;
+    const { time, timeOnlyNumber } = useSelector(stateAlarms);
 
     const [week, setWeek] = useState([
         { id: 1, day: "월", checked: false },
@@ -92,6 +92,48 @@ const AddMedicine = ({ navigation, route }) => {
             dispatch(actionsMedicines.deleteAllValue());
         }
     }, [route.params]);
+
+    const handleSaveButtonPress = () => {
+        if (route.params.alarmId) {
+            // ✨ 알람 변경 하기
+
+            // ① 체크된 요일 id 추출(ex. "234")
+            const checkedDay = week.filter((day) => day.checked === true);
+            const checkedDayId = checkedDay.map((checkedDay) => {
+                return checkedDay.id;
+            });
+            const strCheckedDayId = checkedDayId.join().replace(/\,/g, "");
+
+            // ② 등록된 영양제 id 추출(ex. [1, 4])
+            const arrMedicineId = medicineList.map((medicine) => {
+                return medicine.id;
+            });
+            // console.log(typeof arrMedicineId);
+
+            dispatch(
+                actionsAlarms.editAlarm(
+                    route.params.alarmId,
+                    timeOnlyNumber,
+                    strCheckedDayId,
+                    arrMedicineId
+                )
+            );
+        } else if (route.params.fromScreen) {
+            // ✨ 알람 추가하기
+            dispatch(
+                actionsAlarms.addAlarm(
+                    medicineList,
+                    time,
+                    week,
+                    weekCheckList,
+                    setWeekCheckList,
+                    medicinesId,
+                    setMedicinesId,
+                    navigation
+                )
+            );
+        }
+    };
 
     return (
         <>
@@ -140,44 +182,7 @@ const AddMedicine = ({ navigation, route }) => {
                     </StyledForm>
                 </Container>
             </ScrollView>
-            <Button
-                title="저장하기"
-                onPress={() => {
-                    if (route.params.alarmId) {
-                        // ✨ 알람 변경 하기
-                        dispatch(
-                            actionsAlarms.editAlarm(
-                                route.params.alarmId,
-                                time,
-                                week,
-                                medicineList
-                            )
-                            // medicineList,
-                            // time,
-                            // week,
-                            // weekCheckList,
-                            // setWeekCheckList,
-                            // medicinesId,
-                            // setMedicinesId,
-                            // navigation
-                        );
-                    } else if (route.params.fromScreen) {
-                        // ✨ 알람 추가하기
-                        dispatch(
-                            actionsAlarms.addAlarm(
-                                medicineList,
-                                time,
-                                week,
-                                weekCheckList,
-                                setWeekCheckList,
-                                medicinesId,
-                                setMedicinesId,
-                                navigation
-                            )
-                        );
-                    }
-                }}
-            />
+            <Button title="저장하기" onPress={handleSaveButtonPress} />
         </>
     );
 };

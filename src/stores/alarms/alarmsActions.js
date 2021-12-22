@@ -381,9 +381,6 @@ const actions = {
                 });
                 // ③ api 저장 진행
                 const token = await AsyncStorage.getItem("token");
-                // console.log(typeof time, time);
-                // console.log(typeof weekCheckList, weekCheckList);
-                // console.log(medicinesId);
                 const response = await apiAddAlarm(
                     {
                         time: time,
@@ -404,21 +401,24 @@ const actions = {
         },
 
     // ✨알람 변경
-    editAlarm: (alarmId, time, week, medicineList) => async (dispatch) => {
-        console.log("alarmId : " + alarmId);
-        console.log("time : " + time);
-        console.log("week : ");
-        console.log(week);
-        console.log("medicineList : ");
-        console.log(medicineList);
-        // const response = await apiEditAlarm({
-        //     id: 213,
-        //     time: "15:30:00",
-        //     day: "45",
-        //     medicineIdList: [9, 10],
-        // });
-        // console.log(response);
-    },
+    editAlarm:
+        (alarmId, time, checkedDay, medicineList) => async (dispatch) => {
+            // console.log("alarmId : " + typeof alarmId);
+            // console.log("time : " + typeof time); // 오후 8:30분을 20:30:00으로 바꿔야 함.
+            // console.log("week : " + checkedDay); // 객체 중 checked = true 인 것만 골라서 id를 추출해야 함.
+            // console.log("medicineList : " + medicineList); // 객체들의 id값 만 뽑아야 함.
+            // const token = await AsyncStorage.getItem("token");
+            const response = await apiEditAlarm(
+                {
+                    id: alarmId,
+                    time: time,
+                    day: checkedDay,
+                    medicineIdList: medicineList,
+                }
+                // token
+            );
+            console.log(response);
+        },
 
     // ✨요일 전채선택(common)
     allWeekCheck:
@@ -455,6 +455,9 @@ const actions = {
 
     setTime: (time) => (dispatch) => {
         dispatch(actionsAlarms.setTime(time));
+    },
+    setTimeOnlyNumber: (time) => (dispatch) => {
+        dispatch(actionsAlarms.setTimeOnlyNumber(time));
     },
 };
 

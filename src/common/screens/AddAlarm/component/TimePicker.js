@@ -2,6 +2,9 @@ import React, { useState, useContext, useEffect } from "react";
 import { Button, TouchableOpacity } from "react-native";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import styled, { ThemeContext } from "styled-components/native";
+import { useDispatch } from "react-redux";
+import { stateAlarms } from "stores/alarms/alarmsSlice.js";
+import actionsAlarms from "stores/alarms/alarmsActions.js";
 
 const Container = styled.View`
     background-color: white;
@@ -75,8 +78,8 @@ Number.prototype.zf = function (len) {
 };
 
 function TimePicker({ onPress, getTime }) {
-    // console.log(getTime, "==============78");
     const theme = useContext(ThemeContext);
+    const dispatch = useDispatch();
     const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
     const placeholder = "알람시간을 설정해주세요.";
     const [text, setText] = useState(getTime);
@@ -94,7 +97,6 @@ function TimePicker({ onPress, getTime }) {
     };
 
     const handleConfirm = (date) => {
-        console.log("data : ", date.format("hh").replace(/(^0+)/, ""));
         hideDatePicker();
         setText(
             date.format("a/p ") +
@@ -106,7 +108,8 @@ function TimePicker({ onPress, getTime }) {
                 date.format("hh:").replace(/(^0+)/, "") +
                 date.format("mm")
         );
-        // onPress(date.format("HH:mm:dd"));
+        // timeOnlyNumber에 00:00:00 형태를 저장
+        dispatch(actionsAlarms.setTimeOnlyNumber(date.format("HH:mm:dd")));
     };
 
     return (
