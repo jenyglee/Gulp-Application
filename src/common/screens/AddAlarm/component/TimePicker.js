@@ -108,8 +108,8 @@ function TimePicker({ onPress, getTime }) {
                 date.format("hh:").replace(/(^0+)/, "") +
                 date.format("mm")
         );
-        // timeOnlyNumber에 00:00:00 형태를 저장
-        dispatch(actionsAlarms.setTimeOnlyNumber(date.format("HH:mm:dd")));
+        // timeWithColon에 00:00:00 형태를 저장
+        dispatch(actionsAlarms.setTimeWithColon(date.format("HH:mm:dd")));
     };
 
     return (

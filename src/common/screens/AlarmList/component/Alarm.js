@@ -4,7 +4,6 @@ import styled, { ThemeContext } from "styled-components";
 import IconButton from "@/common/screens/AlarmList/component/IconButton";
 import { icons14px } from "@/icons";
 import Day from "@screens/AlarmList/component/Day";
-import { apiCount } from "@/member/api/memberApi";
 
 const koreanDaysArr = ["월", "화", "수", "목", "금", "토", "일"];
 
@@ -79,10 +78,15 @@ const MedicineContainer = styled.View`
     flex-direction: column;
 `;
 
-const Alarm = ({ alarmInfo, menuIcon, toggleTask, showAlarmMenu }) => {
+const Alarm = ({
+    alarmInfo,
+    completed,
+    menuIcon,
+    toggleTask,
+    showAlarmMenu,
+}) => {
     const theme = useContext(ThemeContext);
     const [alarmVisible, setAlarmVisible] = useState(true); // 알람 노출 / 미노출 (요일 맞춰서)
-    const [completed, setCompleted] = useState(false); // 복용 / 미복용
     const [isNotTodayAlarm, setIsNotTodayAlarm] = useState(true); //(day 정리될때까지 임시용)
     const [hour, setHour] = useState("");
     const [minute, setMinute] = useState("");
@@ -112,11 +116,11 @@ const Alarm = ({ alarmInfo, menuIcon, toggleTask, showAlarmMenu }) => {
     };
 
     const _onPress = async () => {
-        // toggleTask(alarmInfo.id);
+        toggleTask(alarmInfo.id);
 
         // 🍎(진행중)카운트 기능
         // const count = await apiCount()
-        setCompleted(!completed);
+        // setCompleted(!completed);
     };
 
     return (
@@ -132,13 +136,21 @@ const Alarm = ({ alarmInfo, menuIcon, toggleTask, showAlarmMenu }) => {
                                 />
                                 <TimeContainer>
                                     <Time
-                                        completed={completed}
+                                        completed={
+                                            completed
+                                                ? completed.completed
+                                                : null
+                                        }
                                         isNotTodayAlarm={isNotTodayAlarm}
                                     >
                                         {hour}:{minute}
                                     </Time>
                                     <Ampm
-                                        completed={completed}
+                                        completed={
+                                            completed
+                                                ? completed.completed
+                                                : null
+                                        }
                                         isNotTodayAlarm={isNotTodayAlarm}
                                     >
                                         {ampm}
@@ -151,12 +163,16 @@ const Alarm = ({ alarmInfo, menuIcon, toggleTask, showAlarmMenu }) => {
                                     <ButtonSmall
                                         title="복용"
                                         icon={
-                                            completed
+                                            completed && completed.completed
                                                 ? icons14px.checkWhite
                                                 : icons14px.uncheck
                                         }
                                         onPress={_onPress}
-                                        completed={completed}
+                                        completed={
+                                            completed
+                                                ? completed.completed
+                                                : null
+                                        }
                                     />
                                 ) : null}
                                 {/* ✨ 메뉴버튼 */}
@@ -171,7 +187,11 @@ const Alarm = ({ alarmInfo, menuIcon, toggleTask, showAlarmMenu }) => {
                             {alarmInfo.alarmMedicines.map((item) => {
                                 return (
                                     <AlarmMedicine
-                                        completed={completed}
+                                        completed={
+                                            completed
+                                                ? completed.completed
+                                                : null
+                                        }
                                         isNotTodayAlarm={isNotTodayAlarm}
                                         name={item.medicine.name}
                                         key={item.id}

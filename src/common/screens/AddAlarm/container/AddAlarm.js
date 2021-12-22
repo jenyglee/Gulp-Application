@@ -47,7 +47,7 @@ const AddMedicine = ({ navigation, route }) => {
     const theme = useContext(ThemeContext);
 
     const { medicineList } = useSelector(stateMedicines);
-    const { time, timeOnlyNumber } = useSelector(stateAlarms);
+    const { time, timeWithColon } = useSelector(stateAlarms);
 
     const [week, setWeek] = useState([
         { id: 1, day: "월", checked: false },
@@ -109,7 +109,7 @@ const AddMedicine = ({ navigation, route }) => {
             dispatch(
                 actionsAlarms.editAlarm(
                     route.params.alarmId,
-                    timeOnlyNumber,
+                    timeWithColon,
                     strCheckedDayId,
                     arrMedicineId,
                     navigation
@@ -120,7 +120,7 @@ const AddMedicine = ({ navigation, route }) => {
             dispatch(
                 actionsAlarms.addAlarm(
                     medicineList,
-                    time,
+                    timeWithColon,
                     week,
                     weekCheckList,
                     setWeekCheckList,

@@ -31,35 +31,16 @@ const actions = {
 
     // ✨ 알람토글(alarmList)
     toggleAlarm:
-        ({
-            id,
-            filtered,
-            day,
-            year,
-            month,
-            date,
-            count,
-            countTotal,
-            setIsVisibleCompleteModal,
-        }) =>
+        ({ index, completed, setCompleted, setIsVisibleCompleteModal }) =>
         async (dispatch) => {
             try {
-                const alarms = await actions.changeCompleted(id)(dispatch);
-                await actions.storeData(alarms)(dispatch);
-                const filteredAlarms = await actions.getAlarms({
-                    filtered,
-                    day,
-                })(dispatch);
-                // console.log(filteredAlarms, "toggleTask 24");
-                await actions.allCompleted({
-                    alarms: filteredAlarms,
-                    year,
-                    month,
-                    date,
-                    count,
-                    countTotal,
-                    setIsVisibleCompleteModal,
-                })(dispatch);
+                const copy = [...completed];
+                copy[index].completed = !copy[index].completed;
+                setCompleted(copy);
+
+                // 완료모달
+                const allCompleted = completed.every((item) => item.completed);
+                allCompleted ? setIsVisibleCompleteModal(true) : null;
             } catch (error) {
                 Alert.alert(JSON.stringify(error));
             }
@@ -106,13 +87,15 @@ const actions = {
     //     },
 
     // ✨ 알람 불러오기(alarmList) 'api 전용'
-    getAlarms: (day) => async (dispatch) => {
+    getAlarms: (day, completed) => async (dispatch) => {
         try {
             const token = await AsyncStorage.getItem("token");
             const changedDay = day ? day : 7; //일요일을 0 👉 7 변환
             const response = await apiGetAlarm(token, changedDay);
-            console.log(response.data);
             dispatch(actionsAlarms.setAlarms(response.data));
+
+            // 알람 수만큼 {completed:false} 생성하기
+            response.data.map((alarm) => completed.push({ completed: false }));
         } catch (error) {
             console.log(JSON.stringify(error));
         }
@@ -122,10 +105,7 @@ const actions = {
     getAllAlarms: (payload) => async (dispatch) => {
         try {
             const token = await AsyncStorage.getItem("token");
-            // const changedDay = day ? day : 7; //일요일을 0 👉 7 변환
             const response = await apiGetAllAlarm(token);
-            // console.log("getAllAlarms");
-            // console.log(response);
             dispatch(actionsAlarms.setAlarms(response.data));
         } catch (error) {
             console.log(JSON.stringify(error));
@@ -195,7 +175,7 @@ const actions = {
                     0,
                     2
                 )}:${formatArrToStr.slice(2, 4)}:${formatArrToStr.slice(4, 6)}`; // "08:30:10"
-                await actions.setTimeOnlyNumber(colonStrTime)(dispatch);
+                await actions.setTimeWithColon(colonStrTime)(dispatch);
 
                 // ③ 등록된 영양제 넣기
                 dispatch(
@@ -220,19 +200,6 @@ const actions = {
                 ? setIsVisibleAlarm(false)
                 : setIsVisibleAlarm(true);
         },
-
-    // ✨완료용 컴포넌트로 변경(alarmList)
-    changeCompleted: (id) => async (dispatch) => {
-        try {
-            const loadedData = await AsyncStorage.getItem("alarm");
-            const parseData = JSON.parse(loadedData);
-            const copy = Object.assign({}, parseData);
-            copy[id].completed = !copy[id].completed;
-            return copy;
-        } catch (error) {
-            console.log(JSON.stringify(error));
-        }
-    },
 
     // ✨ 로컬에 저장하기(alarmList)
     storeData: (alarms) => async (dispatch) => {
@@ -318,7 +285,7 @@ const actions = {
     addAlarm:
         (
             medicineList,
-            time,
+            timeWithColon,
             week,
             weekCheckList,
             setWeekCheckList,
@@ -333,7 +300,7 @@ const actions = {
             // ⓵ 빈칸검수
             const confirm = await actions.confirmValue(
                 medicineList,
-                time,
+                timeWithColon,
                 week
             )(dispatch);
             if (confirm) {
@@ -350,7 +317,7 @@ const actions = {
                 const token = await AsyncStorage.getItem("token");
                 const response = await apiAddAlarm(
                     {
-                        time: time,
+                        time: timeWithColon,
                         day: weekCheckList,
                         medicineIdList: medicinesId,
                     },
@@ -420,8 +387,11 @@ const actions = {
     setTime: (time) => (dispatch) => {
         dispatch(actionsAlarms.setTime(time));
     },
-    setTimeOnlyNumber: (time) => (dispatch) => {
-        dispatch(actionsAlarms.setTimeOnlyNumber(time));
+    setTimeWithColon: (time) => (dispatch) => {
+        dispatch(actionsAlarms.setTimeWithColon(time));
+    },
+    setCompleted: (time) => (dispatch) => {
+        dispatch(actionsAlarms.setCompleted(time));
     },
 };
 

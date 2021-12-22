@@ -60,6 +60,7 @@ const AlarmList = ({ navigation, alarmsStore }) => {
     const [isVisibleMenu, setIsVisibleMenu] = useState(false); // 알람메뉴 노출/숨김
     const [filtered, setFiltered] = useState(true); // 전체알람 < > 오늘알람
     const [isVisibleAlarm, setIsVisibleAlarm] = useState(true); // 알람 유무
+    const [completed, setCompleted] = useState([]);
     const [isVisibleCompleteModal, setIsVisibleCompleteModal] = useState(false); // 완료모달 노출/숨김
     const fromScreen = "AlarmList";
 
@@ -67,7 +68,7 @@ const AlarmList = ({ navigation, alarmsStore }) => {
     useEffect(() => {
         const removeFocusEvent = navigation.addListener("focus", () => {
             setFiltered(true);
-            dispatch(actionsAlarms.getAlarms(day));
+            dispatch(actionsAlarms.getAlarms(day, completed));
         });
         return () => {
             removeFocusEvent();
@@ -77,7 +78,7 @@ const AlarmList = ({ navigation, alarmsStore }) => {
     // ✨ Today <-> All 필터링 됐을 때
     useEffect(() => {
         if (filtered) {
-            dispatch(actionsAlarms.getAlarms(day));
+            dispatch(actionsAlarms.getAlarms(day, completed));
         } else {
             dispatch(actionsAlarms.getAllAlarms());
         }
@@ -111,7 +112,6 @@ const AlarmList = ({ navigation, alarmsStore }) => {
             <Wrap insets={insets}>
                 <Container width={width}>
                     <StatusBar backgroundColor={theme.background} />
-                    {/* <TopLogo /> */}
                     <Grade
                         countTotal={countTotal}
                         count={count}
@@ -126,28 +126,24 @@ const AlarmList = ({ navigation, alarmsStore }) => {
                     </TitleContainer>
 
                     {isVisibleAlarm ? (
-                        Object.values(alarms).map((item) => {
+                        Object.values(alarms).map((item, index) => {
                             return (
                                 <Alarm
                                     alarmInfo={item}
+                                    completed={completed[index]}
                                     menuIcon={icons.dot}
                                     toggleTask={(id) => {
                                         dispatch(
                                             actionsAlarms.toggleAlarm({
-                                                id,
-                                                filtered,
-                                                day,
-                                                year,
-                                                month,
-                                                date,
-                                                count,
-                                                countTotal,
+                                                alarms,
+                                                index,
+                                                completed,
+                                                setCompleted,
                                                 setIsVisibleCompleteModal,
                                             })
                                         );
                                     }}
                                     showAlarmMenu={showAlarmMenu}
-                                    // day={day ? day : 7}
                                     key={item.id}
                                 />
                             );

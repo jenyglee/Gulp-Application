@@ -5,13 +5,12 @@ export const alarmsSlice = createSlice({
     initialState: {
         alarms: [],
         time: "",
-        timeOnlyNumber: "",
+        timeWithColon: "",
         // today.toLocaleDateString(); 참고해서 변수 줄이기
         year: new Date().getFullYear(),
         month: new Date().getMonth(),
         date: new Date().getDate(),
         day: new Date().getDay(),
-
         count: 0,
         countTotal: 0,
     },
@@ -22,8 +21,8 @@ export const alarmsSlice = createSlice({
         setTime(state, action) {
             state.time = action.payload;
         },
-        setTimeOnlyNumber(state, action) {
-            state.timeOnlyNumber = action.payload;
+        setTimeWithColon(state, action) {
+            state.timeWithColon = action.payload;
         },
         setCount(state, action) {
             state.count = action.payload;
