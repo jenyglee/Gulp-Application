@@ -92,7 +92,7 @@ const Alarm = ({ alarmInfo, menuIcon, toggleTask, showAlarmMenu }) => {
     useEffect(() => {
         formatArrToTimeObj(alarmInfo.time);
         formatStrToDayArr(alarmInfo.day);
-    }, []);
+    }, [alarmInfo.time, alarmInfo.day]);
 
     // ✨ HH:mm:dd로 들어온 시간 전환 => "14:30:30" => "PM 2:30"
     const formatArrToTimeObj = (timeArr) => {

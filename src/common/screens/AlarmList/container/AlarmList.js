@@ -68,9 +68,6 @@ const AlarmList = ({ navigation, alarmsStore }) => {
         const removeFocusEvent = navigation.addListener("focus", () => {
             setFiltered(true);
             dispatch(actionsAlarms.getAlarms(day));
-            // dispatch(actionsAlarms.getAlarms({ filtered, day }));
-            // 👀❓ 무조건 alarms가 빈 배열로 들어감
-            // dispatch(actionsAlarms.confirmList(alarms))
         });
         return () => {
             removeFocusEvent();
@@ -84,8 +81,6 @@ const AlarmList = ({ navigation, alarmsStore }) => {
         } else {
             dispatch(actionsAlarms.getAllAlarms());
         }
-        // 👀❓ 무조건 alarms가 빈 배열로 들어감
-        // dispatch(actionsAlarms.confirmList({alarms, setIsVisibleAlarm}));
     }, [filtered]);
 
     // ✨ 등급표 노출/숨김
@@ -130,7 +125,7 @@ const AlarmList = ({ navigation, alarmsStore }) => {
                         />
                     </TitleContainer>
 
-                    {/* {isVisibleAlarm ? (
+                    {isVisibleAlarm ? (
                         Object.values(alarms).map((item) => {
                             return (
                                 <Alarm
@@ -159,7 +154,7 @@ const AlarmList = ({ navigation, alarmsStore }) => {
                         })
                     ) : (
                         <ProfileName>약을 추가해주세요.</ProfileName>
-                    )} */}
+                    )}
 
                     {gradeTable ? (
                         <GradeTable onPress={showGradeTable} />

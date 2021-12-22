@@ -111,6 +111,7 @@ const actions = {
             const token = await AsyncStorage.getItem("token");
             const changedDay = day ? day : 7; //일요일을 0 👉 7 변환
             const response = await apiGetAlarm(token, changedDay);
+            console.log(response.data);
             dispatch(actionsAlarms.setAlarms(response.data));
         } catch (error) {
             console.log(JSON.stringify(error));
@@ -166,9 +167,37 @@ const actions = {
                         ? response.data.time[0] - 12
                         : response.data.time[0];
                 const minute = response.data.time[1];
-
                 await actions.setTime(`${ampm} ${hour}:${minute}`)(dispatch);
 
+                // ③ time의 "00:00:00" 형태를 저장(알람변경 시 사용)
+                // - 00초인 경우 빈 배열로 나오니(ex. [8, 30]) 이때 임의로 "10"를 추가한다.
+                const newArrTime =
+                    response.data.time.length === 3
+                        ? response.data.time
+                        : [...response.data.time, "10"]; // [8, 30, "10"]
+
+                const strArrTime = [
+                    String(newArrTime[0]),
+                    String(newArrTime[1]),
+                    newArrTime[2],
+                ]; // ["8", "30", "10"]
+
+                if (strArrTime[0].length) {
+                    strArrTime[0] = "0" + strArrTime[0];
+                } // ["08", "30", "10"]
+
+                let formatArrToStr = "";
+                strArrTime.map((item) => {
+                    formatArrToStr += item;
+                }); // "083010"
+
+                const colonStrTime = `${formatArrToStr.slice(
+                    0,
+                    2
+                )}:${formatArrToStr.slice(2, 4)}:${formatArrToStr.slice(4, 6)}`; // "08:30:10"
+                await actions.setTimeOnlyNumber(colonStrTime)(dispatch);
+
+                // ③ 등록된 영양제 넣기
                 dispatch(
                     actionsMedicines.setMedicineList(
                         response.data.alarmMedicines.map(({ medicine }) => ({
@@ -178,67 +207,6 @@ const actions = {
                         }))
                     )
                 );
-
-                // // ③ 등록된 영양제 넣기
-                // const loadedData = await AsyncStorage.getItem("medicine");
-
-                // actionsAlarms.setM;
-
-                // const medicines = JSON.parse(loadedData); //{brandName: "종근당건강", id: 1, name: "알티지 오메가3"}
-
-                // // 🪲 약 갯수만큼 반복문을 돌리고 싶은데, 반복문 안에 AsyncStorage를 쓸 수가 없다.
-                // const newMedicine01 = {
-                //     [response.data.alarmMedicines[0].medicine.id]: {
-                //         id: response.data.alarmMedicines[0].medicine.id,
-                //         name: response.data.alarmMedicines[0].medicine.name,
-                //         brandName:
-                //             response.data.alarmMedicines[0].medicine.brand.name,
-                //     },
-                // };
-                // const newMedicine02 = {
-                //     [response.data.alarmMedicines[1].medicine.id]: {
-                //         id: response.data.alarmMedicines[1].medicine.id,
-                //         name: response.data.alarmMedicines[1].medicine.name,
-                //         brandName:
-                //             response.data.alarmMedicines[1].medicine.brand.name,
-                //     },
-                // };
-                // const newMedicine03 = {
-                //     [response.data.alarmMedicines[2].medicine.id]: {
-                //         id: response.data.alarmMedicines[2].medicine.id,
-                //         name: response.data.alarmMedicines[2].medicine.name,
-                //         brandName:
-                //             response.data.alarmMedicines[2].medicine.brand.name,
-                //     },
-                // };
-
-                // AsyncStorage.setItem(
-                //     "medicine",
-                //     JSON.stringify({
-                //         ...medicines,
-                //         ...newMedicine01,
-                //         ...newMedicine02,
-                //         ...newMedicine03,
-                //     })
-                // );
-
-                // 🪲 약 갯수만큼 반복문을 돌리고 싶은데, 반복문 안에 AsyncStorage를 쓸 수가 없다.
-                // // const arrNewMedicines = [];
-                // response.data.alarmMedicines.map((alarmMedicine) => {
-                //     // console.log(medicines); // null
-                //     const newMedicine = {
-                //         [alarmMedicine.medicine.id]: {
-                //             id: alarmMedicine.medicine.id,
-                //             name: alarmMedicine.medicine.name,
-                //             brandName: alarmMedicine.medicine.brand.name,
-                //         },
-                //     };
-                //     AsyncStorage.setItem(
-                //         "medicine",
-                //         JSON.stringify({ ...medicines, ...newMedicine })
-                //     );
-                //     // arrNewMedicines.push(newMedicine);
-                // });
             } catch (error) {
                 console.log(JSON.stringify(error));
             }
@@ -401,7 +369,8 @@ const actions = {
 
     // ✨알람 변경
     editAlarm:
-        (alarmId, time, checkedDay, medicineList) => async (dispatch) => {
+        (alarmId, time, checkedDay, medicineList, navigation) =>
+        async (dispatch) => {
             const token = await AsyncStorage.getItem("token");
             const response = await apiEditAlarm({
                 id: alarmId,
@@ -410,9 +379,9 @@ const actions = {
                 medicineIdList: medicineList,
                 token,
             });
-            // if (response.status === 200) {
-            //     navigation.navigate("AlarmList");
-            // }
+            if (response.status === 200) {
+                navigation.navigate("AlarmList");
+            }
         },
 
     // ✨요일 전채선택(common)

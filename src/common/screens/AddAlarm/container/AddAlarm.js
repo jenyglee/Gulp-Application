@@ -74,8 +74,6 @@ const AddMedicine = ({ navigation, route }) => {
 
     useEffect(() => {
         // 알람 변경 시
-        // 한글변환작업은 여기서
-        // 요일 데이터는 스토어에 정리
         if (route.params.alarmId) {
             dispatch(
                 actionsAlarms.getOneAlarm(
@@ -108,13 +106,13 @@ const AddMedicine = ({ navigation, route }) => {
             const arrMedicineId = medicineList.map((medicine) => {
                 return medicine.id;
             });
-
             dispatch(
                 actionsAlarms.editAlarm(
                     route.params.alarmId,
                     timeOnlyNumber,
                     strCheckedDayId,
-                    arrMedicineId
+                    arrMedicineId,
+                    navigation
                 )
             );
         } else if (route.params.fromScreen) {
