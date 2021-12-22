@@ -130,8 +130,7 @@ const AlarmList = ({ navigation, alarmsStore }) => {
                         />
                     </TitleContainer>
 
-                    {/* 👀❓ day가 문자열로 만들어진 게 뻑나서 잠시 가림 */}
-                    {isVisibleAlarm ? (
+                    {/* {isVisibleAlarm ? (
                         Object.values(alarms).map((item) => {
                             return (
                                 <Alarm
@@ -160,7 +159,7 @@ const AlarmList = ({ navigation, alarmsStore }) => {
                         })
                     ) : (
                         <ProfileName>약을 추가해주세요.</ProfileName>
-                    )}
+                    )} */}
 
                     {gradeTable ? (
                         <GradeTable onPress={showGradeTable} />

@@ -61,8 +61,7 @@ const actions = {
                     setIsVisibleCompleteModal,
                 })(dispatch);
             } catch (error) {
-                // 🍎
-                // Alert.alert(JSON.stringify(error));
+                Alert.alert(JSON.stringify(error));
             }
         },
 
@@ -403,21 +402,17 @@ const actions = {
     // ✨알람 변경
     editAlarm:
         (alarmId, time, checkedDay, medicineList) => async (dispatch) => {
-            // console.log("alarmId : " + typeof alarmId);
-            // console.log("time : " + typeof time); // 오후 8:30분을 20:30:00으로 바꿔야 함.
-            // console.log("week : " + checkedDay); // 객체 중 checked = true 인 것만 골라서 id를 추출해야 함.
-            // console.log("medicineList : " + medicineList); // 객체들의 id값 만 뽑아야 함.
-            // const token = await AsyncStorage.getItem("token");
-            const response = await apiEditAlarm(
-                {
-                    id: alarmId,
-                    time: time,
-                    day: checkedDay,
-                    medicineIdList: medicineList,
-                }
-                // token
-            );
-            console.log(response);
+            const token = await AsyncStorage.getItem("token");
+            const response = await apiEditAlarm({
+                id: alarmId,
+                time: time,
+                day: checkedDay,
+                medicineIdList: medicineList,
+                token,
+            });
+            // if (response.status === 200) {
+            //     navigation.navigate("AlarmList");
+            // }
         },
 
     // ✨요일 전채선택(common)

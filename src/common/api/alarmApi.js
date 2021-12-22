@@ -19,12 +19,12 @@ const apiAddAlarm = async (alarm, token) => {
 };
 
 // ✨ 알람변경
-const apiEditAlarm = async (alarm, token) => {
+const apiEditAlarm = async ({ id, time, day, medicineIdList, token }) => {
     try {
         const response = await axios({
             method: "PUT",
             url: url + "alarm",
-            data: { alarm },
+            data: { id, time, day, medicineIdList },
             headers: { authorization: token },
         });
         return response;

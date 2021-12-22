@@ -108,7 +108,6 @@ const AddMedicine = ({ navigation, route }) => {
             const arrMedicineId = medicineList.map((medicine) => {
                 return medicine.id;
             });
-            // console.log(typeof arrMedicineId);
 
             dispatch(
                 actionsAlarms.editAlarm(
