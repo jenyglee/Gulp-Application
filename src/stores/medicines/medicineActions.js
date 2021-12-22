@@ -3,7 +3,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Alert } from "react-native";
 import {
     apiGetCategory,
-    getMedicines,
+    apiGetMedicines,
     apiAddMedicine,
 } from "@/medicine/api/medicineApi";
 import { stateAlarms } from "stores/alarms/alarmsSlice.js";
@@ -105,7 +105,7 @@ const actions = {
                         Alert.alert("이 약은 이미 등록되어 있습니다.");
                         return;
                     } else {
-                        const response = await getMedicines({
+                        const response = await apiGetMedicines({
                             categoryKey,
                             brandKey,
                             medicine,

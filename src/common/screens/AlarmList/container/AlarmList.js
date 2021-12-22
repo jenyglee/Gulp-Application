@@ -7,7 +7,6 @@ import { icons } from "@/icons";
 import AlarmMenu from "@/common/components/modal/AlarmMenu";
 import Grade from "@/common/screens/AlarmList/component/Grade";
 import Alarm from "@/common/screens/AlarmList/component/Alarm";
-import TopLogo from "@/common/screens/AlarmList/component/TopLogo";
 import ButtonFilter from "@/common/screens/AlarmList/component/ButtonFilter";
 import FloatingButton from "@/common/screens/AlarmList/component/FloatingButton";
 import { GradeTable } from "@components/modal/index";
@@ -17,8 +16,6 @@ import { inject, observer } from "mobx-react";
 import { useSelector, useDispatch } from "react-redux";
 import { stateAlarms } from "stores/alarms/alarmsSlice.js";
 import actionsAlarms from "stores/alarms/alarmsActions.js";
-import { Button } from "@/common/components";
-import { getAlarm } from "@/common/api/alarmApi";
 
 const Wrap = styled.ScrollView`
     padding-top: ${({ insets }) => insets.top}px;
@@ -50,57 +47,6 @@ const StyledText = styled.Text`
 const ProfileName = styled.Text`
     font-size: 18px;
 `;
-
-// ✨데이터형태(참고용)
-// const tempData = {
-//     1: {
-//         id: 1,
-//         time: "08:30:20",
-//         name: {
-//             1: { id: 1, name: "오메가3", completed: false },
-//             2: { id: 2, name: "비타민", completed: false },
-//             3: { id: 3, name: "철분", completed: false },
-//         },
-//         day: [1, 2],
-//         completed: false,
-//     },
-
-// ✨데이터형태(api)
-// const tempData = [
-//     {
-//         id: 1,
-//         time: [15, 6, 9],
-//         day: "456",
-//         alarmMedicines: [
-//             {
-//                 id: 58,
-//                 medicine: {
-//                     id: 1,
-//                     member: null,
-//                     name: "알티지 오메가3",
-//                     category: {
-//                         id: 3,
-//                         name: "오메가",
-//                     },
-//                     brand: {
-//                         id: 1,
-//                         name: "종근당건강",
-//                     },
-//                 },
-//             },
-//         ],
-//         member: {
-//             email: "test@zzzz.zzz",
-//             gradeId: null,
-//             id: 24,
-//             imgPath:
-//                 "https://firebasestorage.googleapis.com/v0/b/medicine-cc1f6.appspot.com/o/face.png?alt=media",
-//             nickname: "리재",
-//             password:
-//                 "$2a$10$ZNmNbeTBKUzsKk6qu1rcR.DwwI9IIONO1XB.j8Aj3emdD6xIfqNT2",
-//         },
-//     },
-// ];
 
 const AlarmList = ({ navigation, alarmsStore }) => {
     const dispatch = useDispatch(); //dispatch : 해당 state 값을 수정하는 액션

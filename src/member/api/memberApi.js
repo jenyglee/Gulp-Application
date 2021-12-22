@@ -5,7 +5,7 @@ import { Alert } from "react-native";
 const url = "https://gulp.jenyglee.com/";
 
 // ✨로그인
-const signin = async (member) => {
+const apiSignin = async (member) => {
     try {
         const response = await axios({
             method: "POST",
@@ -26,7 +26,7 @@ const signin = async (member) => {
 };
 
 // ✨로그아웃
-const logout = async () => {
+const apiLogout = async () => {
     try {
         const token = await AsyncStorage.getItem("token");
         const response = await axios({
@@ -46,7 +46,7 @@ const logout = async () => {
 };
 
 // ✨회원가입
-const signup = async (member) => {
+const apiSignup = async (member) => {
     try {
         const response = await axios({
             method: "POST",
@@ -64,7 +64,7 @@ const signup = async (member) => {
 };
 
 // ✨회원탈퇴
-const removeUser = async () => {
+const apiRemoveUser = async () => {
     const token = await AsyncStorage.getItem("token");
     // console.log(token);
 
@@ -81,7 +81,7 @@ const removeUser = async () => {
 };
 
 // ✨ 이메일 중복확인
-const emailValidation = async (email) => {
+const apiEmailValidation = async (email) => {
     try {
         const response = await axios({
             method: "GET",
@@ -110,4 +110,24 @@ const apiUpdateUser = async ({ token, nickname, password }) => {
         console.log(response);
     } catch (error) {}
 };
-export { signin, logout, signup, removeUser, emailValidation, apiUpdateUser };
+
+// ✨ 카운트
+const apiCount = async ({ token, nickname, password }) => {
+    try {
+        const response = await axios({
+            method: "PUT",
+            url: url + "member/straight-day",
+            headers: { authorization: token },
+        });
+        console.log(response);
+    } catch (error) {}
+};
+export {
+    apiSignin,
+    apiLogout,
+    apiSignup,
+    apiRemoveUser,
+    apiEmailValidation,
+    apiUpdateUser,
+    apiCount,
+};

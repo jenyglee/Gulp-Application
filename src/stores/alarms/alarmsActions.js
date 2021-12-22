@@ -404,9 +404,20 @@ const actions = {
         },
 
     // ✨알람 변경
-    editAlarm: (payload) => async (dispatch) => {
-        const response = await apiEditAlarm();
-        console.log(response);
+    editAlarm: (alarmId, time, week, medicineList) => async (dispatch) => {
+        console.log("alarmId : " + alarmId);
+        console.log("time : " + time);
+        console.log("week : ");
+        console.log(week);
+        console.log("medicineList : ");
+        console.log(medicineList);
+        // const response = await apiEditAlarm({
+        //     id: 213,
+        //     time: "15:30:00",
+        //     day: "45",
+        //     medicineIdList: [9, 10],
+        // });
+        // console.log(response);
     },
 
     // ✨요일 전채선택(common)

@@ -1,17 +1,18 @@
 import { actionsMembers } from "./membersSlice";
 import { Alert } from "react-native";
-import { emailValidation, signup } from "@/member/api/memberApi";
+import { apiSignup } from "@/member/api/memberApi";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const actions = {
     // ✨ 이메일/비밀번호 검토 및 로그인 진행(Signin)
     SigninButtonPress:
-        (email, password, signin, isEmail, navigation) => async (dispatch) => {
+        (email, password, apiSignin, isEmail, navigation) =>
+        async (dispatch) => {
             try {
                 if (email !== "") {
                     if (isEmail(email)) {
                         if (password !== "") {
-                            await signin({ email, password });
+                            await apiSignin({ email, password });
                             navigation.navigate("AlarmList");
                         } else {
                             Alert.alert("비밀번호를 입력해주세요.");
@@ -69,7 +70,7 @@ const actions = {
     handleSignupBtnPress:
         (nickname, email, password, navigation) => async (dispatch) => {
             try {
-                const response = await signup({ nickname, email, password });
+                const response = await apiSignup({ nickname, email, password });
                 if (response === 200) {
                     navigation.navigate("Signup02");
                 } else {

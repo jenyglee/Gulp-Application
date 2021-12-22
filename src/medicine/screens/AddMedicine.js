@@ -8,7 +8,7 @@ import {
     ButtonCategorySelect,
 } from "@/medicine/components/index";
 import { Alert, Dimensions } from "react-native";
-import { getBrands, getMedicines } from "@/medicine/api/medicineApi";
+import { apiGetBrands, apiGetMedicines } from "@/medicine/api/medicineApi";
 import _ from "lodash";
 import { addMedicine } from "@/medicine/api/medicineApi";
 import { useSelector, useDispatch } from "react-redux";
@@ -76,7 +76,7 @@ const AddMedicine = ({ navigation, route }) => {
     const debounceSearchMedicine = _.debounce(async (text) => {
         if (text) {
             setIsSearchingMedicine(true);
-            const medicines = await getMedicines({ brandKey, text });
+            const medicines = await apiGetMedicines({ brandKey, text });
             setFiltered(medicines ?? []);
         } else {
             setIsSearchingMedicine(false);
@@ -87,7 +87,7 @@ const AddMedicine = ({ navigation, route }) => {
     const debounceSearchBrand = _.debounce(async (text) => {
         if (text) {
             setIsSearchingBrand(true);
-            const brands = await getBrands(text, token);
+            const brands = await apiGetBrands(text, token);
             setFiltered(brands ?? []);
         } else {
             setIsSearchingBrand(false);

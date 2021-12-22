@@ -11,7 +11,7 @@ import {
 } from "@/medicine/components/index";
 import { Alert, Animated, Dimensions, Platform } from "react-native";
 import _ from "lodash";
-import { getBrands, getMedicines } from "@/medicine/api/medicineApi";
+import { apiGetBrands, apiGetMedicines } from "@/medicine/api/medicineApi";
 import { useSelector, useDispatch } from "react-redux";
 import { stateMedicines } from "stores/medicines/medicinesSlice";
 import actionsMedicines from "stores/medicines/medicineActions";
@@ -124,7 +124,7 @@ const SearchMedicine = ({ navigation }) => {
     //✨ brand 검색어 자동완성 노출
     const debounceSearchBrand = _.debounce(async (text) => {
         if (text) {
-            const brands = await getBrands(text, token);
+            const brands = await apiGetBrands(text, token);
             brands ? setIsSearchingBrand(true) : setIsSearchingBrand(false);
             setFiltered(brands ?? []);
         } else {
@@ -136,7 +136,7 @@ const SearchMedicine = ({ navigation }) => {
     const debounceSearchMedicine = _.debounce(async (text) => {
         if (text) {
             setIsSearchingMedicine(true);
-            const medicines = await getMedicines({
+            const medicines = await apiGetMedicines({
                 categoryKey,
                 brandKey,
                 medicine: text,

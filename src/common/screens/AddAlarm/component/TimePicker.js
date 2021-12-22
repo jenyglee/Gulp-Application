@@ -94,10 +94,19 @@ function TimePicker({ onPress, getTime }) {
     };
 
     const handleConfirm = (date) => {
-        // console.warn("dataFormat : ", date.format("a/p hh시 mm분"));
+        console.log("data : ", date.format("hh").replace(/(^0+)/, ""));
         hideDatePicker();
-        setText(date.format("a/p hh:mm"));
-        onPress(date.format("HH:mm:dd"));
+        setText(
+            date.format("a/p ") +
+                date.format("hh:").replace(/(^0+)/, "") +
+                date.format("mm")
+        );
+        onPress(
+            date.format("a/p ") +
+                date.format("hh:").replace(/(^0+)/, "") +
+                date.format("mm")
+        );
+        // onPress(date.format("HH:mm:dd"));
     };
 
     return (

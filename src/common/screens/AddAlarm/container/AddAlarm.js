@@ -1,27 +1,18 @@
 import React, { useState, useEffect, useContext } from "react";
 import styled, { ThemeContext } from "styled-components/native";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import { Alert, Dimensions } from "react-native";
+import { Dimensions } from "react-native";
 import Button from "@components/Button";
 import ButtonSmall from "@components/ButtonSmall";
-import TagButton from "@/common/screens/AddAlarm/component/TagButton";
 import TagButtonContainer from "@/common/screens/AddAlarm/component/TagButtonContainer";
 import TimePicker from "@/common/screens/AddAlarm/component/TimePicker";
-import WeekButton from "@/common/screens/AddAlarm/component/WeekButton";
 import WeekButtonContainer from "@/common/screens/AddAlarm/component/WeekButtonContainer";
 import { icons14px } from "@/icons";
 import { ScrollView } from "react-native-gesture-handler";
-import { deleteMedicine } from "@/medicine/api/medicineApi";
-import { addAlarm } from "@/common/api/alarmApi";
 import { inject, observer } from "mobx-react";
 import { useSelector, useDispatch } from "react-redux";
-import { stateMembers } from "@/stores/members/membersSlice";
 
 import { stateAlarms } from "stores/alarms/alarmsSlice.js";
 import actionsAlarms from "stores/alarms/alarmsActions.js";
-
-import { stateCommon } from "stores/common/commonSlice";
-import actionsCommon from "stores/common/commonActions";
 
 import { stateMedicines } from "stores/medicines/medicinesSlice";
 import actionsMedicines from "stores/medicines/medicineActions";
@@ -155,17 +146,20 @@ const AddMedicine = ({ navigation, route }) => {
                     if (route.params.alarmId) {
                         // ✨ 알람 변경 하기
                         dispatch(
-                            actionsAlarms
-                                .editAlarm
-                                // medicineList,
-                                // time,
-                                // week,
-                                // weekCheckList,
-                                // setWeekCheckList,
-                                // medicinesId,
-                                // setMedicinesId,
-                                // navigation
-                                ()
+                            actionsAlarms.editAlarm(
+                                route.params.alarmId,
+                                time,
+                                week,
+                                medicineList
+                            )
+                            // medicineList,
+                            // time,
+                            // week,
+                            // weekCheckList,
+                            // setWeekCheckList,
+                            // medicinesId,
+                            // setMedicinesId,
+                            // navigation
                         );
                     } else if (route.params.fromScreen) {
                         // ✨ 알람 추가하기

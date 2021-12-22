@@ -24,12 +24,7 @@ const apiEditAlarm = async (alarm, token) => {
         const response = await axios({
             method: "PUT",
             url: url + "alarm",
-            data: {
-                alarmId: 213,
-                time: "15:30:00",
-                day: "45",
-                medicines: [9, 10],
-            },
+            data: { alarm },
             headers: { authorization: token },
         });
         return response;

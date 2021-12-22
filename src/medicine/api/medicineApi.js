@@ -61,7 +61,7 @@ const deleteMedicine = async (token) => {
 };
 
 // ✨브랜드조회
-const getBrands = async (text, token) => {
+const apiGetBrands = async (text, token) => {
     try {
         const response = await axios({
             method: "GET",
@@ -76,7 +76,7 @@ const getBrands = async (text, token) => {
 };
 
 // ✨약 조회
-const getMedicines = async ({ categoryKey, brandKey, medicine }) => {
+const apiGetMedicines = async ({ categoryKey, brandKey, medicine }) => {
     try {
         const response = await axios({
             method: "GET",
@@ -111,7 +111,7 @@ const apiGetCategory = async (token) => {
 export {
     apiAddMedicine,
     deleteMedicine,
-    getBrands,
-    getMedicines,
+    apiGetBrands,
+    apiGetMedicines,
     apiGetCategory,
 };

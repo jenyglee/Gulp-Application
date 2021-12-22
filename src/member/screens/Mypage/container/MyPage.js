@@ -5,7 +5,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import Profile from "@/member/screens/Mypage/component/Profile";
 import ButtonMenu from "@/member/screens/Mypage/component/ButtonMenu";
 import { GradeTable } from "@components/modal/index";
-import { logout, removeUser } from "@/member/api/memberApi";
+import { apiLogout, apiRemoveUser } from "@/member/api/memberApi";
 import RequireSignin from "@/common/components/RequireSignin";
 import { illust } from "@/images";
 import jwt_decode from "jwt-decode";
@@ -62,10 +62,9 @@ const MyPageContainer = ({ navigation }) => {
                         showUserInfo={() => {
                             navigation.navigate("CustomInfo");
                         }}
-                        logout={logout}
+                        logout={apiLogout}
                         onRemoveUser={() => {
-                            removeUser();
-                            // navigation.navigate("Signin");
+                            apiRemoveUser();
                         }}
                         setIsSignin={setIsSignin}
                     />

@@ -10,7 +10,7 @@ import {
     ButtonFloating,
 } from "@components/index";
 import { isEmail, removeWhiteSpace } from "@/util";
-import { emailValidation, signup } from "@/member/api/memberApi";
+import { apiEmailValidation } from "@/member/api/memberApi";
 import { Alert, Animated, Dimensions, Platform } from "react-native";
 import { useSelector, useDispatch } from "react-redux";
 import { stateMembers } from "stores/members/membersSlice";
@@ -191,7 +191,7 @@ const SignupContainer00 = ({ navigation }) => {
                         />
                         <TextButton
                             onPress={() => {
-                                const response = emailValidation(email);
+                                const response = apiEmailValidation(email);
                                 // console.log(response)
                             }}
                             btnStyle={{

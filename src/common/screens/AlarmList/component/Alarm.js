@@ -4,6 +4,7 @@ import styled, { ThemeContext } from "styled-components";
 import IconButton from "@/common/screens/AlarmList/component/IconButton";
 import { icons14px } from "@/icons";
 import Day from "@screens/AlarmList/component/Day";
+import { apiCount } from "@/member/api/memberApi"
 
 const koreanDaysArr = ["월", "화", "수", "목", "금", "토", "일"];
 
@@ -87,6 +88,7 @@ const Alarm = ({ alarmInfo, menuIcon, toggleTask, showAlarmMenu }) => {
     const [minute, setMinute] = useState("");
     const [ampm, setAmpm] = useState("");
     const [day, setDay] = useState([]);
+    
 
     useEffect(() => {
         formatArrToTimeObj(alarmInfo.time);
@@ -110,8 +112,9 @@ const Alarm = ({ alarmInfo, menuIcon, toggleTask, showAlarmMenu }) => {
         setDay(koreanDay);
     };
 
-    const _onPress = () => {
+    const _onPress = async () => {
         // toggleTask(alarmInfo.id);
+        const count = await apiCount()
         setCompleted(!completed);
     };
 

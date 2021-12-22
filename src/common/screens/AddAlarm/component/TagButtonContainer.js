@@ -9,8 +9,6 @@ import { useDispatch, useSelector } from "react-redux";
 const TagButtonContainer = () => {
     const dispatch = useDispatch();
     const { medicineList } = useSelector(stateMedicines);
-    // console.log("medicineList : ");
-    // console.log(medicineList);
     return (
         <>
             {medicineList

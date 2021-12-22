@@ -80,10 +80,12 @@ const ButtonMenu = ({
                     </ListContainer>
                 </ListBtn>
                 <Line />
-                <ListBtn onPress={()=>{
-                    onRemoveUser();
-                    setIsSignin(false)
-                }}>
+                <ListBtn
+                    onPress={() => {
+                        onRemoveUser();
+                        setIsSignin(false);
+                    }}
+                >
                     <ListContainer
                         style={{
                             borderBottomWidth: 0,

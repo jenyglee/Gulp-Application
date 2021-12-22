@@ -6,7 +6,7 @@ import { InputWithIcon } from "@/member/screens/Signin/component/index";
 import { icons20px } from "@/icons";
 import { logo } from "@/images";
 import { isEmail, removeWhiteSpace } from "@/util";
-import { signin } from "@/member/api/memberApi";
+import { apiSignin } from "@/member/api/memberApi";
 import { useSelector, useDispatch } from "react-redux";
 import { stateMembers } from "stores/members/membersSlice";
 import actionsMembers from "stores/members/memberActions";
@@ -104,7 +104,7 @@ const SigninContainer = ({ navigation }) => {
                                 actionsMembers.SigninButtonPress(
                                     email,
                                     password,
-                                    signin,
+                                    apiSignin,
                                     isEmail,
                                     navigation
                                 )
@@ -124,7 +124,7 @@ const SigninContainer = ({ navigation }) => {
                                 actionsMembers.SigninButtonPress(
                                     email,
                                     password,
-                                    signin,
+                                    apiSignin,
                                     isEmail,
                                     navigation
                                 )

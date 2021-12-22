@@ -10,8 +10,14 @@ import { commonStore } from "./stores/CommonStore";
 import { Provider as ProviderRedux } from "react-redux";
 import store from "./stores/index.js";
 
+// ✨ 스플래시 이미지 조정
+// import SplashScreen from 'react-native-splash-screen';
+// useEffect(() => {
+//     SplashScreen.hide();
+//   }, []);
+
 export default function App() {
-    console.log(ProviderRedux);
+    // console.log(ProviderRedux);
     return (
         <ProviderRedux store={store}>
             <Provider
