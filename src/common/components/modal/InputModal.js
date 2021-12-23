@@ -64,9 +64,7 @@ const InputModal = ({ onPress, userInfo }) => {
                             maxLenth={10}
                             onChangeText={(text) => setName(text)}
                             returnKeyType="done"
-                            onSubmitEditing={() => {
-                                // refEmail.current.focus();
-                            }}
+                            onSubmitEditing={() => {}}
                             containerStyle={{
                                 width: "100%",
                             }}
@@ -77,9 +75,7 @@ const InputModal = ({ onPress, userInfo }) => {
                             maxLenth={10}
                             onChangeText={(text) => setName(text)}
                             returnKeyType="done"
-                            onSubmitEditing={() => {
-                                // refEmail.current.focus();
-                            }}
+                            onSubmitEditing={() => {}}
                             containerStyle={{
                                 width: "100%",
                             }}
@@ -90,9 +86,7 @@ const InputModal = ({ onPress, userInfo }) => {
                             maxLenth={10}
                             onChangeText={(text) => setName(text)}
                             returnKeyType="done"
-                            onSubmitEditing={() => {
-                                // refEmail.current.focus();
-                            }}
+                            onSubmitEditing={() => {}}
                             containerStyle={{
                                 width: "100%",
                                 marginBottom: 0,

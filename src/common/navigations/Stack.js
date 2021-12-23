@@ -164,7 +164,6 @@ const HomeTabs = () => {
                         );
                     },
                 }}
-                // options={headerStyle}
             />
         </Tab.Navigator>
     );

@@ -2,14 +2,8 @@ import { createSlice } from "@reduxjs/toolkit";
 
 export const commonSlice = createSlice({
     name: "common",
-    initialState: {
-        // time: "",
-    },
-    reducers: {
-        // setTime(state,action){
-        //     state.time = action.payload
-        // },
-    },
+    initialState: {},
+    reducers: {},
 });
 
 export const stateCommon = (state) => state.common;

@@ -54,7 +54,6 @@ const Line = styled.View`
 `;
 
 const AlarmMenu = ({ isVisible, setIsVisible, onPress }) => {
-    // const { isVisible, setIsVisible } = props;
     const theme = useContext(ThemeContext);
     const width = Dimensions.get("screen").width;
     const screenHeight = Dimensions.get("screen").height;

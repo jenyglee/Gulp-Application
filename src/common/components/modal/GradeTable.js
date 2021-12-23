@@ -3,7 +3,6 @@ import styled from "styled-components";
 import { Modal, Dimensions } from "react-native";
 import Button from "./Button";
 import Swiper from "../Swiper";
-// import { showGradeTable } from "@/common/helper/helper";
 
 const OpacityBackground = styled.View`
     width: 100%;
@@ -36,15 +35,10 @@ const SwipeWrap = styled.View`
 
 const GradeTable = ({ onPress }) => {
     const width = Dimensions.get("window").width;
-
     const refModal = useRef(null);
     const [modalStyle, setModalStyle] = useState({});
-
-    // ✨ 너비값을 높이로 넣는 과정(진행중)
     useLayoutEffect(() => {
         setModalStyle({ height: 350 });
-        // setModalStyle({ height: refModal.current.clientWidth });
-        // console.log(refModal.current.clientWidth);
     }, []);
 
     return (

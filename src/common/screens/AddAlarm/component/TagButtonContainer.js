@@ -13,7 +13,6 @@ const TagButtonContainer = () => {
         <>
             {medicineList
                 ? Object.values(medicineList).map((item) => {
-                      //   console.log(item);
                       return (
                           <TagButton
                               name={item.name}

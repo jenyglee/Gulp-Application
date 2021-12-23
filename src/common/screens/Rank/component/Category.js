@@ -56,7 +56,6 @@ const Category = ({ selectedItem, setSelectedItem, categoryData }) => {
                 style={{
                     paddingLeft: 24,
                     paddingRight: 200,
-                    // marginRight: 100,
                 }}
             />
         </Container>

@@ -162,9 +162,7 @@ const AddMedicine = ({ navigation, route }) => {
                             onBlur={() => {}}
                             onChangeText={(text) => handleBrandInputWrite(text)}
                             placeholder="브랜드를 입력해주세요"
-                            onSubmitEditing={() => {
-                                // refMedicine.current.focus();
-                            }}
+                            onSubmitEditing={() => {}}
                             isFocusedOther={isFocusedBrand}
                             setIsFocusedOther={setIsFocusedBrand}
                             isSearching={isSearchingBrand}

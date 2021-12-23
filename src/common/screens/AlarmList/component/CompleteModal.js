@@ -1,5 +1,12 @@
 import React, { useEffect, useRef } from "react";
-import { View, StyleSheet, Modal, Animated, TouchableWithoutFeedback, Dimensions, PanResponder,
+import {
+    View,
+    StyleSheet,
+    Modal,
+    Animated,
+    TouchableWithoutFeedback,
+    Dimensions,
+    PanResponder,
 } from "react-native";
 import { illust } from "@/images";
 import Button from "@components/modal/Button";
@@ -37,7 +44,6 @@ const StyledImage = styled.Image`
 `;
 
 const CompleteModal = ({ isVisible, setIsVisible, count }) => {
-    // const { isVisible, setIsVisible } = props;
     const width = Dimensions.get("screen").width;
     const screenHeight = Dimensions.get("screen").height;
     const panY = useRef(new Animated.Value(screenHeight)).current;
@@ -83,7 +89,7 @@ const CompleteModal = ({ isVisible, setIsVisible, count }) => {
 
     const closeModal = () => {
         closeBottomSheet.start(() => {
-            setIsVisible(false)
+            setIsVisible(false);
         });
     };
 
@@ -135,7 +141,6 @@ const styles = StyleSheet.create({
     bottomSheetContainer: {
         height: "auto",
         backgroundColor: "white",
-        // paddingTop: 24,
         paddingBottom: 20,
         borderTopLeftRadius: 12,
         borderTopRightRadius: 12,

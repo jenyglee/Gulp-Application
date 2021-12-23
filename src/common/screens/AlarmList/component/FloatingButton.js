@@ -1,6 +1,5 @@
 import React from "react";
 import styled from "styled-components";
-// import {TouchableOpacity } from "react-native";
 
 const Wrap = styled.TouchableOpacity`
     position: absolute;

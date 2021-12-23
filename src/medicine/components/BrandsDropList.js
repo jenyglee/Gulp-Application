@@ -28,7 +28,6 @@ const BrandsDropList = ({ filtered, onSelectItem, setIsFocusedBrand }) => {
                             onPress={() => {
                                 onSelectItem(item.id);
                                 setIsFocusedBrand(false);
-                                // onSelectItem.bind(undefined, item.id);
                             }}
                             key={index}
                         >
@@ -38,8 +37,6 @@ const BrandsDropList = ({ filtered, onSelectItem, setIsFocusedBrand }) => {
                 })}
                 <TouchableOpacity
                     onPress={() => {
-                        // ‘기타’는 어떤 id로 전달해야하는지
-                        // onSelectItem(item.id);
                         setIsFocusedBrand(false);
                     }}
                 >

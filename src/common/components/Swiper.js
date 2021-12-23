@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import styled from "styled-components";
-import { AppRegistry, StyleSheet, Text, View, Image } from "react-native";
-// import { imageNumber } from "../images";
+import { AppRegistry, StyleSheet } from "react-native";
 import { imageNumber } from "./../../images";
 
 import Swiper from "react-native-swiper";
@@ -27,8 +26,6 @@ const Title = styled.Text`
 const StyledImage = styled.Image`
     width: 100%;
     height: 100%;
-    /* background-color: red; */
-    /* opacity: 0.5; */
     position: absolute;
     top: 40px;
     align-self: center;
@@ -36,7 +33,6 @@ const StyledImage = styled.Image`
 
 export default class SwiperComponent extends Component {
     render() {
-        // const theme = useContext(ThemeContext);
         return (
             <Swiper
                 style={styles.wrapper}

@@ -155,7 +155,6 @@ const styles = StyleSheet.create({
     bottomSheetContainer: {
         height: "auto",
         backgroundColor: "white",
-        // paddingTop: 24,
         paddingBottom: 20,
         borderTopLeftRadius: 12,
         borderTopRightRadius: 12,

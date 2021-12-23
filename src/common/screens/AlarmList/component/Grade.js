@@ -89,10 +89,6 @@ const Grade = ({ countTotal, count, onPress }) => {
             return <StyledImage source={gauge.gauge14} resizeMode="contain" />;
         }
         return <StyledImage source={gauge.gauge00} resizeMode="contain" />;
-        // else if (count >= 4 && count < 5) {
-        //     return <StyledImage source={gauge.gauge04} resizeMode="contain" />;
-        // } else if (count >= 4 && count < 5) {
-        //     return <StyledImage source={gauge.gauge04} resizeMode="contain" />;
     };
 
     const GradeChange = () => {

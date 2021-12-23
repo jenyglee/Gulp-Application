@@ -47,7 +47,7 @@ const actions = {
                 copy[index].completed = !copy[index].completed;
                 setCompleted(copy);
 
-                // 완료모달
+                // 완료모달 노출
                 const allCompleted = completed.every((item) => item.completed);
                 if (allCompleted) {
                     // 🍎 api는 현재 response.data가 ""으로 나와서 현재는 가려둠
@@ -112,7 +112,7 @@ const actions = {
         }
     },
 
-    // ✨ 알람 전체 불러오기(alarmList) 'api 전용'
+    // ✨ 알람 전체 불러오기(alarmList)
     getAllAlarms: (payload) => async (dispatch) => {
         try {
             const token = await AsyncStorage.getItem("token");

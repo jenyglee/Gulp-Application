@@ -123,9 +123,7 @@ function TimePicker({ onPress, getTime }) {
                     editable={false}
                     value={text}
                 />
-                {/* <Button title="Show Date Picker" /> */}
                 <DateTimePickerModal
-                    // headerTextIOS={placeholder}
                     isVisible={isDatePickerVisible}
                     mode="time"
                     onConfirm={handleConfirm}

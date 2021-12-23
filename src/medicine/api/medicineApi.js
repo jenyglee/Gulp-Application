@@ -14,33 +14,8 @@ const apiAddMedicine = async (medicine, token) => {
             headers: { authorization: token },
         });
         return response;
-        // const ID = Date.now();
-        // const newMedicine = {
-        //     [ID]: { id: ID, name: medicine.name, brand: medicine.brand.id },
-        // };
-
-        // await AsyncStorage.setItem("medicine", JSON.stringify({ ...Item, ...newMedicine }));
-        // if (response.status === 200) {
-        //     console.log(response.data);
-        //     // 서버 저장 완료 후, AsyncStorage(medicine)에 저장
-        //     // const loadedData = await AsyncStorage.getItem("medicine");
-        //     // const Item = JSON.parse(loadedData);
-        //     // const ID = Date.now();
-        //     // const newMedicine = {
-        //     //     [ID]: { id: ID, name: medicine.name, brand: medicine.brand.id },
-        //     // };
-
-        //     // await AsyncStorage.setItem(
-        //     //     "medicine",
-        //     //     JSON.stringify({ ...Item, ...newMedicine })
-        //     // );
-        // } else if (response.status === 500) {
-        //     // ❓👀 중복된 약이 있을땐 500이 뜨는데, 왜 알럿이 안뜨는 걸까?
-        //     Alert.alert("500");
-        // }
     } catch (error) {
-        // 🍎
-        // Alert.alert(JSON.stringify(error));
+        Alert.alert(JSON.stringify(error));
     }
 };
 
@@ -87,7 +62,6 @@ const apiGetMedicines = async ({ categoryKey, brandKey, medicine }) => {
                 name: medicine,
             },
         });
-        // console.log(response.data)
         return response.data;
     } catch (error) {
         console.log(JSON.stringify(error));
