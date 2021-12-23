@@ -44,6 +44,10 @@ const StyledImage = styled.Image`
 const SignupContainer04 = ({ navigation }) => {
     const width = Dimensions.get("window").width;
     const height = Dimensions.get("window").height;
+
+    const handleSignInButtonPress = () => {
+        navigation.navigate("Signin");
+    };
     return (
         <Container>
             <ContentContainer width={width}>
@@ -66,7 +70,7 @@ const SignupContainer04 = ({ navigation }) => {
                         width: width,
                         alignSelf: "center",
                     }}
-                    onPress={() => navigation.navigate("Signin")}
+                    onPress={handleSignInButtonPress}
                 />
             </ContentContainer>
         </Container>

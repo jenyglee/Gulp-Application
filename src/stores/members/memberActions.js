@@ -5,7 +5,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const actions = {
     // ✨ 이메일/비밀번호 검토 및 로그인 진행(Signin)
-    SigninButtonPress:
+    signin:
         (email, password, apiSignin, isEmail, navigation) =>
         async (dispatch) => {
             try {
@@ -49,7 +49,7 @@ const actions = {
     },
 
     // ✨ 약관 체크 토글(Signup00)
-    toggleList: (id, list, setAllAgree, setList) => (dispatch) => {
+    toggleAgreeItem: (id, list, setAllAgree, setList) => (dispatch) => {
         const copy = [...list];
         copy[id].checked = !copy[id].checked;
         const result = copy.every((item) => {
@@ -67,21 +67,20 @@ const actions = {
     },
 
     // ✨ 회원가입(Signup01)
-    handleSignupBtnPress:
-        (nickname, email, password, navigation) => async (dispatch) => {
-            try {
-                const response = await apiSignup({ nickname, email, password });
-                if (response === 200) {
-                    navigation.navigate("Signup02");
-                } else {
-                    Alert.alert(
-                        "에러가 발생했습니다. 잠시 후에 다시 시도해주세요."
-                    );
-                }
-            } catch (error) {
-                console.log(JSON.stringify(error));
+    signup: (nickname, email, password, navigation) => async (dispatch) => {
+        try {
+            const response = await apiSignup({ nickname, email, password });
+            if (response === 200) {
+                navigation.navigate("Signup02");
+            } else {
+                Alert.alert(
+                    "에러가 발생했습니다. 잠시 후에 다시 시도해주세요."
+                );
             }
-        },
+        } catch (error) {
+            console.log(JSON.stringify(error));
+        }
+    },
 
     // ✨ 유저정보 가져오기
     getUser: () => async (dispatch) => {

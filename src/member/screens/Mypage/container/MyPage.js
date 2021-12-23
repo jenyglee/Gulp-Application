@@ -9,9 +9,7 @@ import { apiLogout, apiRemoveUser } from "@/member/api/memberApi";
 import RequireSignin from "@/common/components/RequireSignin";
 import { illust } from "@/images";
 import jwt_decode from "jwt-decode";
-import { useSelector, useDispatch } from "react-redux";
-import { stateMembers } from "stores/members/membersSlice";
-import actionsMembers from "stores/members/memberActions";
+import { useDispatch } from "react-redux";
 
 const Container = styled.View`
     width: 100%;
@@ -31,7 +29,7 @@ const MyPageContainer = ({ navigation }) => {
     // ✨ 유저 정보 확인
     useEffect(() => {
         const removeFocusEvent = navigation.addListener("focus", () => {
-            getUser();
+            getUser(); //로그인정보 가져오기
         });
         return () => {
             removeFocusEvent();
@@ -41,7 +39,6 @@ const MyPageContainer = ({ navigation }) => {
     // ✨ 로그인정보 가져오기
     const getUser = async () => {
         const token = await AsyncStorage.getItem("token");
-        // console.log(token);
         const user = await jwt_decode(token);
         (await user) ? setIsSignin(true) : setIsSignin(false);
         await setNickname(user.nickname);
@@ -52,20 +49,26 @@ const MyPageContainer = ({ navigation }) => {
         setGradeTable(!gradeTable);
     };
 
+    // ✨ 회원정보 변경 화면으로 이동
+    const handleEditInfoButtonPress = () => {
+        navigation.navigate("CustomInfo");
+    };
+
+    // ✨  로그인 화면으로 이동
+    const handleSignInButtonPress = () => {
+        navigation.navigate("Signin");
+    };
+
     return (
         <SafeAreaView>
             {isSignin ? (
                 <Container height={height} isSignin={isSignin}>
                     <Profile nickname={nickname} />
                     <ButtonMenu
-                        showGradeTable={showGradeTable}
-                        showUserInfo={() => {
-                            navigation.navigate("CustomInfo");
-                        }}
-                        logout={apiLogout}
-                        onRemoveUser={() => {
-                            apiRemoveUser();
-                        }}
+                        onShowGradeTable={showGradeTable}
+                        onShowUserInfo={handleEditInfoButtonPress}
+                        onLogout={apiLogout}
+                        onRemoveUser={apiRemoveUser}
                         setIsSignin={setIsSignin}
                     />
                     {gradeTable ? (
@@ -82,7 +85,7 @@ const MyPageContainer = ({ navigation }) => {
                     <RequireSignin
                         src={illust.error}
                         title="로그인이 필요한 서비스입니다."
-                        onPress={() => navigation.navigate("Signin")}
+                        onPress={handleSignInButtonPress}
                     />
                 </Container>
             )}

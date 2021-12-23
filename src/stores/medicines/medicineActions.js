@@ -194,16 +194,6 @@ const actions = {
         }
     },
 
-    // ✨로컬에서 약 가져오기
-    getMedicine: () => async (dispatch) => {
-        try {
-            // const loadedData = await AsyncStorage.getItem("medicine");
-            // dispatch(actionsMedicines.setMedicineList(JSON.parse(loadedData)));
-        } catch (error) {
-            throw JSON.stringify(error);
-        }
-    },
-
     // ✨ 약 삭제(medicineStore)
     deleteTask: (id, medicineList) => async (dispatch) => {
         const copy = Object.assign({}, medicineList);
@@ -213,7 +203,7 @@ const actions = {
     },
 
     // ✨ 카테고리 선택
-    handleSelectCategory: (categoryData, id) => (dispatch) => {
+    selectCategory: (categoryData, id) => (dispatch) => {
         categoryData.map((item) => {
             if (item.id === id) {
                 dispatch(actionsMedicines.setCategory(item));
@@ -224,21 +214,21 @@ const actions = {
     },
 
     // ✨ brand 검색창에 입력
-    onSearchBrand: (text, debounceSearchBrand) => (dispatch) => {
+    searchBrand: (text, debounceSearchBrand) => (dispatch) => {
         // setBrand(text);
         dispatch(actionsMedicines.setBrand(text));
         debounceSearchBrand(text);
     },
 
     // ✨ medicine 검색창에 입력
-    onSearchMedicine: (text, debounceSearchMedicine) => (dispatch) => {
+    searchMedicine: (text, debounceSearchMedicine) => (dispatch) => {
         dispatch(actionsMedicines.setMedicine(text));
         // setMedicine(text);
         debounceSearchMedicine(text);
     },
 
     // ✨ 항목에 있는 브랜드를 인풋에 입력
-    handleSelectBrand:
+    selectBrand:
         (id, filtered, setIsSearchingBrand, setFiltered) => (dispatch) => {
             filtered.map((item) => {
                 if (item.id === id) {
@@ -251,7 +241,7 @@ const actions = {
         },
 
     // ✨ 항목에 있는 약을 인풋에 입력
-    handleSelectMedicine:
+    selectMedicine:
         (id, filtered, setIsSearchingMedicine, setFiltered) => (dispatch) => {
             filtered.map((item) => {
                 if (item.id === id) {

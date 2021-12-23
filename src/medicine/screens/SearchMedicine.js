@@ -147,8 +147,71 @@ const SearchMedicine = ({ navigation }) => {
         }
     }, 300);
 
+    // ✨ 드롭리스트 노출
     const handleVisibleDropList = () => {
         setIsSelectingCategory(!isSelectingCategory);
+    };
+
+    // ✨ 카테고리 중 하나 선택
+    const handleSelectCategoryItemPress = (id) => {
+        dispatch(actionsMedicines.selectCategory(categoryData, id));
+    };
+
+    // ✨ 브랜드명 입력 시 자동검색
+    const handleBrandInputWrite = (text) => {
+        dispatch(actionsMedicines.searchBrand(text, debounceSearchBrand));
+    };
+
+    // ✨드롭리스트에서 브랜드 선택
+    const handleBrandDropListItemPress = (id) => {
+        dispatch(
+            actionsMedicines.selectBrand(
+                id,
+                filtered,
+                setIsSearchingBrand,
+                setFiltered
+            )
+        );
+    };
+
+    // ✨ 드롭리스트에서 영양제 선택
+    const handleMedicineInputWrite = (text) => {
+        dispatch(actionsMedicines.searchMedicine(text, debounceSearchMedicine));
+    };
+
+    // ✨드롭리스트에서 브랜드 선택
+    const handleMedicineDropListItemPress = (id) => {
+        dispatch(
+            actionsMedicines.selectMedicine(
+                id,
+                filtered,
+                setIsSearchingMedicine,
+                setFiltered
+            )
+        );
+    };
+
+    // ✨ 영양제 등록하기
+    const handleSaveButtonPress = () => {
+        dispatch(
+            actionsMedicines.saveMedicine(
+                category,
+                brand,
+                brandKey,
+                categoryKey,
+                medicine,
+                medicineList,
+                navigation,
+                fromScreen
+            )
+        );
+    };
+
+    // ✨ 영양제 신규등록 화면으로 이동
+    const handleAddMedicineButtonPress = () => {
+        navigation.navigate("AddMedicine", {
+            medicine,
+        });
     };
 
     return (
@@ -156,9 +219,7 @@ const SearchMedicine = ({ navigation }) => {
             <KeyboardAwareScrollView
                 enableOnAndroid={true}
                 contentContainerStyle={{
-                    // flex: 1,
                     height: "100%",
-                    // alignSelf: "center",
                 }}
             >
                 <Container width={width}>
@@ -181,14 +242,9 @@ const SearchMedicine = ({ navigation }) => {
                         {isSelectingCategory && (
                             <PressDropList
                                 filtered={filtered}
-                                onSelectItem={(id) => {
-                                    dispatch(
-                                        actionsMedicines.handleSelectCategory(
-                                            categoryData,
-                                            id
-                                        )
-                                    );
-                                }}
+                                onSelectItem={(id) =>
+                                    handleSelectCategoryItemPress(id)
+                                }
                                 onVisibleDropList={handleVisibleDropList}
                                 categoryData={categoryData}
                                 isFocused={isFocusedCategory}
@@ -202,7 +258,6 @@ const SearchMedicine = ({ navigation }) => {
                                 style={{
                                     width: "100%",
                                     opacity: opacityBrand,
-                                    // marginBottom: 36,
                                 }}
                             >
                                 <StyledTitle>브랜드 이름</StyledTitle>
@@ -213,12 +268,7 @@ const SearchMedicine = ({ navigation }) => {
                                     value={brand}
                                     onBlur={() => {}}
                                     onChangeText={(text) =>
-                                        dispatch(
-                                            actionsMedicines.onSearchBrand(
-                                                text,
-                                                debounceSearchBrand
-                                            )
-                                        )
+                                        handleBrandInputWrite(text)
                                     }
                                     placeholder="브랜드를 입력해주세요"
                                     onSubmitEditing={() => {}}
@@ -230,16 +280,9 @@ const SearchMedicine = ({ navigation }) => {
                                 {isSearchingBrand && (
                                     <BrandsDropList
                                         filtered={filtered}
-                                        onSelectItem={(id) => {
-                                            dispatch(
-                                                actionsMedicines.handleSelectBrand(
-                                                    id,
-                                                    filtered,
-                                                    setIsSearchingBrand,
-                                                    setFiltered
-                                                )
-                                            );
-                                        }}
+                                        onSelectItem={(id) =>
+                                            handleBrandDropListItemPress(id)
+                                        }
                                         setIsFocusedBrand={setIsFocusedBrand}
                                         navigation={navigation}
                                     />
@@ -253,7 +296,6 @@ const SearchMedicine = ({ navigation }) => {
                                 style={{
                                     width: "100%",
                                     opacity: opacityMedicine,
-                                    // marginBottom: 36,
                                 }}
                             >
                                 <StyledTitle>영양제 이름</StyledTitle>
@@ -263,14 +305,9 @@ const SearchMedicine = ({ navigation }) => {
                                     }}
                                     value={medicine}
                                     onBlur={() => {}}
-                                    onChangeText={(text) => {
-                                        dispatch(
-                                            actionsMedicines.onSearchMedicine(
-                                                text,
-                                                debounceSearchMedicine
-                                            )
-                                        );
-                                    }}
+                                    onChangeText={(text) =>
+                                        handleMedicineInputWrite(text)
+                                    }
                                     placeholder="약 이름을 입력해주세요"
                                     isFocusedOther={isFocusedMedicine}
                                     setIsFocusedOther={setIsFocusedMedicine}
@@ -280,16 +317,9 @@ const SearchMedicine = ({ navigation }) => {
                                 {isSearchingMedicine && (
                                     <MedicinesDropList
                                         filtered={filtered}
-                                        onSelectItem={(id) => {
-                                            dispatch(
-                                                actionsMedicines.handleSelectMedicine(
-                                                    id,
-                                                    filtered,
-                                                    setIsSearchingMedicine,
-                                                    setFiltered
-                                                )
-                                            );
-                                        }}
+                                        onSelectItem={(id) =>
+                                            handleMedicineDropListItemPress(id)
+                                        }
                                         setIsFocusedMedicine={
                                             setIsFocusedMedicine
                                         }
@@ -319,11 +349,7 @@ const SearchMedicine = ({ navigation }) => {
                                     color: theme.main,
                                 }}
                                 title="찾으시는 영양제가 없으세요?"
-                                onPress={() =>
-                                    navigation.navigate("AddMedicine", {
-                                        medicine,
-                                    })
-                                }
+                                onPress={handleAddMedicineButtonPress}
                             />
                             <ButtonFloating
                                 btnWrapStyle={{
@@ -332,20 +358,7 @@ const SearchMedicine = ({ navigation }) => {
                                     left: 0,
                                 }}
                                 title="영양제 추가"
-                                onPress={() => {
-                                    dispatch(
-                                        actionsMedicines.saveMedicine(
-                                            category,
-                                            brand,
-                                            brandKey,
-                                            categoryKey,
-                                            medicine,
-                                            medicineList,
-                                            navigation,
-                                            fromScreen
-                                        )
-                                    );
-                                }}
+                                onPress={handleSaveButtonPress}
                             />
                         </>
                     ) : null}
@@ -357,11 +370,7 @@ const SearchMedicine = ({ navigation }) => {
                         <TextButtonContainer>
                             <Line />
                             <TextButton
-                                onPress={() => {
-                                    navigation.navigate("AddMedicine", {
-                                        medicine,
-                                    });
-                                }}
+                                onPress={handleAddMedicineButtonPress}
                                 btnStyle={{
                                     width: "100%",
                                     height: 55,
@@ -374,20 +383,7 @@ const SearchMedicine = ({ navigation }) => {
                         </TextButtonContainer>
                         <Button
                             title="영양제 추가"
-                            onPress={() => {
-                                dispatch(
-                                    actionsMedicines.saveMedicine(
-                                        category,
-                                        brand,
-                                        brandKey,
-                                        categoryKey,
-                                        medicine,
-                                        medicineList,
-                                        navigation,
-                                        fromScreen
-                                    )
-                                );
-                            }}
+                            onPress={handleSaveButtonPress}
                         />
                     </>
                 )}

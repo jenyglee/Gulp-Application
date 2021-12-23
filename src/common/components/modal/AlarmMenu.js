@@ -43,8 +43,8 @@ const Line = styled.View`
 const AlarmMenu = ({
     isVisibleMenu,
     setIsVisibleMenu,
-    editMedicine,
-    deleteTask,
+    onEditAlarm,
+    onDeleteTask,
 }) => {
     // const { isVisibleMenu, setIsVisibleMenu } = props;
     const width = Dimensions.get("screen").width;
@@ -117,7 +117,7 @@ const AlarmMenu = ({
                     <Wrap>
                         <ListBtn
                             onPress={() => {
-                                editMedicine();
+                                onEditAlarm();
                                 closeModal();
                             }}
                         >
@@ -128,7 +128,7 @@ const AlarmMenu = ({
                         <Line />
                         <ListBtn
                             onPress={() => {
-                                deleteTask();
+                                onDeleteTask();
                                 closeModal();
                             }}
                         >

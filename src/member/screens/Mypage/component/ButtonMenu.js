@@ -38,9 +38,9 @@ const Line = styled.View`
 `;
 
 const ButtonMenu = ({
-    showGradeTable,
-    showUserInfo,
-    logout,
+    onShowGradeTable,
+    onShowUserInfo,
+    onLogout,
     onRemoveUser,
     setIsSignin,
 }) => {
@@ -49,13 +49,13 @@ const ButtonMenu = ({
     return (
         <Wrap>
             <Container width={width}>
-                <ListBtn onPress={showUserInfo}>
+                <ListBtn onPress={onShowUserInfo}>
                     <ListContainer>
                         <ListText>회원정보 변경</ListText>
                     </ListContainer>
                 </ListBtn>
                 <Line />
-                <ListBtn onPress={showGradeTable}>
+                <ListBtn onPress={onShowGradeTable}>
                     <ListContainer
                         style={{
                             borderBottomWidth: 0,
@@ -67,7 +67,7 @@ const ButtonMenu = ({
                 <Line />
                 <ListBtn
                     onPress={() => {
-                        logout();
+                        onLogout();
                         setIsSignin(false);
                     }}
                 >

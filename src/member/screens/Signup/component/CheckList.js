@@ -59,12 +59,12 @@ const DetailText = styled.Text`
     color: ${({ theme }) => theme.textSub};
 `;
 
-const CheckList = ({ item, toggleList, toggleDetail }) => {
-    const _toggleList = () => {
-        toggleList(item.id);
+const CheckList = ({ item, onToggleItem, onToggleDetail }) => {
+    const _onToggleItem = () => {
+        onToggleItem(item.id);
     };
-    const _toggleDetail = () => {
-        toggleDetail(item.id);
+    const _onToggleDetail = () => {
+        onToggleDetail(item.id);
     };
     console.log(item.checked);
     return (
@@ -77,7 +77,7 @@ const CheckList = ({ item, toggleList, toggleDetail }) => {
                         alignItems: "center",
                     }}
                 >
-                    <CheckBtnWrap onPress={_toggleList}>
+                    <CheckBtnWrap onPress={_onToggleItem}>
                         <CheckListTitleWrap>
                             <CheckImageBackground checked={item.checked}>
                                 <CheckImage
@@ -92,7 +92,7 @@ const CheckList = ({ item, toggleList, toggleDetail }) => {
                         </CheckListTitleWrap>
                     </CheckBtnWrap>
 
-                    <CheckListDetailBtnWrap onPress={_toggleDetail}>
+                    <CheckListDetailBtnWrap onPress={_onToggleDetail}>
                         <DetailBtnImage
                             source={
                                 item.accordion

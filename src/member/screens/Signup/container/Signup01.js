@@ -1,19 +1,11 @@
 import React, { useState, useRef, useEffect, useContext } from "react";
-import { KeyboardAvoidingView } from "react-native";
 import styled, { ThemeContext } from "styled-components";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
-import {
-    Button,
-    TextButton,
-    Input,
-    Image,
-    ButtonFloating,
-} from "@components/index";
+import { Button, TextButton, Input, ButtonFloating } from "@components/index";
 import { isEmail, removeWhiteSpace } from "@/util";
 import { apiEmailValidation } from "@/member/api/memberApi";
 import { Alert, Animated, Dimensions, Platform } from "react-native";
-import { useSelector, useDispatch } from "react-redux";
-import { stateMembers } from "stores/members/membersSlice";
+import { useDispatch } from "react-redux";
 import actionsMembers from "stores/members/memberActions";
 
 const Container = styled.View`
@@ -121,20 +113,38 @@ const SignupContainer00 = ({ navigation }) => {
         }
     });
 
+    //✨ 회원가입하기
+    const handleSignUpButtonPress = () => {
+        if ((nickname, email, password, passwordConfirm)) {
+            if (password === passwordConfirm) {
+                dispatch(
+                    actionsMembers.signup(nickname, email, password, navigation)
+                );
+            } else {
+                Alert.alert("비밀번호가 일치하지 않습니다.");
+            }
+        } else {
+            Alert.alert("모든 빈칸을 입력해주세요.");
+        }
+    };
+
+    // ✨ 이메일 중복검사
+    const handleEmailValidation = async () => {
+        const response = await apiEmailValidation(email);
+        console.log(response.validation);
+        // if (response.validation) {
+        //     Alert.alert("사용 가능한 이메일입니다.");
+        // } else {
+        //     Alert.alert("이미 사용중인 이메일입니다.");
+        // }
+    };
+
     return (
-        // <KeyboardAvoidingView
-        //     behavior="height"
-        //     style={{
-        //         flex: 1,
-        //     }}
-        // >
         <KeyboardAwareScrollView
             enableOnAndroid={true}
             contentContainerStyle={{
                 flex: 1,
                 width: "100%",
-                // height: 2000,
-                // backgroundColor: "blue",
             }}
             extraScrollHeight={50}
         >
@@ -157,9 +167,6 @@ const SignupContainer00 = ({ navigation }) => {
                         onSubmitEditing={() => {
                             confirmNickname();
                         }}
-                        // containerStyle={{
-                        //     marginBottom: 36,
-                        // }}
                     />
                 </InputContainer>
                 {showEmail ? (
@@ -167,12 +174,10 @@ const SignupContainer00 = ({ navigation }) => {
                         style={{
                             opacity: opacityEmail,
                             marginBottom: 36,
-                            // backgroundColor: "red",
                         }}
                     >
                         <StyledTitle>이메일을 입력해주세요</StyledTitle>
                         <Input
-                            // ref={refEmail}
                             title="이메일"
                             placeholder="이메일을 입력하세요"
                             value={email}
@@ -190,10 +195,7 @@ const SignupContainer00 = ({ navigation }) => {
                             }}
                         />
                         <TextButton
-                            onPress={() => {
-                                const response = apiEmailValidation(email);
-                                // console.log(response)
-                            }}
+                            onPress={handleEmailValidation}
                             btnStyle={{
                                 marginLeft: 12,
                             }}
@@ -209,7 +211,6 @@ const SignupContainer00 = ({ navigation }) => {
                     >
                         <StyledTitle>비밀번호를 입력해주세요.</StyledTitle>
                         <Input
-                            // ref={refPassword}
                             title="비밀번호"
                             placeholder="비밀번호를 입력하세요"
                             value={password}
@@ -220,9 +221,7 @@ const SignupContainer00 = ({ navigation }) => {
                                 const changedPassword = removeWhiteSpace(text);
                                 setPassword(changedPassword);
                             }}
-                            onSubmitEditing={() => {
-                                confirmPassword();
-                            }}
+                            onSubmitEditing={confirmPassword}
                             secureTextEntry={true}
                         />
                         <Input
@@ -238,9 +237,7 @@ const SignupContainer00 = ({ navigation }) => {
                                     removeWhiteSpace(text);
                                 setPasswordConfirm(changedPasswordConfirm);
                             }}
-                            onSubmitEditing={() => {
-                                confirmPasswordTwo();
-                            }}
+                            onSubmitEditing={confirmPasswordTwo}
                             secureTextEntry={true}
                         />
                     </Animated.View>
@@ -249,24 +246,7 @@ const SignupContainer00 = ({ navigation }) => {
             {Platform.OS === "ios" ? (
                 <Button
                     title="회원가입하기"
-                    onPress={() => {
-                        if ((nickname, email, password, passwordConfirm)) {
-                            if (password === passwordConfirm) {
-                                dispatch(
-                                    actionsMembers.handleSignupBtnPress(
-                                        nickname,
-                                        email,
-                                        password,
-                                        navigation
-                                    )
-                                );
-                            } else {
-                                Alert.alert("비밀번호가 일치하지 않습니다.");
-                            }
-                        } else {
-                            Alert.alert("모든 빈칸을 입력해주세요.");
-                        }
-                    }}
+                    onPress={handleSignUpButtonPress}
                     btnWrapStyle={{
                         width: width,
                     }}
@@ -288,7 +268,6 @@ const SignupContainer00 = ({ navigation }) => {
                 />
             )}
         </KeyboardAwareScrollView>
-        // </KeyboardAvoidingView>
     );
 };
 

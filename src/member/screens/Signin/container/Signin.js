@@ -1,14 +1,13 @@
-import React, { useState, useRef, useContext } from "react";
-import { Alert, Dimensions, Platform, Text } from "react-native";
-import styled, { css, ThemeContext } from "styled-components";
+import React, { useState, useRef } from "react";
+import { Dimensions, Platform } from "react-native";
+import styled from "styled-components";
 import { ButtonFloating, TextButton } from "@components/index";
 import { InputWithIcon } from "@/member/screens/Signin/component/index";
 import { icons20px } from "@/icons";
 import { logo } from "@/images";
 import { isEmail, removeWhiteSpace } from "@/util";
 import { apiSignin } from "@/member/api/memberApi";
-import { useSelector, useDispatch } from "react-redux";
-import { stateMembers } from "stores/members/membersSlice";
+import { useDispatch } from "react-redux";
 import actionsMembers from "stores/members/memberActions";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 
@@ -31,16 +30,6 @@ const SignupContainer = styled.View`
     flex-direction: row;
     position: absolute;
     bottom: 40px;
-    /* ${Platform.select({
-        ios: css`
-            position: absolute;
-            bottom: 40px;
-        `,
-        android: css`
-            width: 100px;
-            height: 100px;
-        `,
-    })} */
 `;
 
 const SignupContainerAndroid = styled.View`
@@ -61,6 +50,29 @@ const SigninContainer = ({ navigation }) => {
     const [password, setPassword] = useState("");
     const refPassword = useRef(null);
 
+    // ✨ 로그인 진행
+    const handleSignInButtonPress = () => {
+        dispatch(
+            actionsMembers.signin(
+                email,
+                password,
+                apiSignin,
+                isEmail,
+                navigation
+            )
+        );
+    };
+
+    //✨ 비밀번호 찾기 화면으로 이동
+    const handleFindPasswordButtonPress = () => {
+        navigation.navigate("FindPassword00");
+    };
+
+    // ✨ 회원가입 화면으로 이동
+    const handleSignUpButtonPress = () => {
+        navigation.navigate("Signup00");
+    };
+
     return (
         <KeyboardAwareScrollView
             enableOnAndroid={true}
@@ -76,7 +88,6 @@ const SigninContainer = ({ navigation }) => {
                         placeholder="이메일을 입력하세요"
                         value={email}
                         onBlur={() => {}}
-                        // maxLength={10}
                         onChangeText={(email) => {
                             const changedEmail = removeWhiteSpace(email);
                             setEmail(changedEmail);
@@ -99,17 +110,7 @@ const SigninContainer = ({ navigation }) => {
                             const changedPassword = removeWhiteSpace(password);
                             setPassword(changedPassword);
                         }}
-                        onSubmitEditing={() => {
-                            dispatch(
-                                actionsMembers.SigninButtonPress(
-                                    email,
-                                    password,
-                                    apiSignin,
-                                    isEmail,
-                                    navigation
-                                )
-                            );
-                        }}
+                        onSubmitEditing={handleSignInButtonPress}
                         secureTextEntry={true}
                         icon={icons20px.password}
                         containerStyle={{
@@ -119,26 +120,14 @@ const SigninContainer = ({ navigation }) => {
 
                     <ButtonFloating
                         title="로그인"
-                        onPress={() => {
-                            dispatch(
-                                actionsMembers.SigninButtonPress(
-                                    email,
-                                    password,
-                                    apiSignin,
-                                    isEmail,
-                                    navigation
-                                )
-                            );
-                        }}
+                        onPress={handleSignInButtonPress}
                     />
                     <TextButton
                         title="비밀번호 찾기"
                         btnStyle={{
                             marginTop: 20,
                         }}
-                        onPress={() => {
-                            navigation.navigate("FindPassword00");
-                        }}
+                        onPress={handleFindPasswordButtonPress}
                     />
                     {Platform.OS === "android" ? (
                         <SignupContainerAndroid>
@@ -148,9 +137,7 @@ const SigninContainer = ({ navigation }) => {
                                 btnStyle={{
                                     marginLeft: 5,
                                 }}
-                                onPress={() => {
-                                    navigation.navigate("Signup00");
-                                }}
+                                onPress={handleSignUpButtonPress}
                             />
                         </SignupContainerAndroid>
                     ) : null}
@@ -163,9 +150,7 @@ const SigninContainer = ({ navigation }) => {
                             btnStyle={{
                                 marginLeft: 5,
                             }}
-                            onPress={() => {
-                                navigation.navigate("Signup00");
-                            }}
+                            onPress={handleSignUpButtonPress}
                         />
                     </SignupContainer>
                 ) : null}

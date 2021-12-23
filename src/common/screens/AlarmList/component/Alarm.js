@@ -4,6 +4,7 @@ import styled, { ThemeContext } from "styled-components";
 import IconButton from "@/common/screens/AlarmList/component/IconButton";
 import { icons14px } from "@/icons";
 import Day from "@screens/AlarmList/component/Day";
+import { Alert } from "react-native";
 
 const koreanDaysArr = ["월", "화", "수", "목", "금", "토", "일"];
 
@@ -82,8 +83,9 @@ const Alarm = ({
     alarmInfo,
     completed,
     menuIcon,
-    toggleTask,
-    showAlarmMenu,
+    onToggleAlarm,
+    onShowAlarmMenu,
+    filtered,
 }) => {
     const theme = useContext(ThemeContext);
     const [alarmVisible, setAlarmVisible] = useState(true); // 알람 노출 / 미노출 (요일 맞춰서)
@@ -116,7 +118,9 @@ const Alarm = ({
     };
 
     const _onPress = async () => {
-        toggleTask(alarmInfo.id);
+        filtered
+            ? onToggleAlarm(alarmInfo.id)
+            : Alert.alert("복용완료는 오늘의 알람(Today)에서만 가능합니다.");
 
         // 🍎(진행중)카운트 기능
         // const count = await apiCount()
@@ -179,7 +183,7 @@ const Alarm = ({
                                 <IconButton
                                     icon={menuIcon}
                                     id={alarmInfo.id}
-                                    onPress={showAlarmMenu}
+                                    onPress={onShowAlarmMenu}
                                 />
                             </TopWrapRight>
                         </TopWrap>

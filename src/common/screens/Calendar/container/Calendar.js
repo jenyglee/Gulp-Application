@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext } from "react";
 import { View, ScrollView, Dimensions } from "react-native";
-import styled, { ThemeContext } from "styled-components";
+import styled from "styled-components";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import CalendarTable from "@/common/screens/Calendar/component/CalendarTable";
 import RequireSignin from "@/common/components/RequireSignin";
@@ -47,12 +47,7 @@ const Time = styled.Text`
 `;
 
 const CompleteBadge = styled.Image`
-    width: 39px;
-    height: 19px;
-`;
-
-const NotCompleteBadge = styled.Image`
-    width: 49px;
+    width: ${({ width }) => width}px;
     height: 19px;
 `;
 
@@ -69,13 +64,23 @@ const Line = styled.View`
 
 const Calendar = ({ navigation }) => {
     const { historyData, selectedDate } = useSelector(stateCalendar);
-    // const { alarms } = useSelector(stateAlarms);
     const width = Dimensions.get("window").width;
     const height = Dimensions.get("window").height;
     const [isSignin, setIsSignin] = useState(true); // 캘린더 노출(로그인시)
     const [selectedData, setSelectedData] = useState({});
     const [changedDate, setChangedDate] = useState({});
 
+    //
+    useEffect(() => {
+        const removeFocusEvent = navigation.addListener("focus", () => {
+            getUser(); //로그인정보 가져오기
+        });
+        return () => {
+            removeFocusEvent();
+        };
+    }, []);
+
+    // ✨ 날짜를 누르면 해당 날짜의 등록된 알람정보 노출
     useEffect(() => {
         historyData.map((info) => {
             if (info.date === selectedDate) {
@@ -85,15 +90,6 @@ const Calendar = ({ navigation }) => {
             return;
         });
     }, [selectedDate]);
-
-    useEffect(() => {
-        const removeFocusEvent = navigation.addListener("focus", () => {
-            getUser();
-        });
-        return () => {
-            removeFocusEvent();
-        };
-    }, []);
 
     // ✨ 로그인정보 가져오기
     const getUser = async () => {
@@ -108,6 +104,11 @@ const Calendar = ({ navigation }) => {
             month: arrDate[1].replace(/(^0+)/, ""),
             day: arrDate[2].replace(/(^0+)/, ""),
         });
+    };
+
+    // ✨ 로그인 화면으로 이동
+    const handleSigninButtonPress = () => {
+        navigation.navigate("Signin");
     };
 
     return (
@@ -127,17 +128,17 @@ const Calendar = ({ navigation }) => {
                                       <Alarm key={alarm.id}>
                                           <TimeContainer>
                                               <Time>{alarm.time}</Time>
-                                              {alarm.completed ? (
-                                                  <CompleteBadge
-                                                      source={badge.complete}
-                                                      resizeMode="contain"
-                                                  />
-                                              ) : (
-                                                  <NotCompleteBadge
-                                                      source={badge.notComplete}
-                                                      resizeMode="contain"
-                                                  />
-                                              )}
+                                              <CompleteBadge
+                                                  source={
+                                                      alarm.completed
+                                                          ? badge.complete
+                                                          : badge.notComplete
+                                                  }
+                                                  resizeMode="contain"
+                                                  width={
+                                                      alarm.completed ? 39 : 49
+                                                  }
+                                              />
                                           </TimeContainer>
                                           {alarm.medicines.map((medicine) => {
                                               return (
@@ -163,11 +164,10 @@ const Calendar = ({ navigation }) => {
                         paddingBottom: 200,
                     }}
                 >
-                    {/* <CalendarTitleNotSignin /> */}
                     <RequireSignin
                         src={illust.error}
                         title="로그인이 필요한 서비스입니다."
-                        onPress={() => navigation.navigate("Signin")}
+                        onPress={handleSigninButtonPress}
                     />
                 </Container>
             )}

@@ -8,9 +8,8 @@ import {
     apiGetAllAlarm,
     apiGetOneAlarm,
 } from "@/common/api/alarmApi";
+import { apiCompletedCount } from "@/member/api/memberApi.js";
 import { Alert } from "react-native";
-import { stateCommon } from "stores/common/commonSlice";
-import actionsCommon from "stores/common/commonActions";
 import _ from "lodash";
 
 const actions = {
@@ -31,7 +30,17 @@ const actions = {
 
     // ✨ 알람토글(alarmList)
     toggleAlarm:
-        ({ index, completed, setCompleted, setIsVisibleCompleteModal }) =>
+        ({
+            index,
+            completed,
+            setCompleted,
+            setIsVisibleCompleteModal,
+            year,
+            month,
+            date,
+            count,
+            countTotal,
+        }) =>
         async (dispatch) => {
             try {
                 const copy = [...completed];
@@ -40,7 +49,34 @@ const actions = {
 
                 // 완료모달
                 const allCompleted = completed.every((item) => item.completed);
-                allCompleted ? setIsVisibleCompleteModal(true) : null;
+                if (allCompleted) {
+                    // 🍎 api는 현재 response.data가 ""으로 나와서 현재는 가려둠
+                    // const token = await AsyncStorage.getItem("token");
+                    // const response = await apiCompletedCount(token);
+                    // console.log(response);
+
+                    const loadedDate = await AsyncStorage.getItem("date");
+                    const parseDate = JSON.parse(loadedDate); // 이전에 완료한 날짜
+                    const todayDate = `${year}-${month + 1}-${date}`; // "오늘 날짜"
+                    // const todayDate = "2021-11-10" // 임시용
+                    if (parseDate !== todayDate) {
+                        dispatch(actionsAlarms.setCountTotal(countTotal + 1));
+                        // ✨복용완료 게이지 14까지 되었을 시 초기화
+                        if (count === 13) {
+                            dispatch(actionsAlarms.setCount(0));
+                        } else {
+                            dispatch(actionsAlarms.setCount(count + 1));
+                        }
+                        await AsyncStorage.setItem(
+                            "date",
+                            JSON.stringify(todayDate)
+                        );
+                        setIsVisibleCompleteModal(true);
+                        return;
+                    } else {
+                        return;
+                    }
+                } else return;
             } catch (error) {
                 Alert.alert(JSON.stringify(error));
             }
@@ -59,35 +95,8 @@ const actions = {
         }
     },
 
-    // // ✨ 알람 불러오기(alarmList) 'storage 전용'
-    // getAlarms:
-    //     ({ filtered, day }) =>
-    //     async (dispatch) => {
-    //         try {
-    //             const loadedData = await AsyncStorage.getItem("alarm");
-    //             const parseData = JSON.parse(loadedData);
-
-    //             const changedDay = day ? day : 7; //일요일을 0 👉 7 변환
-    //             // true면 오늘의 요일만 ,  false면 전체요일
-    //             const filteredAlarms = filtered
-    //                 ? Object.values(parseData)
-    //                       .filter((alarm) => alarm.day.includes(changedDay))
-    //                       .reduce((p, v) => ({ ...p, [v.id]: v }), {})
-    //                 : parseData;
-
-    //             dispatch(actionsAlarms.setAlarms(filteredAlarms || []));
-    //             return filteredAlarms;
-
-    //             // 비교후에 아래진행 Lodash > _.isEqual
-    //             // import _ from 'lodash';
-    //         } catch (error) {
-    //             // 🍎
-    //             console.log(error);
-    //         }
-    //     },
-
-    // ✨ 알람 불러오기(alarmList) 'api 전용'
-    getAlarms: (day, completed) => async (dispatch) => {
+    // ✨ 알람 불러오기(alarmList)
+    getAlarms: (day, setCompleted) => async (dispatch) => {
         try {
             const token = await AsyncStorage.getItem("token");
             const changedDay = day ? day : 7; //일요일을 0 👉 7 변환
@@ -95,7 +104,9 @@ const actions = {
             dispatch(actionsAlarms.setAlarms(response.data));
 
             // 알람 수만큼 {completed:false} 생성하기
-            response.data.map((alarm) => completed.push({ completed: false }));
+            const tempArr = [];
+            response.data.map((alarm) => tempArr.push({ completed: false }));
+            setCompleted(tempArr);
         } catch (error) {
             console.log(JSON.stringify(error));
         }

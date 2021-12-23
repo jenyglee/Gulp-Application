@@ -1,6 +1,5 @@
 import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import jwt_decode from "jwt-decode";
 import { Alert } from "react-native";
 const url = "https://gulp.jenyglee.com/";
 
@@ -14,14 +13,13 @@ const apiSignin = async (member) => {
         });
 
         if (response.data.statusCodeValue === 200) {
-            // console.log("로그인 토큰정보 : " + response.headers.authorization);
             console.log(response);
             await AsyncStorage.setItem("token", response.headers.authorization);
         } else if (response.data.statusCodeValue !== 200) {
             throw new Error(response.data.body.message);
         }
     } catch (error) {
-        throw error;
+        console.log(error);
     }
 };
 
@@ -41,7 +39,7 @@ const apiLogout = async () => {
             throw new Error(response.data.body.message);
         }
     } catch (error) {
-        throw error;
+        console.log(error);
     }
 };
 
@@ -54,20 +52,14 @@ const apiSignup = async (member) => {
             data: member,
         });
         return response.status;
-
-        // if (response.data?.statusCodeValue !== 200) {
-        //     throw new Error(response.data.body.message);
-        // }
     } catch (error) {
-        throw error;
+        console.log(error);
     }
 };
 
 // ✨회원탈퇴
 const apiRemoveUser = async () => {
     const token = await AsyncStorage.getItem("token");
-    // console.log(token);
-
     const response = await axios({
         method: "DELETE",
         url: url + "member",
@@ -86,15 +78,11 @@ const apiEmailValidation = async (email) => {
         const response = await axios({
             method: "GET",
             url: url + "email-validation",
-            Param: email,
+            param: { email: email },
         });
-        console.log(response);
-
-        // if (response.status === 200) {
-        //     Alert.alert("사용할 수 있는 이메일입니다.");
-        // }
+        return response.data;
     } catch (error) {
-        throw error;
+        console.log(error);
     }
 };
 
@@ -108,19 +96,23 @@ const apiUpdateUser = async ({ token, nickname, password }) => {
             data: { nickname, password },
         });
         console.log(response);
-    } catch (error) {}
+    } catch (error) {
+        console.log(error);
+    }
 };
 
-// ✨ 카운트
-const apiCount = async ({ token, nickname, password }) => {
+// ✨ 전체 복용완료 시 카운트 증가
+const apiCompletedCount = async (token) => {
     try {
         const response = await axios({
             method: "PUT",
             url: url + "member/straight-day",
             headers: { authorization: token },
         });
-        console.log(response);
-    } catch (error) {}
+        return response;
+    } catch (error) {
+        console.log(error);
+    }
 };
 export {
     apiSignin,
@@ -129,5 +121,5 @@ export {
     apiRemoveUser,
     apiEmailValidation,
     apiUpdateUser,
-    apiCount,
+    apiCompletedCount,
 };

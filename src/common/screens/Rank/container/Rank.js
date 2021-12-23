@@ -53,8 +53,8 @@ const Ranking = ({ navigation }) => {
     useEffect(() => {
         setSelectedItem(12);
         const removeFocusEvent = navigation.addListener("focus", () => {
-            getUser();
-            dispatch(actionsMedicines.setCategoryData(token));
+            getUser(); //로그인정보 가져오기
+            dispatch(actionsMedicines.setCategoryData(token)); //카테고리 데이터 가져오기
         });
         return () => {
             removeFocusEvent();
@@ -65,6 +65,11 @@ const Ranking = ({ navigation }) => {
     const getUser = async () => {
         const token = await AsyncStorage.getItem("token");
         setIsSignin(token);
+    };
+
+    // ✨ 로그인 화면으로 이동
+    const handleSignInButtonPress = () => {
+        navigation.navigate("Signin");
     };
 
     const renderItem = ({ item }) => {
@@ -105,7 +110,7 @@ const Ranking = ({ navigation }) => {
                     <RequireSignin
                         src={illust.error}
                         title="로그인이 필요한 서비스입니다."
-                        onPress={() => navigation.navigate("Signin")}
+                        onPress={handleSignInButtonPress}
                     />
                 </Container>
             )}

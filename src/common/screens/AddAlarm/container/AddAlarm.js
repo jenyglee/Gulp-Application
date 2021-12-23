@@ -45,10 +45,8 @@ const AddMedicine = ({ navigation, route }) => {
     const width = Dimensions.get("window").width;
     const height = Dimensions.get("window").height;
     const theme = useContext(ThemeContext);
-
     const { medicineList } = useSelector(stateMedicines);
     const { time, timeWithColon } = useSelector(stateAlarms);
-
     const [week, setWeek] = useState([
         { id: 1, day: "월", checked: false },
         { id: 2, day: "화", checked: false },
@@ -58,19 +56,11 @@ const AddMedicine = ({ navigation, route }) => {
         { id: 6, day: "토", checked: false },
         { id: 7, day: "일", checked: false },
     ]);
-
     const [weekAll, setWeekAll] = useState([
         { id: 0, day: "All", checked: false },
     ]);
     const [weekCheckList, setWeekCheckList] = useState(""); // 체크된 요일
     const [medicinesId, setMedicinesId] = useState([]);
-
-    useEffect(() => {
-        const removeFocusEvent = navigation.addListener("focus", () => {
-            dispatch(actionsMedicines.getMedicine());
-        });
-        return () => removeFocusEvent();
-    }, []);
 
     useEffect(() => {
         // 알람 변경 시
@@ -91,10 +81,10 @@ const AddMedicine = ({ navigation, route }) => {
         }
     }, [route.params]);
 
+    // 저장버튼 누르기(알람 추가 or 알람 변경)
     const handleSaveButtonPress = () => {
         if (route.params.alarmId) {
             // ✨ 알람 변경 하기
-
             // ① 체크된 요일 id 추출(ex. "234")
             const checkedDay = week.filter((day) => day.checked === true);
             const checkedDayId = checkedDay.map((checkedDay) => {
@@ -132,6 +122,16 @@ const AddMedicine = ({ navigation, route }) => {
         }
     };
 
+    // ✨복용시간 선택
+    const handleTimePickerPress = (time) => {
+        dispatch(actionsAlarms.setTime(time));
+    };
+
+    // ✨ 복용중인 영양제 추가
+    const handleTagButtonPress = () => {
+        navigation.navigate("SearchMedicine");
+    };
+
     return (
         <>
             <ScrollView>
@@ -139,9 +139,7 @@ const AddMedicine = ({ navigation, route }) => {
                     <StyledForm>
                         <StyledTitle>복용시간</StyledTitle>
                         <TimePicker
-                            onPress={(time) => {
-                                dispatch(actionsAlarms.setTime(time));
-                            }}
+                            onPress={(time) => handleTimePickerPress(time)}
                             getTime={time}
                         />
                     </StyledForm>
@@ -171,9 +169,7 @@ const AddMedicine = ({ navigation, route }) => {
                                 textStyle={{
                                     color: theme.main,
                                 }}
-                                onPress={() => {
-                                    navigation.navigate("SearchMedicine");
-                                }}
+                                onPress={handleTagButtonPress}
                             />
                         </StyledTagForm>
                     </StyledForm>

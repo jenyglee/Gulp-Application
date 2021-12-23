@@ -71,13 +71,35 @@ const Signup00 = ({ navigation }) => {
     const [allAgree, setAllAgree] = useState([{ checked: false }]);
     const [list, setList] = useState(listData);
 
+    // ✨ 약관에 모두 동의
+    const handleAllAgreeButtonPress = () => {
+        dispatch(actionsMembers.allCheck(allAgree, list, setAllAgree, setList));
+    };
+
+    // ✨ 약관 동의
+    const handleAgreeItemToggle = () => {
+        dispatch(
+            actionsMembers.toggleAgreeItem(id, list, setAllAgree, setList)
+        );
+    };
+
+    // ✨ 약관 상세 보기
+    const handleAgreeItemDetailPress = (id) => {
+        dispatch(actionsMembers.toggleDetail(id, list, setList));
+    };
+
+    // ✨ 회원정보 입력 화면으로 이동
+    const handleNextButtonPress = () => {
+        if (allAgree[0].checked) {
+            navigation.navigate("Signup01");
+        } else {
+            Alert.alert("약관에 동의해주세요.");
+        }
+    };
+
     return (
         <Wrap width={width} height={height}>
-            <AllAgreeBtn
-                onPress={() => {
-                    dispatch(actionsMembers.allCheck(allAgree, list, setAllAgree, setList))
-                }}
-            >
+            <AllAgreeBtn onPress={handleAllAgreeButtonPress}>
                 <AllAgreeBtnContainer allAgree={allAgree}>
                     <AllAgreeBtnImage
                         source={
@@ -97,24 +119,14 @@ const Signup00 = ({ navigation }) => {
                     <CheckList
                         key={item.id}
                         item={item}
-                        toggleList={(id)=>{
-                            dispatch(actionsMembers.toggleList(id, list, setAllAgree, setList))
-                        }}
-                        toggleDetail={(id)=>{
-                            dispatch(actionsMembers.toggleDetail(id, list, setList))
-                        }}
+                        onToggleItem={(id) => handleAgreeItemToggle(id)}
+                        onToggleDetail={(id) => handleAgreeItemDetailPress(id)}
                     />
                 );
             })}
             <Button
                 title="다음"
-                onPress={() => {
-                    if (allAgree[0].checked) {
-                        navigation.navigate("Signup01");
-                    } else {
-                        Alert.alert("약관에 동의해주세요.");
-                    }
-                }}
+                onPress={handleNextButtonPress}
                 btnWrapStyle={{
                     width: width,
                 }}

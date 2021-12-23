@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useContext } from "react";
 import styled, { ThemeContext } from "styled-components/native";
-import { View, Text, ScrollView, Dimensions, Alert } from "react-native";
-import AsyncStorage from "@react-native-async-storage/async-storage";
+import { Dimensions } from "react-native";
 import { StatusBar } from "expo-status-bar";
 import { icons } from "@/icons";
 import AlarmMenu from "@/common/components/modal/AlarmMenu";
@@ -48,6 +47,8 @@ const ProfileName = styled.Text`
     font-size: 18px;
 `;
 
+const fromScreen = "AlarmList";
+
 const AlarmList = ({ navigation, alarmsStore }) => {
     const dispatch = useDispatch(); //dispatch : 해당 state 값을 수정하는 액션
     const theme = useContext(ThemeContext);
@@ -62,13 +63,12 @@ const AlarmList = ({ navigation, alarmsStore }) => {
     const [isVisibleAlarm, setIsVisibleAlarm] = useState(true); // 알람 유무
     const [completed, setCompleted] = useState([]);
     const [isVisibleCompleteModal, setIsVisibleCompleteModal] = useState(false); // 완료모달 노출/숨김
-    const fromScreen = "AlarmList";
 
     // ✨ 로그인했는지 확인 + 약 추가 후 메인으로 복귀
     useEffect(() => {
         const removeFocusEvent = navigation.addListener("focus", () => {
             setFiltered(true);
-            dispatch(actionsAlarms.getAlarms(day, completed));
+            dispatch(actionsAlarms.getAlarms(day, setCompleted));
         });
         return () => {
             removeFocusEvent();
@@ -76,35 +76,66 @@ const AlarmList = ({ navigation, alarmsStore }) => {
     }, []);
 
     // ✨ Today <-> All 필터링 됐을 때
-    useEffect(() => {
+    const handleAlarmFilterPress = () => {
         if (filtered) {
-            dispatch(actionsAlarms.getAlarms(day, completed));
+            dispatch(actionsAlarms.getAllAlarms()); // All :  전체 알람
         } else {
-            dispatch(actionsAlarms.getAllAlarms());
+            dispatch(actionsAlarms.getAlarms(day, setCompleted)); // Today:  오늘의 알람
         }
-    }, [filtered]);
+        setFiltered(!filtered);
+    };
 
     // ✨ 등급표 노출/숨김
-    const showGradeTable = () => {
+    const handleGradeButtonPress = () => {
         setGradeTable(!gradeTable);
     };
 
-    //  ✨알람메뉴 노출/숨김
-    const showAlarmMenu = (id) => {
+    //  ✨알람메뉴 노출
+    const handleAlarmMenuPress = (id) => {
         setIsVisibleMenu(true);
         setSelectedTaskKey(id);
     };
 
+    // ✨ 알람 추가 페이지로 이동
+    const handleAddAlarmPress = () => {
+        navigation.navigate("AddAlarm", { fromScreen });
+    };
+
     // ✨ 알람 변경 페이지로 이동
-    const editMedicine = (id) => {
+    const handleEditAlarmPress = (id) => {
         navigation.navigate("AddAlarm", {
             alarmId: id,
         });
         setIsVisibleMenu(false);
     };
 
-    const handlePressAlarmFilter = () => {
-        setFiltered(!filtered);
+    // ✨ 알람 복용/미복용 토글
+    const handleAlarmToggle = (index) => {
+        dispatch(
+            actionsAlarms.toggleAlarm({
+                alarms,
+                index,
+                completed,
+                setCompleted,
+                setIsVisibleCompleteModal,
+                year,
+                month,
+                date,
+                count,
+                countTotal,
+            })
+        );
+    };
+
+    // ✨ 알람 삭제
+    const handleAlarmDelete = () => {
+        dispatch(
+            actionsAlarms.deleteTask({
+                selectedTaskKey,
+                filtered,
+                day,
+            })
+        );
     };
 
     return (
@@ -115,13 +146,13 @@ const AlarmList = ({ navigation, alarmsStore }) => {
                     <Grade
                         countTotal={countTotal}
                         count={count}
-                        onPress={showGradeTable}
+                        onPress={handleGradeButtonPress}
                     />
                     <TitleContainer>
                         <StyledText>내 알람</StyledText>
                         <ButtonFilter
                             filtered={filtered}
-                            onPress={handlePressAlarmFilter}
+                            onPress={handleAlarmFilterPress}
                         />
                     </TitleContainer>
 
@@ -132,19 +163,12 @@ const AlarmList = ({ navigation, alarmsStore }) => {
                                     alarmInfo={item}
                                     completed={completed[index]}
                                     menuIcon={icons.dot}
-                                    toggleTask={(id) => {
-                                        dispatch(
-                                            actionsAlarms.toggleAlarm({
-                                                alarms,
-                                                index,
-                                                completed,
-                                                setCompleted,
-                                                setIsVisibleCompleteModal,
-                                            })
-                                        );
-                                    }}
-                                    showAlarmMenu={showAlarmMenu}
+                                    onToggleAlarm={() =>
+                                        handleAlarmToggle(index)
+                                    }
+                                    onShowAlarmMenu={handleAlarmMenuPress}
                                     key={item.id}
+                                    filtered={filtered}
                                 />
                             );
                         })
@@ -153,22 +177,14 @@ const AlarmList = ({ navigation, alarmsStore }) => {
                     )}
 
                     {gradeTable ? (
-                        <GradeTable onPress={showGradeTable} />
+                        <GradeTable onPress={handleGradeButtonPress} />
                     ) : null}
 
                     <AlarmMenu
                         isVisibleMenu={isVisibleMenu}
                         setIsVisibleMenu={setIsVisibleMenu}
-                        deleteTask={() => {
-                            dispatch(
-                                actionsAlarms.deleteTask({
-                                    selectedTaskKey,
-                                    filtered,
-                                    day,
-                                })
-                            );
-                        }}
-                        editMedicine={editMedicine.bind(
+                        onDeleteTask={handleAlarmDelete}
+                        onEditAlarm={handleEditAlarmPress.bind(
                             undefined,
                             selectedTaskKey
                         )}
@@ -180,11 +196,7 @@ const AlarmList = ({ navigation, alarmsStore }) => {
                     />
                 </Container>
             </Wrap>
-            <FloatingButton
-                onPress={() => {
-                    navigation.navigate("AddAlarm", { fromScreen });
-                }}
-            />
+            <FloatingButton onPress={handleAddAlarmPress} />
         </>
     );
 };

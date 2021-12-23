@@ -50,6 +50,11 @@ const FindPasswordContainer01 = ({ navigation }) => {
     const width = Dimensions.get("window").width;
     const height = Dimensions.get("window").height;
 
+    // ✨ 알람 목록 화면으로 이동
+    const handleHomeButtonPress = () => {
+        navigation.navigate("AlarmList");
+    };
+
     return (
         <Container>
             <ContentContainer width={width}>
@@ -72,10 +77,7 @@ const FindPasswordContainer01 = ({ navigation }) => {
                     />
                 </ContentArea>
                 <ButtonArea>
-                    <Button
-                        title="홈으로"
-                        onPress={() => navigation.navigate("AlarmList")}
-                    />
+                    <Button title="홈으로" onPress={handleHomeButtonPress} />
                 </ButtonArea>
             </ContentContainer>
         </Container>

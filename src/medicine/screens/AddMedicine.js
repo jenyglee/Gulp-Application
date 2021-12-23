@@ -35,6 +35,8 @@ const StyledTitle = styled.Text`
     margin-bottom: 10px;
 `;
 
+const fromScreen = "AddMedicine";
+
 const AddMedicine = ({ navigation, route }) => {
     const dispatch = useDispatch();
     const width = Dimensions.get("window").width;
@@ -55,33 +57,11 @@ const AddMedicine = ({ navigation, route }) => {
     const [isFocusedBrand, setIsFocusedBrand] = useState(false);
     const refBrand = useRef(null);
     const refMedicine = useRef(null);
-    const fromScreen = "AddMedicine";
 
     useEffect(() => {
+        // 영양제 검색하다가 추가로 온 경우 검색할 때 Input 값이 그대로 들어가있게 한다.
         setMedicine(route.params.medicine || "");
     }, []);
-
-    const handleSelectCategory = (id) => {
-        console.log(id);
-        categoryData.map((item) => {
-            if (item.id === id) {
-                dispatch(actionsMedicines.setCategory(item));
-                refBrand.current.focus();
-                return;
-            } else return;
-        });
-    };
-
-    // ✨ medicine 검색어 자동완성 노출
-    const debounceSearchMedicine = _.debounce(async (text) => {
-        if (text) {
-            setIsSearchingMedicine(true);
-            const medicines = await apiGetMedicines({ brandKey, text });
-            setFiltered(medicines ?? []);
-        } else {
-            setIsSearchingMedicine(false);
-        }
-    }, 300);
 
     //✨ brand 검색어 자동완성 노출
     const debounceSearchBrand = _.debounce(async (text) => {
@@ -94,8 +74,48 @@ const AddMedicine = ({ navigation, route }) => {
         }
     }, 300);
 
+    // ✨ 드롭리스트 노출
     const handleVisibleDropList = () => {
         setIsSelectingCategory(!isSelectingCategory);
+    };
+
+    // ✨ 카테고리 중 하나 선택
+    const handleSelectCategoryItemPress = (id) => {
+        dispatch(actionsMedicines.selectCategory(categoryData, id));
+    };
+
+    // ✨ 브랜드명 입력 시 자동검색
+    const handleBrandInputWrite = (text) => {
+        dispatch(actionsMedicines.searchBrand(text, debounceSearchBrand));
+    };
+
+    // ✨드롭리스트에서 브랜드 선택
+    const handleBrandDropListItemPress = (id) => {
+        dispatch(
+            actionsMedicines.selectBrand(
+                id,
+                filtered,
+                setIsSearchingBrand,
+                setFiltered
+            )
+        );
+    };
+
+    // ✨ 영양제를 서버에 등록하고 내 알람에 등록
+    const handleAddButtonPress = () => {
+        dispatch(
+            actionsMedicines.addAndSaveMedicine(
+                category,
+                brand,
+                brandKey,
+                categoryKey,
+                medicine,
+                medicineList,
+                navigation,
+                fromScreen,
+                token
+            )
+        );
     };
 
     return (
@@ -103,9 +123,7 @@ const AddMedicine = ({ navigation, route }) => {
             <KeyboardAwareScrollView
                 enableOnAndroid={true}
                 contentContainerStyle={{
-                    // flex: 1,
                     height: "100%",
-                    // alignSelf: "center",
                 }}
             >
                 <Container width={width}>
@@ -123,7 +141,9 @@ const AddMedicine = ({ navigation, route }) => {
                         {isSelectingCategory && (
                             <PressDropList
                                 filtered={filtered}
-                                onSelectItem={handleSelectCategory}
+                                onSelectItem={(id) =>
+                                    handleSelectCategoryItemPress(id)
+                                }
                                 onVisibleDropList={handleVisibleDropList}
                                 categoryData={categoryData}
                                 isFocused={isFocusedCategory}
@@ -140,14 +160,7 @@ const AddMedicine = ({ navigation, route }) => {
                             }}
                             value={brand}
                             onBlur={() => {}}
-                            onChangeText={(text) =>
-                                dispatch(
-                                    actionsMedicines.onSearchBrand(
-                                        text,
-                                        debounceSearchBrand
-                                    )
-                                )
-                            }
+                            onChangeText={(text) => handleBrandInputWrite(text)}
                             placeholder="브랜드를 입력해주세요"
                             onSubmitEditing={() => {
                                 // refMedicine.current.focus();
@@ -160,16 +173,9 @@ const AddMedicine = ({ navigation, route }) => {
                         {isSearchingBrand && (
                             <BrandsDropList
                                 filtered={filtered}
-                                onSelectItem={(id) => {
-                                    dispatch(
-                                        actionsMedicines.handleSelectBrand(
-                                            id,
-                                            filtered,
-                                            setIsSearchingBrand,
-                                            setFiltered
-                                        )
-                                    );
-                                }}
+                                onSelectItem={(id) =>
+                                    handleBrandDropListItemPress(id)
+                                }
                                 setIsFocusedBrand={setIsFocusedBrand}
                             />
                         )}
@@ -188,24 +194,7 @@ const AddMedicine = ({ navigation, route }) => {
                         />
                     </StyledForm>
                 </Container>
-                <Button
-                    title="등록"
-                    onPress={() => {
-                        dispatch(
-                            actionsMedicines.addAndSaveMedicine(
-                                category,
-                                brand,
-                                brandKey,
-                                categoryKey,
-                                medicine,
-                                medicineList,
-                                navigation,
-                                fromScreen,
-                                token
-                            )
-                        );
-                    }}
-                />
+                <Button title="등록" onPress={handleAddButtonPress} />
             </KeyboardAwareScrollView>
         </>
     );
