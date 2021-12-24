@@ -11,13 +11,7 @@ const apiSignin = async (member) => {
             url: url + "signin",
             data: member,
         });
-
-        if (response.data.statusCodeValue === 200) {
-            console.log(response);
-            await AsyncStorage.setItem("token", response.headers.authorization);
-        } else if (response.data.statusCodeValue !== 200) {
-            throw new Error(response.data.body.message);
-        }
+        return response;
     } catch (error) {
         console.log(error);
     }
@@ -95,7 +89,7 @@ const apiUpdateUser = async ({ token, nickname, password }) => {
             headers: { authorization: token },
             data: { nickname, password },
         });
-        console.log(response);
+        return response;
     } catch (error) {
         console.log(error);
     }

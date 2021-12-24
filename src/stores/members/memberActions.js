@@ -1,5 +1,6 @@
 import { actionsMembers } from "./membersSlice";
 import { Alert } from "react-native";
+import jwt_decode from "jwt-decode";
 import { apiSignup } from "@/member/api/memberApi";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
@@ -12,7 +13,22 @@ const actions = {
                 if (email !== "") {
                     if (isEmail(email)) {
                         if (password !== "") {
-                            await apiSignin({ email, password });
+                            const response = await apiSignin({
+                                email,
+                                password,
+                            });
+                            if (response.data.statusCodeValue === 200) {
+                                const token = response.headers.authorization;
+                                await AsyncStorage.setItem("token", token);
+                                const user = jwt_decode(token);
+                                dispatch(
+                                    actionsMembers.setNickname(user.nickname)
+                                );
+                            } else if (response.data.statusCodeValue !== 200) {
+                                console.log(
+                                    JSON.stringify(response.data.body.message)
+                                );
+                            }
                             navigation.navigate("AlarmList");
                         } else {
                             Alert.alert("비밀번호를 입력해주세요.");
@@ -30,6 +46,7 @@ const actions = {
                 console.log(JSON.stringify(e.message));
             }
         },
+
     // ✨ 모두 동의 체크(Signup00)
     allCheck: (allAgree, list, setAllAgree, setList) => (dispatch) => {
         const copyAllAgree = [...allAgree];
@@ -86,6 +103,10 @@ const actions = {
     getUser: () => async (dispatch) => {
         const token = await AsyncStorage.getItem("token");
         dispatch(actionsMembers.setToken(token));
+    },
+
+    setNickname: (nickname) => (dispatch) => {
+        dispatch(actionsMembers.setNickname(nickname));
     },
 };
 

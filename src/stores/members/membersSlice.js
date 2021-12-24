@@ -4,10 +4,14 @@ export const membersSlice = createSlice({
     name: "members",
     initialState: {
         token: "",
+        nickname: "",
     },
     reducers: {
         setToken(state, action) {
             state.token = action.payload;
+        },
+        setNickname(state, action) {
+            state.nickname = action.payload;
         },
     },
 });

@@ -1,7 +1,6 @@
 import React, { useState, useRef, useEffect, useContext } from "react";
 import styled, { ThemeContext } from "styled-components";
 import { ButtonFloating } from "@components/index";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Button, Input, TextButton } from "@components/index";
 import {
     BrandsDropList,
@@ -9,7 +8,7 @@ import {
     PressDropList,
     ButtonCategorySelect,
 } from "@/medicine/components/index";
-import { Alert, Animated, Dimensions, Platform } from "react-native";
+import { Alert, Animated, Dimensions, Platform, LogBox } from "react-native";
 import _ from "lodash";
 import { apiGetBrands, apiGetMedicines } from "@/medicine/api/medicineApi";
 import { useSelector, useDispatch } from "react-redux";
@@ -42,7 +41,6 @@ const StyledTitle = styled.Text`
 const TextButtonContainer = styled.View`
     width: 100%;
     position: absolute;
-    /* bottom: 0; */
     bottom: 80px;
     left: 0;
 `;
@@ -66,10 +64,8 @@ const SearchMedicine = ({ navigation }) => {
         medicine,
         medicineList,
     } = useSelector(stateMedicines);
-    console.log(categoryData);
     const { token } = useSelector(stateMembers);
     const [filtered, setFiltered] = useState([]);
-    const [medicineNeedSave, setMedicineNeedSave] = useState("");
     const [showBrand, setShowBrand] = useState(false);
     const [showMedicine, setShowMedicine] = useState(false);
     const [isFocusedCategory, setIsFocusedCategory] = useState(false);
@@ -94,6 +90,8 @@ const SearchMedicine = ({ navigation }) => {
         // 카테고리 조회 api 적용
         dispatch(actionsMembers.getUser());
         dispatch(actionsMedicines.setCategoryData(token));
+
+        LogBox.ignoreLogs(["VirtualizedLists should never be nested"]);
     }, []);
 
     // ✨ '브랜드 이름' 노출

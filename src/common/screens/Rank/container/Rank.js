@@ -64,7 +64,11 @@ const Ranking = ({ navigation }) => {
     // ✨ 로그인정보 가져오기
     const getUser = async () => {
         const token = await AsyncStorage.getItem("token");
-        setIsSignin(token);
+        if (token) {
+            setIsSignin(token);
+        } else {
+            setIsSignin(false);
+        }
     };
 
     // ✨ 로그인 화면으로 이동

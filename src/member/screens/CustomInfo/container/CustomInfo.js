@@ -6,7 +6,9 @@ import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view
 import { Button, Input, InputDisabled } from "@components/index";
 import { removeWhiteSpace } from "@/util";
 import { View, Alert, Dimensions } from "react-native";
-import { apiUpdateUser } from "@/member/api/memberApi";
+import { apiUpdateUser, apiSignin } from "@/member/api/memberApi";
+import { useDispatch } from "react-redux";
+import actionsMembers from "stores/members/memberActions";
 
 const Container = styled.View`
     flex: 1;
@@ -27,6 +29,7 @@ const StyledTitle = styled.Text`
 `;
 
 const SignupContainer00 = ({ navigation }) => {
+    const dispatch = useDispatch();
     const theme = useContext(ThemeContext);
     const width = Dimensions.get("window").width;
     const [token, setToken] = useState("");
@@ -64,9 +67,25 @@ const SignupContainer00 = ({ navigation }) => {
                 // if 패스워드와 패스워드컨펌이 6자리 이상이라면
                 if (password == passwordConfirm) {
                     // if 패스워드와 패스워드컨펌이 같다면
-                    await apiUpdateUser({ token, nickname, password });
-                    Alert.alert("회원정보 변경이 완료되었습니다.");
-                    navigation.goBack();
+                    const response = await apiUpdateUser({
+                        token,
+                        nickname,
+                        password,
+                    });
+                    if (response.status === 200) {
+                        Alert.alert("회원정보 변경이 완료되었습니다.");
+                        dispatch(actionsMembers.setNickname(nickname));
+                        navigation.goBack();
+                    }
+                    // dispatch(
+                    //     actionsMembers.signin(
+                    //         email,
+                    //         password,
+                    //         apiSignin,
+                    //         isEmail,
+                    //         navigation
+                    //     )
+                    // );
                 } else {
                     Alert.alert("비밀번호가 일치하지 않습니다.");
                 }

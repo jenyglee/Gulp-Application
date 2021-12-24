@@ -8,8 +8,8 @@ import { GradeTable } from "@components/modal/index";
 import { apiLogout, apiRemoveUser } from "@/member/api/memberApi";
 import RequireSignin from "@/common/components/RequireSignin";
 import { illust } from "@/images";
-import jwt_decode from "jwt-decode";
-import { useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
+import { stateMembers } from "stores/members/membersSlice";
 
 const Container = styled.View`
     width: 100%;
@@ -20,11 +20,10 @@ const Container = styled.View`
 `;
 
 const MyPageContainer = ({ navigation }) => {
-    const dispatch = useDispatch();
     const height = Dimensions.get("window").height;
+    const { nickname } = useSelector(stateMembers);
     const [gradeTable, setGradeTable] = useState(false); // 등급표
     const [isSignin, setIsSignin] = useState(true); // 마이페이지 노출(로그인시)
-    const [nickname, setNickname] = useState("");
 
     // ✨ 유저 정보 확인
     useEffect(() => {
@@ -34,14 +33,16 @@ const MyPageContainer = ({ navigation }) => {
         return () => {
             removeFocusEvent();
         };
-    }, [isSignin]);
+    }, []);
 
     // ✨ 로그인정보 가져오기
     const getUser = async () => {
         const token = await AsyncStorage.getItem("token");
-        const user = await jwt_decode(token);
-        (await user) ? setIsSignin(true) : setIsSignin(false);
-        await setNickname(user.nickname);
+        if (token) {
+            setIsSignin(token);
+        } else {
+            setIsSignin(false);
+        }
     };
 
     // ✨ 등급표 노출/숨김

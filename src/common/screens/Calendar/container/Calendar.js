@@ -66,11 +66,10 @@ const Calendar = ({ navigation }) => {
     const { historyData, selectedDate } = useSelector(stateCalendar);
     const width = Dimensions.get("window").width;
     const height = Dimensions.get("window").height;
-    const [isSignin, setIsSignin] = useState(true); // 캘린더 노출(로그인시)
+    const [isSignin, setIsSignin] = useState(false); // 캘린더 노출(로그인시)
     const [selectedData, setSelectedData] = useState({});
     const [changedDate, setChangedDate] = useState({});
 
-    //
     useEffect(() => {
         const removeFocusEvent = navigation.addListener("focus", () => {
             getUser(); //로그인정보 가져오기
@@ -94,7 +93,11 @@ const Calendar = ({ navigation }) => {
     // ✨ 로그인정보 가져오기
     const getUser = async () => {
         const token = await AsyncStorage.getItem("token");
-        setIsSignin(token);
+        if (token) {
+            setIsSignin(token);
+        } else {
+            setIsSignin(false);
+        }
     };
 
     // ✨ 날짜 변환하기

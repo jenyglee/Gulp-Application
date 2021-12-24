@@ -53,6 +53,7 @@ const Category = ({ selectedItem, setSelectedItem, categoryData }) => {
                 renderItem={renderItem}
                 keyExtractor={(item, index) => index.toString()}
                 horizontal={true}
+                showsHorizontalScrollIndicator={false}
                 style={{
                     paddingLeft: 24,
                     paddingRight: 200,
