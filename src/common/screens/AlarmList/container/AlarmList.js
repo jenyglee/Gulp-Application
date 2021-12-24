@@ -8,6 +8,7 @@ import Grade from "@/common/screens/AlarmList/component/Grade";
 import Alarm from "@/common/screens/AlarmList/component/Alarm";
 import ButtonFilter from "@/common/screens/AlarmList/component/ButtonFilter";
 import FloatingButton from "@/common/screens/AlarmList/component/FloatingButton";
+import NotFoundAlarms from "../component/NotFoundAlarms";
 import { GradeTable } from "@components/modal/index";
 import CompleteModal from "@screens/AlarmList/component/CompleteModal";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
@@ -54,6 +55,7 @@ const AlarmList = ({ navigation, alarmsStore }) => {
     const theme = useContext(ThemeContext);
     const { year, month, date, day, alarms, count, countTotal } =
         useSelector(stateAlarms);
+    console.log(alarms);
     const width = Dimensions.get("window").width;
     const insets = useSafeAreaInsets();
     const [selectedTaskKey, setSelectedTaskKey] = useState();
@@ -156,7 +158,7 @@ const AlarmList = ({ navigation, alarmsStore }) => {
                         />
                     </TitleContainer>
 
-                    {isVisibleAlarm ? (
+                    {alarms[0] ? (
                         Object.values(alarms).map((item, index) => {
                             return (
                                 <Alarm
@@ -173,7 +175,7 @@ const AlarmList = ({ navigation, alarmsStore }) => {
                             );
                         })
                     ) : (
-                        <ProfileName>약을 추가해주세요.</ProfileName>
+                        <NotFoundAlarms />
                     )}
 
                     {gradeTable ? (

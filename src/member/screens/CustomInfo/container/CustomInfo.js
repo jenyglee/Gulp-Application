@@ -6,7 +6,7 @@ import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view
 import { Button, Input, InputDisabled } from "@components/index";
 import { removeWhiteSpace } from "@/util";
 import { View, Alert, Dimensions } from "react-native";
-import { apiUpdateUser, apiSignin } from "@/member/api/memberApi";
+import { apiUpdateUser } from "@/member/api/memberApi";
 import { useDispatch } from "react-redux";
 import actionsMembers from "stores/members/memberActions";
 
@@ -20,7 +20,9 @@ const Container = styled.View`
     align-items: center;
 `;
 
-const InputContainer = styled.View``;
+const InputContainer = styled.View`
+    width: ${({ width }) => width - 48}px;
+`;
 
 const StyledTitle = styled.Text`
     font-size: 20px;
@@ -77,15 +79,6 @@ const SignupContainer00 = ({ navigation }) => {
                         dispatch(actionsMembers.setNickname(nickname));
                         navigation.goBack();
                     }
-                    // dispatch(
-                    //     actionsMembers.signin(
-                    //         email,
-                    //         password,
-                    //         apiSignin,
-                    //         isEmail,
-                    //         navigation
-                    //     )
-                    // );
                 } else {
                     Alert.alert("비밀번호가 일치하지 않습니다.");
                 }
@@ -106,7 +99,7 @@ const SignupContainer00 = ({ navigation }) => {
                 extraScrollHeight={20}
             >
                 <Container>
-                    <InputContainer>
+                    <InputContainer width={width}>
                         <StyledTitle
                             style={{
                                 color: theme.inputPlaceholderText,
@@ -123,7 +116,7 @@ const SignupContainer00 = ({ navigation }) => {
                         />
                     </InputContainer>
 
-                    <View>
+                    <InputContainer width={width}>
                         <StyledTitle>변경할 닉네임을 입력해주세요</StyledTitle>
                         <Input
                             title="닉네임"
@@ -140,9 +133,9 @@ const SignupContainer00 = ({ navigation }) => {
                                 marginBottom: 36,
                             }}
                         />
-                    </View>
+                    </InputContainer>
 
-                    <View>
+                    <InputContainer width={width}>
                         <StyledTitle>
                             변경할 비밀번호를 입력해주세요
                         </StyledTitle>
@@ -174,7 +167,7 @@ const SignupContainer00 = ({ navigation }) => {
                             }}
                             secureTextEntry={true}
                         />
-                    </View>
+                    </InputContainer>
                 </Container>
             </KeyboardAwareScrollView>
             <Button

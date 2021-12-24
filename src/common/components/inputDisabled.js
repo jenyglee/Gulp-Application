@@ -3,7 +3,7 @@ import { Dimensions } from "react-native";
 import styled from "styled-components";
 
 const Container = styled.View`
-    width: ${({ width }) => width - 48}px;
+    width: 100%;
     height: 50px;
     background: ${({ theme }) => theme.inputHold};
     margin-bottom: 12px;
