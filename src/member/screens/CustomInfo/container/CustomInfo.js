@@ -5,7 +5,7 @@ import jwt_decode from "jwt-decode";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { Button, Input, InputDisabled } from "@components/index";
 import { removeWhiteSpace } from "@/util";
-import { View, Alert, Dimensions } from "react-native";
+import { Alert, Dimensions } from "react-native";
 import { apiUpdateUser } from "@/member/api/memberApi";
 import { useDispatch } from "react-redux";
 import actionsMembers from "stores/members/memberActions";

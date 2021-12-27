@@ -78,10 +78,28 @@ const apiGetOneAlarm = async (token, alarmId) => {
     }
 };
 
+// ✨ 알람 삭제하기
+const apiRemoveAlarm = async (token, alarmId) => {
+    try {
+        const response = await axios({
+            method: "DELETE",
+            url: url + `alarms/${alarmId}`,
+            params: {
+                alarmId: alarmId,
+            },
+            headers: { authorization: token },
+        });
+        return response;
+    } catch (error) {
+        console.log(error);
+    }
+};
+
 export {
     apiAddAlarm,
     apiEditAlarm,
     apiGetAlarm,
     apiGetAllAlarm,
     apiGetOneAlarm,
+    apiRemoveAlarm,
 };

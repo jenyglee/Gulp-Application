@@ -40,13 +40,15 @@ const StyledTitle = styled.Text`
     margin-bottom: 10px;
 `;
 
-const AddMedicine = ({ navigation, route }) => {
+const AddAlarm = ({ navigation, route }) => {
     const dispatch = useDispatch();
     const width = Dimensions.get("window").width;
     const height = Dimensions.get("window").height;
     const theme = useContext(ThemeContext);
     const { medicineList } = useSelector(stateMedicines);
     const { time, timeWithColon } = useSelector(stateAlarms);
+    const [weekCheckList, setWeekCheckList] = useState(""); // 체크된 요일
+    const [medicinesId, setMedicinesId] = useState([]);
     const [week, setWeek] = useState([
         { id: 1, day: "월", checked: false },
         { id: 2, day: "화", checked: false },
@@ -59,8 +61,6 @@ const AddMedicine = ({ navigation, route }) => {
     const [weekAll, setWeekAll] = useState([
         { id: 0, day: "All", checked: false },
     ]);
-    const [weekCheckList, setWeekCheckList] = useState(""); // 체크된 요일
-    const [medicinesId, setMedicinesId] = useState([]);
 
     useEffect(() => {
         // 알람 변경 시
@@ -180,10 +180,4 @@ const AddMedicine = ({ navigation, route }) => {
     );
 };
 
-export default inject((stores) => ({
-    medicinesStore: stores.medicinesStore,
-    commonStore: stores.commonStore,
-    alarmsStore: stores.alarmsStore,
-}))(observer(AddMedicine));
-// observer: 스토어를 관측할 것이다.
-// inject : 어떤 스토어일지
+export default AddAlarm;

@@ -44,7 +44,6 @@ const CameraBtn = styled.Image`
 
 const TextContainer = styled.View`
     align-items: center;
-    margin-bottom: 30px;
 `;
 
 const NickName = styled.Text`
@@ -54,16 +53,12 @@ const NickName = styled.Text`
     margin-bottom: 5px;
 `;
 
-const Grade = styled.Text`
-    font-size: 14px;
-    color: ${({ theme }) => theme.textBasic};
-`;
-
 const DEFAULT_PHOTO =
     "https://firebasestorage.googleapis.com/v0/b/medicine-cc1f6.appspot.com/o/face.png?alt=media";
 
 const Profile = ({ nickname }) => {
     const [photo, setPhoto] = useState(DEFAULT_PHOTO);
+    console.log(nickname);
 
     useEffect(() => {
         (async () => {
@@ -102,7 +97,6 @@ const Profile = ({ nickname }) => {
             </ImageContainer>
             <TextContainer>
                 <NickName>{nickname}</NickName>
-                <Grade>자기관리 꿈나무</Grade>
             </TextContainer>
         </Container>
     );

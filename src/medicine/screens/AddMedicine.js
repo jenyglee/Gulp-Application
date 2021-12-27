@@ -1,16 +1,14 @@
 import React, { useState, useRef, useEffect } from "react";
 import styled from "styled-components";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Button, Input } from "@components/index";
 import {
     BrandsDropList,
     PressDropList,
     ButtonCategorySelect,
 } from "@/medicine/components/index";
-import { Alert, Dimensions } from "react-native";
-import { apiGetBrands, apiGetMedicines } from "@/medicine/api/medicineApi";
+import { Dimensions } from "react-native";
+import { apiGetBrands } from "@/medicine/api/medicineApi";
 import _ from "lodash";
-import { addMedicine } from "@/medicine/api/medicineApi";
 import { useSelector, useDispatch } from "react-redux";
 import { stateMembers } from "stores/members/membersSlice";
 import { stateMedicines } from "stores/medicines/medicinesSlice";

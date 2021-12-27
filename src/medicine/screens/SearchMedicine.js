@@ -8,7 +8,7 @@ import {
     PressDropList,
     ButtonCategorySelect,
 } from "@/medicine/components/index";
-import { Alert, Animated, Dimensions, Platform, LogBox } from "react-native";
+import { Animated, Dimensions, Platform, LogBox } from "react-native";
 import _ from "lodash";
 import { apiGetBrands, apiGetMedicines } from "@/medicine/api/medicineApi";
 import { useSelector, useDispatch } from "react-redux";
@@ -20,7 +20,6 @@ import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view
 
 const Container = styled.View`
     width: ${({ width }) => width - 48}px;
-    /* height: 100%; */
     align-self: center;
     display: flex;
     align-items: center;

@@ -1,19 +1,16 @@
 import React, { useState, useContext, useEffect } from "react";
-import { View, Dimensions, FlatList } from "react-native";
+import { Dimensions, FlatList } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import styled, { ThemeContext } from "styled-components";
 import ListItem from "@/common/screens/Rank/component/ListItem";
 import Category from "@/common/screens/Rank/component/Category";
 import RequireSignin from "@/common/components/RequireSignin";
 import { illust } from "@/images";
-import { tempData, categoryData } from "@/common/screens/Rank/data";
-
-import { apiGetCategory } from "@/medicine/api/medicineApi";
+import { tempData } from "@/common/screens/Rank/data";
 import { useSelector, useDispatch } from "react-redux";
 import { stateMedicines } from "stores/medicines/medicinesSlice";
 import actionsMedicines from "stores/medicines/medicineActions";
 import { stateMembers } from "stores/members/membersSlice";
-import actionsMembers from "stores/members/memberActions";
 
 const Container = styled.View`
     width: 100%;
@@ -41,7 +38,6 @@ const Block = styled.View`
 
 const Ranking = ({ navigation }) => {
     const dispatch = useDispatch();
-    const theme = useContext(ThemeContext);
     const width = Dimensions.get("window").width;
     const height = Dimensions.get("window").height;
     const { token } = useSelector(stateMembers);

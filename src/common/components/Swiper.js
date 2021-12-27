@@ -14,6 +14,7 @@ const Slide = styled.View`
 const SubTitle = styled.Text`
     color: #27c47d;
     font-size: 14px;
+    font-weight: bold;
     margin-bottom: 5px;
 `;
 
@@ -62,48 +63,48 @@ export default class SwiperComponent extends Component {
                 }}
             >
                 <Slide>
-                    <SubTitle>1주일동안 꾸준히 복용 시</SubTitle>
-                    <Title>자기관리 꿈나무</Title>
+                    <SubTitle>꾸준히 복용 시작!</SubTitle>
+                    <Title>건강관리 꿈나무</Title>
                     <StyledImage
                         source={imageNumber.grade01}
                         resizeMode="center"
                     />
                 </Slide>
                 <Slide>
-                    <SubTitle>2주일동안 꾸준히 복용 시</SubTitle>
-                    <Title>내 취미는 자기관리!</Title>
+                    <SubTitle>2주일동안 복용 시!</SubTitle>
+                    <Title>내 취미는 건강관리!</Title>
                     <StyledImage
                         source={imageNumber.grade02}
                         resizeMode="center"
                     />
                 </Slide>
                 <Slide>
-                    <SubTitle>3주일동안 꾸준히 복용 시</SubTitle>
-                    <Title>자기관리 엘리트</Title>
+                    <SubTitle>4주일동안 복용 시!</SubTitle>
+                    <Title>영양제 엘리트</Title>
                     <StyledImage
                         source={imageNumber.grade03}
                         resizeMode="center"
                     />
                 </Slide>
                 <Slide>
-                    <SubTitle>4주일동안 꾸준히 복용 시</SubTitle>
-                    <Title>자기관리 없이는 못살아😂</Title>
+                    <SubTitle>6주일동안 복용 시!</SubTitle>
+                    <Title>영양제 없이는 못살아😂</Title>
                     <StyledImage
                         source={imageNumber.grade04}
                         resizeMode="center"
                     />
                 </Slide>
                 <Slide>
-                    <SubTitle>5주일동안 꾸준히 복용 시</SubTitle>
-                    <Title>일.편.단.심 자기관리</Title>
+                    <SubTitle>8주일동안 복용 시!</SubTitle>
+                    <Title>일.편.단.심 건강관리</Title>
                     <StyledImage
                         source={imageNumber.grade04}
                         resizeMode="center"
                     />
                 </Slide>
                 <Slide>
-                    <SubTitle>6주일동안 꾸준히 복용 시</SubTitle>
-                    <Title>자기관리 외길인생...</Title>
+                    <SubTitle>10주일동안 복용 시!</SubTitle>
+                    <Title>건강관리 외길인생...</Title>
                     <StyledImage
                         source={imageNumber.grade04}
                         resizeMode="center"

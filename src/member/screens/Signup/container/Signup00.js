@@ -4,8 +4,7 @@ import styled, { ThemeContext } from "styled-components";
 import { icons14px } from "@/icons";
 import { Button } from "@components/index";
 import CheckList from "@/member/screens/Signup/component/CheckList";
-import { useSelector, useDispatch } from "react-redux";
-import { stateMembers } from "stores/members/membersSlice";
+import { useDispatch } from "react-redux";
 import actionsMembers from "stores/members/memberActions";
 
 const Wrap = styled.View`

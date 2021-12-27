@@ -23,7 +23,6 @@ const ModalContainer = styled.View`
     background-color: ${({ theme }) => theme.white};
     width: ${({ width }) => width - 48}px;
     height: 350px;
-    /* padding: 30px; */
     border-radius: 12px;
     align-items: center;
 `;

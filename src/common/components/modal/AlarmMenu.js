@@ -44,7 +44,7 @@ const AlarmMenu = ({
     isVisibleMenu,
     setIsVisibleMenu,
     onEditAlarm,
-    onDeleteTask,
+    onDeleteAlarm,
 }) => {
     // const { isVisibleMenu, setIsVisibleMenu } = props;
     const width = Dimensions.get("screen").width;
@@ -128,7 +128,7 @@ const AlarmMenu = ({
                         <Line />
                         <ListBtn
                             onPress={() => {
-                                onDeleteTask();
+                                onDeleteAlarm();
                                 closeModal();
                             }}
                         >

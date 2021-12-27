@@ -12,7 +12,6 @@ export const alarmsSlice = createSlice({
         date: new Date().getDate(),
         day: new Date().getDay(),
         count: 0,
-        countTotal: 0,
     },
     reducers: {
         setAlarms(state, action) {
@@ -26,12 +25,6 @@ export const alarmsSlice = createSlice({
         },
         setCount(state, action) {
             state.count = action.payload;
-        },
-        setCountTotal(state, action) {
-            state.countTotal = action.payload;
-        },
-        setIsVisibleCompleteModal(state, action) {
-            state.isVisibleCompleteModal = action.payload;
         },
         setDay(state, action) {
             state.day = action.payload;

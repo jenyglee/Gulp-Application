@@ -131,12 +131,11 @@ const SignupContainer00 = ({ navigation }) => {
     // ✨ 이메일 중복검사
     const handleEmailValidation = async () => {
         const response = await apiEmailValidation(email);
-        console.log(response.validation);
-        // if (response.validation) {
-        //     Alert.alert("사용 가능한 이메일입니다.");
-        // } else {
-        //     Alert.alert("이미 사용중인 이메일입니다.");
-        // }
+        if (response.validation) {
+            Alert.alert("사용 가능한 이메일입니다.");
+        } else {
+            Alert.alert("이미 사용중인 이메일입니다.");
+        }
     };
 
     return (

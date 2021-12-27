@@ -2,7 +2,7 @@ import React, { useState, useRef } from "react";
 import styled from "styled-components";
 import { Alert, Dimensions } from "react-native";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
-import { Button, Input, Image } from "@components/index";
+import { Button, Input } from "@components/index";
 import { isEmail, removeWhiteSpace } from "@/util";
 
 const Container = styled.View`

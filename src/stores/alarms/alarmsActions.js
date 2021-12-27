@@ -7,22 +7,25 @@ import {
     apiGetAlarm,
     apiGetAllAlarm,
     apiGetOneAlarm,
+    apiRemoveAlarm,
 } from "@/common/api/alarmApi";
+import jwt_decode from "jwt-decode";
 import { apiCompletedCount } from "@/member/api/memberApi.js";
 import { Alert } from "react-native";
 import _ from "lodash";
+import { actionsMembers } from "../members/membersSlice.js";
 
 const actions = {
     // ✨ 알람 삭제(alarmList)
-    deleteTask:
-        ({ selectedTaskKey, filtered, day }) =>
+    deleteAlarm:
+        ({ selectedTaskKey, day, setCompleted }) =>
         async (dispatch) => {
             try {
-                const alarms = await actions.deleteAlarm(selectedTaskKey)(
-                    dispatch
-                );
-                await actions.storeData(alarms)(dispatch);
-                await actions.getAlarms({ filtered, day })(dispatch);
+                const token = await AsyncStorage.getItem("token");
+                const response = await apiRemoveAlarm(token, selectedTaskKey);
+                if (response.status === 200) {
+                    actions.getAlarms(day, setCompleted)(dispatch);
+                }
             } catch (error) {
                 console.log(JSON.stringify(error));
             }
@@ -38,8 +41,6 @@ const actions = {
             year,
             month,
             date,
-            count,
-            countTotal,
         }) =>
         async (dispatch) => {
             try {
@@ -50,22 +51,19 @@ const actions = {
                 // 완료모달 노출
                 const allCompleted = completed.every((item) => item.completed);
                 if (allCompleted) {
-                    // 🍎 api는 현재 response.data가 ""으로 나와서 현재는 가려둠
-                    // const token = await AsyncStorage.getItem("token");
-                    // const response = await apiCompletedCount(token);
-                    // console.log(response);
-
                     const loadedDate = await AsyncStorage.getItem("date");
                     const parseDate = JSON.parse(loadedDate); // 이전에 완료한 날짜
                     const todayDate = `${year}-${month + 1}-${date}`; // "오늘 날짜"
-                    // const todayDate = "2021-11-10" // 임시용
+                    // const todayDate = "2021-11-18"; // 임시용
                     if (parseDate !== todayDate) {
-                        dispatch(actionsAlarms.setCountTotal(countTotal + 1));
-                        // ✨복용완료 게이지 14까지 되었을 시 초기화
-                        if (count === 13) {
-                            dispatch(actionsAlarms.setCount(0));
-                        } else {
-                            dispatch(actionsAlarms.setCount(count + 1));
+                        const token = await AsyncStorage.getItem("token");
+                        const response = await apiCompletedCount(token);
+                        if (response.status === 200) {
+                            dispatch(actionsAlarms.setCount(response.data));
+                            AsyncStorage.setItem(
+                                "count",
+                                JSON.stringify(response.data)
+                            );
                         }
                         await AsyncStorage.setItem(
                             "date",
@@ -82,31 +80,24 @@ const actions = {
             }
         },
 
-    // ✨ 컴포넌트 삭제후 리턴(alarmList)
-    deleteAlarm: (selectedTaskKey) => async (dispatch) => {
-        try {
-            const loadedData = await AsyncStorage.getItem("alarm");
-            const parseData = JSON.parse(loadedData);
-            const copy = Object.assign({}, parseData);
-            delete copy[selectedTaskKey];
-            return copy;
-        } catch (error) {
-            console.log(error);
-        }
-    },
-
     // ✨ 알람 불러오기(alarmList)
     getAlarms: (day, setCompleted) => async (dispatch) => {
         try {
             const token = await AsyncStorage.getItem("token");
+            const count = await AsyncStorage.getItem("count");
             const changedDay = day ? day : 7; //일요일을 0 👉 7 변환
             const response = await apiGetAlarm(token, changedDay);
             dispatch(actionsAlarms.setAlarms(response.data));
+            dispatch(actionsAlarms.setCount(JSON.parse(count)));
 
             // 알람 수만큼 {completed:false} 생성하기
             const tempArr = [];
             response.data.map((alarm) => tempArr.push({ completed: false }));
             setCompleted(tempArr);
+
+            // 닉네임 저장하기
+            const user = jwt_decode(token);
+            dispatch(actionsMembers.setNickname(user.nickname));
         } catch (error) {
             console.log(JSON.stringify(error));
         }
@@ -203,77 +194,6 @@ const actions = {
             }
         },
 
-    // ✨ 알람이 아예 없는지 검사(alarmList)
-    confirmList:
-        ({ alarms, setIsVisibleAlarm }) =>
-        async (dispatch) => {
-            Object.values(alarms).length === 0
-                ? setIsVisibleAlarm(false)
-                : setIsVisibleAlarm(true);
-        },
-
-    // ✨ 로컬에 저장하기(alarmList)
-    storeData: (alarms) => async (dispatch) => {
-        try {
-            await AsyncStorage.setItem("alarm", JSON.stringify(alarms));
-        } catch (error) {
-            console.log(JSON.stringify(error));
-        }
-    },
-
-    // ✨전체 체크 시 복용일을 1일 증가(alarmList)
-    allCompleted:
-        ({
-            alarms,
-            year,
-            month,
-            date,
-            count,
-            countTotal,
-            setIsVisibleCompleteModal,
-        }) =>
-        async (dispatch) => {
-            // 🪲 오늘의 알람만 눌러야 완료체크 되도록 해야함. 🪲
-            let num = 0;
-
-            for (let i = 0; i < Object.values(alarms).length; i++) {
-                if (Object.values(alarms)[i].completed) {
-                    num++;
-                    if (num == Object.values(alarms).length) {
-                        const loadedDate = await AsyncStorage.getItem("date");
-                        const parseDate = JSON.parse(loadedDate);
-                        const todayDate = `${year}-${month + 1}-${date}`; // "2021-11-10"
-                        if (parseDate !== todayDate) {
-                            // ✨복용완료 일수 증가
-                            dispatch(
-                                actionsAlarms.setCountTotal(countTotal + 1)
-                            );
-                            // ✨복용완료 게이지 14까지 되었을 시 초기화
-                            if (count === 13) {
-                                dispatch(actionsAlarms.setCount(0));
-                            } else {
-                                dispatch(actionsAlarms.setCount(count + 1));
-                            }
-                            // ✨복용완료 모달 노출
-                            setIsVisibleCompleteModal(true);
-                            await AsyncStorage.setItem(
-                                "date",
-                                JSON.stringify(todayDate)
-                            );
-                            return;
-                        } else {
-                            return;
-                        }
-                    }
-                }
-            }
-        },
-
-    // ✨완료모달 닫기(alarmList)
-    setIsVisibleCompleteModal: (payload) => (dispatch) => {
-        dispatch(actionsAlarms.setIsVisibleCompleteModal(payload));
-    },
-
     //  ✨빈칸검수(AddAlarm)
     confirmValue: (medicineList, time, week) => (dispatch) => {
         // ① 복용중인 영양제에 등록된 약이 있는지
@@ -357,6 +277,7 @@ const actions = {
                 medicineIdList: medicineList,
                 token,
             });
+            console.log(response);
             if (response.status === 200) {
                 navigation.navigate("AlarmList");
             }

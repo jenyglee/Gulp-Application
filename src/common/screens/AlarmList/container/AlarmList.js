@@ -12,7 +12,6 @@ import NotFoundAlarms from "../component/NotFoundAlarms";
 import { GradeTable } from "@components/modal/index";
 import CompleteModal from "@screens/AlarmList/component/CompleteModal";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { inject, observer } from "mobx-react";
 import { useSelector, useDispatch } from "react-redux";
 import { stateAlarms } from "stores/alarms/alarmsSlice.js";
 import actionsAlarms from "stores/alarms/alarmsActions.js";
@@ -44,25 +43,18 @@ const StyledText = styled.Text`
     color: ${({ theme }) => theme.textBasic};
 `;
 
-const ProfileName = styled.Text`
-    font-size: 18px;
-`;
-
 const fromScreen = "AlarmList";
 
-const AlarmList = ({ navigation, alarmsStore }) => {
+const AlarmList = ({ navigation }) => {
     const dispatch = useDispatch(); //dispatch : 해당 state 값을 수정하는 액션
     const theme = useContext(ThemeContext);
-    const { year, month, date, day, alarms, count, countTotal } =
-        useSelector(stateAlarms);
-    console.log(alarms);
+    const { year, month, date, day, alarms, count } = useSelector(stateAlarms);
     const width = Dimensions.get("window").width;
     const insets = useSafeAreaInsets();
     const [selectedTaskKey, setSelectedTaskKey] = useState();
     const [gradeTable, setGradeTable] = useState(false); // 등급표
     const [isVisibleMenu, setIsVisibleMenu] = useState(false); // 알람메뉴 노출/숨김
     const [filtered, setFiltered] = useState(true); // 전체알람 < > 오늘알람
-    const [isVisibleAlarm, setIsVisibleAlarm] = useState(true); // 알람 유무
     const [completed, setCompleted] = useState([]);
     const [isVisibleCompleteModal, setIsVisibleCompleteModal] = useState(false); // 완료모달 노출/숨김
 
@@ -124,7 +116,6 @@ const AlarmList = ({ navigation, alarmsStore }) => {
                 month,
                 date,
                 count,
-                countTotal,
             })
         );
     };
@@ -132,10 +123,10 @@ const AlarmList = ({ navigation, alarmsStore }) => {
     // ✨ 알람 삭제
     const handleAlarmDelete = () => {
         dispatch(
-            actionsAlarms.deleteTask({
+            actionsAlarms.deleteAlarm({
                 selectedTaskKey,
-                filtered,
                 day,
+                setCompleted,
             })
         );
     };
@@ -145,11 +136,7 @@ const AlarmList = ({ navigation, alarmsStore }) => {
             <Wrap insets={insets}>
                 <Container width={width}>
                     <StatusBar backgroundColor={theme.background} />
-                    <Grade
-                        countTotal={countTotal}
-                        count={count}
-                        onPress={handleGradeButtonPress}
-                    />
+                    <Grade count={count} onPress={handleGradeButtonPress} />
                     <TitleContainer>
                         <StyledText>내 알람</StyledText>
                         <ButtonFilter
@@ -185,7 +172,7 @@ const AlarmList = ({ navigation, alarmsStore }) => {
                     <AlarmMenu
                         isVisibleMenu={isVisibleMenu}
                         setIsVisibleMenu={setIsVisibleMenu}
-                        onDeleteTask={handleAlarmDelete}
+                        onDeleteAlarm={handleAlarmDelete}
                         onEditAlarm={handleEditAlarmPress.bind(
                             undefined,
                             selectedTaskKey
@@ -203,8 +190,4 @@ const AlarmList = ({ navigation, alarmsStore }) => {
     );
 };
 
-export default inject("alarmsStore")(observer(AlarmList));
-// export default inject((stores) => ({
-//     alarmsStore: stores.alarmsStore,
-//     // commonStore: stores.commonStore,
-// }))(observer(AlarmList));
+export default AlarmList;
