@@ -25,6 +25,8 @@ React native 프로젝트 어플리케이션 '꿀꺽' 입니다. 영양제 복�
 #### 알람 필터&토글
 1. '내 알람' 타이틀 옆 'Today' 버튼(필터)을 눌러 전체 알람을 조회
 2. 오늘의 알람을 전부 체크 시 완료 모달 노출
+
+
 ![ezgif com-gif-maker (4)](https://user-images.githubusercontent.com/86715916/147679714-298467d6-0f36-4ba0-a2e1-928b8aea74e9.gif)
 ---
 #### 캘린더&랭크
