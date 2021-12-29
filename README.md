@@ -5,7 +5,7 @@ React native 프로젝트 어플리케이션 '꿀꺽' 입니다.
 ## 목표
 영양제 복용알람 서비스 앱입니다.
 
-
+![ezgif com-gif-maker](https://user-images.githubusercontent.com/86715916/147676877-32f26322-2f92-4659-8b99-da8bbdcdab81.gif)
 
 
 ## 주요기능
