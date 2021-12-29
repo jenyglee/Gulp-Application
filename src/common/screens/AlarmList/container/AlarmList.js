@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useContext } from "react";
 import styled, { ThemeContext } from "styled-components/native";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Dimensions } from "react-native";
 import { StatusBar } from "expo-status-bar";
 import { icons } from "@/icons";
@@ -15,6 +16,8 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useSelector, useDispatch } from "react-redux";
 import { stateAlarms } from "stores/alarms/alarmsSlice.js";
 import actionsAlarms from "stores/alarms/alarmsActions.js";
+import RequireSignin from "@/common/components/RequireSignin";
+import { illust } from "@/images";
 
 const Wrap = styled.ScrollView`
     padding-top: ${({ insets }) => insets.top}px;
@@ -24,10 +27,11 @@ const Wrap = styled.ScrollView`
 const Container = styled.View`
     flex: 1;
     width: ${({ width }) => width - 48}px;
+    padding-top: ${({ isSignin }) => (isSignin ? `0` : `53px`)};
+    padding-bottom: 50px;
     background-color: ${({ theme }) => theme.background};
     align-self: center;
-    justify-content: center;
-    margin-bottom: 50px;
+    justify-content: ${({ isSignin }) => (isSignin ? `flex-start` : `center`)};
 `;
 
 const TitleContainer = styled.View`
@@ -52,6 +56,7 @@ const AlarmList = ({ navigation }) => {
     const width = Dimensions.get("window").width;
     const insets = useSafeAreaInsets();
     const [selectedTaskKey, setSelectedTaskKey] = useState();
+    const [isSignin, setIsSignin] = useState(false); // 캘린더 노출(로그인시)
     const [gradeTable, setGradeTable] = useState(false); // 등급표
     const [isVisibleMenu, setIsVisibleMenu] = useState(false); // 알람메뉴 노출/숨김
     const [filtered, setFiltered] = useState(true); // 전체알람 < > 오늘알람
@@ -61,6 +66,7 @@ const AlarmList = ({ navigation }) => {
     // ✨ 로그인했는지 확인 + 약 추가 후 메인으로 복귀
     useEffect(() => {
         const removeFocusEvent = navigation.addListener("focus", () => {
+            getUser(); //  로그인정보 가져오기
             setFiltered(true);
             dispatch(actionsAlarms.getAlarms(day, setCompleted));
         });
@@ -68,6 +74,16 @@ const AlarmList = ({ navigation }) => {
             removeFocusEvent();
         };
     }, []);
+
+    // ✨ 로그인정보 가져오기
+    const getUser = async () => {
+        const token = await AsyncStorage.getItem("token");
+        if (token) {
+            setIsSignin(token);
+        } else {
+            setIsSignin(false);
+        }
+    };
 
     // ✨ Today <-> All 필터링 됐을 때
     const handleAlarmFilterPress = () => {
@@ -103,6 +119,11 @@ const AlarmList = ({ navigation }) => {
         setIsVisibleMenu(false);
     };
 
+    // ✨ 로그인 화면으로 이동
+    const handleSigninButtonPress = () => {
+        navigation.navigate("Signin");
+    };
+
     // ✨ 알람 복용/미복용 토글
     const handleAlarmToggle = (index) => {
         dispatch(
@@ -133,59 +154,76 @@ const AlarmList = ({ navigation }) => {
 
     return (
         <>
-            <Wrap insets={insets}>
-                <Container width={width}>
-                    <StatusBar backgroundColor={theme.background} />
-                    <Grade count={count} onPress={handleGradeButtonPress} />
-                    <TitleContainer>
-                        <StyledText>내 알람</StyledText>
-                        <ButtonFilter
-                            filtered={filtered}
-                            onPress={handleAlarmFilterPress}
-                        />
-                    </TitleContainer>
-
-                    {alarms[0] ? (
-                        Object.values(alarms).map((item, index) => {
-                            return (
-                                <Alarm
-                                    alarmInfo={item}
-                                    completed={completed[index]}
-                                    menuIcon={icons.dot}
-                                    onToggleAlarm={() =>
-                                        handleAlarmToggle(index)
-                                    }
-                                    onShowAlarmMenu={handleAlarmMenuPress}
-                                    key={item.id}
+            {isSignin ? (
+                <>
+                    <Wrap insets={insets}>
+                        <Container width={width} isSignin={isSignin}>
+                            <StatusBar backgroundColor={theme.background} />
+                            <Grade
+                                count={count}
+                                onPress={handleGradeButtonPress}
+                            />
+                            <TitleContainer>
+                                <StyledText>내 알람</StyledText>
+                                <ButtonFilter
                                     filtered={filtered}
+                                    onPress={handleAlarmFilterPress}
                                 />
-                            );
-                        })
-                    ) : (
-                        <NotFoundAlarms />
-                    )}
+                            </TitleContainer>
 
-                    {gradeTable ? (
-                        <GradeTable onPress={handleGradeButtonPress} />
-                    ) : null}
+                            {alarms[0] ? (
+                                Object.values(alarms).map((item, index) => {
+                                    return (
+                                        <Alarm
+                                            alarmInfo={item}
+                                            completed={completed[index]}
+                                            menuIcon={icons.dot}
+                                            onToggleAlarm={() =>
+                                                handleAlarmToggle(index)
+                                            }
+                                            onShowAlarmMenu={
+                                                handleAlarmMenuPress
+                                            }
+                                            key={item.id}
+                                            filtered={filtered}
+                                        />
+                                    );
+                                })
+                            ) : (
+                                <NotFoundAlarms />
+                            )}
 
-                    <AlarmMenu
-                        isVisibleMenu={isVisibleMenu}
-                        setIsVisibleMenu={setIsVisibleMenu}
-                        onDeleteAlarm={handleAlarmDelete}
-                        onEditAlarm={handleEditAlarmPress.bind(
-                            undefined,
-                            selectedTaskKey
-                        )}
-                    />
-                    <CompleteModal
-                        isVisible={isVisibleCompleteModal}
-                        setIsVisible={setIsVisibleCompleteModal}
-                        count={count}
+                            {gradeTable ? (
+                                <GradeTable onPress={handleGradeButtonPress} />
+                            ) : null}
+
+                            <AlarmMenu
+                                isVisibleMenu={isVisibleMenu}
+                                setIsVisibleMenu={setIsVisibleMenu}
+                                onDeleteAlarm={handleAlarmDelete}
+                                onEditAlarm={handleEditAlarmPress.bind(
+                                    undefined,
+                                    selectedTaskKey
+                                )}
+                            />
+                            <CompleteModal
+                                isVisible={isVisibleCompleteModal}
+                                setIsVisible={setIsVisibleCompleteModal}
+                                count={count}
+                            />
+                        </Container>
+                    </Wrap>
+                    <FloatingButton onPress={handleAddAlarmPress} />
+                </>
+            ) : (
+                <Container width={width} isSignin={isSignin}>
+                    <RequireSignin
+                        src={illust.error}
+                        title="로그인이 필요한 서비스입니다."
+                        onPress={handleSigninButtonPress}
                     />
                 </Container>
-            </Wrap>
-            <FloatingButton onPress={handleAddAlarmPress} />
+            )}
         </>
     );
 };

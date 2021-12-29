@@ -24,12 +24,12 @@ const actions = {
                                 dispatch(
                                     actionsMembers.setNickname(user.nickname)
                                 );
+                                navigation.navigate("AlarmList");
                             } else if (response.data.statusCodeValue !== 200) {
-                                console.log(
-                                    JSON.stringify(response.data.body.message)
+                                Alert.alert(
+                                    "아이디 또는 비밀번호를 다시 확인해주세요."
                                 );
                             }
-                            navigation.navigate("AlarmList");
                         } else {
                             Alert.alert("비밀번호를 입력해주세요.");
                             return;

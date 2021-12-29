@@ -54,7 +54,7 @@ const actions = {
                     const loadedDate = await AsyncStorage.getItem("date");
                     const parseDate = JSON.parse(loadedDate); // 이전에 완료한 날짜
                     const todayDate = `${year}-${month + 1}-${date}`; // "오늘 날짜"
-                    // const todayDate = "2021-11-18"; // 임시용
+                    // const todayDate = "2021-11-29"; // 임시용
                     if (parseDate !== todayDate) {
                         const token = await AsyncStorage.getItem("token");
                         const response = await apiCompletedCount(token);
@@ -88,6 +88,7 @@ const actions = {
             const changedDay = day ? day : 7; //일요일을 0 👉 7 변환
             const response = await apiGetAlarm(token, changedDay);
             dispatch(actionsAlarms.setAlarms(response.data));
+            // AsyncStorage.setItem("count", JSON.stringify("0"));
             dispatch(actionsAlarms.setCount(JSON.parse(count)));
 
             // 알람 수만큼 {completed:false} 생성하기
