@@ -2,7 +2,7 @@
 React native 프로젝트 어플리케이션 '꿀꺽' 입니다. 영양제 복용알람 서비스 앱으로, 기본 CRUD 기능에 충실하며, '자동검색', 'Navigator 구조', 'react native Animation' 등 다양한 부가 기능들을 추가하였습니다.
 
 
-# 시뮬레이션 화면
+## 시뮬레이션 화면
 
 #### 회원가입&로그인
 1. 회원가입 - 약관동의
@@ -17,9 +17,23 @@ React native 프로젝트 어플리케이션 '꿀꺽' 입니다. 영양제 복�
 ![ezgif com-gif-maker](https://user-images.githubusercontent.com/86715916/147677996-9b2c886a-2a81-435e-91a9-d28ae2f59069.gif)
 ![ezgif com-gif-maker (1)](https://user-images.githubusercontent.com/86715916/147678000-478f4d6a-f00e-4c23-8297-e0b5b8dcbcc9.gif)
 ![ezgif com-gif-maker (3)](https://user-images.githubusercontent.com/86715916/147678623-e5d784c7-4b33-4e7d-a334-ace9406eb9f5.gif)
+---
+#### 알람 필터&토글
+![ezgif com-gif-maker (4)](https://user-images.githubusercontent.com/86715916/147679714-298467d6-0f36-4ba0-a2e1-928b8aea74e9.gif)
+---
+#### 캘린더&랭크
+![ezgif com-gif-maker (5)](https://user-images.githubusercontent.com/86715916/147679934-931f3ad0-3a9b-4828-affb-4be7ee03fb72.gif)
+![ezgif com-gif-maker (6)](https://user-images.githubusercontent.com/86715916/147679941-519e1399-9261-43a2-a036-cef9448b4d0e.gif)
+---
+#### 마이페이지
+![ezgif com-gif-maker (7)](https://user-images.githubusercontent.com/86715916/147680115-936abf36-2f27-4746-8699-6fe5ecde3c24.gif)
+![ezgif com-gif-maker (8)](https://user-images.githubusercontent.com/86715916/147680119-bab3a11f-480c-4d04-97e1-cadd64262386.gif)
 
 
 
+1. 회원가입 - 약관동의
+2. 닉네임, 이메일, 비밀번호 입력 + 이메일 중복확인
+3. 로그인 진행(다양한 경우의 수)
 
 ## 주요기능
 1. 알람 생성(복용시간, 복용요일, 복용중인 영양제 등록)/수정/삭제
