@@ -13,7 +13,8 @@ React native 프로젝트 어플리케이션 '꿀꺽' 입니다.
 ### 알람 생성하기
 ![ezgif com-gif-maker](https://user-images.githubusercontent.com/86715916/147677996-9b2c886a-2a81-435e-91a9-d28ae2f59069.gif)
 ![ezgif com-gif-maker (1)](https://user-images.githubusercontent.com/86715916/147678000-478f4d6a-f00e-4c23-8297-e0b5b8dcbcc9.gif)
-![ezgif com-gif-maker (2)](https://user-images.githubusercontent.com/86715916/147678008-9aa09a17-f20b-4bed-8b4d-c3190b3e8519.gif)
+![ezgif com-gif-maker (3)](https://user-images.githubusercontent.com/86715916/147678623-e5d784c7-4b33-4e7d-a334-ace9406eb9f5.gif)
+
 
 
 
