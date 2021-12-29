@@ -32,12 +32,16 @@ React native 프로젝트 어플리케이션 '꿀꺽' 입니다. 영양제 복�
 #### 캘린더&랭크
 1. 캘린더 월 넘기기, 해당 날짜의 알람 확인
 2. 영양제 종류 별 순위 확인
+
+
 ![ezgif com-gif-maker (5)](https://user-images.githubusercontent.com/86715916/147679934-931f3ad0-3a9b-4828-affb-4be7ee03fb72.gif)
 ![ezgif com-gif-maker (6)](https://user-images.githubusercontent.com/86715916/147679941-519e1399-9261-43a2-a036-cef9448b4d0e.gif)
 ---
 #### 마이페이지
 1. 회원정보 변경
 2. 레벨별 타이틀 확인(스와이프), 로그아웃
+
+
 ![ezgif com-gif-maker (7)](https://user-images.githubusercontent.com/86715916/147680115-936abf36-2f27-4746-8699-6fe5ecde3c24.gif)
 ![ezgif com-gif-maker (8)](https://user-images.githubusercontent.com/86715916/147680119-bab3a11f-480c-4d04-97e1-cadd64262386.gif)
 
