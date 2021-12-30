@@ -50,7 +50,7 @@ React native 프로젝트 어플리케이션 '꿀꺽' 입니다. 영양제 복�
 
 
 ![14](https://user-images.githubusercontent.com/86715916/147720456-d5445c07-d96d-4228-91af-cc00339417db.png)
-<img width="375" alt="15" src="https://user-images.githubusercontent.com/86715916/147720457-7e339ebc-86f7-47f2-bcf5-e741acfb438d.png">
+![15](https://user-images.githubusercontent.com/86715916/147720661-0b3b78af-4167-4236-a0e8-56abd10c5f5f.png)
 ![16](https://user-images.githubusercontent.com/86715916/147720458-4e6853ac-ef0b-414d-90d7-933342fab376.png)
 
 
