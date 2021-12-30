@@ -21,9 +21,6 @@ React native 프로젝트 어플리케이션 '꿀꺽' 입니다. 영양제 복�
 ![03](https://user-images.githubusercontent.com/86715916/147720442-a2b14dcc-d0b5-48bf-8f08-215a3fae2972.png)
 ![04](https://user-images.githubusercontent.com/86715916/147720443-3e0deecf-7d41-4730-bb45-ea14c7c92d15.png)
 ![05](https://user-images.githubusercontent.com/86715916/147720446-32f72e06-d062-4de3-b8c1-14710b4ca335.png)
-![17](http://jenyglee93.com/static/media/pc_function01.fab07768.png)
-
-
 
 
 ---
@@ -50,6 +47,13 @@ React native 프로젝트 어플리케이션 '꿀꺽' 입니다. 영양제 복�
 
 
 ## 주요기능
+![17](http://jenyglee93.com/static/media/pc_function01.fab07768.png)
+![18](http://jenyglee93.com/static/media/pc_function02.8f31c9fb.png)
+![19](http://jenyglee93.com/static/media/pc_function03.5e79459b.png)
+![20](http://jenyglee93.com/static/media/pc_function04.11086221.png)
+![21](http://jenyglee93.com/static/media/pc_function05.ffe6590a.png)
+![22](http://jenyglee93.com/static/media/pc_function06.e49ba78e.png)
+
 1. 알람 생성(복용시간, 복용요일, 복용중인 영양제 등록)/수정/삭제
 2. 영양제 복용완료 횟수(경험치)에 따른 레벨링 디자인
 3. 이번달의 복용 달성률 확인
