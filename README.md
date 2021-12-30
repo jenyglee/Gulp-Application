@@ -1,5 +1,5 @@
 # Gulp-Application
-React native 프로젝트 어플리케이션 '꿀꺽' 입니다. 영양제 복용알람 서비스 앱으로, 기본 CRUD 기능에 충실하며, '자동검색', 'Navigator 구조', 'react native Animation' 등 다양한 부가 기능들을 추가하였습니다.
+React native 프로젝트 어플리케이션 '꿀꺽' 입니다. 영양제 복용알람 서비스 앱으로, CRUD 기능과 '자동검색', 'Stack/tab Navigator', 'Rest Api' 등 다양한 부가 기능들을 추가하였습니다.
 
 
 ## 앱 화면
