@@ -146,3 +146,12 @@ api를 이용하여 알람 정보를 가져오면 요일, 시간, 영양제, 유
 앱의 모든 화면 컴포넌트에는 하단 탭바가 필요한 화면과 필요없는 화면들이 있습니다. 하단 탭바가 ‘있는’ 화면과 ‘없는’ 화면을 공존시키기 위해서는 Stack의 구조 자체를 건드려야 했습니다. react native의 이론을 공부할 당시에는 Stack Navigator와 Tab Navigator를 개별적으로 사용하는 방법을 배웠으나, 현재 프로젝트의 경우에는 두 Navigator를 합쳐서 구조를 짜야했기 때문에 **어떤 것을 ‘어미 컴포넌트’로 둘 것인지 선택해야 했습니다.**
 
 저는 Stack Navigator를 어미 컴포넌트로 두어 그 안에 모든 화면들을 넣었으며, 하단 탭바가 필요한 화면들을 하나의 자식 컴포넌트로 묶어서 함께 넣어주었습니다.
+
+
+
+![스크린샷01](https://user-images.githubusercontent.com/86715916/147722488-8d5f49cd-87da-4cd4-9b7e-12839a0ec0b9.jpg)
+![스크린샷02](https://user-images.githubusercontent.com/86715916/147722491-a99008b3-f3ea-4e79-9449-647427507020.jpg)
+![스크린샷03](https://user-images.githubusercontent.com/86715916/147722492-f2d54635-ca91-4111-8768-28ceba39bd0f.jpg)
+![스크린샷04](https://user-images.githubusercontent.com/86715916/147722494-ab1a3bbf-c2e9-44d8-8e56-b7cfb108e44f.jpg)
+![스크린샷05](https://user-images.githubusercontent.com/86715916/147722495-9c5293d3-0e20-4e96-8143-86417a6f06b5.jpg)
+![스크린샷06](https://user-images.githubusercontent.com/86715916/147722497-a1c248ce-0222-4971-9a1b-036ce5a0770c.jpg)
