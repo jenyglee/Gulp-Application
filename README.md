@@ -23,17 +23,18 @@ React native 프로젝트 어플리케이션 '꿀꺽' 입니다. 영양제 복�
 
 
 
-## 구현 컴포넌트 및 라이브러리
-- styled-components
-- jwt-decode
-- axios
-- react-redux
-- redux-thunk
-- firebase
-- lodash
-- react-native-calendars
-- react-native-swiper
-- expo image picker
+> 구현 컴포넌트 및 라이브러리
+>
+> - styled-components
+> - jwt-decode
+> - axios
+> - react-redux
+> - redux-thunk
+> - firebase
+> - lodash
+> - react-native-calendars
+> - react-native-swiper
+> - expo image picker
 
 
 ## 앱 스크린
