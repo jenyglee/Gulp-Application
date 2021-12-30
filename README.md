@@ -15,7 +15,6 @@ React native 프로젝트 어플리케이션 '꿀꺽' 입니다. 영양제 복�
 ![11](https://user-images.githubusercontent.com/86715916/147720453-8b41ba63-500e-45b5-b97a-e92a5b1d2f1a.png)
 
 
----
 #### 알람 생성하기
 
 
@@ -25,18 +24,18 @@ React native 프로젝트 어플리케이션 '꿀꺽' 입니다. 영양제 복�
 ![05](https://user-images.githubusercontent.com/86715916/147720446-32f72e06-d062-4de3-b8c1-14710b4ca335.png)
 
 
----
+
 #### 캘린더
 
 ![07](https://user-images.githubusercontent.com/86715916/147720448-4188f902-fcfd-49c2-86e4-8867c88f3c51.png)
 
----
+
 #### 랭크
 
 
 ![13](https://user-images.githubusercontent.com/86715916/147720455-9675c70b-d2f2-41d5-87f4-391e97c89560.png)
 
----
+
 #### 마이페이지
 
 
@@ -44,7 +43,7 @@ React native 프로젝트 어플리케이션 '꿀꺽' 입니다. 영양제 복�
 ![15](https://user-images.githubusercontent.com/86715916/147720661-0b3b78af-4167-4236-a0e8-56abd10c5f5f.png)
 ![16](https://user-images.githubusercontent.com/86715916/147720458-4e6853ac-ef0b-414d-90d7-933342fab376.png)
 
-
+---
 
 
 
