@@ -1,6 +1,8 @@
 # Gulp-Application
 React native 프로젝트 어플리케이션 '꿀꺽' 입니다. 영양제 복용알람 서비스 앱으로, CRUD 기능과 '자동검색', 'Stack/tab Navigator', 'Rest Api' 등 다양한 부가 기능들을 추가하였습니다.
 
+[프로젝트 포트폴리오 상세 보기](http://jenyglee93.com/1/0)
+
 
 ## 앱 화면
 
@@ -52,21 +54,11 @@ React native 프로젝트 어플리케이션 '꿀꺽' 입니다. 영양제 복�
 3. 이번달의 복용 달성률 확인
 4. 영양제 종류별 순위 확인
 5. 등록한 알람 시간에 푸쉬알림
+6. 회원가입, 로그인
+7. 이메일 중복확인
+8. 회원정보 변경
+9. 회원탈퇴
 
-![01](https://user-images.githubusercontent.com/86715916/147721245-471657e3-35f8-4f49-811a-6af70ed18623.jpg)
-![02](https://user-images.githubusercontent.com/86715916/147721247-4235a879-2c5b-4f56-aebc-45d196d96a59.jpg)
-![03](https://user-images.githubusercontent.com/86715916/147721248-4a940b2e-1c6a-439e-b9d8-61e8071d6ff8.jpg)
-![04](https://user-images.githubusercontent.com/86715916/147721249-c86b35c5-bdf8-4e90-bb2f-93901707214c.jpg)
-![05](https://user-images.githubusercontent.com/86715916/147721251-42391363-f5d9-4a58-8163-3bc1935e65f6.jpg)
-![06](https://user-images.githubusercontent.com/86715916/147721253-308d1527-fc15-4a30-97b1-d4f5bb84b1db.jpg)
-
-
-
-## 부가기능
-1. 회원가입, 로그인
-2. 이메일 중복확인
-3. 회원정보 변경
-4. 회원탈퇴
 
 
 ## 구현 컴포넌트 및 라이브러리
@@ -80,3 +72,11 @@ React native 프로젝트 어플리케이션 '꿀꺽' 입니다. 영양제 복�
 - react-native-calendars
 - react-native-swiper
 - expo image picker
+
+## 구현의 어려움 및 이슈
+
+### <AlarmList />
+#### 알람 변경/삭제 응용하기(feat. bind())
+등록되어있는 알람을 변경/삭제하는 과정에서, 알람에 있는 메뉴 버튼을 눌러 모달 창을 띄우고, 그 안에서 ‘변경하기’ or ‘지우기’를 눌러 해당 알람을 컨트롤해야 했습니다. 이 과정에서 문제는 모달에 있는 버튼을 누르면 이때 컨트롤할 알람이 무엇인지 알 수 없다는 것이었습니다. 제가 공부하며 배웠던 delete, update의 기능은 모달창을 건너지 않고 바로 컨트롤했었기에, 현재 해당 알람을 컨트롤하기 위해서는 메뉴 버튼을 눌렀던 알람의 id를 파라미터로 넘겨주어야 했습니다.
+
+이용자가 메뉴를 누른 알람의 id를 state에 저장해놓은 뒤, ‘변경하기’ or ‘지우기’ 버튼을 눌렀을 때 ‘bind’ 메서드로 state에 저장된 알람의 id를 파라미터로 전달하여 컨트롤할 수 있도록 구현했습니다.
