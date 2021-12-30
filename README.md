@@ -2,16 +2,18 @@
 React native 프로젝트 어플리케이션 '꿀꺽' 입니다. 영양제 복용알람 서비스 앱으로, 기본 CRUD 기능에 충실하며, '자동검색', 'Navigator 구조', 'react native Animation' 등 다양한 부가 기능들을 추가하였습니다.
 
 
-## 시뮬레이션 화면
+## 앱 화면
 
 ### 회원가입&로그인
 1. 회원가입 - 약관동의
 2. 닉네임, 이메일, 비밀번호 입력 + 이메일 중복확인
 3. 로그인 진행(다양한 경우의 수)
+![08](https://user-images.githubusercontent.com/86715916/147720449-00611f88-3b35-4ccc-bdb5-2deb7fbb31f8.png)
+![09](https://user-images.githubusercontent.com/86715916/147720451-1c566adf-aac5-4897-a84e-b64e86ade0de.png)
+![10](https://user-images.githubusercontent.com/86715916/147720452-8e43249c-e906-45e5-9515-2eeac4d1ab2d.png)
+![11](https://user-images.githubusercontent.com/86715916/147720453-8b41ba63-500e-45b5-b97a-e92a5b1d2f1a.png)
 
-![ezgif com-gif-maker (1)](https://user-images.githubusercontent.com/86715916/147677065-0d9222ac-e6a7-4fd4-87f4-05c0ab080d8d.gif)
-![ezgif com-gif-maker](https://user-images.githubusercontent.com/86715916/147677233-4b421f00-d023-4c4b-9099-88f04a741c99.gif)
-![ezgif com-gif-maker (2)](https://user-images.githubusercontent.com/86715916/147677509-83bb8081-0863-43a3-a8fb-3959a5671f89.gif)
+
 ---
 ### 알람 생성하기
 1. 복용시간 선택 - 복용요일 선택
