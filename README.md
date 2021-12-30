@@ -3,8 +3,8 @@ React native 프로젝트 어플리케이션 '꿀꺽' 입니다. 영양제 복�
 
 [프로젝트 포트폴리오 상세 보기](http://jenyglee93.com/1/0)
 
-![스크린샷01](https://user-images.githubusercontent.com/86715916/147723353-2d6e7ad1-ce59-4b9c-a5c7-b851c7b5eb46.jpg)
-![스크린샷02](https://user-images.githubusercontent.com/86715916/147723354-631639a5-85a4-4ba9-bf3a-f050ca270cb3.jpg)
+![스크린샷01](https://user-images.githubusercontent.com/86715916/147723403-e086c938-2257-4e4e-ae9c-97f6df329087.jpg)
+![스크린샷02](https://user-images.githubusercontent.com/86715916/147723404-58e3c72c-c555-48aa-b25f-90e5b9166e74.jpg)
 ![스크린샷03](https://user-images.githubusercontent.com/86715916/147723355-ca7067ed-868f-4f74-80a9-71d4465c6447.jpg)
 ![스크린샷04](https://user-images.githubusercontent.com/86715916/147723356-84f41aeb-b33f-4786-89db-be292df9f173.jpg)
 ![스크린샷05](https://user-images.githubusercontent.com/86715916/147723357-29afc873-45e9-4868-aa88-04defb6267ff.jpg)
