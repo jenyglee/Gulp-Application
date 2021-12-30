@@ -3,6 +3,13 @@ React native 프로젝트 어플리케이션 '꿀꺽' 입니다. 영양제 복�
 
 [프로젝트 포트폴리오 상세 보기](http://jenyglee93.com/1/0)
 
+![스크린샷01](https://user-images.githubusercontent.com/86715916/147722576-e9f13898-909d-4b9c-8e7d-a03eb5492768.jpg)
+![스크린샷02](https://user-images.githubusercontent.com/86715916/147722577-24ef0e2b-431d-4e54-8d0c-fc5c841ffa3a.jpg)
+![스크린샷03](https://user-images.githubusercontent.com/86715916/147722578-26764d02-82e3-4a1e-9ec2-1a725cdb14ae.jpg)
+![스크린샷04](https://user-images.githubusercontent.com/86715916/147722579-fbc45397-9812-43a7-ab46-51b90d661e22.jpg)
+![스크린샷05](https://user-images.githubusercontent.com/86715916/147722580-193cc49b-8428-47f9-8365-ce685a41d299.jpg)
+![스크린샷06](https://user-images.githubusercontent.com/86715916/147722581-6df3382e-5ff7-4863-9fbc-a43c98f4c884.jpg)
+
 
 ## 앱 스크린
 
@@ -148,12 +155,3 @@ api를 이용하여 알람 정보를 가져오면 요일, 시간, 영양제, 유
 저는 Stack Navigator를 어미 컴포넌트로 두어 그 안에 모든 화면들을 넣었으며, 하단 탭바가 필요한 화면들을 하나의 자식 컴포넌트로 묶어서 함께 넣어주었습니다.
 
 
----
-## 구글플레이 이미지
-
-![스크린샷01](https://user-images.githubusercontent.com/86715916/147722576-e9f13898-909d-4b9c-8e7d-a03eb5492768.jpg)
-![스크린샷02](https://user-images.githubusercontent.com/86715916/147722577-24ef0e2b-431d-4e54-8d0c-fc5c841ffa3a.jpg)
-![스크린샷03](https://user-images.githubusercontent.com/86715916/147722578-26764d02-82e3-4a1e-9ec2-1a725cdb14ae.jpg)
-![스크린샷04](https://user-images.githubusercontent.com/86715916/147722579-fbc45397-9812-43a7-ab46-51b90d661e22.jpg)
-![스크린샷05](https://user-images.githubusercontent.com/86715916/147722580-193cc49b-8428-47f9-8365-ce685a41d299.jpg)
-![스크린샷06](https://user-images.githubusercontent.com/86715916/147722581-6df3382e-5ff7-4863-9fbc-a43c98f4c884.jpg)
