@@ -149,9 +149,9 @@ api를 이용하여 알람 정보를 가져오면 요일, 시간, 영양제, 유
 
 
 
-![스크린샷01](https://user-images.githubusercontent.com/86715916/147722488-8d5f49cd-87da-4cd4-9b7e-12839a0ec0b9.jpg)
-![스크린샷02](https://user-images.githubusercontent.com/86715916/147722491-a99008b3-f3ea-4e79-9449-647427507020.jpg)
-![스크린샷03](https://user-images.githubusercontent.com/86715916/147722492-f2d54635-ca91-4111-8768-28ceba39bd0f.jpg)
-![스크린샷04](https://user-images.githubusercontent.com/86715916/147722494-ab1a3bbf-c2e9-44d8-8e56-b7cfb108e44f.jpg)
-![스크린샷05](https://user-images.githubusercontent.com/86715916/147722495-9c5293d3-0e20-4e96-8143-86417a6f06b5.jpg)
-![스크린샷06](https://user-images.githubusercontent.com/86715916/147722497-a1c248ce-0222-4971-9a1b-036ce5a0770c.jpg)
+![스크린샷01](https://user-images.githubusercontent.com/86715916/147722576-e9f13898-909d-4b9c-8e7d-a03eb5492768.jpg)
+![스크린샷02](https://user-images.githubusercontent.com/86715916/147722577-24ef0e2b-431d-4e54-8d0c-fc5c841ffa3a.jpg)
+![스크린샷03](https://user-images.githubusercontent.com/86715916/147722578-26764d02-82e3-4a1e-9ec2-1a725cdb14ae.jpg)
+![스크린샷04](https://user-images.githubusercontent.com/86715916/147722579-fbc45397-9812-43a7-ab46-51b90d661e22.jpg)
+![스크린샷05](https://user-images.githubusercontent.com/86715916/147722580-193cc49b-8428-47f9-8365-ce685a41d299.jpg)
+![스크린샷06](https://user-images.githubusercontent.com/86715916/147722581-6df3382e-5ff7-4863-9fbc-a43c98f4c884.jpg)
