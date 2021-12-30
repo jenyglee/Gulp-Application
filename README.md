@@ -1,6 +1,9 @@
 # Gulp-Application
 React native 프로젝트 어플리케이션 '꿀꺽' 입니다. 영양제 복용알람 서비스 앱으로, CRUD 기능과 '자동검색 API', 'Stack/tab Navigator', 'REST API' 등 다양한 기능들을 추가하였습니다.
 
+## 팀 구성
+프론트엔드 1명, 백엔드 1명
+
 [프로젝트 포트폴리오 상세 보기](http://jenyglee93.com/1/0)
 
 ![스크린샷01](https://user-images.githubusercontent.com/86715916/147723480-04a65442-63b0-4366-a6f9-c5d7219aa9cf.jpg)
