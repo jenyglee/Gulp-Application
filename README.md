@@ -21,6 +21,8 @@ React native 프로젝트 어플리케이션 '꿀꺽' 입니다. 영양제 복�
 ![03](https://user-images.githubusercontent.com/86715916/147720442-a2b14dcc-d0b5-48bf-8f08-215a3fae2972.png)
 ![04](https://user-images.githubusercontent.com/86715916/147720443-3e0deecf-7d41-4730-bb45-ea14c7c92d15.png)
 ![05](https://user-images.githubusercontent.com/86715916/147720446-32f72e06-d062-4de3-b8c1-14710b4ca335.png)
+![17](http://jenyglee93.com/static/media/pc_function01.fab07768.png)
+
 
 
 
