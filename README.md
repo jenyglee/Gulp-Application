@@ -3,12 +3,12 @@ React native 프로젝트 어플리케이션 '꿀꺽' 입니다. 영양제 복�
 
 [프로젝트 포트폴리오 상세 보기](http://jenyglee93.com/1/0)
 
-![스크린샷01](https://user-images.githubusercontent.com/86715916/147723441-adae3a03-329b-4c95-b0cd-b90e0d3afb1c.jpg)
-![스크린샷02](https://user-images.githubusercontent.com/86715916/147723442-de744e1f-607a-40ae-8cca-d9a5b4a3f796.jpg)
-![스크린샷03](https://user-images.githubusercontent.com/86715916/147723355-ca7067ed-868f-4f74-80a9-71d4465c6447.jpg)
-![스크린샷04](https://user-images.githubusercontent.com/86715916/147723356-84f41aeb-b33f-4786-89db-be292df9f173.jpg)
-![스크린샷05](https://user-images.githubusercontent.com/86715916/147723357-29afc873-45e9-4868-aa88-04defb6267ff.jpg)
-![스크린샷06](https://user-images.githubusercontent.com/86715916/147723359-dd8b6e8b-d3fe-4095-9ec6-c8aca505252c.jpg)
+![스크린샷01](https://user-images.githubusercontent.com/86715916/147723480-04a65442-63b0-4366-a6f9-c5d7219aa9cf.jpg)
+![스크린샷02](https://user-images.githubusercontent.com/86715916/147723484-45448d38-15c3-4b2e-a626-6492ff0d6585.jpg)
+![스크린샷03](https://user-images.githubusercontent.com/86715916/147723485-e984a368-3a42-4c5e-8519-38fd69f6c6ea.jpg)
+![스크린샷04](https://user-images.githubusercontent.com/86715916/147723486-de782e6f-3c73-4731-9c2b-c707a678ea1d.jpg)
+![스크린샷05](https://user-images.githubusercontent.com/86715916/147723488-c763b1a7-25b4-4c9c-99b3-3bab16c4ed44.jpg)
+![스크린샷06](https://user-images.githubusercontent.com/86715916/147723489-a98741b8-1085-4fb8-b33c-54f1ee160cd2.jpg)
 
 
 ## 주요기능
