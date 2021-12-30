@@ -10,6 +10,31 @@ React native 프로젝트 어플리케이션 '꿀꺽' 입니다. 영양제 복�
 ![스크린샷05](https://user-images.githubusercontent.com/86715916/147722580-193cc49b-8428-47f9-8365-ce685a41d299.jpg)
 ![스크린샷06](https://user-images.githubusercontent.com/86715916/147722581-6df3382e-5ff7-4863-9fbc-a43c98f4c884.jpg)
 
+## 주요기능
+1. **알람생성**(복용시간, 복용요일, 복용중인 영양제 등록)/**알람수정**/**알람삭제**
+2. 영양제 복용완료 횟수(경험치)에 따른 **레벨링 디자인**
+3. **복용 캘린더**
+4. **영양제 종류별 순위**
+5. 등록한 알람 시간에 **푸쉬알림**
+6. **회원가입, 로그인**
+7. **이메일 중복확인**
+8. **회원정보 변경**
+9. **회원탈퇴**
+
+
+
+## 구현 컴포넌트 및 라이브러리
+- styled-components
+- jwt-decode
+- axios
+- react-redux
+- redux-thunk
+- firebase
+- lodash
+- react-native-calendars
+- react-native-swiper
+- expo image picker
+
 
 ## 앱 스크린
 
@@ -54,30 +79,6 @@ React native 프로젝트 어플리케이션 '꿀꺽' 입니다. 영양제 복�
 
 
 
-## 주요기능
-1. **알람생성**(복용시간, 복용요일, 복용중인 영양제 등록)/**알람수정**/**알람삭제**
-2. 영양제 복용완료 횟수(경험치)에 따른 **레벨링 디자인**
-3. **복용 캘린더**
-4. **영양제 종류별 순위**
-5. 등록한 알람 시간에 **푸쉬알림**
-6. **회원가입, 로그인**
-7. **이메일 중복확인**
-8. **회원정보 변경**
-9. **회원탈퇴**
-
-
-
-## 구현 컴포넌트 및 라이브러리
-- styled-components
-- jwt-decode
-- axios
-- react-redux
-- redux-thunk
-- firebase
-- lodash
-- react-native-calendars
-- react-native-swiper
-- expo image picker
 
 ## 구현의 어려움 및 이슈
 
