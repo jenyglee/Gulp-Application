@@ -47,40 +47,39 @@ React native 프로젝트 어플리케이션 '꿀꺽' 입니다. 영양제 복�
 ### 알람 생성/수정/삭제
 > 알람생성 시 영양제를 검색할 때 DB에서 검색어에 맞는 데이터를 제공해주며, 데이터가 없을 경우 이용자가 신규등록할 수 있도록 구현했습니다. 
 
-![04](https://user-images.githubusercontent.com/86715916/147725273-430bbec5-14cf-4fc4-a8dd-34f1e13ad949.jpg)
-![05](https://user-images.githubusercontent.com/86715916/147725274-be274191-079b-4c32-b7dc-ef4b114a3459.jpg)
-![02](https://user-images.githubusercontent.com/86715916/147725269-4fd89e4a-ba7e-4fd7-8cb3-9a5ce38e6d07.jpg)
-![03](https://user-images.githubusercontent.com/86715916/147725271-52900d7f-3cfa-4ba6-8323-a49df512b3c9.jpg)
+![04](https://user-images.githubusercontent.com/86715916/147725541-e37c8c9a-4e84-4be1-8596-99568709c133.jpg)
+![05](https://user-images.githubusercontent.com/86715916/147725544-f793b836-7673-4adb-98da-c8400fb3c476.jpg)
+![02](https://user-images.githubusercontent.com/86715916/147725538-019dde01-6288-4514-8b86-d8f14b6be456.jpg)
+![03](https://user-images.githubusercontent.com/86715916/147725540-bd27c4eb-cb75-422f-9a07-8be4e51b49b8.jpg)
 
 
 
 ### 캘린더
 > 한 달을 기점으로 복용완료한 날짜를 계산하여 '복용달성률'을 제공하며, 날짜를 터치해 상세 알람을 확인할 수 있습니다.(백엔드 API가 아직 미완성되어 임시데이터로 구현시켰습니다.) 
-
-
-![07](https://user-images.githubusercontent.com/86715916/147725276-2a0bf7e9-f759-40ff-8134-b7276829e06e.jpg)
+> 
+![07](https://user-images.githubusercontent.com/86715916/147725547-3aa841d1-e5b8-40b9-bd0d-1c01e6347daf.jpg)
 
 
 ### 랭크
 > 이용자가 많이 등록한 영양제 순서대로 순위를 매겨 리스트를 나열합니다.(백엔드 API가 아직 미완성되어 임시데이터로 구현시켰습니다.) 
 
-![13](https://user-images.githubusercontent.com/86715916/147725285-63e3f030-19bc-493e-850b-3d7a230024fc.jpg)
+![13](https://user-images.githubusercontent.com/86715916/147725555-18ca89af-d024-4722-ae3b-f4e418c1d84b.jpg)
 
 
 ### 마이페이지
 > 프로필 사진 변경, 회원정보 변경, 레벨링 시스템 확인 등 다양한 기능을 모아놓았습니다.
 
-![14](https://user-images.githubusercontent.com/86715916/147725286-a06f8bc8-3846-4c92-9edb-fdcb9f9f9be0.jpg)
-![15](https://user-images.githubusercontent.com/86715916/147725289-4a7f66ae-53be-4423-9204-deab77fd6e9e.jpg)
-![16](https://user-images.githubusercontent.com/86715916/147725291-effe0edc-f3e3-4fa2-a790-6c0e6e0d7ef9.jpg)
+![14](https://user-images.githubusercontent.com/86715916/147725557-d1978e86-1abb-4035-8595-5f77f627c6fc.jpg)
+![15](https://user-images.githubusercontent.com/86715916/147725559-a6407755-fdda-411d-8267-2c0e68920591.jpg)
+![16](https://user-images.githubusercontent.com/86715916/147725562-c6c0c0ac-0623-44bd-afee-f05237e9c17e.jpg)
 
 ### 회원가입&로그인
 > 회원가입 시 닉네임-이메일-패스워드 순서대로 입력할 때마다 Input 컴포넌트가 나타나는 애니메이션을 적용했습니다.
 
-![08](https://user-images.githubusercontent.com/86715916/147725277-47a5b0a6-90c4-4ea1-a5a1-c81e288f20fb.jpg)
-![09](https://user-images.githubusercontent.com/86715916/147725279-8bde46ae-3647-4011-bfb3-37238cc82fd2.jpg)
-![10](https://user-images.githubusercontent.com/86715916/147725280-204bc792-c643-4c41-9ec4-b5cac560fb05.jpg)
-![11](https://user-images.githubusercontent.com/86715916/147725282-8cf58a8f-9238-4265-b603-136cf2271f8f.jpg)
+![08](https://user-images.githubusercontent.com/86715916/147725549-e33980d9-44da-4b81-ae39-ced2d535f04a.jpg)
+![09](https://user-images.githubusercontent.com/86715916/147725550-099c7687-8a58-4d39-9843-c13af18ffe2c.jpg)
+![10](https://user-images.githubusercontent.com/86715916/147725551-2113d4ba-cecb-4338-bced-a7e3356faaf4.jpg)
+![11](https://user-images.githubusercontent.com/86715916/147725553-4c673bcc-b93f-4c9a-8b30-f4402b6a1970.jpg)
 
 
 ---
