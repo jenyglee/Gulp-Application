@@ -52,13 +52,13 @@ React native 프로젝트 어플리케이션 '꿀꺽' 입니다. 영양제 복�
 3. 이번달의 복용 달성률 확인
 4. 영양제 종류별 순위 확인
 5. 등록한 알람 시간에 푸쉬알림
-![17](http://jenyglee93.com/static/media/pc_function01.fab07768.png)
-![18](http://jenyglee93.com/static/media/pc_function02.8f31c9fb.png)
-![19](http://jenyglee93.com/static/media/pc_function03.5e79459b.png)
-![20](http://jenyglee93.com/static/media/pc_function04.11086221.png)
-![21](http://jenyglee93.com/static/media/pc_function05.ffe6590a.png)
-![22](http://jenyglee93.com/static/media/pc_function06.e49ba78e.png)
 
+![01](https://user-images.githubusercontent.com/86715916/147721245-471657e3-35f8-4f49-811a-6af70ed18623.jpg)
+![02](https://user-images.githubusercontent.com/86715916/147721247-4235a879-2c5b-4f56-aebc-45d196d96a59.jpg)
+![03](https://user-images.githubusercontent.com/86715916/147721248-4a940b2e-1c6a-439e-b9d8-61e8071d6ff8.jpg)
+![04](https://user-images.githubusercontent.com/86715916/147721249-c86b35c5-bdf8-4e90-bb2f-93901707214c.jpg)
+![05](https://user-images.githubusercontent.com/86715916/147721251-42391363-f5d9-4a58-8163-3bc1935e65f6.jpg)
+![06](https://user-images.githubusercontent.com/86715916/147721253-308d1527-fc15-4a30-97b1-d4f5bb84b1db.jpg)
 
 
 
