@@ -148,6 +148,8 @@ api를 이용하여 알람 정보를 가져오면 요일, 시간, 영양제, 유
 저는 Stack Navigator를 어미 컴포넌트로 두어 그 안에 모든 화면들을 넣었으며, 하단 탭바가 필요한 화면들을 하나의 자식 컴포넌트로 묶어서 함께 넣어주었습니다.
 
 
+---
+## 구글플레이 이미지
 
 ![스크린샷01](https://user-images.githubusercontent.com/86715916/147722576-e9f13898-909d-4b9c-8e7d-a03eb5492768.jpg)
 ![스크린샷02](https://user-images.githubusercontent.com/86715916/147722577-24ef0e2b-431d-4e54-8d0c-fc5c841ffa3a.jpg)
