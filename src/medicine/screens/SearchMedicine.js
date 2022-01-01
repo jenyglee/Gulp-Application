@@ -50,7 +50,7 @@ const Line = styled.View`
     background-color: ${({ theme }) => theme.line};
 `;
 
-const SearchMedicine = ({ navigation }) => {
+const SearchMedicine = ({ navigation, routr }) => {
     const dispatch = useDispatch();
     const width = Dimensions.get("window").width;
     const theme = useContext(ThemeContext);

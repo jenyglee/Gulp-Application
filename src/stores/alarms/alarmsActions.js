@@ -271,6 +271,14 @@ const actions = {
         (alarmId, time, checkedDay, medicineList, navigation) =>
         async (dispatch) => {
             const token = await AsyncStorage.getItem("token");
+            console.log("alarmId");
+            console.log(alarmId);
+            console.log("time");
+            console.log(time);
+            console.log("checkedDay");
+            console.log(checkedDay);
+            console.log("medicineList");
+            console.log(medicineList);
             const response = await apiEditAlarm({
                 id: alarmId,
                 time: time,
@@ -325,6 +333,9 @@ const actions = {
     },
     setCompleted: (time) => (dispatch) => {
         dispatch(actionsAlarms.setCompleted(time));
+    },
+    setChangingAlarmId: (time) => (dispatch) => {
+        dispatch(actionsAlarms.setChangingAlarmId(time));
     },
 };
 

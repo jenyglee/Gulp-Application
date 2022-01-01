@@ -108,6 +108,7 @@ const AlarmList = ({ navigation }) => {
 
     // ✨ 알람 추가 페이지로 이동
     const handleAddAlarmPress = () => {
+        dispatch(actionsAlarms.setChangingAlarmId(""));
         navigation.navigate("AddAlarm", { fromScreen });
     };
 
@@ -116,6 +117,7 @@ const AlarmList = ({ navigation }) => {
         navigation.navigate("AddAlarm", {
             alarmId: id,
         });
+        dispatch(actionsAlarms.setChangingAlarmId(id));
         setIsVisibleMenu(false);
     };
 

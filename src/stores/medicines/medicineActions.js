@@ -83,7 +83,8 @@ const actions = {
             medicine,
             medicineList,
             navigation,
-            fromScreen
+            fromScreen,
+            alarmId
         ) =>
         async (dispatch) => {
             try {
@@ -125,6 +126,7 @@ const actions = {
                                     ])(dispatch);
                                     navigation.navigate("AddAlarm", {
                                         fromScreen,
+                                        alarmId,
                                     });
                                 }
                             });

@@ -46,7 +46,7 @@ const AddAlarm = ({ navigation, route }) => {
     const height = Dimensions.get("window").height;
     const theme = useContext(ThemeContext);
     const { medicineList } = useSelector(stateMedicines);
-    const { time, timeWithColon } = useSelector(stateAlarms);
+    const { time, timeWithColon, changingAlarmId } = useSelector(stateAlarms);
     const [weekCheckList, setWeekCheckList] = useState(""); // 체크된 요일
     const [medicinesId, setMedicinesId] = useState([]);
     const [week, setWeek] = useState([
@@ -64,7 +64,7 @@ const AddAlarm = ({ navigation, route }) => {
 
     useEffect(() => {
         // 알람 변경 시
-        if (route.params.alarmId) {
+        if (changingAlarmId) {
             dispatch(
                 actionsAlarms.getOneAlarm(
                     route.params.alarmId,
@@ -83,7 +83,11 @@ const AddAlarm = ({ navigation, route }) => {
 
     // 저장버튼 누르기(알람 추가 or 알람 변경)
     const handleSaveButtonPress = () => {
-        if (route.params.alarmId) {
+        // console.log(route.params.alarmId);
+        // route.params.alarmId 를 저장소에 저장시키고, 그 값이 존재한다면 무조건 알람변경
+        // AlarmList에서 AddAlarm으로 갈 때는 저장소 값을 없애줌.
+
+        if (changingAlarmId) {
             // ✨ 알람 변경 하기
             // ① 체크된 요일 id 추출(ex. "234")
             const checkedDay = week.filter((day) => day.checked === true);
@@ -98,14 +102,14 @@ const AddAlarm = ({ navigation, route }) => {
             });
             dispatch(
                 actionsAlarms.editAlarm(
-                    route.params.alarmId,
+                    changingAlarmId,
                     timeWithColon,
                     strCheckedDayId,
                     arrMedicineId,
                     navigation
                 )
             );
-        } else if (route.params.fromScreen) {
+        } else {
             // ✨ 알람 추가하기
             dispatch(
                 actionsAlarms.addAlarm(
